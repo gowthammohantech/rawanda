@@ -1,0 +1,1 @@
+Make English and Kinyarwanda switching a P0 requirement across all four applications, including offline support, saved language preferences, translated validation messages and fallback behavior.
