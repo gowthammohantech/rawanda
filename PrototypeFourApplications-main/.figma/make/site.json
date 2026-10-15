@@ -1,0 +1,10 @@
+{
+  "description": "Delivers a unified design system and prototype for four applications featuring Rwanda branding to ensure consistent user experience and visual identity.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
