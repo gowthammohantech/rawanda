@@ -1,0 +1,92 @@
+/*
+ * @laif/ui-web design tokens (FND-09). Same values as src/tokens.ts — tokens.css.test.ts fails
+ * on drift. Components use the generated utilities (bg-primary, text-muted, border-border-soft,
+ * rounded-shell, font-mono …) or var(--color-*); raw hex is only allowed in this file and
+ * tokens.ts.
+ */
+@theme {
+  /* Only the LAIF palette exists: Tailwind's default colour scale is removed on purpose. */
+  --color-*: initial;
+
+  --color-primary: #087f8c;
+  --color-primary-dark: #075d66;
+  --color-primary-soft: #e8f5f5;
+  --color-positive: #1b7653;
+  --color-positive-soft: #eaf6f0;
+  --color-warning: #a15d00;
+  --color-warning-soft: #fff4df;
+  --color-danger: #b42318;
+  --color-danger-soft: #fff0ee;
+  --color-info: #2463a0;
+  --color-info-soft: #edf5fc;
+  --color-ink: #18252b;
+  --color-muted: #5b6870;
+  --color-subtle: #66737a;
+  --color-background: #f7fafa;
+  --color-canvas: #e9ecec;
+  --color-surface: #ffffff;
+  --color-border: #d9e2e4;
+  --color-border-soft: #e8edef;
+  --color-demo-banner-bg: #fff7e7;
+  --color-demo-banner-fg: #79500c;
+  --color-demo-banner-border: #eeddbd;
+  --color-sun: #f4c54e;
+  --color-loader-glow: #15939e;
+  --color-loader-deep: #043d45;
+  --color-on-primary: #ffffff;
+
+  /* Semantic aliases (meaning, not hue). */
+  --color-risk-warning: var(--color-warning);
+  --color-risk-warning-soft: var(--color-warning-soft);
+  --color-risk-danger: var(--color-danger);
+  --color-risk-danger-soft: var(--color-danger-soft);
+  --color-state-success: var(--color-positive);
+  --color-state-success-soft: var(--color-positive-soft);
+  --color-state-info: var(--color-info);
+  --color-state-info-soft: var(--color-info-soft);
+  --color-sync-pending: var(--color-info);
+  --color-sync-pending-soft: var(--color-info-soft);
+  --color-sync-conflict: var(--color-danger);
+  --color-sync-conflict-soft: var(--color-danger-soft);
+
+  /* Typography (self-hosted via @fontsource — see fonts.css). */
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: Manrope, "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --text-micro: 0.6875rem;
+  --text-micro--line-height: 1rem;
+  --text-micro--letter-spacing: 0.06em;
+
+  /* Radii 8 / 12 / 16 / 24; shell 24. */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-shell: 24px;
+  --radius-pill: 999px;
+
+  --shadow-card: 0 1px 2px rgba(24, 37, 43, 0.04);
+  --shadow-raised: 0 8px 28px rgba(24, 37, 43, 0.08);
+  --shadow-overlay: 0 22px 65px rgba(18, 43, 48, 0.18);
+
+  /* Focus ring: 3px teal at 24 % + 2px offset. */
+  --color-focus-ring: rgba(8, 127, 140, 0.24);
+
+  --animate-breathe: breathe 2s ease-in-out infinite;
+  --animate-loader-bar: loader-bar 1.1s ease-in-out infinite;
+
+  @keyframes breathe {
+    50% {
+      transform: scale(1.04);
+      opacity: 0.75;
+    }
+  }
+  @keyframes loader-bar {
+    from {
+      transform: translateX(-110%);
+    }
+    to {
+      transform: translateX(350%);
+    }
+  }
+}

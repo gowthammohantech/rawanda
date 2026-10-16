@@ -1,0 +1,66 @@
+/* Base layer: canvas, focus ring, reduced motion, mono micro-label utility (FND-09). */
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.45;
+  }
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+    color: inherit;
+  }
+  button:not(:disabled),
+  select:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]) {
+    cursor: pointer;
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-focus-ring);
+    outline-offset: 2px;
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* Monospace uppercase micro-label (ref images: PRIMARY CONSTRAINT, NEEDS YOU). */
+@utility micro-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  line-height: 1rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Minimum interactive target: 32×32 on pointer devices, 44×44 on touch breakpoints. */
+@utility target-min {
+  min-width: 32px;
+  min-height: 32px;
+  @media (pointer: coarse) {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}

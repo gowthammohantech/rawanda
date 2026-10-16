@@ -23,10 +23,27 @@
     "offline": "You are offline. Changes are saved on this device.",
     "permissionDenied": "You do not have permission to view this.",
     "conflict": "This record was changed by someone else.",
-    "success": "Saved."
+    "success": "Saved.",
+    "errorCode": "Error code: {{code}}",
+    "clearFilters": "Clear filters",
+    "cachedData": "Showing data saved on this device",
+    "lastUpdated": "Last updated {{time}}",
+    "emptyTitle": "Nothing here yet",
+    "errorTitle": "Something went wrong",
+    "offlineTitle": "You are offline",
+    "permissionDeniedTitle": "Access restricted",
+    "permissionDeniedHint": "Ask a coordinator if you need access. This attempt is recorded."
   },
   "error": {
-    "storageUnavailable": "This device could not save or read data. Use \"Reset demo\" to start again."
+    "storageUnavailable": "This device could not save or read data. Use \"Reset demo\" to start again.",
+    "VALIDATION_ERROR": "Some details are not valid. Check the highlighted fields.",
+    "FORBIDDEN": "You do not have permission to do this.",
+    "NOT_FOUND": "This record could not be found.",
+    "CONFLICT": "This record was changed by someone else.",
+    "DEPENDENCY_UNAVAILABLE": "A connected service is not available right now. Try again later.",
+    "TIMEOUT": "The request took too long. Try again.",
+    "OFFLINE": "You are offline. Try again when you are connected.",
+    "INTERNAL": "Something went wrong on the server. Try again."
   },
   "language": {
     "label": "Language"
@@ -107,5 +124,81 @@
     "inDays_other": "in {{count}} days"
   },
   "suppressed": "Suppressed (<{{threshold}})",
-  "suppressedExplanation": "Fewer than {{threshold}}, hidden to protect privacy"
+  "suppressedExplanation": "Fewer than {{threshold}}, hidden to protect privacy",
+  "table": {
+    "showing": "Showing {{shown}} of {{total}}",
+    "sortBy": "Sort by {{column}}",
+    "sortedAscending": "sorted ascending",
+    "sortedDescending": "sorted descending",
+    "noResults": "No results match these filters.",
+    "actions": "Actions",
+    "pagination": "Pagination",
+    "page": "Page {{page}} of {{pages}}",
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "resultCount_one": "{{count}} result",
+    "resultCount_other": "{{count}} results"
+  },
+  "dialog": {
+    "close": "Close dialog",
+    "reasonLabel": "Reason",
+    "reasonHint": "At least {{min}} characters, spaces not counted. The reason is recorded in the audit log.",
+    "reasonProgress": "{{count}} of at least {{min}} characters",
+    "saving": "Saving…",
+    "cannotUndo": "This cannot be undone."
+  },
+  "ui": {
+    "unitMissing": "Unit missing",
+    "required": "Required",
+    "optional": "Optional",
+    "charCount": "{{count}} of {{max}} characters",
+    "expand": "Show details",
+    "collapse": "Hide details",
+    "progress": "{{value}} of {{max}}",
+    "chartData": "Chart data: {{title}}",
+    "chartCategory": "Period",
+    "stepStatus": {
+      "done": "Completed",
+      "current": "Current step",
+      "upcoming": "Not started",
+      "cancelled": "Cancelled"
+    },
+    "stepPosition": "Step {{index}} of {{total}}",
+    "stepper": "Progress steps",
+    "dismiss": "Dismiss",
+    "breadcrumb": "Breadcrumb",
+    "kigaliTime": "Kigali time (UTC+2)",
+    "notRecorded": "Not recorded",
+    "notifications": "Notifications"
+  },
+  "conflict": {
+    "title": "Someone else changed this record",
+    "description": "Your change was not saved. Compare the two versions and choose what to keep.",
+    "field": "Field",
+    "yourVersion": "Your version",
+    "latestVersion": "Latest version",
+    "changedBy": "Changed by {{name}}",
+    "changedAt": "Changed at {{time}}"
+  },
+  "flag": {
+    "title": "Why this was flagged",
+    "requiresReview": "Needs review",
+    "noReviewNeeded": "No review needed",
+    "notEvaluable": "Not evaluable — needs a person",
+    "reasons": "Reasons",
+    "observations": "Readings compared with the demo rule",
+    "observationValue": "{{value}} — demo threshold {{threshold}}",
+    "ruleset": "Ruleset {{version}}",
+    "inputs": "Inputs used",
+    "noReasons": "No demo rule was triggered.",
+    "input": {
+      "bloodPressure": "Blood pressure",
+      "glucose": "Blood glucose",
+      "glucoseContext": "Glucose context"
+    }
+  },
+  "privacy": {
+    "title": "Privacy",
+    "body": "This demonstration uses synthetic data only. No real patient information is collected, stored or sent anywhere."
+  }
 }

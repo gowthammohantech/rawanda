@@ -1,0 +1,12 @@
+/*
+ * Self-hosted fonts (FND-09 task 1): bundled from @fontsource, never the Google Fonts CDN
+ * (offline + no third-party requests; REL-04 asserts this). Latin subsets only.
+ */
+@import "@fontsource/dm-sans/latin-400.css";
+@import "@fontsource/dm-sans/latin-500.css";
+@import "@fontsource/dm-sans/latin-600.css";
+@import "@fontsource/dm-sans/latin-700.css";
+@import "@fontsource/manrope/latin-600.css";
+@import "@fontsource/manrope/latin-700.css";
+@import "@fontsource/jetbrains-mono/latin-400.css";
+@import "@fontsource/jetbrains-mono/latin-500.css";

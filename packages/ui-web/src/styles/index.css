@@ -1,0 +1,12 @@
+/*
+ * Entry stylesheet: apps import `@laif/ui-web/styles.css` (this file) once.
+ * `@source` makes Tailwind generate the classes used inside this package's components.
+ */
+@import "./fonts.css";
+@import "tailwindcss";
+@import "./tokens.css";
+@import "./base.css";
+
+@source "../components";
+@source "../a11y";
+@source "../icons";

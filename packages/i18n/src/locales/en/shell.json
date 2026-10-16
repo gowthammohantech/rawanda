@@ -11,7 +11,8 @@
   },
   "search": {
     "placeholder": "Search patients and records",
-    "shortcutHint": "Press ⌘K to search"
+    "shortcutHint": "Press ⌘K to search",
+    "label": "Search"
   },
   "notifications": {
     "label": "Notifications",
@@ -21,5 +22,28 @@
     "label": "Profile",
     "openMenu": "Open profile menu"
   },
-  "skipToContent": "Skip to main content"
+  "skipToContent": "Skip to main content",
+  "brand": {
+    "name": "CareConnect",
+    "country": "Rwanda",
+    "loading": "Connecting care, from community to clinic",
+    "footer": "Secure care coordination · Rwanda"
+  },
+  "navigation": "Main navigation",
+  "subNavigation": "Section navigation",
+  "menu": {
+    "open": "Open navigation menu",
+    "close": "Close navigation menu"
+  },
+  "persona": {
+    "label": "Demo persona",
+    "switch": "Switch demo persona",
+    "current": "Demo persona: {{name}}"
+  },
+  "role": {
+    "scope": "Scope: {{scope}}"
+  },
+  "offline": {
+    "lastSynced": "Last synced {{time}}"
+  }
 }

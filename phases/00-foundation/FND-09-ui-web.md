@@ -1,6 +1,6 @@
 # FND-09 — @laif/ui-web: tokens and shared React components (Tailwind v4)
 
-**Status:** Planned
+**Status:** Done
 
 ## 1. Header
 

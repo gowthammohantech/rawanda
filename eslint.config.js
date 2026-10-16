@@ -185,6 +185,11 @@ export default tseslint.config(
       "i18next/no-literal-string": ["error", { mode: "jsx-text-only" }],
     },
   },
+  // Test fixtures are not user-visible copy (FND-09).
+  {
+    files: ["**/*.test.{jsx,tsx}"],
+    rules: { "i18next/no-literal-string": "off" },
+  },
   {
     files: JSX_FILES,
     languageOptions: { globals: { ...globals.browser } },

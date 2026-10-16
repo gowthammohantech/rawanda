@@ -6,7 +6,8 @@
   "sideEffects": false,
   "exports": {
     ".": "./src/index.ts",
-    "./sqlite": "./src/sqlite.ts"
+    "./sqlite": "./src/sqlite.ts",
+    "./web": "./src/web/index.ts"
   },
   "types": "./src/index.ts",
   "scripts": {
@@ -25,5 +26,39 @@
     "@types/better-sqlite3": "9.6.0",
     "better-sqlite3": "13.0.3",
     "fake-indexeddb": "6.2.5"
+  },
+  "devDependencies": {
+    "@tanstack/react-query": "5.90.10",
+    "@testing-library/dom": "10.4.2",
+    "@testing-library/react": "16.3.3",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "react-router": "7.9.6"
+  },
+  "peerDependencies": {
+    "@tanstack/react-query": ">=5.0.0",
+    "@testing-library/react": ">=16.0.0",
+    "react": ">=19.0.0",
+    "react-dom": ">=19.0.0",
+    "react-router": ">=7.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@tanstack/react-query": {
+      "optional": true
+    },
+    "@testing-library/react": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    },
+    "react-router": {
+      "optional": true
+    }
   }
 }

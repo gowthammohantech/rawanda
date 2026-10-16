@@ -67,5 +67,17 @@
       "fac-beta-1": "Demo District Hospital Beta-1"
     }
   },
-  "roleSwitchDisclaimer": "Demo role switch — not authentication"
+  "roleSwitchDisclaimer": "Demo role switch — not authentication",
+  "badge": "Demo",
+  "ruleDisclaimerExplanation": "This flag comes from an illustrative demo rule. Its thresholds are placeholders and are not clinically validated.",
+  "tools": {
+    "label": "Demo tools",
+    "reset": "Reset demo",
+    "resetTitle": "Reset demo data?",
+    "faults": "Simulate problems",
+    "offline": "Offline",
+    "slowNetwork": "Slow network",
+    "serverErrors": "Server errors",
+    "loadScenario": "Load scenario"
+  }
 }
