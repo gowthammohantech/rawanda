@@ -1,6 +1,6 @@
 # FND-02 — @laif/domain: entities, state machines, invariants, demo rules engine, demo clock
 
-**Status:** Planned
+**Status:** Done
 
 ## 1. Header
 
