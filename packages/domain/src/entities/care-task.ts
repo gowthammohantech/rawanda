@@ -1,4 +1,9 @@
-import type { CareTaskKind, CareTaskStatus, EntityType } from "../enums.ts";
+import type {
+  CareTaskKind,
+  CareTaskStatus,
+  CorrectionRequestStatus,
+  EntityType,
+} from "../enums.ts";
 import type {
   CareTaskId,
   FacilityId,
@@ -19,6 +24,8 @@ export type CorrectionRequestPayload = {
   targetId: string;
   description: string;
   suggestedValue: JsonValue;
+  // ext (CTZ-01): citizen-visible request state; absent = derived from the task status.
+  requestStatus?: CorrectionRequestStatus;
 };
 
 export type CallbackRequestPayload = {

@@ -22,6 +22,11 @@ describe("entry isolation", () => {
     expect(root.dexieDbName("clinical")).toBe("laif-clinical");
   });
 
+  it("./citizen loads without dexie or native modules", async () => {
+    const citizen = await import("./citizen/index.ts");
+    expect(citizen.createCitizenRepository).toBeTypeOf("function");
+  });
+
   it("./sqlite and ./ids/web load without dexie or native modules", async () => {
     const sqlite = await import("./store/sqlite-adapter.ts");
     expect(sqlite.createSqliteStoreAdapter).toBeTypeOf("function");
@@ -48,6 +53,7 @@ describe("entry isolation", () => {
     const { default: pkg } = await import("../package.json", { with: { type: "json" } });
     expect(pkg.exports).toEqual({
       ".": "./src/index.ts",
+      "./citizen": "./src/citizen/index.ts",
       "./contract-suite": "./src/store/contract-suite.ts",
       "./dexie": "./src/store/dexie-adapter.ts",
       "./sqlite": "./src/store/sqlite-adapter.ts",

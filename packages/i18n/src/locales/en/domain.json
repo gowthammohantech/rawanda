@@ -501,6 +501,24 @@
     "device": {
       "revoked": "Device access revoked",
       "restored": "Device access restored"
+    },
+    "citizen": {
+      "consent": {
+        "granted": "Consent given (wallet)",
+        "withdrawn": "Consent withdrawn (wallet)"
+      },
+      "result": {
+        "viewed": "Result viewed in the wallet"
+      },
+      "next_step": {
+        "acknowledged": "Next step marked as read"
+      },
+      "support": {
+        "callback_requested": "Call-back requested"
+      },
+      "settings": {
+        "changed": "Wallet settings changed"
+      }
     }
   }
 }

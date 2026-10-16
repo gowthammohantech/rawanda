@@ -65,12 +65,15 @@ export async function simulateTransport<T>(
 
 const UNWRAPPED = new Set(["sync", "demo", "device"]);
 
-/** Wraps every top-level repository method (not `sync` / `demo` / `device`) in `simulateTransport`. */
-export function withSimulatedTransport(
-  repo: CareRepository,
+/**
+ * Wraps every top-level repository method (not `sync` / `demo` / `device`) in `simulateTransport`. Generic
+ * so the CTZ-01 `CitizenRepository` facade gets the same fault behaviour.
+ */
+export function withSimulatedTransport<R extends object = CareRepository>(
+  repo: R,
   faults: FaultInjector,
   options: SimulatedTransportOptions = {},
-): CareRepository {
+): R {
   const sleep = options.sleep ?? realSleep;
   const ready = options.ready ?? (() => Promise.resolve());
   const wrapped: Record<string, unknown> = {};
@@ -85,5 +88,5 @@ export function withSimulatedTransport(
       return simulateTransport(faults, sleep, () => method.apply(repo, args));
     };
   }
-  return wrapped as unknown as CareRepository;
+  return wrapped as unknown as R;
 }

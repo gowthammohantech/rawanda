@@ -173,6 +173,18 @@ export type CareTaskKind = (typeof CARE_TASK_KINDS)[number];
 export const CARE_TASK_STATUSES = ["open", "in_progress", "done", "cancelled_with_reason"] as const;
 export type CareTaskStatus = (typeof CARE_TASK_STATUSES)[number];
 
+/**
+ * ext (CTZ-01): citizen-visible state of a `correction_request` task (payload `requestStatus`).
+ * Only staff move a request beyond `submitted`; the clinical record is never edited by it.
+ */
+export const CORRECTION_REQUEST_STATUSES = [
+  "submitted",
+  "in_review",
+  "resolved_amended",
+  "resolved_no_change",
+] as const;
+export type CorrectionRequestStatus = (typeof CORRECTION_REQUEST_STATUSES)[number];
+
 // ── Sync ─────────────────────────────────────────────────────────────────────
 /** The single sync design shared with HWM-02/09/10 (see machines/sync-operation.ts). */
 export const SYNC_OP_STATUSES = [

@@ -23,7 +23,7 @@ import {
 } from "react";
 
 import { APP_ID } from "./config.ts";
-import { useRepository } from "./providers.tsx";
+import { useCitizenRepo } from "./data/repo.tsx";
 
 export type DemoToolsValue = {
   faults: DemoFaultToggleState;
@@ -41,7 +41,7 @@ const APP_SCENARIOS = SCENARIOS.filter((scenario) => scenario.apps.includes(APP_
 const DemoToolsContext = createContext<DemoToolsValue | null>(null);
 
 export function DemoToolsProvider({ children }: { children?: ReactNode }) {
-  const repo = useRepository();
+  const repo = useCitizenRepo();
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const t = useTx();

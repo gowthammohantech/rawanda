@@ -13,6 +13,7 @@
  */
 import enAdmin from "./locales/en/admin.json";
 import enCitizen from "./locales/en/citizen.json";
+import enCitizenErrors from "./locales/en/citizen/errors.json";
 import enClinical from "./locales/en/clinical.json";
 import enClinicalCommon from "./locales/en/clinical/common.json";
 import enClinicalErrors from "./locales/en/clinical/errors.json";
@@ -28,6 +29,7 @@ import enWorkerNav from "./locales/en/worker/nav.json";
 import enWorkerSettings from "./locales/en/worker/settings.json";
 import rwAdmin from "./locales/rw/admin.json";
 import rwCitizen from "./locales/rw/citizen.json";
+import rwCitizenErrors from "./locales/rw/citizen/errors.json";
 import rwClinical from "./locales/rw/clinical.json";
 import rwClinicalCommon from "./locales/rw/clinical/common.json";
 import rwClinicalErrors from "./locales/rw/clinical/errors.json";
@@ -73,7 +75,7 @@ export const enResources = {
   },
   worker: { ...enWorker, auth: enWorkerAuth, nav: enWorkerNav, settings: enWorkerSettings },
   admin: enAdmin,
-  citizen: enCitizen,
+  citizen: { ...enCitizen, errors: enCitizenErrors },
 } as const satisfies Record<Namespace, object>;
 
 /** Kinyarwanda drafts. Parity with EN is enforced by `pnpm i18n:check`, not by types. */
@@ -91,7 +93,7 @@ export const rwResources: Record<Namespace, object> = {
   },
   worker: { ...rwWorker, auth: rwWorkerAuth, nav: rwWorkerNav, settings: rwWorkerSettings },
   admin: rwAdmin,
-  citizen: rwCitizen,
+  citizen: { ...rwCitizen, errors: rwCitizenErrors },
 };
 
 export const resources = { en: enResources, rw: rwResources } as const;

@@ -488,6 +488,30 @@ export class TxContext {
     }
   }
 
+  /**
+   * Denies with a specific reason decided by a service (e.g. CTZ `SCOPE` from the patient links,
+   * `CONSENT_REQUIRED`): deferred `access.denied` audit (outcome `denied`) + `FORBIDDEN`.
+   */
+  deny(
+    reason: ErrorReason,
+    target: AuthorizeTarget,
+    resource: ScopedResource = {},
+    details: { [key: string]: JsonValue } = {},
+  ): never {
+    const error = new RepositoryError("FORBIDDEN", { reason, details });
+    throw defer(error, {
+      action: target.denyAction ?? "access.denied",
+      entityType: target.entityType,
+      entityId: target.entityId,
+      outcome: "denied",
+      ...this.scopeOf(resource),
+      changeSummary: { reason, ...details },
+      actorId: this.actor?.personaId ?? null,
+      actorRole: this.actor?.role ?? null,
+      occurredAt: this.nowIso,
+    });
+  }
+
   /** Boolean scope check for list filtering (no audit). */
   can(permission: Permission, resource: ScopedResource): boolean {
     if (!this.actor) return false;

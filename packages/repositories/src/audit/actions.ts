@@ -125,6 +125,14 @@ export const AUDIT_ACTIONS = {
   "instruction.released": change,
   "instruction.withdrawn": seedChange,
 
+  // ── Citizen wallet (CTZ-01; `citizen.reminder.*` maps to `reminder.preference_changed`) ──
+  "citizen.consent.granted": change,
+  "citizen.consent.withdrawn": change,
+  "citizen.result.viewed": access,
+  "citizen.next_step.acknowledged": change,
+  "citizen.support.callback_requested": change,
+  "citizen.settings.changed": change,
+
   // ── Sync & devices ───────────────────────────────────────────────────────
   "sync.op_acknowledged": change,
   "sync.op_rejected": change,
