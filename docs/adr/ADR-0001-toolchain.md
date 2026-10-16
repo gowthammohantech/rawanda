@@ -112,6 +112,39 @@ test-utils`, then `ui-web → ui-native`; a package may only depend on earlier p
 - Platform entries are subpath exports (`./dexie`, `./sqlite`, `./expo-sqlite`, `./ids/web`,
   `./ids/native`); the root entry imports none of them (tested by `src/entry-isolation.test.ts`).
 
+## FND-10 additions (native kit)
+
+Versions are those of Expo SDK 58 (`expo@58.0.11` `bundledNativeModules.json`), pinned exactly:
+
+| Package                             | Pinned version | Where                                                                  |
+| ----------------------------------- | -------------- | ---------------------------------------------------------------------- |
+| `react-native`                      | 0.88.0         | `packages/ui-native` + `packages/test-utils` `devDependencies` (types) |
+| `react-native-web`                  | 0.21.4         | `packages/ui-native` `devDependencies` (Vitest alias target)           |
+| `react-native-svg`                  | 15.16.0        | `packages/ui-native` `devDependencies`; optional peer (no range)       |
+| `react-native-safe-area-context`    | 5.10.1         | `packages/ui-native` + `packages/test-utils` dev; optional peer        |
+| `@expo-google-fonts/dm-sans`        | 0.4.2          | `packages/ui-native` `dependencies` (bundled TTFs, no deps/peers)      |
+| `@expo-google-fonts/manrope`        | 0.4.2          | `packages/ui-native` `dependencies`                                    |
+| `@expo-google-fonts/jetbrains-mono` | 0.4.1          | `packages/ui-native` `dependencies`                                    |
+| `expo-font` (optional peer)         | 58.0.8 (SDK)   | not installed; `src/types/expo-optional-peers.d.ts`, FND-11 installs   |
+
+- **No Expo SDK in the lockfile yet.** All native libraries are exact `devDependencies` (for
+  types and tests) plus optional peers declared only in `peerDependenciesMeta` (no ranges), so
+  `auto-install-peers=true` does not pull `expo`. `react-native@0.88.0` brings ~100 transitive
+  packages (`@react-native/*`, `metro-runtime`, …) — the same set FND-11's Expo install needs.
+  `expo-font` is declared locally like FND-08's optional peers; FND-11 adds it with
+  `npx expo install` and may delete the declaration file.
+- **Single test runner** (FND-10 §10): Vitest + jsdom with `react-native` aliased to
+  `react-native-web`, `.web.*` files preferred, rendered with `@testing-library/react`
+  (`renderNative` in `@laif/test-utils/native`). `@testing-library/react-native` /
+  `react-test-renderer` were **not** added: they need the real RN renderer (Jest preset) and
+  `react-test-renderer` is deprecated in React 19. In `packages/ui-native/vitest.config.ts`
+  `react-native-svg` / `react-native-safe-area-context` are aliased to their ESM builds (their
+  CJS `main` requires the Flow-typed real `react-native`), `expo-font` and
+  `@react-native/assets-registry/registry` (imported by react-native-svg's web build, absent in
+  RN 0.88) to small stubs.
+- `@laif/ui-web` gained a `./icon-data` export (additive) so the native icon parity test can
+  import the web icon set without loading the web components.
+
 ## Consequences
 
 - Later FND phases fill packages without touching root tooling except to add scripts.

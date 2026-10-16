@@ -169,7 +169,13 @@
     "breadcrumb": "Breadcrumb",
     "kigaliTime": "Kigali time (UTC+2)",
     "notRecorded": "Not recorded",
-    "notifications": "Notifications"
+    "notifications": "Notifications",
+    "date": "Date",
+    "time": "Time",
+    "datePlaceholder": "YYYY-MM-DD",
+    "timePlaceholder": "HH:MM",
+    "selectPlaceholder": "Choose an option",
+    "invalidDateTime": "Enter a valid date and time"
   },
   "conflict": {
     "title": "Someone else changed this record",
@@ -178,7 +184,8 @@
     "yourVersion": "Your version",
     "latestVersion": "Latest version",
     "changedBy": "Changed by {{name}}",
-    "changedAt": "Changed at {{time}}"
+    "changedAt": "Changed at {{time}}",
+    "changed": "Changed"
   },
   "flag": {
     "title": "Why this was flagged",
@@ -200,5 +207,25 @@
   "privacy": {
     "title": "Privacy",
     "body": "This demonstration uses synthetic data only. No real patient information is collected, stored or sent anywhere."
+  },
+  "sync": {
+    "savedOnDevice": "Saved on this device",
+    "syncing": "Syncing…",
+    "synced": "Synced",
+    "conflict": "Conflict — needs your decision",
+    "failedWillRetry": "Not sent — will retry",
+    "notAccepted": "Not accepted",
+    "keptOnDeviceRevoked": "Kept on device — device revoked",
+    "statusLabel": "Sync status: {{status}}"
+  },
+  "a11y": {
+    "status": "Status: {{status}}",
+    "backHint": "Goes to the previous screen",
+    "languageHint": "Changes the app language",
+    "tabCount_one": "{{label}}, {{count}} item",
+    "tabCount_other": "{{label}}, {{count}} items",
+    "opensOptions": "Opens a list of options",
+    "selectedValue": "{{label}}: {{value}}",
+    "opensMenu": "Opens a menu"
   }
 }

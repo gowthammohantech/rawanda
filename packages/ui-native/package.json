@@ -5,7 +5,9 @@
   "type": "module",
   "sideEffects": false,
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./fonts": "./src/fonts.ts",
+    "./tokens": "./src/tokens.ts"
   },
   "types": "./src/index.ts",
   "scripts": {
@@ -15,7 +17,42 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@laif/i18n": "workspace:*",
-    "@laif/domain": "workspace:*"
+    "@expo-google-fonts/dm-sans": "0.4.2",
+    "@expo-google-fonts/jetbrains-mono": "0.4.1",
+    "@expo-google-fonts/manrope": "0.4.2",
+    "@laif/contracts": "workspace:*",
+    "@laif/domain": "workspace:*",
+    "@laif/i18n": "workspace:*"
+  },
+  "devDependencies": {
+    "@laif/test-utils": "workspace:*",
+    "@laif/ui-web": "workspace:*",
+    "@testing-library/dom": "10.4.2",
+    "@testing-library/react": "16.3.3",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "react-native": "0.88.0",
+    "react-native-safe-area-context": "5.10.1",
+    "react-native-svg": "15.16.0",
+    "react-native-web": "0.21.4"
+  },
+  "peerDependenciesMeta": {
+    "expo-font": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    },
+    "react-native": {
+      "optional": true
+    },
+    "react-native-safe-area-context": {
+      "optional": true
+    },
+    "react-native-svg": {
+      "optional": true
+    }
   }
 }

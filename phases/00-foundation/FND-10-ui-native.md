@@ -1,6 +1,6 @@
 # FND-10 — @laif/ui-native: native tokens and shared React Native components
 
-**Status:** Planned
+**Status:** Done
 
 ## 1. Header
 
@@ -65,13 +65,13 @@ Adds `worker`/`citizen`-agnostic shared keys under `common:sync.*` (`savedOnDevi
 
 ## 9. Acceptance criteria
 
-- [ ] Parity test: every colour token in ui-native equals ui-web.
-- [ ] Every pressable component test asserts `accessibilityRole` and a label, and computed hit area ≥ 44×44.
-- [ ] `Screen` always renders DemoBanner text; `AppHeader` renders LanguageSwitcher by default.
-- [ ] `ReadingDisplay` never renders a value without its unit (test with missing unit shows "Unit missing" chip).
-- [ ] `SyncStatusPill` renders icon + text for all five states in EN and RW.
-- [ ] No component sets `allowFontScaling={false}`.
-- [ ] Lint: no hex literals in `src/components/**`; no literal JSX text.
+- [x] Parity test: every colour token in ui-native equals ui-web.
+- [x] Every pressable component test asserts `accessibilityRole` and a label, and computed hit area ≥ 44×44.
+- [x] `Screen` always renders DemoBanner text; `AppHeader` renders LanguageSwitcher by default.
+- [x] `ReadingDisplay` never renders a value without its unit (test with missing unit shows "Unit missing" chip).
+- [x] `SyncStatusPill` renders icon + text for all five states in EN and RW.
+- [x] No component sets `allowFontScaling={false}`.
+- [x] Lint: no hex literals in `src/components/**`; no literal JSX text.
 
 ## 10. Tests
 

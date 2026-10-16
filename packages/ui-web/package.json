@@ -9,7 +9,8 @@
   "exports": {
     ".": "./src/index.ts",
     "./styles.css": "./src/styles/index.css",
-    "./tokens": "./src/tokens.ts"
+    "./tokens": "./src/tokens.ts",
+    "./icon-data": "./src/icons/icon-data.ts"
   },
   "types": "./src/index.ts",
   "scripts": {

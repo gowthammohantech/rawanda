@@ -169,7 +169,13 @@
     "breadcrumb": "Inzira y'urupapuro",
     "kigaliTime": "Isaha ya Kigali (UTC+2)",
     "notRecorded": "Ntibyanditswe",
-    "notifications": "Amatangazo"
+    "notifications": "Amatangazo",
+    "date": "Itariki",
+    "time": "Isaha",
+    "datePlaceholder": "UUUU-KK-II",
+    "timePlaceholder": "SS:MM",
+    "selectPlaceholder": "Hitamo kimwe",
+    "invalidDateTime": "Andika itariki n'isaha byemewe"
   },
   "conflict": {
     "title": "Undi muntu yahinduye iyi nyandiko",
@@ -178,7 +184,8 @@
     "yourVersion": "Inyandiko yawe",
     "latestVersion": "Inyandiko iheruka",
     "changedBy": "Byahinduwe na {{name}}",
-    "changedAt": "Byahinduwe saa {{time}}"
+    "changedAt": "Byahinduwe saa {{time}}",
+    "changed": "Byahindutse"
   },
   "flag": {
     "title": "Impamvu byagaragajwe",
@@ -200,5 +207,25 @@
   "privacy": {
     "title": "Ibanga",
     "body": "Iri gerageza rikoresha amakuru y'ikitegererezo gusa. Nta makuru nyayo y'abarwayi akusanywa, abikwa cyangwa yoherezwa ahandi."
+  },
+  "sync": {
+    "savedOnDevice": "Byabitswe kuri iki gikoresho",
+    "syncing": "Birimo guhuzwa…",
+    "synced": "Byahujwe",
+    "conflict": "Bivuguruzanya — bikeneye icyemezo cyawe",
+    "failedWillRetry": "Ntibyoherejwe — bizongera kugeragezwa",
+    "notAccepted": "Ntibyemewe",
+    "keptOnDeviceRevoked": "Bibitswe kuri iki gikoresho — igikoresho cyambuwe uburenganzira",
+    "statusLabel": "Uko guhuza bihagaze: {{status}}"
+  },
+  "a11y": {
+    "status": "Uko bihagaze: {{status}}",
+    "backHint": "Isubira ku rupapuro rubanza",
+    "languageHint": "Ihindura ururimi rwa porogaramu",
+    "tabCount_one": "{{label}}, ikintu {{count}}",
+    "tabCount_other": "{{label}}, ibintu {{count}}",
+    "opensOptions": "Ifungura urutonde rw'amahitamo",
+    "selectedValue": "{{label}}: {{value}}",
+    "opensMenu": "Ifungura urutonde"
   }
 }
