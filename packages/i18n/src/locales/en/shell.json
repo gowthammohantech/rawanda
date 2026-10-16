@@ -41,7 +41,8 @@
     "current": "Demo persona: {{name}}"
   },
   "role": {
-    "scope": "Scope: {{scope}}"
+    "scope": "Scope: {{scope}}",
+    "programmeWide": "All districts (programme-wide)"
   },
   "offline": {
     "lastSynced": "Last synced {{time}}"

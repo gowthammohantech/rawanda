@@ -1,3 +1,16 @@
 {
-  "appName": "CareConnect Worker (Demo)"
+  "appName": "CareConnect Worker (Demo)",
+  "tabs": {
+    "home": "Home",
+    "settings": "Settings"
+  },
+  "placeholder": {
+    "comingSoon": "Built in {{phase}}",
+    "description": "This screen is a placeholder in the foundation shell. It is delivered in a later phase."
+  },
+  "notFound": {
+    "title": "Screen not found",
+    "description": "This link does not match any screen in this demo.",
+    "home": "Go to the start screen"
+  }
 }

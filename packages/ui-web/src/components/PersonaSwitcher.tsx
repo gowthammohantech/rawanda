@@ -33,21 +33,19 @@ export function PersonaSwitcher({
   const current = personas.find((persona) => persona.id === value);
   return (
     <Menu.Root>
-      <Menu.Trigger
-        aria-label={
-          current === undefined
-            ? t("shell:persona.switch")
-            : `${t("shell:persona.current", { name: current.name })}. ${t("shell:persona.switch")}`
-        }
-        className="target-min rounded-pill border-border-soft bg-surface hover:bg-background inline-flex items-center gap-2 border py-1 ps-1 pe-2"
-      >
+      {/* Named by its content (no aria-label), so the accessible name always contains the
+          visible text (WCAG 2.5.3 label in name): "<name> Demo, Switch demo persona". */}
+      <Menu.Trigger className="target-min rounded-pill border-border-soft bg-surface hover:bg-background inline-flex items-center gap-2 border py-1 ps-1 pe-2">
         <Avatar name={current?.name ?? "?"} size="sm" decorative />
-        <span className="text-ink hidden max-w-40 truncate text-[13px] font-medium lg:inline">
-          {current?.name}
-        </span>
+        {current === undefined ? null : (
+          <span className="text-ink sr-only max-w-40 truncate text-[13px] font-medium lg:not-sr-only">
+            {current.name}
+          </span>
+        )}
         <span className="micro-label rounded-pill bg-demo-banner-bg text-demo-banner-fg hidden px-1.5 lg:inline">
           {t("demo:badge")}
         </span>
+        <span className="sr-only">{`, ${t("shell:persona.switch")}`}</span>
         <Icon name="chevron-down" size={14} className="text-muted" />
       </Menu.Trigger>
       <Menu.Portal>

@@ -78,6 +78,14 @@
     "offline": "Nta murandasi",
     "slowNetwork": "Umurandasi utinda",
     "serverErrors": "Amakosa ya seriveri",
-    "loadScenario": "Fungura urugero"
+    "loadScenario": "Fungura urugero",
+    "open": "Fungura ibikoresho by'igerageza",
+    "resetDone": "Amakuru y'igerageza yasubijwe uko yari ameze mbere.",
+    "scenarioLoaded": "Igerageza ryashyizweho: {{title}}",
+    "actionFailed": "Igikorwa cy'igerageza nticyarangiye. Ongera ugerageze."
+  },
+  "seedFailed": {
+    "title": "Amakuru y'igerageza ntiyashoboye gutegurwa",
+    "description": "Koresha \"Subiza igerageza uko ryari\" kugira ngo wongere wubake amakuru y'igerageza kuri iki gikoresho."
   }
 }

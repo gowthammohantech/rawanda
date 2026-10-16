@@ -20,7 +20,8 @@
     "test:watch": "vitest",
     "build": "turbo run build",
     "test:e2e": "turbo run test:e2e",
-    "verify": "pnpm typecheck && pnpm lint && pnpm test && pnpm build"
+    "verify": "pnpm typecheck && pnpm lint && pnpm test && pnpm build",
+    "test:maestro": "turbo run test:maestro"
   },
   "devDependencies": {
     "@eslint/js": "9.39.5",
@@ -39,5 +40,12 @@
     "typescript": "5.9.3",
     "typescript-eslint": "8.71.2",
     "vitest": "3.2.7"
+  },
+  "pnpm": {
+    "overrides": {
+      "react": "19.3.0",
+      "react-dom": "19.3.0",
+      "@types/react": "19.3.0"
+    }
   }
 }

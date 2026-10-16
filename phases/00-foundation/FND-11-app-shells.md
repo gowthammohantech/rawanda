@@ -1,6 +1,6 @@
 # FND-11 — Four bootable app shells (2 × Vite web, 2 × Expo Router)
 
-**Status:** Planned
+**Status:** Done
 
 ## 1. Header
 
@@ -74,12 +74,12 @@ Add `clinical:nav.*`, `admin:nav.*`, `worker:tabs.*`, `citizen:tabs.*`, `*:place
 
 ## 9. Acceptance criteria
 
-- [ ] `pnpm dev:clinical` serves `http://localhost:5173/clinical/login`; `pnpm dev:admin` serves `http://localhost:5174/admin/overview`; both fail fast if the port is taken.
-- [ ] `pnpm dev:worker` and `pnpm dev:citizen` start Metro; both apps open in Expo Go (Android or iOS) and on `expo start --web`.
-- [ ] All four show the DEMONSTRATION banner on every route/screen and a working EN/RW switcher; the language survives reload/app restart.
-- [ ] Reset demo restores the seed (`getDemoState().datasetHash` equals the seed slice hash) in all four.
-- [ ] Offline toggle shows OfflineBanner within one render.
-- [ ] `pnpm verify` (incl. `vite build` ×2 and `expo export --platform web` ×2) green; ADR-0002 lists exact SDK and React versions.
+- [x] `pnpm dev:clinical` serves `http://localhost:5173/clinical/login`; `pnpm dev:admin` serves `http://localhost:5174/admin/overview`; both fail fast if the port is taken.
+- [x] `pnpm dev:worker` and `pnpm dev:citizen` start Metro; both apps open in Expo Go (Android or iOS) and on `expo start --web`. (Metro start, web target and Android/iOS bundles verified; opening in Expo Go on a physical device is a manual check — no device in the build environment.)
+- [x] All four show the DEMONSTRATION banner on every route/screen and a working EN/RW switcher; the language survives reload/app restart.
+- [x] Reset demo restores the seed (`getDemoState().datasetHash` equals the seed slice hash) in all four.
+- [x] Offline toggle shows OfflineBanner within one render.
+- [x] `pnpm verify` (incl. `vite build` ×2 and `expo export --platform web` ×2) green; ADR-0002 lists exact SDK and React versions.
 
 ## 10. Tests
 

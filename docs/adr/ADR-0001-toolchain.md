@@ -145,6 +145,14 @@ Versions are those of Expo SDK 58 (`expo@58.0.11` `bundledNativeModules.json`), 
 - `@laif/ui-web` gained a `./icon-data` export (additive) so the native icon parity test can
   import the web icon set without loading the web components.
 
+## FND-11 follow-up
+
+The Expo SDK pin, the repo-wide React override and the app-shell pins are in
+[ADR-0002](./ADR-0002-expo-sdk.md). The FND-08 / FND-10 `expo-optional-peers.d.ts` declaration
+files were deleted; `expo-sqlite`, `expo-crypto` (repositories) and `expo-font` (ui-native) are
+now exact devDependencies, still optional peers for consumers. The FND-10 test stubs moved to
+`@laif/test-utils/native/vitest` (shared native Vitest preset).
+
 ## Consequences
 
 - Later FND phases fill packages without touching root tooling except to add scripts.

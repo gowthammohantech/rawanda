@@ -35,6 +35,7 @@ export {
 } from "./store/storage-errors.ts";
 export * from "./transport/faults.ts";
 export * from "./transport/simulated.ts";
+export * from "./transport/demo-toggles.ts";
 export {
   backoffMs,
   createSyncQueue,

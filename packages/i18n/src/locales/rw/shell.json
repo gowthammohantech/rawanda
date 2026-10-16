@@ -41,7 +41,8 @@
     "current": "Umuntu w'igerageza: {{name}}"
   },
   "role": {
-    "scope": "Aho bigarukira: {{scope}}"
+    "scope": "Aho bigarukira: {{scope}}",
+    "programmeWide": "Uturere twose (porogaramu yose)"
   },
   "offline": {
     "lastSynced": "Byahujwe bwa nyuma {{time}}"

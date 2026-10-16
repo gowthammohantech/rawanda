@@ -1,0 +1,66 @@
+{
+  "name": "@laif/citizen-wallet",
+  "version": "0.0.0",
+  "private": true,
+  "main": "expo-router/entry",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "build": "expo export --platform web --output-dir dist",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:maestro": "maestro test .maestro"
+  },
+  "dependencies": {
+    "@expo/metro-runtime": "58.0.14",
+    "@hookform/resolvers": "5.9.1",
+    "@laif/auth-demo": "workspace:*",
+    "@laif/contracts": "workspace:*",
+    "@laif/domain": "workspace:*",
+    "@laif/i18n": "workspace:*",
+    "@laif/mock-data": "workspace:*",
+    "@laif/repositories": "workspace:*",
+    "@laif/ui-native": "workspace:*",
+    "@tanstack/react-query": "5.90.10",
+    "expo": "58.0.12",
+    "expo-constants": "58.0.12",
+    "expo-crypto": "58.0.6",
+    "expo-font": "58.0.8",
+    "expo-linking": "58.0.13",
+    "expo-router": "58.0.21",
+    "expo-sqlite": "58.0.13",
+    "expo-status-bar": "58.0.3",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "react-hook-form": "7.90.0",
+    "react-native": "0.88.0",
+    "react-native-gesture-handler": "3.3.0",
+    "react-native-reanimated": "4.7.1",
+    "react-native-safe-area-context": "5.10.1",
+    "react-native-screens": "4.30.0",
+    "react-native-svg": "15.16.0",
+    "react-native-web": "0.21.4",
+    "react-native-worklets": "0.13.0",
+    "zod": "4.6.7",
+    "zustand": "5.0.15"
+  },
+  "devDependencies": {
+    "@laif/test-utils": "workspace:*",
+    "@testing-library/dom": "10.4.2",
+    "@testing-library/react": "16.3.3",
+    "@testing-library/user-event": "14.6.8",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "fake-indexeddb": "6.2.5"
+  },
+  "expo": {
+    "install": {
+      "exclude": [
+        "@types/react-dom"
+      ]
+    }
+  }
+}

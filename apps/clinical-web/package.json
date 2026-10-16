@@ -1,0 +1,47 @@
+{
+  "name": "@laif/clinical-web",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@hookform/resolvers": "5.9.1",
+    "@laif/auth-demo": "workspace:*",
+    "@laif/contracts": "workspace:*",
+    "@laif/domain": "workspace:*",
+    "@laif/i18n": "workspace:*",
+    "@laif/mock-data": "workspace:*",
+    "@laif/repositories": "workspace:*",
+    "@laif/ui-web": "workspace:*",
+    "@tanstack/react-query": "5.90.10",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "react-hook-form": "7.90.0",
+    "react-router": "7.9.6",
+    "zod": "4.6.7",
+    "zustand": "5.0.15"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.14.0",
+    "@laif/test-utils": "workspace:*",
+    "@playwright/test": "1.64.1",
+    "@tailwindcss/vite": "4.3.3",
+    "@testing-library/dom": "10.4.2",
+    "@testing-library/react": "16.3.3",
+    "@testing-library/user-event": "14.6.8",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "5.2.0",
+    "fake-indexeddb": "6.2.5",
+    "tailwindcss": "4.3.3",
+    "vite": "7.3.7"
+  }
+}

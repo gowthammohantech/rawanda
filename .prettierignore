@@ -21,3 +21,6 @@ test-results/
 
 # Agent worktrees (other branches checked out locally)
 .claude/worktrees/
+
+# Expo-generated (expo start)
+**/expo-env.d.ts

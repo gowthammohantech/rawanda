@@ -1,0 +1,15 @@
+{
+  "expo": {
+    "name": "CareConnect Wallet (Demo)",
+    "slug": "laif-citizen-wallet",
+    "version": "0.0.0",
+    "orientation": "portrait",
+    "scheme": "laifwallet",
+    "userInterfaceStyle": "light",
+    "ios": { "supportsTablet": false },
+    "android": {},
+    "web": { "bundler": "metro", "output": "single" },
+    "plugins": ["expo-router", "expo-sqlite", "expo-font"],
+    "experiments": { "typedRoutes": true }
+  }
+}

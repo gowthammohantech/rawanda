@@ -1,6 +1,6 @@
 {
   "$schema": "https://turborepo.com/schema.json",
-  "globalEnv": ["LAIF_DEMO_*"],
+  "globalEnv": ["LAIF_DEMO_*", "VITE_LAIF_*", "EXPO_PUBLIC_LAIF_*"],
   "tasks": {
     "typecheck": {
       "dependsOn": ["^typecheck"]
@@ -21,6 +21,9 @@
       "persistent": true
     },
     "test:e2e": {
+      "cache": false
+    },
+    "test:maestro": {
       "cache": false
     }
   }

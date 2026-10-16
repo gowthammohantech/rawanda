@@ -74,5 +74,28 @@
       "description": "Iminota yo kugerageza guhamagara wongeyeho igihe cyo kwandika ibipimo. Ni igereranya ry'igerageza, si igipimo nyacyo cy'akazi."
     },
     "staffTimeProxyNote": "Igereranya ry'igihe cy'abakozi (igerageza) — si igipimo nyacyo cy'akazi."
+  },
+  "nav": {
+    "section": {
+      "monitor": "Gukurikirana",
+      "assure": "Kwizeza ubuziranenge",
+      "govern": "Imiyoborere"
+    },
+    "overview": "Incamake",
+    "funnel": "Inzira y'ubuvuzi",
+    "timeliness": "Igihe cyubahirijwe",
+    "workload": "Akazi k'abakozi",
+    "quality": "Umutekano n'ubuziranenge",
+    "reports": "Raporo",
+    "governance": "Imiyoborere"
+  },
+  "placeholder": {
+    "comingSoon": "Bizubakwa muri {{phase}}",
+    "description": "Iyi paji ni iy'agateganyo mu ishingiro rya porogaramu. Izatangwa mu cyiciro gikurikira."
+  },
+  "notFound": {
+    "title": "Paji ntiyabonetse",
+    "description": "Iyi aderesi ntihuye n'ipaji iyo ari yo yose muri iri gerageza.",
+    "home": "Jya ku ipaji ibanza"
   }
 }

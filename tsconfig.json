@@ -2,16 +2,50 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "files": [],
   "references": [
-    { "path": "./packages/domain" },
-    { "path": "./packages/contracts" },
-    { "path": "./packages/i18n" },
-    { "path": "./packages/mock-data" },
-    { "path": "./packages/auth-demo" },
-    { "path": "./packages/analytics" },
-    { "path": "./packages/repositories" },
-    { "path": "./packages/test-utils" },
-    { "path": "./packages/ui-web" },
-    { "path": "./packages/ui-native" },
-    { "path": "./scripts" }
+    {
+      "path": "./packages/domain"
+    },
+    {
+      "path": "./packages/contracts"
+    },
+    {
+      "path": "./packages/i18n"
+    },
+    {
+      "path": "./packages/mock-data"
+    },
+    {
+      "path": "./packages/auth-demo"
+    },
+    {
+      "path": "./packages/analytics"
+    },
+    {
+      "path": "./packages/repositories"
+    },
+    {
+      "path": "./packages/test-utils"
+    },
+    {
+      "path": "./packages/ui-web"
+    },
+    {
+      "path": "./packages/ui-native"
+    },
+    {
+      "path": "./apps/clinical-web"
+    },
+    {
+      "path": "./apps/programme-admin"
+    },
+    {
+      "path": "./apps/worker-mobile"
+    },
+    {
+      "path": "./apps/citizen-wallet"
+    },
+    {
+      "path": "./scripts"
+    }
   ]
 }

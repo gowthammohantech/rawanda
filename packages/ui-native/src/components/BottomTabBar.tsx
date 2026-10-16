@@ -1,3 +1,5 @@
+import type { ColorValue } from "react-native";
+
 import { Icon } from "../icons/Icon.tsx";
 import type { IconName } from "../icons/icon-data.ts";
 import { colors, fontFamilies, minTouchTarget, spacing } from "../tokens.ts";
@@ -29,8 +31,15 @@ export function bottomTabBarScreenOptions(options: { bottomInset?: number } = {}
 
 /** `tabBarIcon` renderer for a kit icon (tinted by the navigator's active/inactive colour). */
 export function tabBarIcon(name: IconName) {
-  function TabBarIcon({ color, size }: { color: string; size: number; focused?: boolean }) {
-    return <Icon name={name} color={color} size={Math.min(size, 26)} />;
+  // React Navigation passes a `ColorValue`; the navigator tints are token strings (above).
+  function TabBarIcon({ color, size }: { color: ColorValue; size: number; focused?: boolean }) {
+    return (
+      <Icon
+        name={name}
+        color={typeof color === "string" ? color : colors.muted}
+        size={Math.min(size, 26)}
+      />
+    );
   }
   return TabBarIcon;
 }

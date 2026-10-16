@@ -78,6 +78,14 @@
     "offline": "Offline",
     "slowNetwork": "Slow network",
     "serverErrors": "Server errors",
-    "loadScenario": "Load scenario"
+    "loadScenario": "Load scenario",
+    "open": "Open demo tools",
+    "resetDone": "Demo data was reset to the baseline.",
+    "scenarioLoaded": "Scenario loaded: {{title}}",
+    "actionFailed": "The demo action did not complete. Try again."
+  },
+  "seedFailed": {
+    "title": "The demo data could not be prepared",
+    "description": "Use \"Reset demo\" to rebuild the synthetic data on this device."
   }
 }

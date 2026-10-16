@@ -39,7 +39,7 @@ export function AppShell({ sidebar, topbar, banners, children, className }: AppS
         data-testid="app-shell"
         className="bg-canvas lg:rounded-shell mx-auto flex max-w-[1600px] gap-6 p-3 sm:p-4 lg:my-4 lg:w-[calc(100%-32px)] lg:p-5"
       >
-        <aside className="sticky top-5 hidden max-h-[calc(100dvh-100px)] min-h-[560px] w-60 shrink-0 self-start lg:block">
+        <aside className="sticky top-12 hidden max-h-[calc(100dvh-120px)] min-h-[560px] w-60 shrink-0 self-start lg:block">
           {sidebar}
         </aside>
         <Drawer

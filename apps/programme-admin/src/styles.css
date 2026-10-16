@@ -1,0 +1,4 @@
+/* Programme Admin Dashboard: the shared kit stylesheet (tokens, fonts, Tailwind v4) + this app's classes. */
+@import "@laif/ui-web/styles.css";
+
+@source "./";

@@ -1,3 +1,16 @@
 {
-  "appName": "Agasanduku k'Ubuzima ka CareConnect (Igerageza)"
+  "appName": "Agasanduku k'Ubuzima ka CareConnect (Igerageza)",
+  "tabs": {
+    "health": "Ubuzima bwanjye",
+    "settings": "Igenamiterere"
+  },
+  "placeholder": {
+    "comingSoon": "Bizubakwa muri {{phase}}",
+    "description": "Iyi paji ni iy'agateganyo mu ishingiro rya porogaramu. Izatangwa mu cyiciro gikurikira."
+  },
+  "notFound": {
+    "title": "Ipaji ntiyabonetse",
+    "description": "Iyi link ntihuye n'ipaji iyo ari yo yose muri iri gerageza.",
+    "home": "Jya ku ipaji ibanza"
+  }
 }

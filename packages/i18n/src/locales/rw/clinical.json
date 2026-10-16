@@ -1,3 +1,27 @@
 {
-  "appName": "Urubuga rw'Abaganga rwa CareConnect (Igerageza)"
+  "appName": "Urubuga rw'Abaganga rwa CareConnect (Igerageza)",
+  "nav": {
+    "section": {
+      "work": "Akazi",
+      "oversight": "Igenzura"
+    },
+    "login": "Kwinjira mu igerageza",
+    "queue": "Urutonde rwo gusuzuma",
+    "patients": "Abarwayi",
+    "patient": "Incamake y'umurwayi",
+    "review": "Ibisobanuro by'isuzuma",
+    "decision": "Andika icyemezo",
+    "referrals": "Kohereza abarwayi",
+    "tasks": "Imirimo y'itsinda ry'abaganga",
+    "audit": "Igenzura ry'ibikorwa"
+  },
+  "placeholder": {
+    "comingSoon": "Bizubakwa muri {{phase}}",
+    "description": "Iyi paji ni iy'agateganyo mu ishingiro rya porogaramu. Izatangwa mu cyiciro gikurikira."
+  },
+  "notFound": {
+    "title": "Paji ntiyabonetse",
+    "description": "Iyi aderesi ntihuye n'ipaji iyo ari yo yose muri iri gerageza.",
+    "home": "Jya ku ipaji ibanza"
+  }
 }
