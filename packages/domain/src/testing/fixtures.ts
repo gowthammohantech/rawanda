@@ -28,6 +28,7 @@ export function makeRuleset(overrides: Partial<DemoRuleset> = {}): DemoRuleset {
       glucoseMmol: { min: 1, max: 35 },
       glucoseMgDl: { min: 18, max: 630 },
     },
+    synthetic: true,
     ...overrides,
   };
 }

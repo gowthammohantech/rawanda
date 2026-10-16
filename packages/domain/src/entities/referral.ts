@@ -43,6 +43,8 @@ export type Referral = PersistedEntity & {
   assignedWorkerId: PersonaId | null;
   // ext: carried from the review decision.
   priority: ReviewPriority;
+  // ext: clinician's reason for referral, from the `refer` decision (CLN-07, FND-03).
+  referralReason?: string;
   // ext: set on `scheduled`.
   appointmentAt: IsoUtc | null;
   // ext: set on `cancelled_with_reason`.

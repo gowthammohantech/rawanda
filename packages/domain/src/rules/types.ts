@@ -73,6 +73,8 @@ export type DemoRuleset = {
   requiredInputs: string[];
   thresholds: DemoThresholds;
   plausibility: PlausibilityLimits;
+  // ext: privacy assertion hook shared with persisted entities (FND-03 schemas require it).
+  synthetic: true;
 };
 
 export type ScreeningEvaluationInput = {

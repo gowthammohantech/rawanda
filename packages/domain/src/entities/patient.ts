@@ -10,6 +10,8 @@ export type Patient = PersistedEntity & {
   displayName: string;
   /** ISO date `YYYY-MM-DD`, or null when only an estimated age is known. */
   dateOfBirth: string | null;
+  // ext: HWM-04 registration without a known date of birth (FND-03 `RegisterPatientInput`).
+  estimatedAgeYears?: number;
   sexOptional: Sex | null;
   facilityId: FacilityId;
   districtId: DistrictId;

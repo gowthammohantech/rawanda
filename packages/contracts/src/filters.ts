@@ -1,0 +1,156 @@
+/**
+ * List / query filter schemas (FND-07 `list*` methods). Paging values are coerced so URL
+ * search params can be parsed directly. App phases extend these (CLN `ReviewQueueFilterSchema`,
+ * `PatientSearchSchema`, audit-filter extensions; ADM `AdminFilterSchema`).
+ */
+import {
+  AUDIT_CATEGORIES,
+  AUDIT_OUTCOMES,
+  CARE_TASK_KINDS,
+  CARE_TASK_STATUSES,
+  ENTITY_TYPES,
+  FOLLOW_UP_PURPOSES,
+  FOLLOW_UP_STATUSES,
+  REFERRAL_STATUSES,
+  REVIEW_ORIGINS,
+  REVIEW_PRIORITIES,
+  REVIEW_STATUSES,
+  ROLES,
+  SCREENING_STATUSES,
+} from "@laif/domain";
+import { z } from "zod";
+
+import {
+  CorrelationIdSchema,
+  DistrictIdSchema,
+  FacilityIdSchema,
+  PatientIdSchema,
+  PersonaIdSchema,
+} from "./entities.ts";
+import { vMsg } from "./messages.ts";
+import { IsoDate, IsoUtcString } from "./primitives.ts";
+
+export const DEFAULT_PAGE_SIZE = 25;
+export const MAX_PAGE_SIZE = 200;
+
+export const PageRequestSchema = z.object({
+  page: z.coerce.number().int().min(1).default(1),
+  pageSize: z.coerce.number().int().min(1).max(MAX_PAGE_SIZE).default(DEFAULT_PAGE_SIZE),
+});
+export type PageRequest = z.output<typeof PageRequestSchema>;
+
+const pageShape = PageRequestSchema.shape;
+const facilityIds = z.array(FacilityIdSchema).optional();
+const districtIds = z.array(DistrictIdSchema).optional();
+
+/** Adds `to: dateRangeOrder` when both bounds are set and `from > to`. */
+function refineRange<T extends { from?: string | undefined; to?: string | undefined }>(
+  value: T,
+  ctx: z.core.$RefinementCtx<T>,
+): void {
+  if (value.from !== undefined && value.to !== undefined && value.from > value.to) {
+    ctx.addIssue({ code: "custom", path: ["to"], message: vMsg("dateRangeOrder") });
+  }
+}
+
+export const PatientFilterSchema = z.object({
+  ...pageShape,
+  /** Free-text search over display name / synthetic identifier. */
+  q: z.string().trim().max(100).optional(),
+  facilityIds,
+  districtIds,
+});
+export type PatientFilter = z.output<typeof PatientFilterSchema>;
+
+export const ScreeningFilterSchema = z
+  .object({
+    ...pageShape,
+    patientId: PatientIdSchema.optional(),
+    statuses: z.array(z.enum(SCREENING_STATUSES)).optional(),
+    facilityIds,
+    districtIds,
+    from: IsoUtcString.optional(),
+    to: IsoUtcString.optional(),
+  })
+  .superRefine(refineRange);
+export type ScreeningFilter = z.output<typeof ScreeningFilterSchema>;
+
+export const ReviewFilterSchema = z.object({
+  ...pageShape,
+  statuses: z.array(z.enum(REVIEW_STATUSES)).optional(),
+  priorities: z.array(z.enum(REVIEW_PRIORITIES)).optional(),
+  origins: z.array(z.enum(REVIEW_ORIGINS)).optional(),
+  assignedClinicianId: PersonaIdSchema.nullable().optional(),
+  patientId: PatientIdSchema.optional(),
+  facilityIds,
+  /** Derived: review due date passed while not decided (demo fixture SLA only). */
+  overdueOnly: z.boolean().optional(),
+});
+export type ReviewFilter = z.output<typeof ReviewFilterSchema>;
+
+export const ReferralFilterSchema = z.object({
+  ...pageShape,
+  statuses: z.array(z.enum(REFERRAL_STATUSES)).optional(),
+  priorities: z.array(z.enum(REVIEW_PRIORITIES)).optional(),
+  patientId: PatientIdSchema.optional(),
+  facilityIds,
+  destinationFacilityIds: z.array(FacilityIdSchema).optional(),
+  assignedWorkerId: PersonaIdSchema.optional(),
+  /** Derived `overdue` (never a stored status). */
+  overdueOnly: z.boolean().optional(),
+});
+export type ReferralFilter = z.output<typeof ReferralFilterSchema>;
+
+export const FollowUpFilterSchema = z.object({
+  ...pageShape,
+  statuses: z.array(z.enum(FOLLOW_UP_STATUSES)).optional(),
+  purposes: z.array(z.enum(FOLLOW_UP_PURPOSES)).optional(),
+  patientId: PatientIdSchema.optional(),
+  facilityIds,
+  assignedWorkerId: PersonaIdSchema.nullable().optional(),
+  /** Derived `overdue` (never a stored status). */
+  overdueOnly: z.boolean().optional(),
+});
+export type FollowUpFilter = z.output<typeof FollowUpFilterSchema>;
+
+export const TaskFilterSchema = z.object({
+  ...pageShape,
+  kinds: z.array(z.enum(CARE_TASK_KINDS)).optional(),
+  statuses: z.array(z.enum(CARE_TASK_STATUSES)).optional(),
+  assignedToId: PersonaIdSchema.nullable().optional(),
+  patientId: PatientIdSchema.optional(),
+  facilityIds,
+});
+export type TaskFilter = z.output<typeof TaskFilterSchema>;
+
+export const AuditFilterSchema = z
+  .object({
+    ...pageShape,
+    /** Action name or dot prefix (e.g. `review.` matches `review.decided`). */
+    action: z.string().trim().max(100).optional(),
+    actorId: PersonaIdSchema.optional(),
+    actorRole: z.enum(ROLES).optional(),
+    categories: z.array(z.enum(AUDIT_CATEGORIES)).optional(),
+    outcome: z.enum(AUDIT_OUTCOMES).optional(),
+    entityType: z.enum(ENTITY_TYPES).optional(),
+    entityId: z.string().trim().min(1).optional(),
+    patientId: PatientIdSchema.optional(),
+    correlationId: CorrelationIdSchema.optional(),
+    facilityIds,
+    districtIds,
+    from: IsoUtcString.optional(),
+    to: IsoUtcString.optional(),
+  })
+  .superRefine(refineRange);
+export type AuditFilter = z.output<typeof AuditFilterSchema>;
+
+/** Aggregate metrics filter: Kigali calendar days (`YYYY-MM-DD`), scope ids (FND-06). */
+export const MetricsFilterSchema = z
+  .object({
+    from: IsoDate.optional(),
+    to: IsoDate.optional(),
+    districtIds,
+    facilityIds,
+  })
+  .superRefine(refineRange);
+export type MetricsFilter = z.output<typeof MetricsFilterSchema>;

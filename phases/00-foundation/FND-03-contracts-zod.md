@@ -1,6 +1,6 @@
 # FND-03 — @laif/contracts: Zod schemas, inputs, results and error codes
 
-**Status:** Planned
+**Status:** Done
 
 ## 1. Header
 
@@ -94,13 +94,13 @@ Introduces the canonical list of `validation` namespace keys (`VALIDATION_KEYS`)
 
 ## 9. Acceptance criteria
 
-- [ ] `ScreeningInputSchema` rejects glucose value without unit with message `validation:unitRequired` (no English text).
-- [ ] Dismiss decision (`kind: 'dismiss'`) with reason `"ok"` fails with `validation:reasonTooShort|{"min":10}`; each of the five decision kinds has a valid and an invalid fixture.
-- [ ] Referral transition to `completed` without `evidence` fails with `validation:evidenceRequired`.
-- [ ] Changing a field type in `@laif/domain` `Patient` without updating `PatientSchema` fails `pnpm typecheck`.
-- [ ] After `installContractsErrorMap()`, parsing `{}` with any schema yields only messages that `parseValidationMessage` can decode.
-- [ ] Timestamps with `+02:00` offsets are accepted and normalised to `Z`.
-- [ ] Every entity schema rejects `synthetic: false`.
+- [x] `ScreeningInputSchema` rejects glucose value without unit with message `validation:unitRequired` (no English text).
+- [x] Dismiss decision (`kind: 'dismiss'`) with reason `"ok"` fails with `validation:reasonTooShort|{"min":10}`; each of the five decision kinds has a valid and an invalid fixture.
+- [x] Referral transition to `completed` without `evidence` fails with `validation:evidenceRequired`.
+- [x] Changing a field type in `@laif/domain` `Patient` without updating `PatientSchema` fails `pnpm typecheck`.
+- [x] After `installContractsErrorMap()`, parsing `{}` with any schema yields only messages that `parseValidationMessage` can decode.
+- [x] Timestamps with `+02:00` offsets are accepted and normalised to `Z`.
+- [x] Every entity schema rejects `synthetic: false`.
 
 ## 10. Tests
 

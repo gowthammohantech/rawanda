@@ -35,7 +35,7 @@ Exact versions were resolved at install time (2026-10-16) and are written withou
 | `globals`                     | 17.13.0        | root `devDependencies`                                           |
 | `jsdom`                       | 30.1.3         | root `devDependencies` (`ui-web` test environment)               |
 | `@types/node`                 | 22.20.5        | root `devDependencies` (matches the Node 22 line)                |
-| Zod                           | 4.x            | Line pinned here; installed with an exact patch by FND-03        |
+| Zod                           | 4.6.7          | `packages/contracts` `dependencies` (FND-03, one hoisted copy)   |
 
 ## Decisions and rationale
 
