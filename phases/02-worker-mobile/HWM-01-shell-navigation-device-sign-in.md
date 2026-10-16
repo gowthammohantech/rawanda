@@ -10,7 +10,7 @@
 | Depends on | FND-11 (worker Expo shell, providers, DemoBanner + language switcher), FND-05/06 (personas incl. `persona-sup-alpha`, `createPersonaSession`), FND-07/08 (repository on SQLite `laif-worker.db`), FND-10 (`ui-native`) |
 | Trace | PRD HW-01 · FRD HW-01, §7 Permissions · Tech spec §2.2 "Sign-in / role", "Settings" (partial), ADR-P10 · FRD T-01, T-02 |
 | Size | M |
-| Status | Planned |
+| Status | Done |
 
 ## 2. Goal
 

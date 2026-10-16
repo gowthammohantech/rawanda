@@ -5,11 +5,11 @@ import { QueryClient } from "@tanstack/react-query";
 
 import { APP_ID } from "./config.ts";
 import { platform } from "./platform";
-import { createAppSession, type AppSession } from "./session.ts";
+import { createSessionStore, type SessionStore } from "./session/store.ts";
 
 export type ShellServices = {
   i18n: I18nInstance;
-  session: AppSession;
+  session: SessionStore;
   queryClient: QueryClient;
 };
 
@@ -31,7 +31,7 @@ export async function bootstrapShell(): Promise<ShellServices> {
   });
   return {
     i18n,
-    session: createAppSession(platform.personaStorage()),
+    session: createSessionStore(platform.personaStorage()),
     queryClient: createAppQueryClient(),
   };
 }

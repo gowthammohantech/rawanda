@@ -9,8 +9,8 @@
  *
  * Web apps get the whole repository wrapped (`withSimulatedTransport`); the worker app writes
  * locally without faults and only its sync sends to the simulated remote go through
- * `simulateTransport`. The `demo` and `sync` namespaces are never wrapped (a demo must always be
- * able to switch faults off again).
+ * `simulateTransport`. The `demo`, `sync` and `device` namespaces are never wrapped (a demo must always be
+ * able to switch faults off again; demo sign-in works offline).
  *
  * Deviation (decision): the spec signature `withSimulatedTransport(repo, faults, clock)` takes
  * `options` instead of `clock` — latency is real time (`sleep`), never demo-clock time.
@@ -63,9 +63,9 @@ export async function simulateTransport<T>(
   return result;
 }
 
-const UNWRAPPED = new Set(["sync", "demo"]);
+const UNWRAPPED = new Set(["sync", "demo", "device"]);
 
-/** Wraps every top-level repository method (not `sync` / `demo`) in `simulateTransport`. */
+/** Wraps every top-level repository method (not `sync` / `demo` / `device`) in `simulateTransport`. */
 export function withSimulatedTransport(
   repo: CareRepository,
   faults: FaultInjector,

@@ -16,6 +16,7 @@ import { createSeed, type SeedDataset } from "@laif/mock-data";
 import type { CareRepository, RepositoryDeps } from "./care-repository.ts";
 import { Engine } from "./core/engine.ts";
 import { applyClockOffset, createDemoApi, META_KEYS } from "./services/demo.ts";
+import { createDeviceService } from "./services/devices.ts";
 import { createServices } from "./services/index.ts";
 import { createSimulatedRemote } from "./sync/simulated-remote.ts";
 import { createSyncQueue } from "./sync/sync-queue.ts";
@@ -58,6 +59,7 @@ export function createCareRepository(deps: RepositoryDeps): CareRepository {
     ...createServices(engine),
     sync: queue.api,
     demo: createDemoApi({ engine, remote, faults, seed }),
+    device: createDeviceService(engine, { remote: remote !== null }),
   };
   return syncEnabled
     ? repository
