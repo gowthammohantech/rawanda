@@ -14,6 +14,7 @@
  */
 import { asId, type AppId, type DemoPersona, type PatientId, type PersonaId } from "@laif/domain";
 
+import { buildCitizenOverlay } from "./overlays/citizen.ts";
 import { PERSONA_IDS } from "./reference/personas.ts";
 import { SEED_COLLECTIONS, type SeedCollectionName, type SeedDataset } from "./seed/types.ts";
 
@@ -25,9 +26,11 @@ export type SliceOverlay = (base: Readonly<SeedDataset>) => OverlayRecords;
 
 /**
  * The overlay registry. ADM-01 registers `admin: buildAdminAnalyticsOverlay`; CTZ-01 registers
- * `citizen: buildCitizenOverlay`. Until then the slices carry no overlay records.
+ * `citizen: buildCitizenOverlay`.
  */
-export const SLICE_OVERLAYS: Readonly<Partial<Record<AppId, SliceOverlay>>> = {};
+export const SLICE_OVERLAYS: Readonly<Partial<Record<AppId, SliceOverlay>>> = {
+  citizen: buildCitizenOverlay,
+};
 
 export type SeedSlice = SeedDataset & {
   slice: { appId: AppId; personaId: PersonaId | null };

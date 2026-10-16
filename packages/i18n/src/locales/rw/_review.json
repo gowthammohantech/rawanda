@@ -700,5 +700,17 @@
   "worker:notFound.home": "draft",
   "citizen:notFound.title": "draft",
   "citizen:notFound.description": "draft",
-  "citizen:notFound.home": "draft"
+  "citizen:notFound.home": "draft",
+  "domain:audit.citizen.consent.granted": "needs clinical/linguistic review",
+  "domain:audit.citizen.consent.withdrawn": "needs clinical/linguistic review",
+  "domain:audit.citizen.result.viewed": "needs clinical/linguistic review",
+  "domain:audit.citizen.next_step.acknowledged": "needs clinical/linguistic review",
+  "domain:audit.citizen.support.callback_requested": "needs clinical/linguistic review",
+  "domain:audit.citizen.settings.changed": "needs clinical/linguistic review",
+  "citizen:errors.forbidden": "draft",
+  "citizen:errors.consentRequired": "needs clinical/linguistic review",
+  "citizen:errors.notFound": "draft",
+  "citizen:errors.conflict": "needs clinical/linguistic review",
+  "citizen:errors.unavailable": "draft",
+  "citizen:errors.generic": "draft"
 }

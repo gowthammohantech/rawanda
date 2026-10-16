@@ -500,6 +500,24 @@
     "device": {
       "revoked": "Uburenganzira bw'igikoresho bwakuweho",
       "restored": "Uburenganzira bw'igikoresho bwasubijweho"
+    },
+    "citizen": {
+      "consent": {
+        "granted": "Uruhushya rwatanzwe (agasanduku)",
+        "withdrawn": "Uruhushya rwakuweho (agasanduku)"
+      },
+      "result": {
+        "viewed": "Igisubizo cyarebwe mu gasanduku"
+      },
+      "next_step": {
+        "acknowledged": "Intambwe ikurikira yasomwe"
+      },
+      "support": {
+        "callback_requested": "Hasabwe guhamagarwa"
+      },
+      "settings": {
+        "changed": "Igenamiterere ry'agasanduku ryahinduwe"
+      }
     }
   }
 }
