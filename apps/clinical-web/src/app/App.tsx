@@ -1,3 +1,4 @@
+import { flushSync } from "react-dom";
 import { RouterProvider, type RouterProviderProps } from "react-router";
 
 import { Boot } from "./Boot.tsx";
@@ -17,7 +18,12 @@ export function App({ services, router }: AppProps) {
     <AppProviders services={services}>
       <Boot>
         <DemoToolsProvider>
-          <RouterProvider router={router} />
+          <RouterProvider
+            router={router}
+            flushSync={(fn) => {
+              flushSync(fn);
+            }}
+          />
         </DemoToolsProvider>
       </Boot>
     </AppProviders>

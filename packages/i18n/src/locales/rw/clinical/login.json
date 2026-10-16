@@ -1,0 +1,18 @@
+{
+  "title": "Kwinjira mu igerageza",
+  "subtitle": "Hitamo umukozi w'igerageza n'ivuriro ukoreramo uyu munsi.",
+  "demoOnlyNotice": "Igerageza gusa — si ukwinjira mu buryo bwemewe. Guhitamo umukozi ntibyemeza uwo uri we; byerekana gusa icyo urwo ruhare rushobora gukora ku makuru atari ay'ukuri.",
+  "noSessionNote": "Nta mukozi w'igerageza wahiswemo · Guhindura uruhare ni igerageza gusa — si ukwinjira mu buryo bwemewe",
+  "selectPersona": "Umukozi w'igerageza",
+  "selectFacility": "Ivuriro rikoreshwa",
+  "facilityPlaceholder": "Hitamo ivuriro",
+  "facilityHint": "Hagaragazwa gusa amavuriro uyu mukozi yemerewe gukoreramo.",
+  "facilityNeedsPersona": "Banza uhitemo umukozi.",
+  "personaPill": "Umukozi w'igerageza",
+  "permittedFacilities": "Amavuriro: {{facilities}}",
+  "submit": "Injira mu rubuga rw'abaganga",
+  "selected": "Byahiswemo",
+  "errors": {
+    "personaRequired": "Hitamo umukozi w'igerageza."
+  }
+}

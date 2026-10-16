@@ -1,9 +1,12 @@
 /**
- * FND-11 shell gate in a real browser (Chromium): banner on every route, EN ⇄ RW persisted
- * across reload with `<html lang>`, Offline banner, Reset demo, no axe violations on the shell.
+ * FND-11 / CLN-01 shell gate in a real browser (Chromium): banner on every route incl. login,
+ * EN ⇄ RW persisted across reload with `<html lang>`, Offline banner, Reset demo, no axe
+ * violations on the demo sign-in or the shell.
  */
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
+
+import { signIn } from "./helpers.ts";
 
 test("clinical shell: banner, language persistence, demo tools", async ({ page }) => {
   await page.goto("/");
@@ -12,15 +15,18 @@ test("clinical shell: banner, language persistence, demo tools", async ({ page }
   await expect(banner).toContainText(
     "DEMONSTRATION — SYNTHETIC PATIENT DATA — NOT FOR CLINICAL USE",
   );
+  const login = await new AxeBuilder({ page }).include("[data-testid=public-shell]").analyze();
+  expect(login.violations.map((violation) => violation.id)).toEqual([]);
 
   await page.getByRole("button", { name: "Ikinyarwanda" }).click();
   await expect(page.locator("html")).toHaveAttribute("lang", "rw");
   await page.reload();
   await expect(page.locator("html")).toHaveAttribute("lang", "rw");
-  await expect(page.getByTestId("app-shell")).toBeVisible();
+  await expect(page.getByTestId("public-shell")).toBeVisible();
   await page.getByRole("button", { name: "English" }).click();
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
 
+  await signIn(page, "Zorvel Quorandi");
   await page.goto("/clinical/queue");
   await expect(banner).toBeVisible();
   await page.getByRole("button", { name: "Demo tools" }).click();

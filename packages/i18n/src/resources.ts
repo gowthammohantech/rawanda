@@ -14,6 +14,9 @@
 import enAdmin from "./locales/en/admin.json";
 import enCitizen from "./locales/en/citizen.json";
 import enClinical from "./locales/en/clinical.json";
+import enClinicalCommon from "./locales/en/clinical/common.json";
+import enClinicalErrors from "./locales/en/clinical/errors.json";
+import enClinicalLogin from "./locales/en/clinical/login.json";
 import enCommon from "./locales/en/common.json";
 import enDemo from "./locales/en/demo.json";
 import enDomain from "./locales/en/domain.json";
@@ -23,6 +26,9 @@ import enWorker from "./locales/en/worker.json";
 import rwAdmin from "./locales/rw/admin.json";
 import rwCitizen from "./locales/rw/citizen.json";
 import rwClinical from "./locales/rw/clinical.json";
+import rwClinicalCommon from "./locales/rw/clinical/common.json";
+import rwClinicalErrors from "./locales/rw/clinical/errors.json";
+import rwClinicalLogin from "./locales/rw/clinical/login.json";
 import rwCommon from "./locales/rw/common.json";
 import rwDemo from "./locales/rw/demo.json";
 import rwDomain from "./locales/rw/domain.json";
@@ -53,7 +59,12 @@ export const enResources = {
   domain: enDomain,
   demo: enDemo,
   shell: enShell,
-  clinical: enClinical,
+  clinical: {
+    ...enClinical,
+    common: enClinicalCommon,
+    login: enClinicalLogin,
+    errors: enClinicalErrors,
+  },
   worker: enWorker,
   admin: enAdmin,
   citizen: enCitizen,
@@ -66,7 +77,12 @@ export const rwResources: Record<Namespace, object> = {
   domain: rwDomain,
   demo: rwDemo,
   shell: rwShell,
-  clinical: rwClinical,
+  clinical: {
+    ...rwClinical,
+    common: rwClinicalCommon,
+    login: rwClinicalLogin,
+    errors: rwClinicalErrors,
+  },
   worker: rwWorker,
   admin: rwAdmin,
   citizen: rwCitizen,

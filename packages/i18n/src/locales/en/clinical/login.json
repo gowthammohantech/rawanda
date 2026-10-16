@@ -1,0 +1,18 @@
+{
+  "title": "Demo access",
+  "subtitle": "Choose a demo persona and the facility you are working in today.",
+  "demoOnlyNotice": "Demo only — not authentication. Choosing a persona does not prove who you are; it only shows what that role can do with synthetic data.",
+  "noSessionNote": "No demo persona selected · Role switching is demo only — not authentication",
+  "selectPersona": "Demo persona",
+  "selectFacility": "Active facility",
+  "facilityPlaceholder": "Choose a facility",
+  "facilityHint": "Only the facilities this persona is permitted to work in are listed.",
+  "facilityNeedsPersona": "Choose a persona first.",
+  "personaPill": "Demo persona",
+  "permittedFacilities": "Facilities: {{facilities}}",
+  "submit": "Enter the clinical portal",
+  "selected": "Selected",
+  "errors": {
+    "personaRequired": "Choose a demo persona."
+  }
+}

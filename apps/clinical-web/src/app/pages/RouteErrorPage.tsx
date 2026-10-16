@@ -1,12 +1,34 @@
-import { DemoBanner, ErrorState } from "@laif/ui-web";
+import { RepositoryError } from "@laif/repositories";
+import { DemoBanner, ErrorState, LanguageSwitcher, SkipLink, useTx } from "@laif/ui-web";
+import { useRouteError } from "react-router";
 
-/** Route render error: still shows the DemoBanner; "Try again" reloads the page. */
+import { useDocumentTitle } from "./useDocumentTitle.ts";
+
+/**
+ * Route render / loader error (CLN-01 task 10): DemoBanner and EN/RW switcher stay visible;
+ * "Try again" reloads the page.
+ */
 export function RouteErrorPage() {
+  const t = useTx();
+  const error = useRouteError();
+  const title = t("clinical:errors.routeError.title");
+  useDocumentTitle(title);
+  if (import.meta.env.DEV) console.error("[clinical] route error", error);
   return (
     <div className="bg-canvas min-h-dvh">
+      <SkipLink />
       <DemoBanner />
-      <main id="main" className="mx-auto max-w-xl p-6">
-        <ErrorState code="INTERNAL" onRetry={() => window.location.reload()} />
+      <div className="mx-auto flex max-w-xl justify-end px-6 pt-4">
+        <LanguageSwitcher />
+      </div>
+      <main id="main" tabIndex={-1} className="mx-auto max-w-xl p-6 outline-none">
+        <h1 className="sr-only">{title}</h1>
+        <ErrorState
+          title={title}
+          message={t("clinical:errors.routeError.description")}
+          code={error instanceof RepositoryError ? error.code : "INTERNAL"}
+          onRetry={() => window.location.reload()}
+        />
       </main>
     </div>
   );

@@ -1,6 +1,6 @@
-import { EmptyState, PageHeader, useTx, type TranslationKey } from "@laif/ui-web";
+import { EmptyState, useTx, type TranslationKey } from "@laif/ui-web";
 
-import { useDocumentTitle } from "./useDocumentTitle.ts";
+import { PageHeader } from "./PageHeader.tsx";
 
 export type PlaceholderPageProps = {
   /** Page title key, e.g. `clinical:nav.queue`. */
@@ -9,14 +9,12 @@ export type PlaceholderPageProps = {
   phase: string;
 };
 
-/** Placeholder for a route delivered by a later CLN phase. */
+/** Placeholder for a route delivered by a later CLN phase ("Delivered in CLN-xx"). */
 export function PlaceholderPage({ titleKey, phase }: PlaceholderPageProps) {
   const t = useTx();
-  const title = t(titleKey);
-  useDocumentTitle(title);
   return (
     <>
-      <PageHeader title={title} subtitle={t("clinical:appName")} />
+      <PageHeader title={t(titleKey)} subtitle={t("clinical:appName")} />
       <EmptyState
         icon="clock"
         title={t("clinical:placeholder.comingSoon", { phase })}

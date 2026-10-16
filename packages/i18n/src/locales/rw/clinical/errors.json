@@ -1,0 +1,17 @@
+{
+  "permissionDenied": {
+    "title": "Ntibiboneka kuri uru ruhare rw'igerageza",
+    "body": "Uruhare rw'igerageza rwa {{role}} ntirushobora gufungura iyi paji. Iki gikorwa cyanditswe mu gitabo cy'igenzura.",
+    "switchPersona": "Hindura umukozi",
+    "navHint": "Ntibiboneka kuri uru ruhare rw'igerageza"
+  },
+  "notFound": {
+    "title": "Paji ntiyabonetse",
+    "description": "Iyi aderesi ntihuye n'ipaji iyo ari yo yose muri iri gerageza.",
+    "home": "Jya ku rutonde rwo gusuzuma"
+  },
+  "routeError": {
+    "title": "Iyi paji ntiyashoboye kugaragara",
+    "description": "Habaye ikibazo mu kugaragaza iyi paji. Ongera ugerageze, cyangwa usubize igerageza uko ryari riri ukoresheje Ibikoresho by'igerageza."
+  }
+}

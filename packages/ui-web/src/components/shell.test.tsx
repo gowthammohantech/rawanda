@@ -50,6 +50,33 @@ describe("Sidebar", () => {
     await expectNoAxeViolations(container);
   });
 
+  it("renders a disabled item as non-link text with its reason (tooltip + screen reader)", async () => {
+    const { container } = renderUi(
+      <Sidebar
+        sections={[
+          {
+            items: [
+              {
+                to: "/clinical/audit",
+                labelKey: "shell:nav.section.reports",
+                icon: "shield",
+                disabled: true,
+                disabledReason: "Not available for this demo role",
+              },
+            ],
+          },
+        ]}
+        activePath="/clinical/queue"
+      />,
+    );
+    expect(screen.queryByRole("link", { name: /Reports/ })).toBeNull();
+    const item = screen.getByText("Reports").parentElement as HTMLElement;
+    expect(item.getAttribute("aria-disabled")).toBe("true");
+    expect(item.getAttribute("title")).toBe("Not available for this demo role");
+    expect(item.textContent).toContain("Not available for this demo role");
+    await expectNoAxeViolations(container);
+  });
+
   it("works router-free with activePath", () => {
     renderUi(<Sidebar sections={sections} activePath="/clinical/queue/123" />);
     expect(screen.getByRole("link", { name: /Overview/ }).getAttribute("aria-current")).toBe(

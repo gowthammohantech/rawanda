@@ -17,6 +17,13 @@ export type SidebarItem = {
   countTone?: Tone;
   /** Exact match only (for index routes). */
   end?: boolean;
+  /**
+   * Visibly disabled (e.g. the persona lacks the capability): rendered as non-interactive text
+   * with `aria-disabled`, and `disabledReason` as tooltip + screen-reader text.
+   */
+  disabled?: boolean;
+  /** Translated reason shown for a disabled item. */
+  disabledReason?: string;
   /** Indented child links shown under the item (ref image 4 sub-navigation). */
   children?: readonly { to: string; labelKey: TranslationKey; end?: boolean }[];
 };
@@ -92,26 +99,42 @@ export function Sidebar({
             <ul className="m-0 list-none space-y-0.5 p-0">
               {section.items.map((item) => (
                 <li key={item.to}>
-                  <Link
-                    to={item.to}
-                    {...(item.end === undefined ? {} : { end: item.end })}
-                    className={linkClass}
-                    {...(onNavigate === undefined ? {} : { onClick: onNavigate })}
-                  >
-                    <Icon name={item.icon} size={18} className="text-muted shrink-0" />
-                    <span className="min-w-0 flex-1 truncate">{t(item.labelKey)}</span>
-                    {item.count === undefined || item.count === 0 ? null : (
-                      <span
-                        className={cx(
-                          "inline-flex min-w-5 items-center justify-center rounded-sm px-1.5 font-mono text-[11px] font-medium",
-                          COUNT_TONE[item.countTone ?? "neutral"],
-                        )}
-                      >
-                        {item.count}
-                      </span>
-                    )}
-                  </Link>
-                  {item.children === undefined || item.children.length === 0 ? null : (
+                  {item.disabled === true ? (
+                    <span
+                      aria-disabled="true"
+                      title={item.disabledReason}
+                      className="target-min text-muted flex cursor-not-allowed items-center gap-3 rounded-md px-3 py-2 text-sm opacity-60"
+                    >
+                      <Icon name="lock" size={18} className="text-muted shrink-0" />
+                      <span className="min-w-0 flex-1 truncate">{t(item.labelKey)}</span>
+                      {item.disabledReason === undefined ? null : (
+                        <span className="sr-only">{`, ${item.disabledReason}`}</span>
+                      )}
+                    </span>
+                  ) : (
+                    <Link
+                      to={item.to}
+                      {...(item.end === undefined ? {} : { end: item.end })}
+                      className={linkClass}
+                      {...(onNavigate === undefined ? {} : { onClick: onNavigate })}
+                    >
+                      <Icon name={item.icon} size={18} className="text-muted shrink-0" />
+                      <span className="min-w-0 flex-1 truncate">{t(item.labelKey)}</span>
+                      {item.count === undefined || item.count === 0 ? null : (
+                        <span
+                          className={cx(
+                            "inline-flex min-w-5 items-center justify-center rounded-sm px-1.5 font-mono text-[11px] font-medium",
+                            COUNT_TONE[item.countTone ?? "neutral"],
+                          )}
+                        >
+                          {item.count}
+                        </span>
+                      )}
+                    </Link>
+                  )}
+                  {item.disabled === true ||
+                  item.children === undefined ||
+                  item.children.length === 0 ? null : (
                     <ul className="border-border m-0 ms-5 mt-0.5 list-none border-s p-0">
                       {item.children.map((child) => (
                         <li key={child.to}>

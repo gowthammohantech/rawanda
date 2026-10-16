@@ -2,10 +2,9 @@
   "appName": "CareConnect Clinical Portal (Demo)",
   "nav": {
     "section": {
-      "work": "Work",
-      "oversight": "Oversight"
+      "workspace": "Workspace",
+      "governance": "Governance"
     },
-    "login": "Demo access",
     "queue": "Review queue",
     "patients": "Patients",
     "patient": "Patient overview",
@@ -13,15 +12,12 @@
     "decision": "Record decision",
     "referrals": "Referrals",
     "tasks": "Care-team tasks",
-    "audit": "Audit"
+    "audit": "Audit",
+    "settings": "Settings",
+    "help": "Help"
   },
   "placeholder": {
-    "comingSoon": "Built in {{phase}}",
+    "comingSoon": "Delivered in {{phase}}",
     "description": "This screen is a placeholder in the foundation shell. It is delivered in a later phase."
-  },
-  "notFound": {
-    "title": "Page not found",
-    "description": "This address does not match any screen in this demo.",
-    "home": "Go to the start page"
   }
 }
