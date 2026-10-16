@@ -1,0 +1,7 @@
+# PrototypeFourApplications-main/ is a read-only reference and is intentionally NOT a workspace package.
+packages:
+  - "apps/*"
+  - "packages/*"
+
+onlyBuiltDependencies:
+  - esbuild

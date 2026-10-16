@@ -1,6 +1,6 @@
 # FND-01 — Monorepo, toolchain and package skeletons
 
-**Status:** Planned
+**Status:** Done
 
 ## 1. Header
 

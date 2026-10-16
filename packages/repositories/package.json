@@ -1,0 +1,24 @@
+{
+  "name": "@laif/repositories",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "types": "./src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "build": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@laif/domain": "workspace:*",
+    "@laif/contracts": "workspace:*",
+    "@laif/auth-demo": "workspace:*",
+    "@laif/analytics": "workspace:*",
+    "@laif/mock-data": "workspace:*"
+  }
+}

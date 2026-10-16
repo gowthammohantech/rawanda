@@ -1,0 +1,20 @@
+# Read-only references (never formatted)
+PrototypeFourApplications-main/
+ref-images/
+
+# Hand-authored source documents and phase plans (kept verbatim)
+docs/*.md
+docs/ref/
+phases/
+Implementation_notes.md
+
+# Generated
+pnpm-lock.yaml
+node_modules/
+dist/
+.turbo/
+.expo/
+web-build/
+coverage/
+playwright-report/
+test-results/

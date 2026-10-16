@@ -1,0 +1,18 @@
+# Dependencies
+node_modules/
+
+# Build / tool output
+dist/
+.turbo/
+.expo/
+web-build/
+coverage/
+playwright-report/
+test-results/
+*.tsbuildinfo
+
+# Environment
+.env*
+
+# OS / editor
+.DS_Store
