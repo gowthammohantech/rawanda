@@ -1,6 +1,6 @@
 # FND-08 — Dexie (web) and expo-sqlite (native) store adapters + @laif/test-utils
 
-**Status:** Planned
+**Status:** Done
 
 ## 1. Header
 
@@ -75,12 +75,12 @@ Only `common:error.storageUnavailable` (EN + RW) for quota/version failures.
 
 ## 9. Acceptance criteria
 
-- [ ] Contract suite green for memory, Dexie (fake-indexeddb) and SQLite (better-sqlite3).
-- [ ] Reopen test: queued sync ops and a draft screening persist across adapter re-creation for Dexie and SQLite.
-- [ ] Throwing inside `transaction` rolls back all writes on both adapters.
-- [ ] Importing the root `@laif/repositories` entry with `dexie` and `expo-sqlite` mocked to throw on import still succeeds (entry isolation).
-- [ ] `createTestRepository({ scenario: 'SCN-09-version-conflict' })` yields a queued op whose processing ends in `needs_resolution`.
-- [ ] `pnpm verify` green.
+- [x] Contract suite green for memory, Dexie (fake-indexeddb) and SQLite (better-sqlite3).
+- [x] Reopen test: queued sync ops and a draft screening persist across adapter re-creation for Dexie and SQLite.
+- [x] Throwing inside `transaction` rolls back all writes on both adapters.
+- [x] Importing the root `@laif/repositories` entry with `dexie` and `expo-sqlite` mocked to throw on import still succeeds (entry isolation).
+- [x] `createTestRepository({ scenario: 'SCN-09-version-conflict' })` yields a queued op whose processing ends in `needs_resolution`.
+- [x] `pnpm verify` green.
 
 ## 10. Tests
 

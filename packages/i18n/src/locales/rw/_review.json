@@ -21,6 +21,7 @@
   "common:state.permissionDenied": "draft",
   "common:state.conflict": "draft",
   "common:state.success": "draft",
+  "common:error.storageUnavailable": "draft",
   "common:language.label": "draft",
   "common:languageName.en": "draft",
   "common:languageName.rw": "draft",

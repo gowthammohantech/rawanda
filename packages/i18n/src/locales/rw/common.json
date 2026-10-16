@@ -25,6 +25,9 @@
     "conflict": "Iyi nyandiko yahinduwe n'undi muntu.",
     "success": "Byabitswe."
   },
+  "error": {
+    "storageUnavailable": "Iki gikoresho nticyashoboye kubika cyangwa gusoma amakuru. Koresha \"Subiza igerageza uko ryari\" kugira ngo wongere utangire."
+  },
   "language": {
     "label": "Ururimi"
   },

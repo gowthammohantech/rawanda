@@ -6,7 +6,12 @@
   "sideEffects": false,
   "exports": {
     ".": "./src/index.ts",
-    "./contract-suite": "./src/store/contract-suite.ts"
+    "./contract-suite": "./src/store/contract-suite.ts",
+    "./dexie": "./src/store/dexie-adapter.ts",
+    "./sqlite": "./src/store/sqlite-adapter.ts",
+    "./expo-sqlite": "./src/store/expo-sqlite-executor.ts",
+    "./ids/web": "./src/ids/web.ts",
+    "./ids/native": "./src/ids/native.ts"
   },
   "types": "./src/index.ts",
   "scripts": {
@@ -16,14 +21,26 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@laif/domain": "workspace:*",
-    "@laif/contracts": "workspace:*",
-    "@laif/mock-data": "workspace:*",
-    "@laif/auth-demo": "workspace:*",
     "@laif/analytics": "workspace:*",
+    "@laif/auth-demo": "workspace:*",
+    "@laif/contracts": "workspace:*",
+    "@laif/domain": "workspace:*",
+    "@laif/mock-data": "workspace:*",
+    "dexie": "4.4.6",
     "zod": "4.6.7"
   },
+  "peerDependenciesMeta": {
+    "expo-crypto": {
+      "optional": true
+    },
+    "expo-sqlite": {
+      "optional": true
+    }
+  },
   "devDependencies": {
-    "@laif/i18n": "workspace:*"
+    "@laif/i18n": "workspace:*",
+    "@types/better-sqlite3": "9.6.0",
+    "better-sqlite3": "13.0.3",
+    "fake-indexeddb": "6.2.5"
   }
 }

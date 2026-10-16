@@ -61,6 +61,11 @@ export type HarnessOptions = {
   faults?: FaultConfigPatch;
   /** Seed the store (`ensureSeeded`) before returning (default true). */
   seeded?: boolean;
+  /**
+   * Prefix of the sequential runtime ids (default `rt`). A harness reopened over a persisted
+   * store (FND-08 restart tests) needs a different one, since its counter starts again.
+   */
+  idPrefix?: string;
 };
 
 export async function createHarness(options: HarnessOptions = {}): Promise<Harness> {
@@ -88,7 +93,7 @@ export async function createHarness(options: HarnessOptions = {}): Promise<Harne
     const repo = createCareRepository({
       store,
       clock,
-      ids: createSequentialIdGenerator(`rt${++state.builds}`),
+      ids: createSequentialIdGenerator(`${options.idPrefix ?? "rt"}${++state.builds}`),
       getActor: actor,
       appId: options.appId ?? "clinical",
       sleep: () => Promise.resolve(),

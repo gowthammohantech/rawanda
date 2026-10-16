@@ -25,6 +25,9 @@
     "conflict": "This record was changed by someone else.",
     "success": "Saved."
   },
+  "error": {
+    "storageUnavailable": "This device could not save or read data. Use \"Reset demo\" to start again."
+  },
   "language": {
     "label": "Language"
   },

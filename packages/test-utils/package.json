@@ -5,7 +5,8 @@
   "type": "module",
   "sideEffects": false,
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./sqlite": "./src/sqlite.ts"
   },
   "types": "./src/index.ts",
   "scripts": {
@@ -15,9 +16,14 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@laif/domain": "workspace:*",
+    "@laif/auth-demo": "workspace:*",
     "@laif/contracts": "workspace:*",
+    "@laif/domain": "workspace:*",
+    "@laif/i18n": "workspace:*",
     "@laif/mock-data": "workspace:*",
-    "@laif/repositories": "workspace:*"
+    "@laif/repositories": "workspace:*",
+    "@types/better-sqlite3": "9.6.0",
+    "better-sqlite3": "13.0.3",
+    "fake-indexeddb": "6.2.5"
   }
 }

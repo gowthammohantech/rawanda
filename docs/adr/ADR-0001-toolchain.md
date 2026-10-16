@@ -15,31 +15,37 @@ this ADR pins them so every later phase builds on the same baseline.
 Exact versions were resolved at install time (2026-10-16) and are written without carets
 (`save-exact=true`).
 
-| Tool                          | Pinned version | Where pinned                                                        |
-| ----------------------------- | -------------- | ------------------------------------------------------------------- |
-| Node.js                       | 22.23.3 (LTS)  | `.mise.toml`                                                        |
-| pnpm                          | 10.34.7        | `.mise.toml`, root `package.json` `packageManager`                  |
-| TypeScript                    | 5.9.3          | root `devDependencies`                                              |
-| Turborepo (`turbo`)           | 2.11.8         | root `devDependencies`                                              |
-| Vitest                        | 3.2.7          | root `devDependencies`                                              |
-| `@vitest/coverage-v8`         | 3.2.7          | root `devDependencies`                                              |
-| ESLint                        | 9.39.5         | root `devDependencies`                                              |
-| `@eslint/js`                  | 9.39.5         | root `devDependencies`                                              |
-| `typescript-eslint`           | 8.71.2         | root `devDependencies`                                              |
-| Prettier                      | 3.9.10         | root `devDependencies`                                              |
-| `prettier-plugin-tailwindcss` | 0.8.1          | root `devDependencies`                                              |
-| `tsx`                         | 4.23.15        | root `devDependencies` (runs `scripts/*.ts`)                        |
-| `eslint-plugin-react-hooks`   | 7.1.1          | root `devDependencies` (scoped to `apps/**`, `packages/ui-*/**`)    |
-| `eslint-plugin-jsx-a11y`      | 6.10.2         | root `devDependencies` (scoped to `apps/**`, `packages/ui-*/**`)    |
-| `eslint-plugin-i18next`       | 6.1.5          | root `devDependencies` (`no-literal-string`, `jsx-text-only`)       |
-| `globals`                     | 17.13.0        | root `devDependencies`                                              |
-| `jsdom`                       | 30.1.3         | root `devDependencies` (`ui-web` test environment)                  |
-| `@types/node`                 | 22.20.5        | root `devDependencies` (matches the Node 22 line)                   |
-| Zod                           | 4.6.7          | `packages/contracts` `dependencies` (FND-03, one hoisted copy)      |
-| i18next                       | 25.10.10       | `packages/i18n` `dependencies` (FND-04)                             |
-| react-i18next                 | 15.7.4         | `packages/i18n` `dependencies` (FND-04)                             |
-| React (dev/test only)         | 19.3.0         | `packages/i18n` `devDependencies`; FND-11 sets the repo override    |
-| `@testing-library/react`      | 16.3.3         | `packages/i18n` `devDependencies` (+ `@testing-library/dom` 10.4.2) |
+| Tool                          | Pinned version   | Where pinned                                                        |
+| ----------------------------- | ---------------- | ------------------------------------------------------------------- |
+| Node.js                       | 22.23.3 (LTS)    | `.mise.toml`                                                        |
+| pnpm                          | 10.34.7          | `.mise.toml`, root `package.json` `packageManager`                  |
+| TypeScript                    | 5.9.3            | root `devDependencies`                                              |
+| Turborepo (`turbo`)           | 2.11.8           | root `devDependencies`                                              |
+| Vitest                        | 3.2.7            | root `devDependencies`                                              |
+| `@vitest/coverage-v8`         | 3.2.7            | root `devDependencies`                                              |
+| ESLint                        | 9.39.5           | root `devDependencies`                                              |
+| `@eslint/js`                  | 9.39.5           | root `devDependencies`                                              |
+| `typescript-eslint`           | 8.71.2           | root `devDependencies`                                              |
+| Prettier                      | 3.9.10           | root `devDependencies`                                              |
+| `prettier-plugin-tailwindcss` | 0.8.1            | root `devDependencies`                                              |
+| `tsx`                         | 4.23.15          | root `devDependencies` (runs `scripts/*.ts`)                        |
+| `eslint-plugin-react-hooks`   | 7.1.1            | root `devDependencies` (scoped to `apps/**`, `packages/ui-*/**`)    |
+| `eslint-plugin-jsx-a11y`      | 6.10.2           | root `devDependencies` (scoped to `apps/**`, `packages/ui-*/**`)    |
+| `eslint-plugin-i18next`       | 6.1.5            | root `devDependencies` (`no-literal-string`, `jsx-text-only`)       |
+| `globals`                     | 17.13.0          | root `devDependencies`                                              |
+| `jsdom`                       | 30.1.3           | root `devDependencies` (`ui-web` test environment)                  |
+| `@types/node`                 | 22.20.5          | root `devDependencies` (matches the Node 22 line)                   |
+| Zod                           | 4.6.7            | `packages/contracts` `dependencies` (FND-03, one hoisted copy)      |
+| i18next                       | 25.10.10         | `packages/i18n` `dependencies` (FND-04)                             |
+| react-i18next                 | 15.7.4           | `packages/i18n` `dependencies` (FND-04)                             |
+| React (dev/test only)         | 19.3.0           | `packages/i18n` `devDependencies`; FND-11 sets the repo override    |
+| `@testing-library/react`      | 16.3.3           | `packages/i18n` `devDependencies` (+ `@testing-library/dom` 10.4.2) |
+| Dexie                         | 4.4.6            | `packages/repositories` `dependencies` (FND-08, `./dexie` entry)    |
+| `fake-indexeddb`              | 6.2.5            | `packages/repositories` dev, `packages/test-utils` (FND-08)         |
+| `better-sqlite3`              | 13.0.3           | `packages/repositories` dev, `packages/test-utils` (Node SQLite)    |
+| `@types/better-sqlite3`       | 9.6.0            | next to `better-sqlite3`                                            |
+| `expo-sqlite` (optional peer) | 58.0.13 (SDK 58) | not installed; `peerDependenciesMeta` optional, FND-11 installs     |
+| `expo-crypto` (optional peer) | 58.0.6 (SDK 58)  | not installed; `peerDependenciesMeta` optional, FND-11 installs     |
 
 ## Decisions and rationale
 
@@ -91,6 +97,20 @@ test-utils`, then `ui-web → ui-native`; a package may only depend on earlier p
 | —                                                             | `onlyBuiltDependencies: [esbuild]` in `pnpm-workspace.yaml`                                                                                                   | pnpm 10 blocks dependency build scripts by default; esbuild (used by tsx/Vite/Vitest) is explicitly allowed.                                                                                                                                                                                                                          |
 | `.prettierignore` lists the read-only references              | Also ignores the hand-authored source documents (`docs/*.md`, `docs/ref/`, `phases/`, `Implementation_notes.md`) and `pnpm-lock.yaml`                         | Source documents and phase plans are kept verbatim; reformatting them is out of scope. ADRs under `docs/adr/` are formatted.                                                                                                                                                                                                          |
 | Package `scripts`: `typecheck`, `lint`, `build`               | Also `test: vitest run`, plus a per-package `vitest.config.ts`                                                                                                | Lets `turbo run test` work per package; the root `pnpm test` still runs everything via projects mode.                                                                                                                                                                                                                                 |
+
+## FND-08 additions (storage adapters)
+
+- **Optional native peers without a version range.** `@laif/repositories` declares `expo-sqlite`
+  and `expo-crypto` only in `peerDependenciesMeta` (`optional: true`), not in `peerDependencies`.
+  With `auto-install-peers=true`, pnpm installs even _optional_ peers that carry a range, which
+  pulled `expo`, `react-native` and ~400 packages into the lockfile before the SDK pin (FND-11).
+  The versions matching Expo SDK 58 are `expo-sqlite@58.0.13` and `expo-crypto@58.0.6`; FND-11
+  adds them (via `npx expo install`) to the native apps. Until then
+  `packages/repositories/src/types/expo-optional-peers.d.ts` declares the few members the
+  `./expo-sqlite` and `./ids/native` entries use; FND-11 may delete it to use the real types.
+- **`onlyBuiltDependencies` += `better-sqlite3`** (native addon; Node-side SQLite for tests only).
+- Platform entries are subpath exports (`./dexie`, `./sqlite`, `./expo-sqlite`, `./ids/web`,
+  `./ids/native`); the root entry imports none of them (tested by `src/entry-isolation.test.ts`).
 
 ## Consequences
 
