@@ -23,7 +23,16 @@
     "offline": "Nta murandasi. Impinduka zibikwa kuri iki gikoresho.",
     "permissionDenied": "Nta burenganzira ufite bwo kureba ibi.",
     "conflict": "Iyi nyandiko yahinduwe n'undi muntu.",
-    "success": "Byabitswe."
+    "success": "Byabitswe.",
+    "errorCode": "Kode y'ikosa: {{code}}",
+    "clearFilters": "Kuraho ibyo gushungura",
+    "cachedData": "Herekanywe amakuru abitswe kuri iki gikoresho",
+    "lastUpdated": "Byavuguruwe bwa nyuma {{time}}",
+    "emptyTitle": "Nta kintu kirimo kugeza ubu",
+    "errorTitle": "Habaye ikibazo",
+    "offlineTitle": "Nta murandasi ufite",
+    "permissionDeniedTitle": "Kwinjira birabujijwe",
+    "permissionDeniedHint": "Saba umuhuzabikorwa niba ukeneye uburenganzira. Iki gikorwa cyanditswe."
   },
   "language": {
     "label": "Ururimi"
@@ -104,5 +113,91 @@
     "inDays_other": "mu minsi {{count}}"
   },
   "suppressed": "Byahishwe (<{{threshold}})",
-  "suppressedExplanation": "Munsi ya {{threshold}}, byahishwe kugira ngo ibanga ririndwe"
+  "suppressedExplanation": "Munsi ya {{threshold}}, byahishwe kugira ngo ibanga ririndwe",
+  "table": {
+    "showing": "Herekanywe {{shown}} kuri {{total}}",
+    "sortBy": "Tondeka ukurikije {{column}}",
+    "sortedAscending": "bitondetse uhereye ku gito",
+    "sortedDescending": "bitondetse uhereye ku kinini",
+    "noResults": "Nta bisubizo bihuye n'ibi byo gushungura.",
+    "actions": "Ibikorwa",
+    "pagination": "Impapuro",
+    "page": "Urupapuro {{page}} kuri {{pages}}",
+    "previousPage": "Urupapuro rubanza",
+    "nextPage": "Urupapuro rukurikira",
+    "resultCount_one": "Igisubizo {{count}}",
+    "resultCount_other": "Ibisubizo {{count}}"
+  },
+  "dialog": {
+    "close": "Funga idirishya",
+    "reasonLabel": "Impamvu",
+    "reasonHint": "Nibura inyuguti {{min}}, utabariyemo imyanya. Impamvu yandikwa mu gitabo cy'igenzura.",
+    "reasonProgress": "Inyuguti {{count}} kuri nibura {{min}}",
+    "saving": "Birimo kubikwa…",
+    "cannotUndo": "Ntibishobora gusubizwa inyuma."
+  },
+  "error": {
+    "VALIDATION_ERROR": "Amakuru amwe ntiyemewe. Reba ibice byagaragajwe.",
+    "FORBIDDEN": "Nta burenganzira ufite bwo gukora ibi.",
+    "NOT_FOUND": "Iyi nyandiko ntiyabonetse.",
+    "CONFLICT": "Iyi nyandiko yahinduwe n'undi muntu.",
+    "DEPENDENCY_UNAVAILABLE": "Serivisi ihujwe ntiboneka ubu. Ongera ugerageze nyuma.",
+    "TIMEOUT": "Igisabwa cyatinze cyane. Ongera ugerageze.",
+    "OFFLINE": "Nta murandasi. Ongera ugerageze umaze kubona umurandasi.",
+    "INTERNAL": "Habaye ikibazo kuri seriveri. Ongera ugerageze."
+  },
+  "ui": {
+    "unitMissing": "Igipimo kibura",
+    "required": "Birakenewe",
+    "optional": "Si ngombwa",
+    "charCount": "Inyuguti {{count}} kuri {{max}}",
+    "expand": "Erekana ibisobanuro",
+    "collapse": "Hisha ibisobanuro",
+    "progress": "{{value}} kuri {{max}}",
+    "chartData": "Amakuru y'igishushanyo: {{title}}",
+    "chartCategory": "Igihe",
+    "stepStatus": {
+      "done": "Byarangiye",
+      "current": "Intambwe iriho",
+      "upcoming": "Ntiratangira",
+      "cancelled": "Byahagaritswe"
+    },
+    "stepPosition": "Intambwe {{index}} kuri {{total}}",
+    "stepper": "Intambwe z'igikorwa",
+    "dismiss": "Kuraho",
+    "breadcrumb": "Inzira y'urupapuro",
+    "kigaliTime": "Isaha ya Kigali (UTC+2)",
+    "notRecorded": "Ntibyanditswe",
+    "notifications": "Amatangazo"
+  },
+  "conflict": {
+    "title": "Undi muntu yahinduye iyi nyandiko",
+    "description": "Impinduka yawe ntiyabitswe. Gereranya inyandiko zombi uhitemo iyo ugumana.",
+    "field": "Igice",
+    "yourVersion": "Inyandiko yawe",
+    "latestVersion": "Inyandiko iheruka",
+    "changedBy": "Byahinduwe na {{name}}",
+    "changedAt": "Byahinduwe saa {{time}}"
+  },
+  "flag": {
+    "title": "Impamvu byagaragajwe",
+    "requiresReview": "Bikeneye isuzuma",
+    "noReviewNeeded": "Nta suzuma rikenewe",
+    "notEvaluable": "Ntibyasuzumwa — bikeneye umuntu",
+    "reasons": "Impamvu",
+    "observations": "Ibipimo byagereranyijwe n'itegeko ry'igerageza",
+    "observationValue": "{{value}} — urugero rw'igerageza {{threshold}}",
+    "ruleset": "Amategeko {{version}}",
+    "inputs": "Amakuru yakoreshejwe",
+    "noReasons": "Nta tegeko ry'igerageza ryakozweho.",
+    "input": {
+      "bloodPressure": "Umuvuduko w'amaraso",
+      "glucose": "Isukari mu maraso",
+      "glucoseContext": "Igihe isukari yapimiwe"
+    }
+  },
+  "privacy": {
+    "title": "Ibanga",
+    "body": "Iri gerageza rikoresha amakuru y'ikitegererezo gusa. Nta makuru nyayo y'abarwayi akusanywa, abikwa cyangwa yoherezwa ahandi."
+  }
 }

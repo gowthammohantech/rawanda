@@ -11,7 +11,8 @@
   },
   "search": {
     "placeholder": "Shakisha abarwayi n'inyandiko",
-    "shortcutHint": "Kanda ⌘K ushakishe"
+    "shortcutHint": "Kanda ⌘K ushakishe",
+    "label": "Shakisha"
   },
   "notifications": {
     "label": "Amatangazo",
@@ -21,5 +22,28 @@
     "label": "Umwirondoro",
     "openMenu": "Fungura urutonde rw'umwirondoro"
   },
-  "skipToContent": "Jya ku bikubiyemo by'ingenzi"
+  "skipToContent": "Jya ku bikubiyemo by'ingenzi",
+  "brand": {
+    "name": "CareConnect",
+    "country": "Rwanda",
+    "loading": "Duhuza ubuvuzi, kuva mu muryango kugera ku kigo nderabuzima",
+    "footer": "Guhuza ubuvuzi mu mutekano · Rwanda"
+  },
+  "navigation": "Inzira z'ingenzi",
+  "subNavigation": "Inzira z'igice",
+  "menu": {
+    "open": "Fungura urutonde rw'inzira",
+    "close": "Funga urutonde rw'inzira"
+  },
+  "persona": {
+    "label": "Umuntu w'igerageza",
+    "switch": "Hindura umuntu w'igerageza",
+    "current": "Umuntu w'igerageza: {{name}}"
+  },
+  "role": {
+    "scope": "Aho bigarukira: {{scope}}"
+  },
+  "offline": {
+    "lastSynced": "Byahujwe bwa nyuma {{time}}"
+  }
 }

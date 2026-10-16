@@ -67,5 +67,17 @@
       "fac-beta-1": "Ibitaro by'Akarere by'Igerageza Beta-1"
     }
   },
-  "roleSwitchDisclaimer": "Guhindura uruhare mu igerageza — si ukwinjira muri sisitemu"
+  "roleSwitchDisclaimer": "Guhindura uruhare mu igerageza — si ukwinjira muri sisitemu",
+  "badge": "Igerageza",
+  "ruleDisclaimerExplanation": "Iki kimenyetso gituruka ku itegeko ry'igerageza. Imibare yaryo ni iy'agateganyo kandi ntiyemejwe n'abaganga.",
+  "tools": {
+    "label": "Ibikoresho by'igerageza",
+    "reset": "Subiza igerageza uko ryari",
+    "resetTitle": "Gusubiza amakuru y'igerageza uko yari?",
+    "faults": "Igana ibibazo",
+    "offline": "Nta murandasi",
+    "slowNetwork": "Umurandasi utinda",
+    "serverErrors": "Amakosa ya seriveri",
+    "loadScenario": "Fungura urugero"
+  }
 }

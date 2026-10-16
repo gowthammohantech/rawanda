@@ -5,7 +5,8 @@
   "type": "module",
   "sideEffects": false,
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./web": "./src/web/index.ts"
   },
   "types": "./src/index.ts",
   "scripts": {
@@ -15,9 +16,44 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@laif/domain": "workspace:*",
     "@laif/contracts": "workspace:*",
+    "@laif/domain": "workspace:*",
+    "@laif/i18n": "workspace:*",
     "@laif/mock-data": "workspace:*",
     "@laif/repositories": "workspace:*"
+  },
+  "devDependencies": {
+    "@tanstack/react-query": "5.90.10",
+    "@testing-library/dom": "10.4.2",
+    "@testing-library/react": "16.3.3",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "react-router": "7.9.6"
+  },
+  "peerDependencies": {
+    "@tanstack/react-query": ">=5.0.0",
+    "@testing-library/react": ">=16.0.0",
+    "react": ">=19.0.0",
+    "react-dom": ">=19.0.0",
+    "react-router": ">=7.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@tanstack/react-query": {
+      "optional": true
+    },
+    "@testing-library/react": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    },
+    "react-router": {
+      "optional": true
+    }
   }
 }
