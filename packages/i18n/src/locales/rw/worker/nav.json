@@ -1,0 +1,12 @@
+{
+  "today": "Uyu munsi",
+  "find": "Shakisha",
+  "screen": "Suzuma",
+  "tasks": "Imirimo",
+  "sync": "Guhuza",
+  "settings": "Igenamiterere",
+  "online": "Kuri murandasi",
+  "networkStatus": "Imiterere ya murandasi: {{status}}",
+  "openSettings": "Fungura igenamiterere ({{name}})",
+  "openSettingsHint": "Herekana ururimi, amakuru yo kwinjira no gusohoka"
+}

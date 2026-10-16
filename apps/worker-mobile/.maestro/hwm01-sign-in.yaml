@@ -1,0 +1,30 @@
+# HWM-01 device gate (not part of `pnpm verify`): `pnpm --filter @laif/worker-mobile test:maestro`
+# with the app open in Expo Go / a dev build, starting signed out (fresh install or after Sign out).
+appId: host.exp.Exponent
+---
+- launchApp
+- assertVisible: "DEMONSTRATION — SYNTHETIC PATIENT DATA — NOT FOR CLINICAL USE"
+- assertVisible: "Choose your demo profile"
+- assertVisible: "Demo sign-in — not real authentication"
+- tapOn:
+    id: "persona-card-persona-chw-alpha1-a"
+- tapOn:
+    id: "persona-continue"
+- assertVisible: "Confirm your assignment"
+- assertVisible: "Demo Health Centre Alpha-1"
+- tapOn:
+    id: "scope-continue"
+- assertVisible: "Signed in to Demo Health Centre Alpha-1"
+- assertVisible:
+    id: "today-screen"
+- stopApp
+- launchApp
+- assertVisible:
+    id: "today-screen"
+- assertVisible: "Today"
+- tapOn:
+    id: "avatar-button"
+- tapOn:
+    id: "sign-out"
+- tapOn: "Sign out"
+- assertVisible: "Choose your demo profile"

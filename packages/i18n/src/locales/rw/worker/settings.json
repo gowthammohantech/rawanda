@@ -1,0 +1,20 @@
+{
+  "title": "Igenamiterere",
+  "language": "Ururimi",
+  "signedInAs": "Winjiye nka",
+  "demo": "Igerageza",
+  "about": "Ibyerekeye",
+  "profile": "Umwirondoro",
+  "role": "Uruhare",
+  "facility": "Ikigo nderabuzima",
+  "district": "Akarere",
+  "deviceId": "Nimero y'igikoresho",
+  "networkSimulation": "Kwigana murandasi",
+  "resetDemo": "Subiza igerageza uko ryari",
+  "comingIn": "Bizaboneka muri {{phase}}",
+  "aboutText": "CareConnect y'Umujyanama ni igerageza rikoresha amakuru y'igerageza gusa. Ntirikoreshwa mu buvuzi.",
+  "signOut": "Sohoka",
+  "signOutTitle": "Gusohoka kuri iki gikoresho?",
+  "signOutKeepsData": "Ibitarahujwe bigumye kuri iki gikoresho.",
+  "signedOut": "Wasohotse. Ibitarahujwe bigumye kuri iki gikoresho."
+}

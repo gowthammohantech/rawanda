@@ -1,19 +1,14 @@
 /**
  * Native providers (FND-10 order): I18nProvider > SafeAreaProvider > ToastProvider, then
- * QueryClientProvider and PersonaProvider. The RepositoryProvider is mounted by `Boot` once the
- * local database is open and seeded.
+ * QueryClientProvider and PersonaProvider (the synchronous device session store). The
+ * RepositoryProvider and the HWM-01 SessionProvider are mounted by `Boot` once the local database
+ * is open and seeded.
  */
 import { I18nProvider } from "@laif/i18n";
 import type { CareRepository } from "@laif/repositories";
 import { ToastProvider } from "@laif/ui-native";
 import { QueryClientProvider } from "@tanstack/react-query";
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useSyncExternalStore,
-  type ReactNode,
-} from "react";
+import { createContext, useContext, type ReactNode } from "react";
 import {
   initialWindowMetrics,
   SafeAreaProvider,
@@ -21,10 +16,10 @@ import {
 } from "react-native-safe-area-context";
 
 import type { ShellServices } from "./services.ts";
-import type { AppPersona, AppSession } from "./session.ts";
+import type { SessionStore } from "./session/store.ts";
 
 const RepositoryContext = createContext<CareRepository | null>(null);
-const SessionContext = createContext<AppSession | null>(null);
+const SessionStoreContext = createContext<SessionStore | null>(null);
 
 export function RepositoryProvider({
   repo,
@@ -40,10 +35,10 @@ export function PersonaProvider({
   session,
   children,
 }: {
-  session: AppSession;
+  session: SessionStore;
   children?: ReactNode;
 }) {
-  return <SessionContext.Provider value={session}>{children}</SessionContext.Provider>;
+  return <SessionStoreContext.Provider value={session}>{children}</SessionStoreContext.Provider>;
 }
 
 export function useRepository(): CareRepository {
@@ -52,18 +47,11 @@ export function useRepository(): CareRepository {
   return repo;
 }
 
-export function useSession(): AppSession {
-  const session = useContext(SessionContext);
-  if (session === null) throw new Error("useSession must be used inside <PersonaProvider>");
-  return session;
-}
-
-/** The signed-in demo persona; re-renders on every switch. */
-export function usePersona(): AppPersona | null {
-  const session = useSession();
-  const subscribe = useCallback((listener: () => void) => session.subscribe(listener), [session]);
-  const current = useCallback(() => session.current(), [session]);
-  return useSyncExternalStore(subscribe, current, current);
+/** The synchronous device session store (repository actor). Screens use `useSession()`. */
+export function useSessionStore(): SessionStore {
+  const store = useContext(SessionStoreContext);
+  if (store === null) throw new Error("useSessionStore must be used inside <PersonaProvider>");
+  return store;
 }
 
 export type AppProvidersProps = {

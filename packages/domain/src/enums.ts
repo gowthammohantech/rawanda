@@ -299,7 +299,8 @@ export const INSTRUCTION_PROGRESS_VALUES = ["planned", "completed", "cancelled"]
 export type InstructionProgress = (typeof INSTRUCTION_PROGRESS_VALUES)[number];
 
 // ── Devices ──────────────────────────────────────────────────────────────────
-export const DEVICE_SESSION_STATUSES = ["active", "revoked"] as const;
+/** `ended` = signed out on this device (HWM-01); the record is kept for the audit trail. */
+export const DEVICE_SESSION_STATUSES = ["active", "revoked", "ended"] as const;
 export type DeviceSessionStatus = (typeof DEVICE_SESSION_STATUSES)[number];
 
 // ── Actors ───────────────────────────────────────────────────────────────────

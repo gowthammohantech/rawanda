@@ -63,7 +63,8 @@
     },
     "deviceSession": {
       "active": "Birakora",
-      "revoked": "Byakuweho"
+      "revoked": "Byakuweho",
+      "ended": "Yasohotsemo"
     }
   },
   "screeningSource": {

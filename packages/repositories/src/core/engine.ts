@@ -39,6 +39,7 @@ import {
   type Clock,
   type CorrelationId,
   type DemoRuleset,
+  type DeviceSessionStatus,
   type DistrictId,
   type EntityType,
   type Facility,
@@ -81,7 +82,7 @@ export type AuditDraft = {
   actor?: { actorId: PersonaId | null; actorRole: Role | null };
 };
 
-type DeferredAudit = AuditDraft & {
+export type DeferredAudit = AuditDraft & {
   actorId: PersonaId | null;
   actorRole: Role | null;
   occurredAt: string;
@@ -89,7 +90,8 @@ type DeferredAudit = AuditDraft & {
 
 const deferredAudits = new WeakMap<RepositoryError, DeferredAudit[]>();
 
-function defer(error: RepositoryError, audit: DeferredAudit): RepositoryError {
+/** Attaches an audit written after the rollback (denials). Services use it for custom denials. */
+export function defer(error: RepositoryError, audit: DeferredAudit): RepositoryError {
   const list = deferredAudits.get(error) ?? [];
   list.push(audit);
   deferredAudits.set(error, list);
@@ -185,7 +187,7 @@ export class Engine {
     const raw = this.deps.getActor();
     let actor: ActorContext | null = raw ? { ...raw } : null;
     if (actor?.deviceSessionId) {
-      const session = await tx.get<{ status: "active" | "revoked" }>(
+      const session = await tx.get<{ status: DeviceSessionStatus }>(
         "deviceSessions",
         actor.deviceSessionId,
       );

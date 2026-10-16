@@ -63,7 +63,8 @@
     },
     "deviceSession": {
       "active": "Active",
-      "revoked": "Revoked"
+      "revoked": "Revoked",
+      "ended": "Signed out"
     }
   },
   "screeningSource": {
