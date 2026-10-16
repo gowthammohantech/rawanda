@@ -102,5 +102,7 @@
     "daysAgo_other": "{{count}} days ago",
     "inDays_one": "in {{count}} day",
     "inDays_other": "in {{count}} days"
-  }
+  },
+  "suppressed": "Suppressed (<{{threshold}})",
+  "suppressedExplanation": "Fewer than {{threshold}}, hidden to protect privacy"
 }

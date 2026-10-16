@@ -321,5 +321,70 @@
   },
   "derived": {
     "pastDueDemoTiming": "Past due date (demo timing)"
+  },
+  "permission": {
+    "patient": {
+      "read": "View patient records",
+      "register": "Register patients"
+    },
+    "screening": {
+      "create": "Record screenings",
+      "amend": "Correct screenings"
+    },
+    "review": {
+      "read": "View clinical reviews",
+      "decide": "Record review decisions"
+    },
+    "referral": {
+      "manage": "Manage referrals",
+      "complete": "Complete referrals with evidence"
+    },
+    "followup": {
+      "read_assigned": "View assigned follow-ups",
+      "update": "Update follow-ups"
+    },
+    "task": {
+      "assign": "Assign care tasks",
+      "read": "View care tasks"
+    },
+    "audit": {
+      "read": "View the audit log",
+      "read_scoped": "View the audit log for your scope",
+      "export": "Export the audit log"
+    },
+    "metrics": {
+      "read": "View programme metrics",
+      "drilldown": "Drill down into metrics"
+    },
+    "programme_action": {
+      "write": "Record programme actions"
+    },
+    "quality": {
+      "triage": "Triage data-quality issues"
+    },
+    "export": {
+      "aggregate": "Export aggregate reports"
+    },
+    "roles": {
+      "configure": "Configure roles and access"
+    },
+    "settings": {
+      "privacy": "Change privacy settings"
+    },
+    "self": {
+      "read": "View my own health record",
+      "reminders": {
+        "manage": "Manage my reminders"
+      },
+      "correction": {
+        "request": "Request a correction"
+      }
+    },
+    "demo": {
+      "reset": "Reset demo data (demo tooling)",
+      "scenario": {
+        "transfer": "Transfer demo scenarios (demo tooling)"
+      }
+    }
   }
 }

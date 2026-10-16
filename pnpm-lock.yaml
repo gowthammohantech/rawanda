@@ -62,21 +62,35 @@ importers:
       '@laif/auth-demo':
         specifier: workspace:*
         version: link:../auth-demo
+      '@laif/contracts':
+        specifier: workspace:*
+        version: link:../contracts
       '@laif/domain':
         specifier: workspace:*
         version: link:../domain
       '@laif/mock-data':
         specifier: workspace:*
         version: link:../mock-data
+    devDependencies:
+      '@laif/i18n':
+        specifier: workspace:*
+        version: link:../i18n
 
   packages/auth-demo:
     dependencies:
+      '@laif/contracts':
+        specifier: workspace:*
+        version: link:../contracts
       '@laif/domain':
         specifier: workspace:*
         version: link:../domain
       '@laif/mock-data':
         specifier: workspace:*
         version: link:../mock-data
+    devDependencies:
+      '@laif/i18n':
+        specifier: workspace:*
+        version: link:../i18n
 
   packages/contracts:
     dependencies:

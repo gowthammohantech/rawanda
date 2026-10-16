@@ -1,6 +1,6 @@
 # FND-06 — @laif/auth-demo (personas, roles, scope) and @laif/analytics (metrics, small-cell suppression)
 
-**Status:** Planned
+**Status:** Done
 
 ## 1. Header
 
@@ -89,14 +89,14 @@ Adds `domain:permission.<name>`, `domain:role.<role>` (if not already), `admin:m
 
 ## 9. Acceptance criteria
 
-- [ ] `checkAccess(analystAlpha, 'metrics.read', { districtId: BETA })` → `{ allowed: false, reason: 'SCOPE' }` (SCN-11).
-- [ ] Citizen persona cannot read another patient (`SCOPE`).
-- [ ] CHW cannot `review.decide` (`ROLE`).
-- [ ] On the baseline seed, `pathwayFunnel` totals equal independently computed values (recorded 57, flagged 20, reviewed 15, dismissed 3; `referred` = 12 (11 refer + 1 plan_follow_up); `completed` asserted against a naive filter over the seed).
-- [ ] The full role × permission matrix (10 roles) is table-tested; `scripts/gen-permissions-matrix.ts` (REL-05) reads it.
-- [ ] SCN-12 cell renders suppressed; its complementary cell is also suppressed when a total is shown.
-- [ ] CSV starts with the watermark line and contains no denylisted column (`displayName`, `patientId`, `syntheticIdentifier`, `dateOfBirth`).
-- [ ] All metrics are deterministic given the demo clock.
+- [x] `checkAccess(analystAlpha, 'metrics.read', { districtId: BETA })` → `{ allowed: false, reason: 'SCOPE' }` (SCN-11).
+- [x] Citizen persona cannot read another patient (`SCOPE`).
+- [x] CHW cannot `review.decide` (`ROLE`).
+- [x] On the baseline seed, `pathwayFunnel` totals equal independently computed values (recorded 57, flagged 20, reviewed 15, dismissed 3; `referred` = 12 (11 refer + 1 plan_follow_up); `completed` asserted against a naive filter over the seed).
+- [x] The full role × permission matrix (10 roles) is table-tested; `scripts/gen-permissions-matrix.ts` (REL-05) reads it.
+- [x] SCN-12 cell renders suppressed; its complementary cell is also suppressed when a total is shown.
+- [x] CSV starts with the watermark line and contains no denylisted column (`displayName`, `patientId`, `syntheticIdentifier`, `dateOfBirth`).
+- [x] All metrics are deterministic given the demo clock.
 
 ## 10. Tests
 

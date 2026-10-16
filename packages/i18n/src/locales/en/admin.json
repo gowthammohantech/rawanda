@@ -1,3 +1,78 @@
 {
-  "appName": "CareConnect Programme Admin (Demo)"
+  "appName": "CareConnect Programme Admin (Demo)",
+  "metric": {
+    "screenings_recorded": {
+      "label": "Screenings recorded",
+      "description": "Submitted screenings in the period (drafts excluded)."
+    },
+    "distinct_patients_screened": {
+      "label": "People screened",
+      "description": "Distinct patients with at least one submitted screening."
+    },
+    "screenings_flagged": {
+      "label": "Screenings flagged",
+      "description": "Submitted screenings the demo rule flagged for clinician review."
+    },
+    "reviews_pending": {
+      "label": "Reviews pending",
+      "description": "Flagged screenings whose review is pending or in progress."
+    },
+    "reviews_completed": {
+      "label": "Reviews completed",
+      "description": "Flagged screenings with a recorded decision or a dismissal with reason."
+    },
+    "reviews_dismissed": {
+      "label": "Flags dismissed with reason",
+      "description": "Reviewed flags dismissed by a clinician with a recorded reason. Never counted as completed care."
+    },
+    "pathway_referred": {
+      "label": "Referred or follow-up planned",
+      "description": "Reviewed flags with an active referral or a planned follow-up."
+    },
+    "pathway_completed": {
+      "label": "Pathway completed",
+      "description": "Referred screenings with a referral completed with evidence or a follow-up completed with outcome and evidence."
+    },
+    "referrals_completed": {
+      "label": "Referrals completed",
+      "description": "Referrals completed with completion evidence."
+    },
+    "follow_ups_completed": {
+      "label": "Follow-ups completed",
+      "description": "Follow-ups completed with a recorded outcome."
+    },
+    "median_days_to_review": {
+      "label": "Median days to review",
+      "description": "Median days from measurement to review decision, rounded to 1 decimal."
+    },
+    "overdue_referrals": {
+      "label": "Referrals past due date",
+      "description": "Open referrals whose demo due date has passed."
+    },
+    "overdue_follow_ups": {
+      "label": "Follow-ups past due date",
+      "description": "Open follow-ups whose demo due date has passed."
+    },
+    "missing_glucose_unit": {
+      "label": "Missing glucose unit",
+      "description": "Submitted screenings with a glucose value but no unit."
+    },
+    "possible_duplicate_identities": {
+      "label": "Possible duplicate identities",
+      "description": "Patients marked as a possible duplicate."
+    },
+    "flags_overturned_at_review": {
+      "label": "Flags overturned at review",
+      "description": "Flags a clinician dismissed after review."
+    },
+    "screening_amendments": {
+      "label": "Screening corrections",
+      "description": "Recorded amendments to submitted screenings."
+    },
+    "staff_time_minutes": {
+      "label": "Staff-time proxy (demo)",
+      "description": "Contact-attempt minutes plus screening capture time, in minutes. A demo proxy, not a measured workload."
+    },
+    "staffTimeProxyNote": "Staff-time proxy (demo) — not a measured workload."
+  }
 }

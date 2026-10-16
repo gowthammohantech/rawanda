@@ -1,3 +1,78 @@
 {
-  "appName": "Ubuyobozi bwa Porogaramu ya CareConnect (Igerageza)"
+  "appName": "Ubuyobozi bwa Porogaramu ya CareConnect (Igerageza)",
+  "metric": {
+    "screenings_recorded": {
+      "label": "Ibipimo byanditswe",
+      "description": "Ibipimo byoherejwe muri icyo gihe (ibitararangira ntibibarwa)."
+    },
+    "distinct_patients_screened": {
+      "label": "Abantu bapimwe",
+      "description": "Abarwayi batandukanye bafite nibura ipimwa rimwe ryoherejwe."
+    },
+    "screenings_flagged": {
+      "label": "Ibipimo byagaragajwe",
+      "description": "Ibipimo itegeko ry'igerageza ryagaragaje ko bikeneye isuzuma ry'umuganga."
+    },
+    "reviews_pending": {
+      "label": "Isuzuma ritegereje",
+      "description": "Ibipimo byagaragajwe bitegereje isuzuma cyangwa birimo gusuzumwa."
+    },
+    "reviews_completed": {
+      "label": "Isuzuma ryarangiye",
+      "description": "Ibipimo byagaragajwe byafatiwe icyemezo cyangwa byakuweho hatanzwe impamvu."
+    },
+    "reviews_dismissed": {
+      "label": "Ibimenyetso byakuweho hatanzwe impamvu",
+      "description": "Ibimenyetso umuganga yakuyeho atanze impamvu. Ntibibarwa nk'ubuvuzi bwarangiye."
+    },
+    "pathway_referred": {
+      "label": "Byoherejwe cyangwa byateganyirijwe gukurikiranwa",
+      "description": "Ibimenyetso byasuzumwe bifite koherezwa gukomeje cyangwa gukurikiranwa kwateganyijwe."
+    },
+    "pathway_completed": {
+      "label": "Urugendo rw'ubuvuzi rwarangiye",
+      "description": "Ibipimo byoherejwe bifite koherezwa kwarangiye hamwe n'ibimenyetso cyangwa gukurikiranwa kwarangiye hamwe n'umusaruro n'ibimenyetso."
+    },
+    "referrals_completed": {
+      "label": "Koherezwa kwarangiye",
+      "description": "Koherezwa kwarangiye hamwe n'ibimenyetso."
+    },
+    "follow_ups_completed": {
+      "label": "Ibikurikiranwa byarangiye",
+      "description": "Ibikurikiranwa byarangiye hamwe n'umusaruro wanditswe."
+    },
+    "median_days_to_review": {
+      "label": "Iminsi yo hagati kugeza ku isuzuma",
+      "description": "Iminsi yo hagati kuva ku ipimwa kugeza ku cyemezo cy'isuzuma, izengurutswe ku mubare umwe nyuma y'akadomo."
+    },
+    "overdue_referrals": {
+      "label": "Koherezwa kwarenze itariki",
+      "description": "Koherezwa kutararangira kwarenze itariki y'igerageza."
+    },
+    "overdue_follow_ups": {
+      "label": "Ibikurikiranwa byarenze itariki",
+      "description": "Ibikurikiranwa bitararangira byarenze itariki y'igerageza."
+    },
+    "missing_glucose_unit": {
+      "label": "Igipimo cy'isukari kitagira igice",
+      "description": "Ibipimo byoherejwe bifite agaciro k'isukari ariko nta gice cyanditswe."
+    },
+    "possible_duplicate_identities": {
+      "label": "Imyirondoro ishobora kuba yisubiramo",
+      "description": "Abarwayi bagaragajwe ko bashobora kuba banditswe kabiri."
+    },
+    "flags_overturned_at_review": {
+      "label": "Ibimenyetso byavanyweho mu isuzuma",
+      "description": "Ibimenyetso umuganga yakuyeho nyuma yo gusuzuma."
+    },
+    "screening_amendments": {
+      "label": "Ikosorwa ry'ibipimo",
+      "description": "Ikosorwa ryanditswe ku bipimo byoherejwe."
+    },
+    "staff_time_minutes": {
+      "label": "Igereranya ry'igihe cy'abakozi (igerageza)",
+      "description": "Iminota yo kugerageza guhamagara wongeyeho igihe cyo kwandika ibipimo. Ni igereranya ry'igerageza, si igipimo nyacyo cy'akazi."
+    },
+    "staffTimeProxyNote": "Igereranya ry'igihe cy'abakozi (igerageza) — si igipimo nyacyo cy'akazi."
+  }
 }

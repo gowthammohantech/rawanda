@@ -102,5 +102,7 @@
     "daysAgo_other": "hashize iminsi {{count}}",
     "inDays_one": "mu munsi {{count}}",
     "inDays_other": "mu minsi {{count}}"
-  }
+  },
+  "suppressed": "Byahishwe (<{{threshold}})",
+  "suppressedExplanation": "Munsi ya {{threshold}}, byahishwe kugira ngo ibanga ririndwe"
 }

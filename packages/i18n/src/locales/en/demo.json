@@ -66,5 +66,6 @@
       "fac-alpha-2": "Demo Health Centre Alpha-2",
       "fac-beta-1": "Demo District Hospital Beta-1"
     }
-  }
+  },
+  "roleSwitchDisclaimer": "Demo role switch — not authentication"
 }

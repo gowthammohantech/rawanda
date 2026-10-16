@@ -321,5 +321,70 @@
   },
   "derived": {
     "pastDueDemoTiming": "Itariki yarenze (igihe cy'igerageza)"
+  },
+  "permission": {
+    "patient": {
+      "read": "Kureba amadosiye y'abarwayi",
+      "register": "Kwandika abarwayi bashya"
+    },
+    "screening": {
+      "create": "Kwandika ibipimo",
+      "amend": "Gukosora ibipimo"
+    },
+    "review": {
+      "read": "Kureba isuzuma ry'abaganga",
+      "decide": "Gufata icyemezo cy'isuzuma"
+    },
+    "referral": {
+      "manage": "Gucunga koherezwa ku kindi kigo",
+      "complete": "Kurangiza koherezwa hamwe n'ibimenyetso"
+    },
+    "followup": {
+      "read_assigned": "Kureba ibikurikiranwa wahawe",
+      "update": "Kuvugurura ibikurikiranwa"
+    },
+    "task": {
+      "assign": "Gutanga imirimo y'ubuvuzi",
+      "read": "Kureba imirimo y'ubuvuzi"
+    },
+    "audit": {
+      "read": "Kureba igitabo cy'igenzura",
+      "read_scoped": "Kureba igitabo cy'igenzura mu karere kawe",
+      "export": "Kohereza igitabo cy'igenzura"
+    },
+    "metrics": {
+      "read": "Kureba imibare ya porogaramu",
+      "drilldown": "Gucukumbura imibare"
+    },
+    "programme_action": {
+      "write": "Kwandika ibikorwa bya porogaramu"
+    },
+    "quality": {
+      "triage": "Gusuzuma ibibazo by'ubuziranenge bw'amakuru"
+    },
+    "export": {
+      "aggregate": "Kohereza raporo z'imibare rusange"
+    },
+    "roles": {
+      "configure": "Gutunganya inshingano n'uburenganzira"
+    },
+    "settings": {
+      "privacy": "Guhindura igenamiterere ry'ibanga"
+    },
+    "self": {
+      "read": "Kureba amakuru yanjye y'ubuzima",
+      "reminders": {
+        "manage": "Gucunga ibinyibutsa byanjye"
+      },
+      "correction": {
+        "request": "Gusaba ikosorwa"
+      }
+    },
+    "demo": {
+      "reset": "Gusubiza amakuru y'igerageza uko yari (igikoresho cy'igerageza)",
+      "scenario": {
+        "transfer": "Kwimura ibyitegererezo by'igerageza (igikoresho cy'igerageza)"
+      }
+    }
   }
 }

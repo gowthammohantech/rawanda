@@ -16,7 +16,11 @@
   },
   "dependencies": {
     "@laif/domain": "workspace:*",
+    "@laif/contracts": "workspace:*",
     "@laif/mock-data": "workspace:*",
     "@laif/auth-demo": "workspace:*"
+  },
+  "devDependencies": {
+    "@laif/i18n": "workspace:*"
   }
 }
