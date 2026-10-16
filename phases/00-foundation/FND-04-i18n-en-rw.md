@@ -1,6 +1,6 @@
 # FND-04 — @laif/i18n: English ⇄ Kinyarwanda (P0) for web and React Native
 
-**Status:** Planned
+**Status:** Done
 
 ## 1. Header
 
@@ -76,14 +76,14 @@ This phase *is* the i18n foundation. Namespaces created: `common, validation, do
 
 ## 9. Acceptance criteria
 
-- [ ] `setLanguage('rw')` then re-creating the instance with the same storage starts in `rw` (persisted preference).
-- [ ] With all network APIs stubbed to throw, `createI18n` resolves and translates (offline bundles).
-- [ ] Deleting one RW key at runtime renders the EN string and records one dev warning; `getMissingKeyReport()` lists it.
-- [ ] `translateValidationMessage(t_rw, 'validation:reasonTooShort|{"min":10}')` returns the RW string with `10` interpolated.
-- [ ] `formatDateTime('2026-10-14T06:00:00.000Z','en')` contains `08:00`; the manual fallback path yields the same string.
-- [ ] `pnpm i18n:check` passes; removing an RW key makes it fail.
-- [ ] Using `t('common:doesNotExist')` is a TypeScript error.
-- [ ] Package imports no DOM-only or RN-only module at top level (native storage lives in a separate entry `@laif/i18n/native`, web in `@laif/i18n/web`).
+- [x] `setLanguage('rw')` then re-creating the instance with the same storage starts in `rw` (persisted preference).
+- [x] With all network APIs stubbed to throw, `createI18n` resolves and translates (offline bundles).
+- [x] Deleting one RW key at runtime renders the EN string and records one dev warning; `getMissingKeyReport()` lists it.
+- [x] `translateValidationMessage(t_rw, 'validation:reasonTooShort|{"min":10}')` returns the RW string with `10` interpolated.
+- [x] `formatDateTime('2026-10-14T06:00:00.000Z','en')` contains `08:00`; the manual fallback path yields the same string.
+- [x] `pnpm i18n:check` passes; removing an RW key makes it fail.
+- [x] Using `t('common:doesNotExist')` is a TypeScript error.
+- [x] Package imports no DOM-only or RN-only module at top level (native storage lives in a separate entry `@laif/i18n/native`, web in `@laif/i18n/web`).
 
 ## 10. Tests
 

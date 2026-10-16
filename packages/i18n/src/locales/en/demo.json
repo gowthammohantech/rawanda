@@ -1,0 +1,47 @@
+{
+  "banner": "DEMONSTRATION — SYNTHETIC PATIENT DATA — NOT FOR CLINICAL USE",
+  "syntheticData": "All patient data in this demo is synthetic.",
+  "resetDemo": "Reset demo",
+  "resetConfirm": "Reset all demo data on this device? This cannot be undone.",
+  "demoRoleSwitcher": "Demo role switch — not authentication",
+  "notForClinicalUse": "Not for clinical use",
+  "ruleDisclaimer": "DEMO_RULE_NOT_CLINICALLY_VALIDATED — this flag comes from an illustrative demo rule. Its thresholds are placeholders and are not clinically validated.",
+  "scenario": {
+    "SCN-01": {
+      "title": "Normal screening"
+    },
+    "SCN-02": {
+      "title": "Flagged screening"
+    },
+    "SCN-03": {
+      "title": "Clinician dismissal"
+    },
+    "SCN-04": {
+      "title": "Overdue referral"
+    },
+    "SCN-05": {
+      "title": "Completed follow-up"
+    },
+    "SCN-06": {
+      "title": "Missing glucose unit"
+    },
+    "SCN-07": {
+      "title": "Duplicate submission"
+    },
+    "SCN-08": {
+      "title": "Offline sync"
+    },
+    "SCN-09": {
+      "title": "Version conflict"
+    },
+    "SCN-10": {
+      "title": "Consent withdrawn"
+    },
+    "SCN-11": {
+      "title": "Unauthorised district access"
+    },
+    "SCN-12": {
+      "title": "Suppressed small aggregate"
+    }
+  }
+}

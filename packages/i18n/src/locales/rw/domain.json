@@ -1,0 +1,325 @@
+{
+  "status": {
+    "screening": {
+      "draft": "Ritararangira",
+      "submitted": "Ryoherejwe",
+      "review_required": "Bisaba gusuzumwa",
+      "no_review_required": "Ntibisaba gusuzumwa"
+    },
+    "review": {
+      "pending": "Birategereje",
+      "in_review": "Birimo gusuzumwa",
+      "action_recorded": "Igikorwa cyanditswe",
+      "dismissed_with_reason": "Byakuweho hatanzwe impamvu"
+    },
+    "referral": {
+      "created": "Byashyizweho",
+      "accepted": "Byemewe",
+      "scheduled": "Byateganyijwe",
+      "completed": "Byarangiye",
+      "cancelled_with_reason": "Byahagaritswe hatanzwe impamvu"
+    },
+    "followUp": {
+      "assigned": "Byahawe umukozi",
+      "contacted": "Yavuganywe",
+      "completed": "Byarangiye",
+      "unable_to_reach": "Ntiyabonetse",
+      "reassigned": "Byahawe undi mukozi"
+    },
+    "careTask": {
+      "open": "Bifunguye",
+      "in_progress": "Birimo gukorwa",
+      "done": "Byakozwe",
+      "cancelled_with_reason": "Byahagaritswe hatanzwe impamvu"
+    },
+    "syncOp": {
+      "queued": "Biri ku murongo",
+      "sending": "Birimo koherezwa",
+      "acknowledged": "Byakiriwe",
+      "retryable_failure": "Byanze — bizongera kugeragezwa",
+      "conflict": "Bivuguruzanya",
+      "needs_resolution": "Bikeneye gukemurwa",
+      "rejected": "Byanzwe",
+      "superseded": "Byasimbuwe",
+      "blocked_revoked": "Byahagaritswe — uburenganzira bwakuweho"
+    },
+    "entitySync": {
+      "saved_locally": "Byabitswe kuri iki gikoresho",
+      "syncing": "Birimo guhuzwa",
+      "synced": "Byahujwe",
+      "conflict": "Bivuguruzanya",
+      "rejected": "Byanzwe",
+      "blocked": "Byahagaritswe"
+    },
+    "reminder": {
+      "scheduled": "Biteganyijwe",
+      "delivered_simulated": "Byatanzwe (igerageza)",
+      "acknowledged": "Byabonywe",
+      "cancelled": "Byahagaritswe"
+    },
+    "careInstruction": {
+      "released": "Byatangajwe",
+      "withdrawn": "Byakuweho"
+    },
+    "deviceSession": {
+      "active": "Birakora",
+      "revoked": "Byakuweho"
+    }
+  },
+  "screeningSource": {
+    "worker_mobile": "Porogaramu y'umujyanama w'ubuzima",
+    "clinical_web": "Urubuga rw'abaganga",
+    "imported": "Byinjijwe biturutse ahandi"
+  },
+  "decision": {
+    "refer": "Kohereza ahandi kwivuza",
+    "plan_follow_up": "Gutegura isuzuma ry'ikurikirana",
+    "request_repeat_screening": "Gusaba kongera gupima",
+    "no_further_action": "Kwandika isuzuma — nta kindi gikorwa",
+    "dismiss": "Gukuraho ikimenyetso hatanzwe impamvu"
+  },
+  "priority": {
+    "routine": "Bisanzwe",
+    "urgent_demo": "Byihutirwa (igerageza)"
+  },
+  "origin": {
+    "rule_flag": "Ikimenyetso cy'itegeko ry'igerageza",
+    "manual_escalation": "Byazamuwe n'umukozi"
+  },
+  "dismissReason": {
+    "measurement_error_suspected": "Hakekwa ikosa mu gupima",
+    "repeat_reading_acceptable": "Igipimo cyasubiwemo kiri mu rugero",
+    "known_managed_condition": "Indwara izwi kandi isanzwe ikurikiranwa",
+    "duplicate_flag": "Ikimenyetso cyisubiyemo",
+    "other": "Ikindi"
+  },
+  "referralOutcome": {
+    "attended_seen": "Yitabiriye — yasuzumwe",
+    "attended_further_care_planned": "Yitabiriye — hateganyijwe ubundi buvuzi",
+    "attended_returned_to_community": "Yitabiriye — yasubijwe ku buvuzi bwo mu mudugudu"
+  },
+  "referralCancelReason": {
+    "patient_declined": "Umurwayi yabyanze",
+    "duplicate": "Byisubiyemo",
+    "no_longer_indicated": "Ntibikiri ngombwa",
+    "destination_unavailable": "Aho yoherejwe ntihaboneka",
+    "other": "Ikindi"
+  },
+  "followUpPurpose": {
+    "referral_attendance": "Kugenzura ko yitabiriye aho yoherejwe",
+    "planned_review": "Isuzuma ryateganyijwe",
+    "repeat_screening": "Kongera gupima",
+    "post_referral_check": "Gukurikirana nyuma yo koherezwa"
+  },
+  "followUpOutcome": {
+    "attended": "Yitabiriye",
+    "repeat_screening_done": "Yongeye gupimwa",
+    "referred_onward": "Yoherejwe ahandi",
+    "unable_to_reach": "Ntiyabonetse",
+    "declined": "Yabyanze"
+  },
+  "unableToReachReason": {
+    "not_at_home_repeatedly": "Ntiyari mu rugo (inshuro nyinshi)",
+    "moved_away": "Yimukiye ahandi",
+    "phone_unreachable": "Telefoni ntiboneka",
+    "declined_contact": "Yanze kuvugana",
+    "other": "Ikindi"
+  },
+  "contactMethod": {
+    "home_visit": "Gusura mu rugo",
+    "phone": "Telefoni",
+    "facility": "Ku kigo nderabuzima"
+  },
+  "contactResult": {
+    "reached": "Yabonetse",
+    "not_reached": "Ntiyabonetse",
+    "declined": "Yanze"
+  },
+  "clinicianConfirmation": {
+    "not_required": "Ntibikenewe",
+    "pending": "Bitegereje kwemezwa n'umuganga",
+    "confirmed": "Byemejwe",
+    "returned": "Byasubijwe umujyanama"
+  },
+  "careTaskKind": {
+    "follow_up_assignment": "Inshingano yo gukurikirana",
+    "correction_request": "Gusaba gukosora",
+    "callback_request": "Gusaba guhamagarwa",
+    "programme_action": "Igikorwa cya porogaramu",
+    "data_quality": "Ubuziranenge bw'amakuru"
+  },
+  "syncOpType": {
+    "create": "Gushyiraho",
+    "update": "Guhindura",
+    "command": "Itegeko"
+  },
+  "conflictResolution": {
+    "reapply_on_latest": "Ongera ushyire impinduka zanjye ku nyandiko nshya",
+    "keep_latest": "Gumana inyandiko nshya"
+  },
+  "glucoseContext": {
+    "fasting": "Atariye",
+    "non_fasting": "Yariye",
+    "not_recorded": "Ntibyanditswe"
+  },
+  "consent": {
+    "granted": "Uburenganzira bwatanzwe",
+    "withdrawn": "Uburenganzira bwakuweho",
+    "not_recorded": "Uburenganzira ntibwanditswe"
+  },
+  "identity": {
+    "verified_local": "Byemejwe ku rwego rw'ikigo",
+    "unverified": "Ntibyemejwe",
+    "possible_duplicate": "Ashobora kuba yanditswe kabiri",
+    "needs_match_review": "Bisaba kugenzura ko ari umuntu umwe"
+  },
+  "sex": {
+    "female": "Gore",
+    "male": "Gabo",
+    "not_recorded": "Ntibyanditswe"
+  },
+  "evidence": {
+    "facility_attendance_record": "Inyandiko y'ukwitabira ku kigo nderabuzima",
+    "clinician_confirmation": "Kwemezwa n'umuganga",
+    "return_slip_reference": "Nimero y'urupapuro rwo kugaruka",
+    "facility_register_checked": "Igitabo cy'ikigo nderabuzima cyagenzuwe",
+    "appointment_card_seen": "Ikarita ya gahunda yabonywe",
+    "worker_accompanied_visit": "Umujyanama yamuherekeje",
+    "patient_verbal_confirmation": "Umurwayi yabyemeje mu magambo"
+  },
+  "reminderCancelReason": {
+    "opted_out": "Yahisemo kutabona ibyibutsa",
+    "timing_changed": "Igihe cyahindutse",
+    "consent_withdrawn": "Uburenganzira bwakuweho",
+    "instruction_cancelled": "Amabwiriza yahagaritswe"
+  },
+  "channel": {
+    "in_app": "Muri porogaramu",
+    "sms_simulated": "SMS (igerageza)"
+  },
+  "reminderTiming": {
+    "day_before": "Umunsi ubanziriza",
+    "morning_of": "Mu gitondo cy'uwo munsi"
+  },
+  "careInstructionKind": {
+    "appointment": "Gahunda yo kwa muganga",
+    "referral": "Kohererezwa ahandi kwivuza",
+    "follow_up": "Ikurikirana"
+  },
+  "careInstructionSource": {
+    "review": "Isuzuma",
+    "referral": "Kohererezwa ahandi kwivuza",
+    "follow_up": "Ikurikirana"
+  },
+  "instructionProgress": {
+    "planned": "Biteganyijwe",
+    "completed": "Byarangiye",
+    "cancelled": "Byahagaritswe"
+  },
+  "role": {
+    "clinician": "Umuganga",
+    "nurse_reviewer": "Umuforomo usuzuma",
+    "facility_coordinator": "Umuhuzabikorwa w'ikigo nderabuzima",
+    "community_health_worker": "Umujyanama w'ubuzima",
+    "field_supervisor": "Umugenzuzi w'abajyanama b'ubuzima",
+    "programme_lead": "Umuyobozi wa porogaramu",
+    "district_analyst": "Umusesenguzi w'akarere",
+    "facility_manager": "Umuyobozi w'ikigo nderabuzima",
+    "auditor": "Umugenzuzi",
+    "citizen": "Umuturage"
+  },
+  "app": {
+    "clinical": "Urubuga rw'abaganga",
+    "worker": "Porogaramu y'umujyanama w'ubuzima",
+    "admin": "Ubuyobozi bwa porogaramu",
+    "citizen": "Agasanduku k'ubuzima k'umuturage"
+  },
+  "facilityKind": {
+    "health_centre": "Ikigo nderabuzima",
+    "health_post": "Poste de santé",
+    "district_hospital": "Ibitaro by'akarere"
+  },
+  "auditCategory": {
+    "access": "Kugera ku makuru",
+    "change": "Impinduka",
+    "export": "Kohereza hanze",
+    "security": "Umutekano",
+    "demo": "Igerageza"
+  },
+  "auditOutcome": {
+    "success": "Byagenze neza",
+    "denied": "Byanzwe"
+  },
+  "entityType": {
+    "patient": "Umurwayi",
+    "screening": "Ipimwa",
+    "review": "Isuzuma",
+    "referral": "Kohererezwa ahandi kwivuza",
+    "follow_up": "Ikurikirana",
+    "care_task": "Igikorwa cy'ubuvuzi",
+    "care_instruction": "Amabwiriza y'ubuvuzi",
+    "reminder": "Icyibutsa",
+    "reminder_preference": "Ibyo wahisemo ku byibutsa",
+    "audit_event": "Igikorwa cyanditswe mu igenzura",
+    "facility": "Ikigo nderabuzima",
+    "district": "Akarere",
+    "persona": "Uruhare rw'igerageza",
+    "ruleset": "Amategeko y'igerageza",
+    "sync_operation": "Igikorwa cyo guhuza",
+    "device_session": "Igikoresho cyinjiwemo"
+  },
+  "pathwayStage": {
+    "DRAFT_SCREENING": "Ipimwa ritararangira",
+    "RECORDED": "Byanditswe",
+    "REVIEW_REQUIRED": "Bisaba gusuzumwa",
+    "NO_REVIEW_REQUIRED": "Ntibisaba gusuzumwa",
+    "REVIEWED": "Byasuzumwe",
+    "REFERRAL_OPEN": "Kohererezwa birakomeje",
+    "FOLLOW_UP_PLANNED": "Ikurikirana riteganyijwe",
+    "CLOSED_WITH_REASON": "Byafunzwe hatanzwe impamvu",
+    "FOLLOW_UP_COMPLETED": "Ikurikirana ryarangiye",
+    "OVERDUE": "Itariki yarenze (igihe cy'igerageza)",
+    "CLOSED": "Byafunzwe"
+  },
+  "transitionTrigger": {
+    "user_action": "Igikorwa cy'ukoresha",
+    "sync": "Guhuza",
+    "system": "Sisitemu",
+    "reminder": "Icyibutsa"
+  },
+  "observation": {
+    "SYSTOLIC": "Umuvuduko w'amaraso wo hejuru (systolic)",
+    "DIASTOLIC": "Umuvuduko w'amaraso wo hasi (diastolic)",
+    "GLUCOSE": "Isukari mu maraso"
+  },
+  "amendableField": {
+    "systolic": "Umuvuduko wo hejuru (systolic)",
+    "diastolic": "Umuvuduko wo hasi (diastolic)",
+    "glucoseValue": "Igipimo cy'isukari",
+    "glucoseUnit": "Igipimo (unit) cy'isukari",
+    "glucoseContext": "Niba yariye cyangwa atariye",
+    "measuredAt": "Igihe yapimiwe"
+  },
+  "reason": {
+    "DEMO_BP_SYSTOLIC_AT_OR_ABOVE_THRESHOLD": "Umuvuduko w'amaraso wo hejuru (systolic) ungana cyangwa urenze urugero rw'igerageza",
+    "DEMO_BP_DIASTOLIC_AT_OR_ABOVE_THRESHOLD": "Umuvuduko w'amaraso wo hasi (diastolic) ungana cyangwa urenze urugero rw'igerageza",
+    "DEMO_GLUCOSE_AT_OR_ABOVE_THRESHOLD": "Isukari mu maraso ingana cyangwa irenze urugero rw'igerageza",
+    "GLUCOSE_UNIT_MISSING": "Igipimo (unit) cy'isukari nticyanditswe — bisaba gusuzumwa n'umuntu",
+    "GLUCOSE_CONTEXT_NOT_RECORDED": "Ntibyanditswe niba yariye cyangwa atariye"
+  },
+  "invariant": {
+    "DECISION_NOT_ATTRIBUTABLE": "Icyemezo kigomba kwandikwa n'ukoresha uzwi.",
+    "DISMISSAL_REASON_REQUIRED": "Impamvu irakenewe kugira ngo ikimenyetso gikurweho.",
+    "CANCELLATION_REASON_REQUIRED": "Impamvu irakenewe kugira ngo bihagarikwe.",
+    "AMENDMENT_REASON_REQUIRED": "Impamvu irakenewe kugira ngo ipimwa ryoherejwe rikosorwe.",
+    "AMENDMENT_NOT_APPLICABLE": "Iri pimwa ntirishobora gukosorwa uko rimeze ubu.",
+    "COMPLETION_EVIDENCE_REQUIRED": "Ikimenyetso cy'uko byarangiye kirakenewe.",
+    "SCREENING_IMMUTABLE": "Ipimwa ryoherejwe ntirishobora guhindurwa; andika ikosora.",
+    "STALE_VERSION": "Iyi nyandiko yahindutse kuva wayifungura.",
+    "REMINDER_CANNOT_TRANSITION": "Icyibutsa ntigishobora guhindura uko ubuvuzi buhagaze.",
+    "RETURN_TO_WORKER_NOT_ALLOWED": "Iri rangiza ntirishobora gusubizwa umujyanama."
+  },
+  "derived": {
+    "pastDueDemoTiming": "Itariki yarenze (igihe cy'igerageza)"
+  }
+}

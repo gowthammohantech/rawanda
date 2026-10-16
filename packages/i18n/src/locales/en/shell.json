@@ -1,0 +1,25 @@
+{
+  "nav": {
+    "section": {
+      "overview": "Overview",
+      "work": "Work",
+      "patients": "Patients",
+      "reports": "Reports",
+      "administration": "Administration",
+      "settings": "Settings"
+    }
+  },
+  "search": {
+    "placeholder": "Search patients and records",
+    "shortcutHint": "Press ⌘K to search"
+  },
+  "notifications": {
+    "label": "Notifications",
+    "unread": "You have unread notifications"
+  },
+  "profile": {
+    "label": "Profile",
+    "openMenu": "Open profile menu"
+  },
+  "skipToContent": "Skip to main content"
+}

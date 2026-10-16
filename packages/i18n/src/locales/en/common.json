@@ -1,0 +1,106 @@
+{
+  "appTitle": "LAIF CareConnect",
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "retry": "Try again",
+    "back": "Back",
+    "next": "Next",
+    "search": "Search",
+    "filter": "Filter",
+    "reset": "Reset",
+    "close": "Close"
+  },
+  "state": {
+    "initial": "Choose an option to get started.",
+    "loading": "Loading…",
+    "loaded": "Loaded.",
+    "empty": "Nothing to show yet.",
+    "validationError": "Check the highlighted fields.",
+    "serverError": "Something went wrong on the server. Try again.",
+    "error": "Something went wrong.",
+    "offline": "You are offline. Changes are saved on this device.",
+    "permissionDenied": "You do not have permission to view this.",
+    "conflict": "This record was changed by someone else.",
+    "success": "Saved."
+  },
+  "language": {
+    "label": "Language"
+  },
+  "languageName": {
+    "en": "English",
+    "rw": "Ikinyarwanda"
+  },
+  "months": {
+    "short": {
+      "1": "Jan",
+      "2": "Feb",
+      "3": "Mar",
+      "4": "Apr",
+      "5": "May",
+      "6": "Jun",
+      "7": "Jul",
+      "8": "Aug",
+      "9": "Sep",
+      "10": "Oct",
+      "11": "Nov",
+      "12": "Dec"
+    },
+    "long": {
+      "1": "January",
+      "2": "February",
+      "3": "March",
+      "4": "April",
+      "5": "May",
+      "6": "June",
+      "7": "July",
+      "8": "August",
+      "9": "September",
+      "10": "October",
+      "11": "November",
+      "12": "December"
+    }
+  },
+  "weekdays": {
+    "short": {
+      "0": "Sun",
+      "1": "Mon",
+      "2": "Tue",
+      "3": "Wed",
+      "4": "Thu",
+      "5": "Fri",
+      "6": "Sat"
+    },
+    "long": {
+      "0": "Sunday",
+      "1": "Monday",
+      "2": "Tuesday",
+      "3": "Wednesday",
+      "4": "Thursday",
+      "5": "Friday",
+      "6": "Saturday"
+    }
+  },
+  "format": {
+    "date": "{{day}} {{month}} {{year}}",
+    "dateLong": "{{weekday}} {{day}} {{month}} {{year}}",
+    "time": "{{hour}}:{{minute}}",
+    "dateTime": "{{date}}, {{time}}"
+  },
+  "relative": {
+    "now": "just now",
+    "minutesAgo_one": "{{count}} minute ago",
+    "minutesAgo_other": "{{count}} minutes ago",
+    "inMinutes_one": "in {{count}} minute",
+    "inMinutes_other": "in {{count}} minutes",
+    "hoursAgo_one": "{{count}} hour ago",
+    "hoursAgo_other": "{{count}} hours ago",
+    "inHours_one": "in {{count}} hour",
+    "inHours_other": "in {{count}} hours",
+    "daysAgo_one": "{{count}} day ago",
+    "daysAgo_other": "{{count}} days ago",
+    "inDays_one": "in {{count}} day",
+    "inDays_other": "in {{count}} days"
+  }
+}

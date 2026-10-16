@@ -5,7 +5,9 @@
   "type": "module",
   "sideEffects": false,
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./web": "./src/storage.web.ts",
+    "./native": "./src/storage.native.ts"
   },
   "types": "./src/index.ts",
   "scripts": {
@@ -15,6 +17,20 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@laif/contracts": "workspace:*"
+    "@laif/contracts": "workspace:*",
+    "@laif/domain": "workspace:*",
+    "i18next": "25.10.10",
+    "react-i18next": "15.7.4"
+  },
+  "peerDependencies": {
+    "react": ">=19.0.0"
+  },
+  "devDependencies": {
+    "@testing-library/dom": "10.4.2",
+    "@testing-library/react": "16.3.3",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
   }
 }

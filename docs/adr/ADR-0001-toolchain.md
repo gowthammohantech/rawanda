@@ -15,27 +15,31 @@ this ADR pins them so every later phase builds on the same baseline.
 Exact versions were resolved at install time (2026-10-16) and are written without carets
 (`save-exact=true`).
 
-| Tool                          | Pinned version | Where pinned                                                     |
-| ----------------------------- | -------------- | ---------------------------------------------------------------- |
-| Node.js                       | 22.23.3 (LTS)  | `.mise.toml`                                                     |
-| pnpm                          | 10.34.7        | `.mise.toml`, root `package.json` `packageManager`               |
-| TypeScript                    | 5.9.3          | root `devDependencies`                                           |
-| Turborepo (`turbo`)           | 2.11.8         | root `devDependencies`                                           |
-| Vitest                        | 3.2.7          | root `devDependencies`                                           |
-| `@vitest/coverage-v8`         | 3.2.7          | root `devDependencies`                                           |
-| ESLint                        | 9.39.5         | root `devDependencies`                                           |
-| `@eslint/js`                  | 9.39.5         | root `devDependencies`                                           |
-| `typescript-eslint`           | 8.71.2         | root `devDependencies`                                           |
-| Prettier                      | 3.9.10         | root `devDependencies`                                           |
-| `prettier-plugin-tailwindcss` | 0.8.1          | root `devDependencies`                                           |
-| `tsx`                         | 4.23.15        | root `devDependencies` (runs `scripts/*.ts`)                     |
-| `eslint-plugin-react-hooks`   | 7.1.1          | root `devDependencies` (scoped to `apps/**`, `packages/ui-*/**`) |
-| `eslint-plugin-jsx-a11y`      | 6.10.2         | root `devDependencies` (scoped to `apps/**`, `packages/ui-*/**`) |
-| `eslint-plugin-i18next`       | 6.1.5          | root `devDependencies` (`no-literal-string`, `jsx-text-only`)    |
-| `globals`                     | 17.13.0        | root `devDependencies`                                           |
-| `jsdom`                       | 30.1.3         | root `devDependencies` (`ui-web` test environment)               |
-| `@types/node`                 | 22.20.5        | root `devDependencies` (matches the Node 22 line)                |
-| Zod                           | 4.6.7          | `packages/contracts` `dependencies` (FND-03, one hoisted copy)   |
+| Tool                          | Pinned version | Where pinned                                                        |
+| ----------------------------- | -------------- | ------------------------------------------------------------------- |
+| Node.js                       | 22.23.3 (LTS)  | `.mise.toml`                                                        |
+| pnpm                          | 10.34.7        | `.mise.toml`, root `package.json` `packageManager`                  |
+| TypeScript                    | 5.9.3          | root `devDependencies`                                              |
+| Turborepo (`turbo`)           | 2.11.8         | root `devDependencies`                                              |
+| Vitest                        | 3.2.7          | root `devDependencies`                                              |
+| `@vitest/coverage-v8`         | 3.2.7          | root `devDependencies`                                              |
+| ESLint                        | 9.39.5         | root `devDependencies`                                              |
+| `@eslint/js`                  | 9.39.5         | root `devDependencies`                                              |
+| `typescript-eslint`           | 8.71.2         | root `devDependencies`                                              |
+| Prettier                      | 3.9.10         | root `devDependencies`                                              |
+| `prettier-plugin-tailwindcss` | 0.8.1          | root `devDependencies`                                              |
+| `tsx`                         | 4.23.15        | root `devDependencies` (runs `scripts/*.ts`)                        |
+| `eslint-plugin-react-hooks`   | 7.1.1          | root `devDependencies` (scoped to `apps/**`, `packages/ui-*/**`)    |
+| `eslint-plugin-jsx-a11y`      | 6.10.2         | root `devDependencies` (scoped to `apps/**`, `packages/ui-*/**`)    |
+| `eslint-plugin-i18next`       | 6.1.5          | root `devDependencies` (`no-literal-string`, `jsx-text-only`)       |
+| `globals`                     | 17.13.0        | root `devDependencies`                                              |
+| `jsdom`                       | 30.1.3         | root `devDependencies` (`ui-web` test environment)                  |
+| `@types/node`                 | 22.20.5        | root `devDependencies` (matches the Node 22 line)                   |
+| Zod                           | 4.6.7          | `packages/contracts` `dependencies` (FND-03, one hoisted copy)      |
+| i18next                       | 25.10.10       | `packages/i18n` `dependencies` (FND-04)                             |
+| react-i18next                 | 15.7.4         | `packages/i18n` `dependencies` (FND-04)                             |
+| React (dev/test only)         | 19.3.0         | `packages/i18n` `devDependencies`; FND-11 sets the repo override    |
+| `@testing-library/react`      | 16.3.3         | `packages/i18n` `devDependencies` (+ `@testing-library/dom` 10.4.2) |
 
 ## Decisions and rationale
 

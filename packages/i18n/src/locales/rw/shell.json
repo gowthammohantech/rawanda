@@ -1,0 +1,25 @@
+{
+  "nav": {
+    "section": {
+      "overview": "Incamake",
+      "work": "Imirimo",
+      "patients": "Abarwayi",
+      "reports": "Raporo",
+      "administration": "Ubuyobozi",
+      "settings": "Igenamiterere"
+    }
+  },
+  "search": {
+    "placeholder": "Shakisha abarwayi n'inyandiko",
+    "shortcutHint": "Kanda ⌘K ushakishe"
+  },
+  "notifications": {
+    "label": "Amatangazo",
+    "unread": "Ufite amatangazo utarasoma"
+  },
+  "profile": {
+    "label": "Umwirondoro",
+    "openMenu": "Fungura urutonde rw'umwirondoro"
+  },
+  "skipToContent": "Jya ku bikubiyemo by'ingenzi"
+}

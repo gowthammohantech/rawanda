@@ -1,0 +1,325 @@
+{
+  "status": {
+    "screening": {
+      "draft": "Draft",
+      "submitted": "Submitted",
+      "review_required": "Review required",
+      "no_review_required": "No review required"
+    },
+    "review": {
+      "pending": "Pending",
+      "in_review": "In review",
+      "action_recorded": "Action recorded",
+      "dismissed_with_reason": "Dismissed with reason"
+    },
+    "referral": {
+      "created": "Created",
+      "accepted": "Accepted",
+      "scheduled": "Scheduled",
+      "completed": "Completed",
+      "cancelled_with_reason": "Cancelled with reason"
+    },
+    "followUp": {
+      "assigned": "Assigned",
+      "contacted": "Contacted",
+      "completed": "Completed",
+      "unable_to_reach": "Unable to reach",
+      "reassigned": "Reassigned"
+    },
+    "careTask": {
+      "open": "Open",
+      "in_progress": "In progress",
+      "done": "Done",
+      "cancelled_with_reason": "Cancelled with reason"
+    },
+    "syncOp": {
+      "queued": "Queued",
+      "sending": "Sending",
+      "acknowledged": "Acknowledged",
+      "retryable_failure": "Failed — will retry",
+      "conflict": "Conflict",
+      "needs_resolution": "Needs resolution",
+      "rejected": "Rejected",
+      "superseded": "Superseded",
+      "blocked_revoked": "Blocked — access revoked"
+    },
+    "entitySync": {
+      "saved_locally": "Saved on this device",
+      "syncing": "Syncing",
+      "synced": "Synced",
+      "conflict": "Conflict",
+      "rejected": "Rejected",
+      "blocked": "Blocked"
+    },
+    "reminder": {
+      "scheduled": "Scheduled",
+      "delivered_simulated": "Delivered (simulated)",
+      "acknowledged": "Acknowledged",
+      "cancelled": "Cancelled"
+    },
+    "careInstruction": {
+      "released": "Released",
+      "withdrawn": "Withdrawn"
+    },
+    "deviceSession": {
+      "active": "Active",
+      "revoked": "Revoked"
+    }
+  },
+  "screeningSource": {
+    "worker_mobile": "Health worker app",
+    "clinical_web": "Clinical portal",
+    "imported": "Imported"
+  },
+  "decision": {
+    "refer": "Refer",
+    "plan_follow_up": "Plan follow-up review",
+    "request_repeat_screening": "Request repeat test",
+    "no_further_action": "Record assessment — no further action",
+    "dismiss": "Dismiss flag with reason"
+  },
+  "priority": {
+    "routine": "Routine",
+    "urgent_demo": "Urgent (demo)"
+  },
+  "origin": {
+    "rule_flag": "Demo rule flag",
+    "manual_escalation": "Manual escalation"
+  },
+  "dismissReason": {
+    "measurement_error_suspected": "Measurement error suspected",
+    "repeat_reading_acceptable": "Repeat reading acceptable",
+    "known_managed_condition": "Known condition already managed",
+    "duplicate_flag": "Duplicate flag",
+    "other": "Other"
+  },
+  "referralOutcome": {
+    "attended_seen": "Attended — seen",
+    "attended_further_care_planned": "Attended — further care planned",
+    "attended_returned_to_community": "Attended — returned to community care"
+  },
+  "referralCancelReason": {
+    "patient_declined": "Patient declined",
+    "duplicate": "Duplicate",
+    "no_longer_indicated": "No longer indicated",
+    "destination_unavailable": "Destination unavailable",
+    "other": "Other"
+  },
+  "followUpPurpose": {
+    "referral_attendance": "Check referral attendance",
+    "planned_review": "Planned review",
+    "repeat_screening": "Repeat screening",
+    "post_referral_check": "Post-referral check"
+  },
+  "followUpOutcome": {
+    "attended": "Attended",
+    "repeat_screening_done": "Repeat screening done",
+    "referred_onward": "Referred onward",
+    "unable_to_reach": "Unable to reach",
+    "declined": "Declined"
+  },
+  "unableToReachReason": {
+    "not_at_home_repeatedly": "Not at home (repeatedly)",
+    "moved_away": "Moved away",
+    "phone_unreachable": "Phone unreachable",
+    "declined_contact": "Declined contact",
+    "other": "Other"
+  },
+  "contactMethod": {
+    "home_visit": "Home visit",
+    "phone": "Phone",
+    "facility": "At the facility"
+  },
+  "contactResult": {
+    "reached": "Reached",
+    "not_reached": "Not reached",
+    "declined": "Declined"
+  },
+  "clinicianConfirmation": {
+    "not_required": "Not required",
+    "pending": "Awaiting clinician confirmation",
+    "confirmed": "Confirmed",
+    "returned": "Returned to worker"
+  },
+  "careTaskKind": {
+    "follow_up_assignment": "Follow-up assignment",
+    "correction_request": "Correction request",
+    "callback_request": "Callback request",
+    "programme_action": "Programme action",
+    "data_quality": "Data quality"
+  },
+  "syncOpType": {
+    "create": "Create",
+    "update": "Update",
+    "command": "Command"
+  },
+  "conflictResolution": {
+    "reapply_on_latest": "Re-apply my change on the latest version",
+    "keep_latest": "Keep the latest version"
+  },
+  "glucoseContext": {
+    "fasting": "Fasting",
+    "non_fasting": "Non-fasting",
+    "not_recorded": "Not recorded"
+  },
+  "consent": {
+    "granted": "Consent granted",
+    "withdrawn": "Consent withdrawn",
+    "not_recorded": "Consent not recorded"
+  },
+  "identity": {
+    "verified_local": "Verified locally",
+    "unverified": "Unverified",
+    "possible_duplicate": "Possible duplicate",
+    "needs_match_review": "Needs match review"
+  },
+  "sex": {
+    "female": "Female",
+    "male": "Male",
+    "not_recorded": "Not recorded"
+  },
+  "evidence": {
+    "facility_attendance_record": "Facility attendance record",
+    "clinician_confirmation": "Clinician confirmation",
+    "return_slip_reference": "Return slip reference",
+    "facility_register_checked": "Facility register checked",
+    "appointment_card_seen": "Appointment card seen",
+    "worker_accompanied_visit": "Worker accompanied the visit",
+    "patient_verbal_confirmation": "Patient verbal confirmation"
+  },
+  "reminderCancelReason": {
+    "opted_out": "Opted out",
+    "timing_changed": "Timing changed",
+    "consent_withdrawn": "Consent withdrawn",
+    "instruction_cancelled": "Instruction cancelled"
+  },
+  "channel": {
+    "in_app": "In the app",
+    "sms_simulated": "SMS (simulated)"
+  },
+  "reminderTiming": {
+    "day_before": "The day before",
+    "morning_of": "The morning of"
+  },
+  "careInstructionKind": {
+    "appointment": "Appointment",
+    "referral": "Referral",
+    "follow_up": "Follow-up"
+  },
+  "careInstructionSource": {
+    "review": "Review",
+    "referral": "Referral",
+    "follow_up": "Follow-up"
+  },
+  "instructionProgress": {
+    "planned": "Planned",
+    "completed": "Completed",
+    "cancelled": "Cancelled"
+  },
+  "role": {
+    "clinician": "Clinician",
+    "nurse_reviewer": "Nurse reviewer",
+    "facility_coordinator": "Facility coordinator",
+    "community_health_worker": "Community health worker",
+    "field_supervisor": "Field supervisor",
+    "programme_lead": "Programme lead",
+    "district_analyst": "District analyst",
+    "facility_manager": "Facility manager",
+    "auditor": "Auditor",
+    "citizen": "Citizen"
+  },
+  "app": {
+    "clinical": "Clinical portal",
+    "worker": "Health worker app",
+    "admin": "Programme admin",
+    "citizen": "Citizen health wallet"
+  },
+  "facilityKind": {
+    "health_centre": "Health centre",
+    "health_post": "Health post",
+    "district_hospital": "District hospital"
+  },
+  "auditCategory": {
+    "access": "Access",
+    "change": "Change",
+    "export": "Export",
+    "security": "Security",
+    "demo": "Demo"
+  },
+  "auditOutcome": {
+    "success": "Success",
+    "denied": "Denied"
+  },
+  "entityType": {
+    "patient": "Patient",
+    "screening": "Screening",
+    "review": "Review",
+    "referral": "Referral",
+    "follow_up": "Follow-up",
+    "care_task": "Care task",
+    "care_instruction": "Care instruction",
+    "reminder": "Reminder",
+    "reminder_preference": "Reminder preference",
+    "audit_event": "Audit event",
+    "facility": "Facility",
+    "district": "District",
+    "persona": "Demo persona",
+    "ruleset": "Demo ruleset",
+    "sync_operation": "Sync operation",
+    "device_session": "Device session"
+  },
+  "pathwayStage": {
+    "DRAFT_SCREENING": "Draft screening",
+    "RECORDED": "Recorded",
+    "REVIEW_REQUIRED": "Review required",
+    "NO_REVIEW_REQUIRED": "No review required",
+    "REVIEWED": "Reviewed",
+    "REFERRAL_OPEN": "Referral open",
+    "FOLLOW_UP_PLANNED": "Follow-up planned",
+    "CLOSED_WITH_REASON": "Closed with reason",
+    "FOLLOW_UP_COMPLETED": "Follow-up completed",
+    "OVERDUE": "Past due date (demo timing)",
+    "CLOSED": "Closed"
+  },
+  "transitionTrigger": {
+    "user_action": "User action",
+    "sync": "Sync",
+    "system": "System",
+    "reminder": "Reminder"
+  },
+  "observation": {
+    "SYSTOLIC": "Systolic blood pressure",
+    "DIASTOLIC": "Diastolic blood pressure",
+    "GLUCOSE": "Blood glucose"
+  },
+  "amendableField": {
+    "systolic": "Systolic",
+    "diastolic": "Diastolic",
+    "glucoseValue": "Glucose value",
+    "glucoseUnit": "Glucose unit",
+    "glucoseContext": "Fasting status",
+    "measuredAt": "Measured at"
+  },
+  "reason": {
+    "DEMO_BP_SYSTOLIC_AT_OR_ABOVE_THRESHOLD": "Systolic blood pressure at or above the demo threshold",
+    "DEMO_BP_DIASTOLIC_AT_OR_ABOVE_THRESHOLD": "Diastolic blood pressure at or above the demo threshold",
+    "DEMO_GLUCOSE_AT_OR_ABOVE_THRESHOLD": "Blood glucose at or above the demo threshold",
+    "GLUCOSE_UNIT_MISSING": "Glucose unit missing — needs human review",
+    "GLUCOSE_CONTEXT_NOT_RECORDED": "Fasting status not recorded"
+  },
+  "invariant": {
+    "DECISION_NOT_ATTRIBUTABLE": "A decision must be recorded by an identified user.",
+    "DISMISSAL_REASON_REQUIRED": "A reason is required to dismiss a flag.",
+    "CANCELLATION_REASON_REQUIRED": "A reason is required to cancel.",
+    "AMENDMENT_REASON_REQUIRED": "A reason is required to amend a submitted screening.",
+    "AMENDMENT_NOT_APPLICABLE": "This screening cannot be amended in its current state.",
+    "COMPLETION_EVIDENCE_REQUIRED": "Completion evidence is required.",
+    "SCREENING_IMMUTABLE": "A submitted screening cannot be edited; record an amendment instead.",
+    "STALE_VERSION": "This record has changed since you opened it.",
+    "REMINDER_CANNOT_TRANSITION": "A reminder cannot change the status of care.",
+    "RETURN_TO_WORKER_NOT_ALLOWED": "This completion cannot be returned to the worker."
+  },
+  "derived": {
+    "pastDueDemoTiming": "Past due date (demo timing)"
+  }
+}

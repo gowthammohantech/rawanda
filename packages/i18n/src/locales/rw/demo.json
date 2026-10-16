@@ -1,0 +1,47 @@
+{
+  "banner": "IGERAGEZA — AMAKURU Y'ABARWAYI B'IKITEGEREREZO — NTIBIKORESHWA MU BUVUZI",
+  "syntheticData": "Amakuru yose y'abarwayi muri iri gerageza ni ay'ikitegererezo.",
+  "resetDemo": "Subiza igerageza uko ryari",
+  "resetConfirm": "Gusiba amakuru yose y'igerageza kuri iki gikoresho? Ntibishobora gusubizwa inyuma.",
+  "demoRoleSwitcher": "Guhindura uruhare mu igerageza — si ukwinjira muri sisitemu",
+  "notForClinicalUse": "Ntibikoreshwa mu buvuzi",
+  "ruleDisclaimer": "DEMO_RULE_NOT_CLINICALLY_VALIDATED — iki kimenyetso gituruka ku itegeko ry'igerageza. Imibare yaryo ni iy'agateganyo kandi ntiyemejwe n'abaganga.",
+  "scenario": {
+    "SCN-01": {
+      "title": "Ipimwa risanzwe"
+    },
+    "SCN-02": {
+      "title": "Ipimwa ryagaragaje ikimenyetso"
+    },
+    "SCN-03": {
+      "title": "Umuganga yakuyeho ikimenyetso"
+    },
+    "SCN-04": {
+      "title": "Kohererezwa byarengeje igihe"
+    },
+    "SCN-05": {
+      "title": "Ikurikirana ryarangiye"
+    },
+    "SCN-06": {
+      "title": "Igipimo (unit) cy'isukari kibura"
+    },
+    "SCN-07": {
+      "title": "Kohereza kabiri"
+    },
+    "SCN-08": {
+      "title": "Guhuza nta murandasi"
+    },
+    "SCN-09": {
+      "title": "Kuvuguruzanya kw'inyandiko"
+    },
+    "SCN-10": {
+      "title": "Uburenganzira bwakuweho"
+    },
+    "SCN-11": {
+      "title": "Kugera ku makuru y'akarere bitemewe"
+    },
+    "SCN-12": {
+      "title": "Imibare mito yahishwe"
+    }
+  }
+}

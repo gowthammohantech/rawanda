@@ -1,0 +1,106 @@
+{
+  "appTitle": "LAIF CareConnect",
+  "actions": {
+    "save": "Bika",
+    "cancel": "Hagarika",
+    "confirm": "Emeza",
+    "retry": "Ongera ugerageze",
+    "back": "Subira inyuma",
+    "next": "Komeza",
+    "search": "Shakisha",
+    "filter": "Shungura",
+    "reset": "Subiza uko byari",
+    "close": "Funga"
+  },
+  "state": {
+    "initial": "Hitamo icyo ushaka kugira ngo utangire.",
+    "loading": "Birimo gufunguka…",
+    "loaded": "Byafunguwe.",
+    "empty": "Nta kintu cyo kwerekana kugeza ubu.",
+    "validationError": "Reba ibice byagaragajwe.",
+    "serverError": "Habaye ikibazo kuri seriveri. Ongera ugerageze.",
+    "error": "Habaye ikibazo.",
+    "offline": "Nta murandasi. Impinduka zibikwa kuri iki gikoresho.",
+    "permissionDenied": "Nta burenganzira ufite bwo kureba ibi.",
+    "conflict": "Iyi nyandiko yahinduwe n'undi muntu.",
+    "success": "Byabitswe."
+  },
+  "language": {
+    "label": "Ururimi"
+  },
+  "languageName": {
+    "en": "English",
+    "rw": "Ikinyarwanda"
+  },
+  "months": {
+    "short": {
+      "1": "Mut",
+      "2": "Gas",
+      "3": "Wer",
+      "4": "Mat",
+      "5": "Gic",
+      "6": "Kam",
+      "7": "Nya",
+      "8": "Kan",
+      "9": "Nze",
+      "10": "Ukw",
+      "11": "Ugu",
+      "12": "Uku"
+    },
+    "long": {
+      "1": "Mutarama",
+      "2": "Gashyantare",
+      "3": "Werurwe",
+      "4": "Mata",
+      "5": "Gicurasi",
+      "6": "Kamena",
+      "7": "Nyakanga",
+      "8": "Kanama",
+      "9": "Nzeri",
+      "10": "Ukwakira",
+      "11": "Ugushyingo",
+      "12": "Ukuboza"
+    }
+  },
+  "weekdays": {
+    "short": {
+      "0": "Cyu",
+      "1": "Mbe",
+      "2": "Kab",
+      "3": "Gtu",
+      "4": "Kan",
+      "5": "Gnu",
+      "6": "Gnd"
+    },
+    "long": {
+      "0": "Ku cyumweru",
+      "1": "Kuwa mbere",
+      "2": "Kuwa kabiri",
+      "3": "Kuwa gatatu",
+      "4": "Kuwa kane",
+      "5": "Kuwa gatanu",
+      "6": "Kuwa gatandatu"
+    }
+  },
+  "format": {
+    "date": "{{day}} {{month}} {{year}}",
+    "dateLong": "{{weekday}} {{day}} {{month}} {{year}}",
+    "time": "{{hour}}:{{minute}}",
+    "dateTime": "{{date}}, {{time}}"
+  },
+  "relative": {
+    "now": "ubu nyine",
+    "minutesAgo_one": "hashize umunota {{count}}",
+    "minutesAgo_other": "hashize iminota {{count}}",
+    "inMinutes_one": "mu munota {{count}}",
+    "inMinutes_other": "mu minota {{count}}",
+    "hoursAgo_one": "hashize isaha {{count}}",
+    "hoursAgo_other": "hashize amasaha {{count}}",
+    "inHours_one": "mu isaha {{count}}",
+    "inHours_other": "mu masaha {{count}}",
+    "daysAgo_one": "hashize umunsi {{count}}",
+    "daysAgo_other": "hashize iminsi {{count}}",
+    "inDays_one": "mu munsi {{count}}",
+    "inDays_other": "mu minsi {{count}}"
+  }
+}
