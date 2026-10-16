@@ -167,6 +167,14 @@ describe("checkAccess acceptance", () => {
         assignedWorkerId: null,
       }),
     ).toBe(false);
+    // Fails closed: a follow-up resource without `assignedWorkerId` is denied (FND-07 fix).
+    expect(checkAccess(chw, "followup.update", { facilityId: FACILITY_IDS.alpha1 })).toEqual({
+      allowed: false,
+      reason: "SCOPE",
+    });
+    expect(can(chw, "followup.read_assigned", { facilityId: FACILITY_IDS.alpha1 })).toBe(false);
+    // Role-only checks (no resource) are unaffected.
+    expect(can(chw, "followup.update")).toBe(true);
     // Assignment limit only applies to follow-up permissions.
     expect(can(chw, "patient.read", { facilityId: FACILITY_IDS.alpha1 })).toBe(true);
     const sup = actor(PERSONA_IDS.supAlpha);

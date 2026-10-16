@@ -5,7 +5,8 @@
   "type": "module",
   "sideEffects": false,
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./contract-suite": "./src/store/contract-suite.ts"
   },
   "types": "./src/index.ts",
   "scripts": {
@@ -17,8 +18,12 @@
   "dependencies": {
     "@laif/domain": "workspace:*",
     "@laif/contracts": "workspace:*",
+    "@laif/mock-data": "workspace:*",
     "@laif/auth-demo": "workspace:*",
     "@laif/analytics": "workspace:*",
-    "@laif/mock-data": "workspace:*"
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@laif/i18n": "workspace:*"
   }
 }

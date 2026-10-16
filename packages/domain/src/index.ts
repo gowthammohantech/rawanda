@@ -10,6 +10,8 @@ export type * from "./entities/index.ts";
 export * from "./machines/index.ts";
 export * from "./invariants.ts";
 export * from "./derive.ts";
+export * from "./queue.ts";
+export * from "./matching.ts";
 export * from "./rules/types.ts";
 export * from "./rules/engine.ts";
 export * from "./clock/clock.ts";

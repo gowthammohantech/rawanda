@@ -386,5 +386,120 @@
         "transfer": "Transfer demo scenarios (demo tooling)"
       }
     }
+  },
+  "audit": {
+    "session": {
+      "started": "Session started",
+      "ended": "Session ended",
+      "expired": "Session expired"
+    },
+    "access": {
+      "denied": "Access denied"
+    },
+    "export": {
+      "requested": "Export requested",
+      "generated": "Export generated",
+      "denied": "Export denied"
+    },
+    "demo": {
+      "reset": "Demo reset to baseline",
+      "scenario_loaded": "Demo scenario loaded",
+      "fault_toggled": "Simulated faults changed",
+      "clock_changed": "Demo clock changed",
+      "concurrent_update_simulated": "Update by another user simulated",
+      "simulated_staff_action": "Staff action simulated",
+      "bundle_exported": "Demo bundle exported",
+      "bundle_imported": "Demo bundle imported"
+    },
+    "conflict": {
+      "detected": "Version conflict detected",
+      "resolved": "Version conflict resolved"
+    },
+    "sync": {
+      "duplicate_suppressed": "Duplicate submission prevented",
+      "op_acknowledged": "Change synced",
+      "op_rejected": "Change not accepted",
+      "conflict_resolved": "Sync conflict resolved"
+    },
+    "task": {
+      "created": "Task created",
+      "updated": "Task updated",
+      "started": "Task started",
+      "completed": "Task completed"
+    },
+    "correction": {
+      "requested": "Correction requested"
+    },
+    "patient": {
+      "viewed": "Patient record viewed",
+      "searched": "Patient search",
+      "registered": "Patient registered",
+      "match_flagged": "Possible duplicate flagged",
+      "consent_withdrawn": "Consent withdrawn"
+    },
+    "review": {
+      "viewed": "Review viewed",
+      "created": "Review created",
+      "started": "Review started",
+      "taken_over": "Review taken over",
+      "decided": "Review decision recorded",
+      "dismissed": "Flag dismissed with reason"
+    },
+    "audit": {
+      "viewed": "Audit log viewed"
+    },
+    "screening": {
+      "history_viewed": "Screening history viewed",
+      "draft_saved": "Screening draft saved",
+      "draft_discarded": "Screening draft discarded",
+      "submitted": "Screening submitted",
+      "amended": "Screening amended",
+      "created": "Screening recorded",
+      "evaluated": "Screening evaluated (demo rules)"
+    },
+    "referral": {
+      "viewed": "Referral viewed",
+      "created": "Referral created",
+      "transitioned": "Referral status changed",
+      "accepted": "Referral accepted",
+      "scheduled": "Referral scheduled",
+      "completed": "Referral completed",
+      "cancelled": "Referral cancelled"
+    },
+    "followup": {
+      "viewed": "Follow-up viewed",
+      "created": "Follow-up created",
+      "assigned": "Follow-up assigned",
+      "reassigned": "Follow-up reassigned",
+      "due_date_changed": "Follow-up due date changed",
+      "attempt_recorded": "Contact attempt recorded",
+      "outcome_recorded": "Follow-up outcome recorded",
+      "note_added": "Follow-up note added",
+      "completion_confirmed": "Follow-up completion confirmed",
+      "returned_to_worker": "Follow-up returned to worker",
+      "unable_to_reach": "Patient could not be reached",
+      "completed": "Follow-up completed"
+    },
+    "queue": {
+      "viewed": "Review queue viewed"
+    },
+    "reminder": {
+      "preference_changed": "Reminder preference changed",
+      "scheduled": "Reminder scheduled",
+      "delivered_simulated": "Reminder delivered (simulated)",
+      "acknowledged": "Reminder acknowledged",
+      "cancelled": "Reminder cancelled"
+    },
+    "reminder_preference": {
+      "set": "Reminder preference set"
+    },
+    "instruction": {
+      "released": "Care instruction released",
+      "withdrawn": "Care instruction withdrawn"
+    },
+    "device": {
+      "revoked": "Device access revoked",
+      "restored": "Device access restored"
+    }
   }
 }

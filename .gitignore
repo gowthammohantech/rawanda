@@ -16,3 +16,6 @@ test-results/
 
 # OS / editor
 .DS_Store
+
+# local agent worktrees
+.claude/worktrees/

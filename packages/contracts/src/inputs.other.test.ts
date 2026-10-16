@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   CallbackRequestInputSchema,
+  ClientAuditInputSchema,
   CareTaskInputSchema,
   CareTaskUpdateInputSchema,
   CorrectionRequestInputSchema,
@@ -161,5 +162,21 @@ describe("ExportRecordInputSchema", () => {
     expect(
       errorKeys(ExportRecordInputSchema, { ...input, reasonCode: "other", sha256: "abc" }),
     ).toEqual({ reasonText: "required", sha256: "invalidFormat" });
+  });
+});
+
+describe("ClientAuditInputSchema", () => {
+  it("accepts a dotted action with defaults and rejects malformed actions", () => {
+    expect(ClientAuditInputSchema.parse({ action: "session.started" })).toEqual({
+      action: "session.started",
+      outcome: "success",
+      changeSummary: {},
+    });
+    expect(errorKeys(ClientAuditInputSchema, { action: "Session Started" })).toEqual({
+      action: "invalidFormat",
+    });
+    expect(
+      errorKeys(ClientAuditInputSchema, { action: "access.denied", outcome: "maybe" }),
+    ).toEqual({ outcome: "invalidEnum" });
   });
 });

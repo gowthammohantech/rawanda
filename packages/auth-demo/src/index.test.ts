@@ -27,6 +27,7 @@ describe("@laif/auth-demo", () => {
       "requirePermission",
       "ForbiddenError",
       "revokeDeviceSession",
+      "restoreDeviceSession",
     ]) {
       expect(api).toHaveProperty(name);
     }

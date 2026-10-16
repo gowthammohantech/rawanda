@@ -57,8 +57,9 @@ const ALLOWED: AccessDecision = Object.freeze({ allowed: true });
  * Order of checks: revoked device session → role → scope.
  * - Demo tooling (`demo.*`) is never blocked by a revoked session so a demo can always recover.
  * - Without a `resource` only the role is checked (e.g. "may this persona see the queue?").
- * - Community health workers are additionally limited to follow-ups assigned to them when the
- *   resource carries `assignedWorkerId` (also when it is `null` = unassigned).
+ * - Community health workers are additionally limited to follow-ups assigned to them: for the
+ *   assignment-limited permissions a resource MUST carry `assignedWorkerId` equal to the actor
+ *   (fails closed: a missing key or `null` = unassigned denies with `SCOPE`, FND-07 fix).
  */
 export function checkAccess(
   actor: ActorContext,
@@ -79,8 +80,7 @@ export function checkAccess(
   if (
     (ASSIGNMENT_LIMITED_ROLES as readonly Role[]).includes(actor.role) &&
     (ASSIGNMENT_LIMITED_PERMISSIONS as readonly Permission[]).includes(permission) &&
-    "assignedWorkerId" in resource &&
-    resource.assignedWorkerId !== actor.personaId
+    (!("assignedWorkerId" in resource) || resource.assignedWorkerId !== actor.personaId)
   ) {
     return { allowed: false, reason: "SCOPE" };
   }

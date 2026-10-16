@@ -7,6 +7,7 @@
  * clinical thresholds.
  */
 import {
+  AUDIT_OUTCOMES,
   CARE_INSTRUCTION_KINDS,
   CARE_INSTRUCTION_SOURCE_TYPES,
   COMPLETION_EVIDENCE_TYPES,
@@ -686,3 +687,27 @@ export const ExportRecordInputSchema = z
     }
   });
 export type ExportRecordInput = z.output<typeof ExportRecordInputSchema>;
+
+// ── Client-originated audit events ───────────────────────────────────────────
+
+/**
+ * UI-originated access / session / demo audit events (FND-07 `recordAuditEvent`): route-guard
+ * denials, `session.started`, demo tooling. The repository additionally requires `action` to be
+ * a client-recordable entry of the FND-07 audit action registry.
+ */
+export const ClientAuditInputSchema = z.object({
+  action: z
+    .string()
+    .trim()
+    .regex(/^[a-z][a-z0-9_]*(\.[a-z0-9_]+)+$/u, { error: vMsg("invalidFormat") }),
+  entityType: z.enum(ENTITY_TYPES).optional(),
+  entityId: NonEmptyTrimmed.optional(),
+  patientId: PatientIdSchema.optional(),
+  facilityId: FacilityIdSchema.optional(),
+  districtId: DistrictIdSchema.optional(),
+  outcome: z.enum(AUDIT_OUTCOMES).default("success"),
+  changeSummary: z.record(z.string(), JsonValueSchema).default({}),
+  justification: optionalNote(),
+});
+export type ClientAuditInput = z.input<typeof ClientAuditInputSchema>;
+export type ParsedClientAuditInput = z.output<typeof ClientAuditInputSchema>;

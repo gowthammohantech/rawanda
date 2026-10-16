@@ -171,6 +171,13 @@ importers:
       '@laif/mock-data':
         specifier: workspace:*
         version: link:../mock-data
+      zod:
+        specifier: 4.6.7
+        version: 4.6.7
+    devDependencies:
+      '@laif/i18n':
+        specifier: workspace:*
+        version: link:../i18n
 
   packages/test-utils:
     dependencies:

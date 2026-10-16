@@ -1,6 +1,6 @@
 # FND-07 — @laif/repositories: CareRepository, in-memory store, audit, idempotency, versions, faults, sync, reset
 
-**Status:** Planned
+**Status:** Done
 
 ## 1. Header
 
@@ -123,14 +123,14 @@ No UI strings. Audit `action` values are stable codes; UIs translate via `domain
 
 ## 9. Acceptance criteria
 
-- [ ] Same `createScreening` input + key twice → one screening, one review, second result `replayed: true` (T-04).
-- [ ] `decideReview` with `expectedVersion` one behind → `CONFLICT` with current entity; nothing written (T-05).
-- [ ] District-Alpha analyst calling `getAggregateMetrics({ districtIds: [BETA] })` → `FORBIDDEN` and a denied audit event (WF-04, T-02).
-- [ ] Dismissal without reason → `VALIDATION_ERROR`; with reason → review `dismissed_with_reason`, no referral, audit has actor + justification.
-- [ ] `offline: true` → every call rejects `OFFLINE`; sync ops stay `queued`; after `offline: false` + `sync.process()` each op is acknowledged exactly once even if `process()` is called twice concurrently.
-- [ ] Timeout-after-commit + retry with same key → exactly one record.
-- [ ] `resetDemo()` → `datasetHash` equals fresh seed slice; audit log equals baseline + one `demo.reset`.
-- [ ] Contract suite passes for the memory adapter.
+- [x] Same `createScreening` input + key twice → one screening, one review, second result `replayed: true` (T-04).
+- [x] `decideReview` with `expectedVersion` one behind → `CONFLICT` with current entity; nothing written (T-05).
+- [x] District-Alpha analyst calling `getAggregateMetrics({ districtIds: [BETA] })` → `FORBIDDEN` and a denied audit event (WF-04, T-02).
+- [x] Dismissal without reason → `VALIDATION_ERROR`; with reason → review `dismissed_with_reason`, no referral, audit has actor + justification.
+- [x] `offline: true` → every call rejects `OFFLINE`; sync ops stay `queued`; after `offline: false` + `sync.process()` each op is acknowledged exactly once even if `process()` is called twice concurrently.
+- [x] Timeout-after-commit + retry with same key → exactly one record.
+- [x] `resetDemo()` → `datasetHash` equals fresh seed slice; audit log equals baseline + one `demo.reset`.
+- [x] Contract suite passes for the memory adapter.
 
 ## 10. Tests
 

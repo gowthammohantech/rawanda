@@ -2,7 +2,7 @@ import { asId, type DeviceSession } from "@laif/domain";
 import { DEMO_PERSONAS, PERSONA_IDS } from "@laif/mock-data";
 import { describe, expect, it, vi } from "vitest";
 
-import { isDeviceSessionActive, revokeDeviceSession } from "./device.ts";
+import { isDeviceSessionActive, restoreDeviceSession, revokeDeviceSession } from "./device.ts";
 import {
   createMemoryStorage,
   createPersonaSession,
@@ -118,5 +118,18 @@ describe("revokeDeviceSession", () => {
     expect(isDeviceSessionActive(session)).toBe(true);
     expect(isDeviceSessionActive(revoked)).toBe(false);
     expect(isDeviceSessionActive(null)).toBe(false);
+  });
+
+  it("restores a revoked session with a version bump and is idempotent", () => {
+    const revoked = revokeDeviceSession(session, { now });
+    const later = new Date("2026-10-14T08:00:00.000Z");
+    const restored = restoreDeviceSession(revoked, { now: later });
+    expect(restored).toEqual({
+      ...session,
+      status: "active",
+      version: 3,
+      updatedAt: later.toISOString(),
+    });
+    expect(restoreDeviceSession(restored, { now })).toBe(restored);
   });
 });

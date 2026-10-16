@@ -11,6 +11,7 @@
  * `VALIDATION_ERROR`; idempotency key reuse with a different payload → `VALIDATION_ERROR`.
  * The thrown class is `RepositoryError` (FND-07); there is no separate `AppError`.
  */
+import type { DomainInvariantCode, JsonValue } from "@laif/domain";
 import { z } from "zod";
 
 import type { ParsedValidationMessage } from "./messages.ts";
@@ -96,12 +97,20 @@ export type ConflictDetails<T> = {
 
 export type Page<T> = { items: T[]; total: number; page: number; pageSize: number };
 
+/**
+ * Error envelope of every repository failure (thrown as `RepositoryError`, FND-07).
+ * - `invariantCode`: set when a `DomainInvariantError` was mapped to `VALIDATION_ERROR` (FND-07
+ *   decision); UIs render it via `domain:invariant.<code>`.
+ * - `details`: small, non-identifying diagnostic JSON (never shown verbatim to users).
+ */
 export type RepositoryErrorShape = {
   code: ErrorCode;
   status: number;
   reason?: ErrorReason;
   fieldErrors?: Record<string, ParsedValidationMessage>;
   conflict?: ConflictDetails<unknown>;
+  invariantCode?: DomainInvariantCode;
+  details?: { [key: string]: JsonValue };
 };
 
 /** Schema for a `WriteResult<T>` (import paths, transport round-trips). */

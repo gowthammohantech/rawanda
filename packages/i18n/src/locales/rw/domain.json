@@ -386,5 +386,120 @@
         "transfer": "Kwimura ibyitegererezo by'igerageza (igikoresho cy'igerageza)"
       }
     }
+  },
+  "audit": {
+    "session": {
+      "started": "Isomo ryatangiye",
+      "ended": "Isomo ryarangiye",
+      "expired": "Igihe cy'isomo cyarangiye"
+    },
+    "access": {
+      "denied": "Kwinjira byanze"
+    },
+    "export": {
+      "requested": "Gusohora amakuru byasabwe",
+      "generated": "Amakuru yasohowe",
+      "denied": "Gusohora amakuru byanze"
+    },
+    "demo": {
+      "reset": "Igerageza ryasubijwe uko ryari ritangiye",
+      "scenario_loaded": "Urugero rw'igerageza rwafunguwe",
+      "fault_toggled": "Amakosa yiganwa yahinduwe",
+      "clock_changed": "Isaha y'igerageza yahinduwe",
+      "concurrent_update_simulated": "Ihindurwa ry'undi muntu ryiganwe",
+      "simulated_staff_action": "Igikorwa cy'umukozi cyiganwe",
+      "bundle_exported": "Ipaki y'igerageza yasohowe",
+      "bundle_imported": "Ipaki y'igerageza yinjijwe"
+    },
+    "conflict": {
+      "detected": "Ukuvuguruzanya kw'ibihinduwe kwagaragaye",
+      "resolved": "Ukuvuguruzanya kw'ibihinduwe kwakemuwe"
+    },
+    "sync": {
+      "duplicate_suppressed": "Kohereza kabiri byakumiriwe",
+      "op_acknowledged": "Impinduka yahujwe",
+      "op_rejected": "Impinduka ntiyemewe",
+      "conflict_resolved": "Ukuvuguruzanya mu guhuza kwakemuwe"
+    },
+    "task": {
+      "created": "Igikorwa cyashyizweho",
+      "updated": "Igikorwa cyavuguruwe",
+      "started": "Igikorwa cyatangiye",
+      "completed": "Igikorwa cyarangiye"
+    },
+    "correction": {
+      "requested": "Ikosora ryasabwe"
+    },
+    "patient": {
+      "viewed": "Amakuru y'umurwayi yarebwe",
+      "searched": "Gushakisha umurwayi",
+      "registered": "Umurwayi yanditswe",
+      "match_flagged": "Ishobora kuba isubiramo yagaragajwe",
+      "consent_withdrawn": "Uruhushya rwakuweho"
+    },
+    "review": {
+      "viewed": "Isuzuma ryarebwe",
+      "created": "Isuzuma ryashyizweho",
+      "started": "Isuzuma ryatangiye",
+      "taken_over": "Isuzuma ryafashwe n'undi",
+      "decided": "Icyemezo cy'isuzuma cyanditswe",
+      "dismissed": "Ikimenyetso cyakuweho gifite impamvu"
+    },
+    "audit": {
+      "viewed": "Igitabo cy'igenzura cyarebwe"
+    },
+    "screening": {
+      "history_viewed": "Amateka y'ipimwa yarebwe",
+      "draft_saved": "Umushinga w'ipimwa wabitswe",
+      "draft_discarded": "Umushinga w'ipimwa wajugunywe",
+      "submitted": "Ipimwa ryoherejwe",
+      "amended": "Ipimwa ryakosowe",
+      "created": "Ipimwa ryanditswe",
+      "evaluated": "Ipimwa ryasuzumwe (amategeko y'igerageza)"
+    },
+    "referral": {
+      "viewed": "Kohererezwa byarebwe",
+      "created": "Kohererezwa byashyizweho",
+      "transitioned": "Uko kohererezwa bihagaze byahindutse",
+      "accepted": "Kohererezwa byemewe",
+      "scheduled": "Kohererezwa byahawe gahunda",
+      "completed": "Kohererezwa byarangiye",
+      "cancelled": "Kohererezwa byahagaritswe"
+    },
+    "followup": {
+      "viewed": "Ikurikirana ryarebwe",
+      "created": "Ikurikirana ryashyizweho",
+      "assigned": "Ikurikirana ryahawe umukozi",
+      "reassigned": "Ikurikirana ryahawe undi mukozi",
+      "due_date_changed": "Itariki y'ikurikirana yahinduwe",
+      "attempt_recorded": "Igerageza ryo kuvugana ryanditswe",
+      "outcome_recorded": "Umusaruro w'ikurikirana wanditswe",
+      "note_added": "Icyitonderwa cy'ikurikirana cyongeweho",
+      "completion_confirmed": "Irangira ry'ikurikirana ryemejwe",
+      "returned_to_worker": "Ikurikirana ryasubijwe umukozi",
+      "unable_to_reach": "Umurwayi ntiyabonetse",
+      "completed": "Ikurikirana ryarangiye"
+    },
+    "queue": {
+      "viewed": "Urutonde rw'isuzuma rwarebwe"
+    },
+    "reminder": {
+      "preference_changed": "Ibyo wahisemo ku byibutsa byahinduwe",
+      "scheduled": "Icyibutsa cyashyizwe kuri gahunda",
+      "delivered_simulated": "Icyibutsa cyatanzwe (kwigana)",
+      "acknowledged": "Icyibutsa cyemewe ko cyabonywe",
+      "cancelled": "Icyibutsa cyahagaritswe"
+    },
+    "reminder_preference": {
+      "set": "Ibyo wahisemo ku byibutsa byashyizweho"
+    },
+    "instruction": {
+      "released": "Amabwiriza y'ubuvuzi yatangajwe",
+      "withdrawn": "Amabwiriza y'ubuvuzi yakuweho"
+    },
+    "device": {
+      "revoked": "Uburenganzira bw'igikoresho bwakuweho",
+      "restored": "Uburenganzira bw'igikoresho bwasubijweho"
+    }
   }
 }
