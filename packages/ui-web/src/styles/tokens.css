@@ -1,5 +1,5 @@
 /*
- * @laif/ui-web design tokens (FND-09). Same values as src/tokens.ts — tokens.css.test.ts fails
+ * @laif/ui-web design tokens (FND-09). Same values as src/tokens.ts — tokens.contrast.test.ts fails
  * on drift. Components use the generated utilities (bg-primary, text-muted, border-border-soft,
  * rounded-shell, font-mono …) or var(--color-*); raw hex is only allowed in this file and
  * tokens.ts.

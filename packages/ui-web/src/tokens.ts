@@ -1,6 +1,6 @@
 /**
  * Design tokens (FND-09 task 2) as a TypeScript object. The SAME values are declared as CSS
- * custom properties in `styles/tokens.css` (`tokens.css.test.ts` fails on drift) and are the
+ * custom properties in `styles/tokens.css` (`tokens.contrast.test.ts` fails on drift) and are the
  * reference for the native parity test in `@laif/ui-native` (FND-10).
  *
  * Palette: clinical teal from the tech spec §7 / prototype `index.css` soft tints.

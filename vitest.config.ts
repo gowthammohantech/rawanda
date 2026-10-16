@@ -42,6 +42,8 @@ const selected = selectedProjectSources(process.argv);
 
 export default defineConfig({
   test: {
+    // Cap parallelism: cold runs under load hit vitest-worker RPC "fetch" timeouts (FND-09 verification).
+    maxWorkers: "50%",
     projects: ["packages/*", "apps/*", "scripts"],
     coverage: {
       provider: "v8",
