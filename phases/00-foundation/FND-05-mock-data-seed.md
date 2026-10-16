@@ -1,6 +1,6 @@
 # FND-05 — @laif/mock-data: deterministic synthetic seed and 12 named scenarios
 
-**Status:** Planned
+**Status:** Done
 
 ## 1. Header
 
@@ -106,15 +106,15 @@ Adds keys `demo:scenario.<id>.title` / `.description` for all 12 scenarios and `
 
 ## 9. Acceptance criteria
 
-- [ ] `createSeed()` twice → deep-equal; `datasetHash` equals committed snapshot.
-- [ ] Counts in task 4 asserted exactly; ≥ 40 patients, 3 facilities, 2 districts.
-- [ ] Every record parses with its `@laif/contracts` schema.
-- [ ] Every non-draft seeded screening's stored `flag` equals `evaluateScreening(...)` with `DEMO_RULESET_V1`.
-- [ ] All 12 scenarios resolve; each anchor ID exists in `applyScenario(seed, id)`.
-- [ ] No `Math.random`, `Date.now` or `new Date()` without argument in `src/` (lint).
-- [ ] A privacy test scans all string fields for patterns of real identifiers (16-digit NIDA-like numbers, `+2507…` phone numbers) and fails if found.
-- [ ] `sliceForApp(seed,'citizen')` contains exactly the patients linked to the five citizen personas, no unreleased instructions and no record for `CTZ_P1_UNRELEASED_REFERRAL` as a care instruction.
-- [ ] Every `SEED_ANCHORS` entry exists in the documented state; every persona in task 3 exists with its role and scope.
+- [x] `createSeed()` twice → deep-equal; `datasetHash` equals committed snapshot.
+- [x] Counts in task 4 asserted exactly; ≥ 40 patients, 3 facilities, 2 districts.
+- [x] Every record parses with its `@laif/contracts` schema.
+- [x] Every non-draft seeded screening's stored `flag` equals `evaluateScreening(...)` with `DEMO_RULESET_V1`.
+- [x] All 12 scenarios resolve; each anchor ID exists in `applyScenario(seed, id)`.
+- [x] No `Math.random`, `Date.now` or `new Date()` without argument in `src/` (lint).
+- [x] A privacy test scans all string fields for patterns of real identifiers (16-digit NIDA-like numbers, `+2507…` phone numbers) and fails if found.
+- [x] `sliceForApp(seed,'citizen')` contains exactly the patients linked to the five citizen personas, no unreleased instructions and no record for `CTZ_P1_UNRELEASED_REFERRAL` as a care instruction.
+- [x] Every `SEED_ANCHORS` entry exists in the documented state; every persona in task 3 exists with its role and scope.
 
 ## 10. Tests
 

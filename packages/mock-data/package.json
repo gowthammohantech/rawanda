@@ -17,5 +17,8 @@
   "dependencies": {
     "@laif/domain": "workspace:*",
     "@laif/contracts": "workspace:*"
+  },
+  "devDependencies": {
+    "@laif/i18n": "workspace:*"
   }
 }

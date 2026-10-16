@@ -135,6 +135,10 @@ importers:
       '@laif/domain':
         specifier: workspace:*
         version: link:../domain
+    devDependencies:
+      '@laif/i18n':
+        specifier: workspace:*
+        version: link:../i18n
 
   packages/repositories:
     dependencies:

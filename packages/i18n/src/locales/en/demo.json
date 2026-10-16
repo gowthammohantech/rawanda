@@ -8,40 +8,63 @@
   "ruleDisclaimer": "DEMO_RULE_NOT_CLINICALLY_VALIDATED — this flag comes from an illustrative demo rule. Its thresholds are placeholders and are not clinically validated.",
   "scenario": {
     "SCN-01": {
-      "title": "Normal screening"
+      "title": "Normal screening",
+      "description": "A submitted screening by a worker at Demo Health Centre Alpha-1 that did not need clinician review."
     },
     "SCN-02": {
-      "title": "Flagged screening"
+      "title": "Flagged screening",
+      "description": "A screening flagged by the illustrative demo rule, with a pending review and a fully explained flag."
     },
     "SCN-03": {
-      "title": "Clinician dismissal"
+      "title": "Clinician dismissal",
+      "description": "A clinician dismissed a demo flag with a recorded reason; no referral was made."
     },
     "SCN-04": {
-      "title": "Overdue referral"
+      "title": "Overdue referral",
+      "description": "A scheduled referral whose due date has passed (demo timing)."
     },
     "SCN-05": {
-      "title": "Completed follow-up"
+      "title": "Completed follow-up",
+      "description": "A follow-up completed with evidence, with a care instruction released to the citizen."
     },
     "SCN-06": {
-      "title": "Missing glucose unit"
+      "title": "Missing glucose unit",
+      "description": "An imported screening and a worker draft where the glucose unit is missing."
     },
     "SCN-07": {
-      "title": "Duplicate submission"
+      "title": "Duplicate submission",
+      "description": "The same offline submission queued twice with one idempotency key; only one record is kept."
     },
     "SCN-08": {
-      "title": "Offline sync"
+      "title": "Offline sync",
+      "description": "Two screenings saved on the device while offline, waiting to sync."
     },
     "SCN-09": {
-      "title": "Version conflict"
+      "title": "Version conflict",
+      "description": "A queued follow-up update made on an older version, which raises a conflict when synced."
     },
     "SCN-10": {
-      "title": "Consent withdrawn"
+      "title": "Consent withdrawn",
+      "description": "A citizen withdrew consent: reminders are cancelled and the wallet cannot open the record."
     },
     "SCN-11": {
-      "title": "Unauthorised district access"
+      "title": "Unauthorised district access",
+      "description": "A district analyst for Demo District Alpha tries to open Demo District Beta data and is denied."
     },
     "SCN-12": {
-      "title": "Suppressed small aggregate"
+      "title": "Suppressed small aggregate",
+      "description": "A Demo District Beta figure below the small-cell threshold is shown as suppressed."
+    }
+  },
+  "entity": {
+    "district": {
+      "dist-alpha": "Demo District Alpha",
+      "dist-beta": "Demo District Beta"
+    },
+    "facility": {
+      "fac-alpha-1": "Demo Health Centre Alpha-1",
+      "fac-alpha-2": "Demo Health Centre Alpha-2",
+      "fac-beta-1": "Demo District Hospital Beta-1"
     }
   }
 }

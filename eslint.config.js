@@ -125,6 +125,24 @@ export default tseslint.config(
     },
   },
 
+  // Deterministic seed (FND-05): no Math.random in mock-data either — use the seeded PRNG.
+  // (no-restricted-properties options are replaced, not merged, so repeat the clock rule.)
+  {
+    files: ["packages/mock-data/**"],
+    rules: {
+      "no-restricted-properties": [
+        "error",
+        ...NO_WALL_CLOCK_PROPERTIES,
+        {
+          object: "Math",
+          property: "random",
+          message:
+            "Use the seeded PRNG from packages/mock-data/src/prng.ts instead of Math.random().",
+        },
+      ],
+    },
+  },
+
   // Tokens only in app sources.
   {
     files: ["apps/**/src/**"],

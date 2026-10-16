@@ -8,40 +8,63 @@
   "ruleDisclaimer": "DEMO_RULE_NOT_CLINICALLY_VALIDATED — iki kimenyetso gituruka ku itegeko ry'igerageza. Imibare yaryo ni iy'agateganyo kandi ntiyemejwe n'abaganga.",
   "scenario": {
     "SCN-01": {
-      "title": "Ipimwa risanzwe"
+      "title": "Ipimwa risanzwe",
+      "description": "Ipimwa ryakozwe n'umujyanama w'ubuzima ku kigo nderabuzima cy'igerageza Alpha-1 ritari rikeneye isuzumwa ry'umuganga."
     },
     "SCN-02": {
-      "title": "Ipimwa ryagaragaje ikimenyetso"
+      "title": "Ipimwa ryagaragaje ikimenyetso",
+      "description": "Ipimwa ryagaragajwe n'itegeko ry'igerageza, rifite isuzumwa ritegereje n'ikimenyetso gisobanuwe neza."
     },
     "SCN-03": {
-      "title": "Umuganga yakuyeho ikimenyetso"
+      "title": "Umuganga yakuyeho ikimenyetso",
+      "description": "Umuganga yakuyeho ikimenyetso cy'igerageza atanga impamvu; nta kohereza kwakozwe."
     },
     "SCN-04": {
-      "title": "Kohererezwa byarengeje igihe"
+      "title": "Kohererezwa byarengeje igihe",
+      "description": "Kohererezwa kwateganyijwe kwarengeje itariki yagenwe (igihe cy'igerageza)."
     },
     "SCN-05": {
-      "title": "Ikurikirana ryarangiye"
+      "title": "Ikurikirana ryarangiye",
+      "description": "Ikurikirana ryarangiye rifite ibimenyetso, kandi amabwiriza yohererejwe umuturage."
     },
     "SCN-06": {
-      "title": "Igipimo (unit) cy'isukari kibura"
+      "title": "Igipimo (unit) cy'isukari kibura",
+      "description": "Ipimwa ryinjijwe n'irindi ry'agateganyo by'umujyanama w'ubuzima bibura igipimo (unit) cy'isukari."
     },
     "SCN-07": {
-      "title": "Kohereza kabiri"
+      "title": "Kohereza kabiri",
+      "description": "Icyoherezwa kimwe cyashyizwe ku murongo kabiri gifite urufunguzo rumwe; hasigara inyandiko imwe gusa."
     },
     "SCN-08": {
-      "title": "Guhuza nta murandasi"
+      "title": "Guhuza nta murandasi",
+      "description": "Amapimwa abiri yabitswe kuri telefoni nta murandasi, ategereje guhuzwa."
     },
     "SCN-09": {
-      "title": "Kuvuguruzanya kw'inyandiko"
+      "title": "Kuvuguruzanya kw'inyandiko",
+      "description": "Ivugurura ry'ikurikirana ryakozwe kuri verisiyo ishaje, rizatera amakimbirane nirihuzwa."
     },
     "SCN-10": {
-      "title": "Uburenganzira bwakuweho"
+      "title": "Uburenganzira bwakuweho",
+      "description": "Umuturage yakuyeho uburenganzira: ibyibutsa byahagaritswe kandi ikofi ntishobora gufungura amakuru."
     },
     "SCN-11": {
-      "title": "Kugera ku makuru y'akarere bitemewe"
+      "title": "Kugera ku makuru y'akarere bitemewe",
+      "description": "Umusesenguzi w'akarere k'igerageza Alpha agerageza gufungura amakuru y'akarere ka Beta akangirwa."
     },
     "SCN-12": {
-      "title": "Imibare mito yahishwe"
+      "title": "Imibare mito yahishwe",
+      "description": "Umubare w'akarere k'igerageza Beta uri munsi y'imbibi z'utugari duto werekanwa nk'uhishwe."
+    }
+  },
+  "entity": {
+    "district": {
+      "dist-alpha": "Akarere k'Igerageza Alpha",
+      "dist-beta": "Akarere k'Igerageza Beta"
+    },
+    "facility": {
+      "fac-alpha-1": "Ikigo Nderabuzima cy'Igerageza Alpha-1",
+      "fac-alpha-2": "Ikigo Nderabuzima cy'Igerageza Alpha-2",
+      "fac-beta-1": "Ibitaro by'Akarere by'Igerageza Beta-1"
     }
   }
 }
