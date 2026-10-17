@@ -1,11 +1,13 @@
-/** CTZ-02: every pressable on the onboarding / wallet screens has a role, a label and ≥ 44 × 44. */
+/** CTZ-02/03: every pressable on the onboarding / wallet screens has a role, a label and ≥ 44 × 44. */
 import { minTouchTarget } from "@laif/ui-native";
-import { PERSONA_IDS } from "@laif/mock-data";
+import { PERSONA_IDS, SEED_ANCHORS } from "@laif/mock-data";
 import { screen } from "@testing-library/react";
 import type { ReactNode } from "react";
 import { describe, expect, it, vi } from "vitest";
 
 import { WalletHeader } from "../components/WalletHeader.tsx";
+import { HealthListScreen } from "../features/health/HealthListScreen.tsx";
+import { ResultDetailScreen } from "../features/health/ResultDetailScreen.tsx";
 import { DemoToolsScreen } from "../screens/DemoToolsScreen.tsx";
 import { ConsentScreen } from "../screens/onboarding/ConsentScreen.tsx";
 import { PersonaScreen } from "../screens/onboarding/PersonaScreen.tsx";
@@ -45,6 +47,16 @@ const cases: [string, ReactNode, string | null, string][] = [
   ["more", <MoreScreen key="m" />, PERSONA_IDS.citizen1, "more-consent"],
   ["header", <WalletHeader key="h" title="My health" />, PERSONA_IDS.citizen1, "wallet-menu"],
   ["demo tools", <DemoToolsScreen key="d" />, null, "demo-reset"],
+  ["my health", <HealthListScreen key="hl" />, PERSONA_IDS.citizen2, "results-list"],
+  [
+    "result detail",
+    <ResultDetailScreen
+      key="rd"
+      observationId={SEED_ANCHORS.CTZ_P2_DISMISSED_SCREENING.screeningId}
+    />,
+    PERSONA_IDS.citizen2,
+    "result-detail",
+  ],
 ];
 
 describe("touch targets and labels", () => {

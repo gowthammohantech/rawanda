@@ -130,6 +130,8 @@ export const AUDIT_ACTIONS = {
   "citizen.consent.granted": change,
   "citizen.consent.withdrawn": change,
   "citizen.result.viewed": access,
+  // CTZ-03: the "My health" results list was shown (once per screen focus).
+  "citizen.result.list_viewed": access,
   "citizen.next_step.acknowledged": change,
   "citizen.support.callback_requested": change,
   "citizen.settings.changed": change,

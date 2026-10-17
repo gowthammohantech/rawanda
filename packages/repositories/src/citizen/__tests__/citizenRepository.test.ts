@@ -243,6 +243,49 @@ describe.each(adapters)("CitizenRepository (%s adapter)", (_name, makeStore) => 
     expect(await h.audits("citizen.result.viewed")).toHaveLength(0);
   });
 
+  it("CTZ-P4: another patient's result id via the own patient → FORBIDDEN SCOPE + access.denied (CTZ-03)", async () => {
+    const h = await setup(makeStore(), PERSONA_IDS.citizenRep);
+    const marie = (await setup(makeStore())).repo;
+    const p1Result = (await marie.listReleasedObservations(P1)).find((o) => o.kind === "released");
+    expect(p1Result).toBeDefined();
+    await forbidden(h.repo.getObservation(p1Result!.id, P4), "SCOPE");
+    const denied = await h.audits("access.denied");
+    expect(denied).toHaveLength(1);
+    expect(denied[0]).toMatchObject({
+      outcome: "denied",
+      entityType: "screening",
+      entityId: p1Result!.id,
+      actorId: PERSONA_IDS.citizenRep,
+    });
+    expect(await h.audits("citizen.result.viewed")).toHaveLength(0);
+    // An unknown id stays NOT_FOUND (nothing to deny).
+    await expect(h.repo.getObservation("scr-unknown", P4)).rejects.toMatchObject({
+      code: "NOT_FOUND",
+    });
+  });
+
+  it("recordResultsListViewed: one record_viewed access event + citizen.result.list_viewed per call (CTZ-03)", async () => {
+    const h = await setup(makeStore());
+    await h.repo.recordResultsListViewed(P1);
+    await h.repo.recordResultsListViewed(P1);
+    expect(await h.audits("citizen.result.list_viewed")).toHaveLength(2);
+    const events = (await h.repo.listAccessEvents(P1)).filter(
+      (e) => e.action === "record_viewed" && e.actorId === PERSONA_IDS.citizen1,
+    );
+    expect(events).toHaveLength(2);
+    expect(events[0]).toMatchObject({
+      actorId: PERSONA_IDS.citizen1,
+      purpose: "self_access",
+      resourceType: "patient",
+      resourceId: P1,
+    });
+    h.as(PERSONA_IDS.citizenWithdrawn);
+    await forbidden(h.repo.recordResultsListViewed(P3), "CONSENT_REQUIRED");
+    h.as(PERSONA_IDS.citizenRep);
+    await forbidden(h.repo.recordResultsListViewed(P1), "SCOPE");
+    expect(await h.audits("citizen.result.list_viewed")).toHaveLength(2);
+  });
+
   it("CTZ-P5 (pending) has no linked patient: reads are FORBIDDEN", async () => {
     const h = await setup(makeStore(), PERSONA_IDS.citizenPending);
     await forbidden(h.repo.listReleasedObservations(P1), "SCOPE");

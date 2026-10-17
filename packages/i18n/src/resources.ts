@@ -18,6 +18,7 @@ import enAdminShell from "./locales/en/admin/shell.json";
 import enCitizen from "./locales/en/citizen.json";
 import enCitizenConsent from "./locales/en/citizen/consent.json";
 import enCitizenErrors from "./locales/en/citizen/errors.json";
+import enCitizenHealth from "./locales/en/citizen/health.json";
 import enCitizenMore from "./locales/en/citizen/more.json";
 import enCitizenNav from "./locales/en/citizen/nav.json";
 import enCitizenOnboarding from "./locales/en/citizen/onboarding.json";
@@ -46,6 +47,7 @@ import rwAdminShell from "./locales/rw/admin/shell.json";
 import rwCitizen from "./locales/rw/citizen.json";
 import rwCitizenConsent from "./locales/rw/citizen/consent.json";
 import rwCitizenErrors from "./locales/rw/citizen/errors.json";
+import rwCitizenHealth from "./locales/rw/citizen/health.json";
 import rwCitizenMore from "./locales/rw/citizen/more.json";
 import rwCitizenNav from "./locales/rw/citizen/nav.json";
 import rwCitizenOnboarding from "./locales/rw/citizen/onboarding.json";
@@ -116,6 +118,7 @@ export const enResources = {
     nav: enCitizenNav,
     validation: enCitizenValidation,
     more: enCitizenMore,
+    health: enCitizenHealth,
   },
 } as const satisfies Record<Namespace, object>;
 
@@ -151,6 +154,7 @@ export const rwResources: Record<Namespace, object> = {
     nav: rwCitizenNav,
     validation: rwCitizenValidation,
     more: rwCitizenMore,
+    health: rwCitizenHealth,
   },
 };
 

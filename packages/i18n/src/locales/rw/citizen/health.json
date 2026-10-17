@@ -1,0 +1,97 @@
+{
+  "eyebrow": "Ubuzima bwanjye",
+  "title": "Muraho, {{firstName}}",
+  "subtitle": "Ibisubizo itsinda rikwitaho ryagusangije",
+  "listLabel": "Ibisubizo wasangijwe",
+  "loading": "Turimo gushaka ibisubizo byawe",
+  "error": "Ntitwashoboye kubona ibisubizo byawe. Nta cyahindutse. Ongera ugerageze.",
+  "refreshHint": "Kurura hasi urebe niba hari ibisubizo bishya",
+  "empty": {
+    "title": "Nta bisubizo urasangizwa",
+    "body": "Nta bisubizo urasangizwa. Itsinda rikwitaho risangiza ibisubizo nyuma yo kubisuzuma."
+  },
+  "kind": {
+    "bpAndGlucose": "Igipimo cy'umuvuduko w'amaraso n'isukari",
+    "bloodPressure": "Igipimo cy'umuvuduko w'amaraso",
+    "glucose": "Igipimo cy'isukari mu maraso",
+    "check": "Igipimo cy'ubuzima"
+  },
+  "chip": {
+    "followUpAgreed": "Gukurikiranwa byemejwe",
+    "noActionNeeded": "Nta gikorwa gikenewe",
+    "reviewed": "Byasuzumwe"
+  },
+  "pending": {
+    "title": "Bitegereje itsinda rikwitaho",
+    "body": "Igipimo giheruka gitegereje itsinda rikwitaho.",
+    "after": "Uzakibona hano nibamara kugisuzuma."
+  },
+  "meaning": {
+    "title": "Icyo bivuze kuri wowe",
+    "followUpAgreed": "Itsinda rikwitaho rirashaka kongera kukubona kubera iki gisubizo.",
+    "seeNextSteps": "Reba Intambwe zikurikira.",
+    "noAction": "Itsinda rikwitaho ryarebye iki gisubizo. Nta rundi ruzinduko rukenewe ubu."
+  },
+  "notDiagnosis": "Iki gisubizo si isuzuma rya muganga.",
+  "askCareTeam": "Vugana n'itsinda rikwitaho niba ufite ibibazo.",
+  "supportLink": "Vugana n'ubufasha",
+  "supportHint": "Ifungura Ibindi, aho uburyo bw'ubufasha buri",
+  "nextStepsLink": "Reba Intambwe zikurikira",
+  "nextStepsHint": "Ifungura intambwe ikurikira itsinda rikwitaho ryemeje kuri iki gisubizo",
+  "reviewedBy": "Byasuzumwe na {{name}} · {{time}}",
+  "sharedNoReview": "Byasangijwe n'itsinda rikwitaho · {{time}}",
+  "openHint": "Ifungura iki gisubizo",
+  "card": {
+    "a11y": "{{kind}}, {{date}}, {{status}}"
+  },
+  "detail": {
+    "title": "Igisubizo",
+    "measured": "Igihe cyapimiwe",
+    "facility": "Aho",
+    "context": "Mbere y'igipimo",
+    "reviewer": "Byasuzumwe na",
+    "reviewerValue": "{{name}}, {{role}}",
+    "released": "Byagusangijwe",
+    "noReviewer": "Iki gipimo nticyari gikeneye gusuzumwa",
+    "readings": "Ibipimo byawe",
+    "notFoundTitle": "Igisubizo ntikiboneka",
+    "notFound": "Ntitwabonye iki gisubizo. Gishobora kuba kitagusangijwe.",
+    "deniedTitle": "Ntibiboneka",
+    "denied": "Iki gisubizo ntikiri mu nyandiko wemerewe kureba.",
+    "back": "Subira ku Buzima bwanjye"
+  },
+  "reading": {
+    "bloodPressure": "Umuvuduko w'amaraso",
+    "glucose": "Isukari mu maraso",
+    "bloodPressureA11y": "Umuvuduko w'amaraso {{systolic}} kuri {{diastolic}} {{unit}}",
+    "glucoseA11y": "Isukari mu maraso {{value}} {{unit}}"
+  },
+  "context": {
+    "fasting": "Utariye",
+    "nonFasting": "Wariye",
+    "notRecorded": "Ntibyanditswe"
+  },
+  "units": {
+    "mmHg": "mmHg",
+    "mmolL": "mmol/L",
+    "mgdL": "mg/dL",
+    "mmHgSpoken": "milimetero za merikire",
+    "mmolLSpoken": "milimole kuri litiro",
+    "mgdLSpoken": "miligarama kuri desilitiro"
+  },
+  "understand": {
+    "open": "Sobanukirwa igisubizo cyanjye",
+    "title": "Sobanukirwa igisubizo cyanjye",
+    "intro": "Ibi bisobanura icyo ibipimo bipima. Ntibisobanura igisubizo cyawe bwite.",
+    "bpTitle": "Igipimo cy'umuvuduko w'amaraso",
+    "bpBody": "Igipimo cy'umuvuduko w'amaraso gipima imbaraga amaraso asunika inkuta z'imitsi yawe. Cyandikwa mu mibare ibiri, muri milimetero za merikire (mmHg).",
+    "glucoseTitle": "Igipimo cy'isukari mu maraso",
+    "glucoseBody": "Igipimo cy'isukari mu maraso gipima ingano y'isukari mu maraso yawe igihe cy'igipimo. Cyandikwa muri milimole kuri litiro (mmol/L). Kurya mbere y'igipimo bishobora guhindura umubare, ni yo mpamvu igipimo kigaragaza niba utariye.",
+    "clinician": "Itsinda rikwitaho ni ryo ryonyine rifata icyemezo ku cyo igisubizo cyawe kivuze kuri wowe.",
+    "close": "Funga"
+  },
+  "representative": {
+    "viewingFor": "Urareba ibya {{name}}",
+    "body": "Uri uhagarariye mu buryo bwemewe n'amategeko. Ubona gusa ibisubizo byasangijwe bya {{name}}."
+  }
+}

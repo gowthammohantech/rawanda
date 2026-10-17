@@ -121,7 +121,16 @@ export interface CitizenRepository {
    * reminders (`consent_withdrawn`) and never deletes clinical records. */
   recordConsent(i: RecordConsentCall, key: string): Promise<WriteResult<ConsentRecord>>;
   listReleasedObservations(patientId: string): Promise<CitizenObservationItem[]>;
-  /** A released result (`NOT_FOUND` for pending / unknown); writes `citizen.result.viewed`. */
+  /**
+   * CTZ-03: the results list was shown (once per screen focus) — one `record_viewed` access
+   * event + `citizen.result.list_viewed` audit. Link + consent required.
+   */
+  recordResultsListViewed(patientId: string): Promise<void>;
+  /**
+   * A released result (`NOT_FOUND` for pending / unknown); writes `citizen.result.viewed`
+   * (de-duplicated per persona + result per demo minute). A result id of ANOTHER patient
+   * (cross-patient deep link, T-02) → `FORBIDDEN` `SCOPE` + one `access.denied`, no data.
+   */
   getObservation(id: string, patientId: string): Promise<ReleasedObservation>;
   listApprovedInstructions(patientId: string): Promise<ApprovedInstruction[]>;
   /** "I have read this" — one ack per instruction; replays return the same ack. */
