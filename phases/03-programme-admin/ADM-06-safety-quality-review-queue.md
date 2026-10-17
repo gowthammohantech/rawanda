@@ -166,3 +166,10 @@ Manual:
 ## 12. Commit
 
 `feat(admin): ADM-06 safety and quality monitor with data-quality triage queue`
+
+## 13. Implementation notes (verifier)
+
+- **Queue rows vs suppressed KPIs (task 7, product-owner decision):** the queue lists individual issue rows even when the matching KPI cell is suppressed (e.g. "Screenings with missing required fields" shows `<5` while 3 `MISSING FIELD` rows are listed), so the row count discloses the suppressed figure to anyone who can open the page. The phase accepts this explicitly: each row is an operational record with no patient data (type, facility, district, Kigali dates, rule, ruleset version, source app, opaque `SCR-`/`REV-`/`PAT-` ref). Queue tab counts are row counts and are not passed through `toCells`. The per-facility open-issue breakdown, fairness lines (sex / age band), dismissal reasons, and weekly lines are suppressed in one scope-wide pass. If the PO revisits the decision, hide the rows of suppressed cells for `metrics.read`-only roles.
+- **Duplicate-identifier groups:** the repository computes them (`qualitySourcesOf`) as groups of patient ids, so synthetic identifiers, names, DOB, phone and village never leave the aggregate read. Patient ids stay in the in-memory dataset (as before ADM-06). They never reach the issue record or the DOM: the issue carries only `PAT-` + 8 characters of the anchor id (a hash for non-uuid seed ids), and `selectQuality.test.ts` checks that no full patient id appears in the view or the queue.
+- **Audit names:** the phase's `system.quality_issue.detected` became `admin.quality_issue.detected` (actor null = system), following the registry prefix rule. `admin.quality_issue.conflict` / `.denied` map to the canonical `conflict.detected` / `access.denied` with entityType `data_quality_issue`. `admin.quality_issue.triaged` carries `noteLength`, never the note text. The note is stored only on the issue record.
+- **Shared changes:** `ENTITY_TYPES` + `data_quality_issue`. The `dataQualityIssues` collection is hashed, and detection upserts happen on page view. Reset clears it, and the reset/hash tests still pass.
