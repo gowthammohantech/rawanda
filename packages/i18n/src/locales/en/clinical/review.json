@@ -1,0 +1,186 @@
+{
+  "title": "Review detail",
+  "loading": "Loading the review…",
+  "patientLine": "{{name}} · {{syntheticId}}",
+  "notFound": {
+    "title": "No review with this ID in your facilities",
+    "description": "Check the link, or open the review from the review queue.",
+    "back": "Back to review queue"
+  },
+  "denied": {
+    "body": "This review belongs to a facility outside your current scope. The attempt was recorded in the audit trail."
+  },
+  "flag": {
+    "label": "Flag for review",
+    "heading": "Why this screening was flagged",
+    "summary": {
+      "DEMO_BP_SYSTOLIC_AT_OR_ABOVE_THRESHOLD": "Systolic reading at or above the demo threshold configured in ruleset {{version}}.",
+      "DEMO_BP_DIASTOLIC_AT_OR_ABOVE_THRESHOLD": "Diastolic reading at or above the demo threshold configured in ruleset {{version}}.",
+      "DEMO_GLUCOSE_AT_OR_ABOVE_THRESHOLD": "Blood glucose at or above the demo threshold for its fasting status configured in ruleset {{version}}.",
+      "GLUCOSE_UNIT_MISSING": "A glucose value was recorded without a unit, so ruleset {{version}} could not evaluate it — a person must review it.",
+      "GLUCOSE_CONTEXT_NOT_RECORDED": "Fasting status was not recorded; ruleset {{version}} used its placeholder for an unknown status.",
+      "notEvaluable": "Required inputs were incomplete, so ruleset {{version}} could not evaluate this screening — it was routed to a person.",
+      "manual": "Escalated manually for human review."
+    },
+    "rulesetChip": "Demo ruleset {{version}} · not clinically validated",
+    "rulesetChipHint": "Show the rules of this demo ruleset",
+    "disclaimer": "A flag is a prompt for clinician review — it is not a diagnosis.",
+    "snapshotAt": "Evidence frozen at flag time · {{time}}",
+    "rulesetModal": {
+      "title": "Demo ruleset {{version}}",
+      "description": "The illustrative rules that flag screenings in this demo. Their values are placeholders — not clinically validated and not approved by any clinical authority.",
+      "status": "Status",
+      "statusActive": "Active (demo)",
+      "statusRetired": "Retired (demo)",
+      "validation": "Validation status",
+      "approvedBy": "Approved by",
+      "notApproved": "Not approved — demonstration only",
+      "effectiveFrom": "Effective from",
+      "requiredInputs": "Required inputs",
+      "rules": "Rules",
+      "placeholder": "Demo placeholder value: {{value}}",
+      "unknown": "This ruleset version is not available in this demo, so its rules cannot be listed.",
+      "close": "Close"
+    }
+  },
+  "rules": {
+    "BP-1": "Systolic blood pressure is compared with the demo systolic threshold.",
+    "BP-2": "Diastolic blood pressure is compared with the demo diastolic threshold.",
+    "GLU-1": "Blood glucose (converted to mmol/L) is compared with the demo threshold for its fasting status.",
+    "GLU-2": "A glucose value needs a unit; without one it is not evaluated and goes to a person.",
+    "GLU-3": "Fasting status should be recorded; when it is not, the demo placeholder for an unknown status is used."
+  },
+  "evidence": {
+    "title": "Evidence",
+    "subtitle": "Inputs as captured at flag time, compared with demo ruleset {{version}}.",
+    "caption": "Evidence inputs and their demo rule status",
+    "columns": {
+      "input": "Input",
+      "value": "Recorded value",
+      "rule": "Demo rule",
+      "status": "Status"
+    },
+    "inputs": {
+      "systolic": "Systolic blood pressure",
+      "diastolic": "Diastolic blood pressure",
+      "glucoseValue": "Blood glucose",
+      "glucoseUnit": "Glucose unit",
+      "glucoseContext": "Fasting status",
+      "repeatReading": "Repeat reading"
+    },
+    "status": {
+      "TRIGGERED": "Triggered",
+      "WITHIN_DEMO_RANGE": "Within demo range",
+      "MISSING": "Missing",
+      "NOT_EVALUATED": "Not evaluated"
+    },
+    "ruleText": "Demo threshold: configured in {{version}}",
+    "noRule": "No demo rule evaluates this input",
+    "comparedTo": "Compared with {{value}}",
+    "demoPlaceholderValue": "Demo placeholder value",
+    "notRecorded": "Not recorded",
+    "amendedAfterFlag": "Evidence amended after flag — see correction history",
+    "amendedAfterFlagBody": "The screening was corrected after this flag was raised. The evidence above is the snapshot taken at flag time and is never changed.",
+    "openHistory": "Open correction history",
+    "empty": "No evidence captured — cannot be reviewed; contact data quality"
+  },
+  "completeness": {
+    "title": "Data completeness",
+    "label": "{{present}} of {{total}} required inputs present",
+    "missing": "Missing: {{inputs}}",
+    "complete": "All required inputs are present."
+  },
+  "howToRead": {
+    "title": "How to read this",
+    "body": "A flag is a prompt for a clinician to look at this screening. It is not a diagnosis and does not recommend treatment. The demo rules use placeholder values that are not clinically validated — use your clinical judgement and the full record."
+  },
+  "prior": {
+    "title": "Prior records",
+    "subtitle": "Last 5 screenings of this patient",
+    "caption": "Last 5 screenings, newest first",
+    "columns": {
+      "measuredAt": "Measured (Kigali time)",
+      "bp": "Blood pressure",
+      "glucose": "Blood glucose",
+      "trend": "Systolic trend",
+      "flag": "Flag"
+    },
+    "trend": {
+      "up": "↑ Higher than previous",
+      "down": "↓ Lower than previous",
+      "same": "→ Same as previous",
+      "none": "— No earlier reading"
+    },
+    "thisScreening": "This screening",
+    "repeat": "Includes repeat reading",
+    "flagged": "Flagged",
+    "notFlagged": "Not flagged",
+    "empty": "No screenings recorded for this patient."
+  },
+  "provenance": {
+    "title": "Source and provenance",
+    "recordedBy": "Recorded by",
+    "device": "Device",
+    "deviceUnknown": "Not recorded in this demo",
+    "source": "Source",
+    "facility": "Facility",
+    "measuredAt": "Measured (Kigali time)",
+    "syncedAt": "Received (Kigali time)",
+    "version": "Screening version",
+    "amendments": "Amendments",
+    "noAmendments": "None",
+    "amendmentCount_one": "{{count}} amendment",
+    "amendmentCount_other": "{{count}} amendments",
+    "unavailable": "The screening record is not available."
+  },
+  "responsibility": {
+    "title": "Responsibility",
+    "assigned": "Assigned clinician",
+    "unassigned": "Unassigned",
+    "status": "Review status",
+    "startedBy": "Started by",
+    "notStarted": "Not started",
+    "lastUpdated": "Last updated (Kigali time)",
+    "decidedBy": "Decided by",
+    "decidedAt": "Decided at (Kigali time)",
+    "notDecided": "Not decided yet",
+    "you": "{{name}} (you)",
+    "reassignNote": "Reassigning the reviewer is not available in this demo."
+  },
+  "outcome": {
+    "title": "Outcome",
+    "body": "This review is closed and read-only.",
+    "decision": "Decision",
+    "reason": "Reason",
+    "note": "Note",
+    "auditTrail": "View audit trail"
+  },
+  "actions": {
+    "openPatient": "Open patient",
+    "start": "Start review",
+    "recordDecision": "Record decision",
+    "takeOver": "Take over review",
+    "takeOverTitle": "Take over this review?",
+    "takeOverDescription": "{{name}} is reviewing this case. Taking over is recorded in the audit trail together with your reason.",
+    "takeOverReason": "Reason for taking over",
+    "takeOverConfirm": "Take over",
+    "inReviewBy": "In review by {{name}}",
+    "readOnlyCoordinator": "Decisions require a clinician or authorised reviewer",
+    "offline": "Simulated offline — a review cannot be started right now",
+    "started": "Review started",
+    "startedBody": "You are now reviewing this case.",
+    "takenOver": "Review taken over",
+    "startFailed": "The review could not be started",
+    "retry": "Retry"
+  },
+  "conflict": {
+    "title": "Another clinician changed this review",
+    "description": "Nothing was overwritten. Reload the latest version before you continue.",
+    "cancel": "Cancel",
+    "fields": {
+      "status": "Status",
+      "assigned": "Assigned clinician",
+      "version": "Version"
+    }
+  }
+}

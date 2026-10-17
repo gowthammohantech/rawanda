@@ -194,7 +194,7 @@
     "notEvaluable": "Not evaluable — needs a person",
     "reasons": "Reasons",
     "observations": "Readings compared with the demo rule",
-    "observationValue": "{{value}} — demo threshold {{threshold}}",
+    "observationValue": "{{value}} — demo threshold {{threshold}} (demo placeholder value)",
     "ruleset": "Ruleset {{version}}",
     "inputs": "Inputs used",
     "noReasons": "No demo rule was triggered.",

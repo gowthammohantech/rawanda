@@ -193,5 +193,22 @@ describe("queue pill priority", () => {
       "In review · Quilra Xabezo",
       "In review · you",
     ]);
+    expect(screen.queryAllByTestId("queue-pill-in-review")).toHaveLength(0);
+  });
+
+  it("an urgent review already in review also shows who is reviewing it (CLN-06)", () => {
+    renderWithProviders(
+      <ul>
+        <QueueRow
+          item={item({ priority: "urgent_demo", status: "in_review", startedBy: ME })}
+          nowIso={NOW}
+          personaId={ME}
+          expanded={false}
+          onExpandedChange={() => undefined}
+        />
+      </ul>,
+    );
+    expect(screen.getByTestId("queue-pill").textContent).toBe("Urgent · demo");
+    expect(screen.getByTestId("queue-pill-in-review").textContent).toBe("In review · you");
   });
 });

@@ -15,6 +15,7 @@ export * from "./queue.ts";
 export * from "./matching.ts";
 export * from "./rules/types.ts";
 export * from "./rules/engine.ts";
+export * from "./rules/explain.ts";
 export * from "./clock/clock.ts";
 export * from "./hash.ts";
 export * from "./errors.ts";
