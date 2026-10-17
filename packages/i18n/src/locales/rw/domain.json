@@ -513,7 +513,9 @@
         "list_viewed": "Urutonde rw'ibisubizo rwarebwe mu gasanduku"
       },
       "next_step": {
-        "acknowledged": "Intambwe ikurikira yasomwe"
+        "acknowledged": "Intambwe ikurikira yasomwe",
+        "list_viewed": "Urutonde rw'intambwe zikurikira rwarebwe mu gasanduku",
+        "viewed": "Intambwe ikurikira yarebwe mu gasanduku"
       },
       "support": {
         "callback_requested": "Hasabwe guhamagarwa"

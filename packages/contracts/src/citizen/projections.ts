@@ -7,6 +7,7 @@
 import {
   AMENDABLE_SCREENING_FIELDS,
   CITIZEN_RESULT_LABELS,
+  COMPLETION_EVIDENCE_TYPES,
   CORRECTION_REQUEST_STATUSES,
   ENTITY_TYPES,
   GLUCOSE_CONTEXTS,
@@ -91,6 +92,12 @@ export const ApprovedInstructionSchema = CareInstructionSchema.extend({
   datePassed: z.boolean(),
   reviewId: ReviewIdSchema.nullable(),
   acknowledgement: z.object({ id: NonEmptyTrimmed, acknowledgedAt: IsoUtcString }).nullable(),
+  completion: z
+    .object({
+      completedAt: IsoUtcString,
+      evidenceType: z.enum(COMPLETION_EVIDENCE_TYPES).nullable(),
+    })
+    .nullable(),
 }) satisfies z.ZodType<ApprovedInstruction>;
 
 /** FRD CorrectionRequest — projection of a `correction_request` care task. */

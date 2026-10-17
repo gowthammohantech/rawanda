@@ -326,6 +326,115 @@ describe.each(adapters)("CitizenRepository (%s adapter)", (_name, makeStore) => 
     ).rejects.toMatchObject({ code: "NOT_FOUND" });
   });
 
+  it("CTZ-04 getInstruction: approved step + one citizen.next_step.viewed; others denied alike", async () => {
+    const h = await setup(makeStore());
+    const id = SEED_ANCHORS.CTZ_P1_APPOINTMENT_INSTRUCTION.careInstructionId;
+    const step = await h.repo.getInstruction(id, P1);
+    expect(step).toMatchObject({ id, approvalState: "approved", progress: "planned" });
+    await h.repo.getInstruction(id, P1); // same demo minute → de-duplicated
+    expect(await h.audits("citizen.next_step.viewed")).toHaveLength(1);
+    const events = await h.repo.listAccessEvents(P1);
+    expect(events[0]).toMatchObject({ action: "next_steps_viewed", resourceId: id });
+
+    // Withdrawn (P2's), unreleased referral (P1's draft), unknown → the same FORBIDDEN SCOPE.
+    for (const other of [
+      SEED_ANCHORS.CTZ_P2_WITHDRAWN_INSTRUCTION.careInstructionId,
+      SEED_ANCHORS.CTZ_P1_UNRELEASED_REFERRAL.referralId,
+      "no-such-step",
+    ]) {
+      await forbidden(h.repo.getInstruction(other, P1), "SCOPE");
+    }
+    const denied = await h.audits("access.denied");
+    expect(denied.map((d) => d.entityId)).toEqual([
+      SEED_ANCHORS.CTZ_P2_WITHDRAWN_INSTRUCTION.careInstructionId,
+      SEED_ANCHORS.CTZ_P1_UNRELEASED_REFERRAL.referralId,
+      "no-such-step",
+    ]);
+    expect(denied.every((d) => d.entityType === "care_instruction")).toBe(true);
+
+    // P2's own withdrawn step is unreachable too.
+    h.as(PERSONA_IDS.citizen2);
+    await forbidden(
+      h.repo.getInstruction(SEED_ANCHORS.CTZ_P2_WITHDRAWN_INSTRUCTION.careInstructionId, P2),
+      "SCOPE",
+    );
+    expect(
+      (await h.repo.listApprovedInstructions(P2)).some(
+        (i) => i.id === SEED_ANCHORS.CTZ_P2_WITHDRAWN_INSTRUCTION.careInstructionId,
+      ),
+    ).toBe(false);
+  });
+
+  it("CTZ-04 recordNextStepsListViewed: one next_steps_viewed event + list_viewed per call", async () => {
+    const h = await setup(makeStore());
+    await h.repo.recordNextStepsListViewed(P1);
+    await h.repo.recordNextStepsListViewed(P1);
+    expect(await h.audits("citizen.next_step.list_viewed")).toHaveLength(2);
+    const before = (await setup(makeStore()).then((x) => x.repo.listAccessEvents(P1))).length;
+    const events = await h.repo.listAccessEvents(P1);
+    expect(events.length - before).toBe(2);
+    expect(events.slice(0, 2).map((e) => [e.action, e.resourceType])).toEqual([
+      ["next_steps_viewed", "patient"],
+      ["next_steps_viewed", "patient"],
+    ]);
+    h.as(PERSONA_IDS.citizenWithdrawn);
+    await forbidden(h.repo.recordNextStepsListViewed(P3), "CONSENT_REQUIRED");
+  });
+
+  it("CTZ-04 completed follow-up carries completion evidence; ack audit keeps the key", async () => {
+    const h = await setup(makeStore());
+    const done = (await h.repo.listApprovedInstructions(P1)).find(
+      (i) => i.id === SEED_ANCHORS.COMPLETED_FOLLOWUP_WITH_INSTRUCTION.careInstructionId,
+    );
+    expect(done?.completion?.evidenceType).not.toBeNull();
+    const key = h.key();
+    await h.repo.acknowledgeInstruction(
+      {
+        patientId: P1,
+        instructionId: SEED_ANCHORS.CTZ_P1_APPOINTMENT_INSTRUCTION.careInstructionId,
+      },
+      key,
+    );
+    const [event] = await h.audits("citizen.next_step.acknowledged");
+    expect(event?.changeSummary).toMatchObject({ idempotencyKey: key, instructionVersion: 1 });
+    expect(event?.entityType).toBe("care_instruction");
+    expect(event?.correlationId).toBeTruthy();
+  });
+
+  it("CTZ-04 ack conflict (T-05): stale version or the patient conflict toggle → CONFLICT, no row", async () => {
+    const h = await setup(makeStore());
+    const instructionId = SEED_ANCHORS.CTZ_P1_APPOINTMENT_INSTRUCTION.careInstructionId;
+    const rows = async () =>
+      (await h.store.getAll<{ instructionId: string }>("nextStepAcks")).filter(
+        (a) => a.instructionId === instructionId,
+      );
+    await expect(
+      h.repo.acknowledgeInstruction({ patientId: P1, instructionId, expectedVersion: 99 }, h.key()),
+    ).rejects.toMatchObject({ code: "CONFLICT" });
+    expect(await rows()).toHaveLength(0);
+
+    await h.repo.demo.setFaults({ conflictOnce: [{ entityType: "patient", entityId: P1 }] });
+    const key = h.key();
+    const error = await h.repo
+      .acknowledgeInstruction({ patientId: P1, instructionId, expectedVersion: 1 }, key)
+      .then(
+        () => null,
+        (e: unknown) => e,
+      );
+    expect(error).toMatchObject({ code: "CONFLICT" });
+    expect((error as RepositoryError).conflict?.latest).toMatchObject({ id: instructionId });
+    expect(await rows()).toHaveLength(0);
+    expect(await h.audits("conflict.detected")).toHaveLength(2);
+    expect((await h.repo.demo.getFaults()).conflictOnce).toEqual([]);
+    // The toggle is consumed: the next acknowledgement (re-read, new action) is saved once.
+    const ok = await h.repo.acknowledgeInstruction(
+      { patientId: P1, instructionId, expectedVersion: 1 },
+      h.key(),
+    );
+    expect(ok.data.instructionId).toBe(instructionId);
+    expect(await rows()).toHaveLength(1);
+  });
+
   it("stale expectedVersion on prefs throws CONFLICT with latest; row unchanged (T-05)", async () => {
     const h = await setup(makeStore());
     const prefs = await h.repo.getNotificationPrefs(P1);

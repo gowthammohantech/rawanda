@@ -286,8 +286,15 @@ describe("citizen projections", () => {
       datePassed: false,
       reviewId: null,
       acknowledgement: null,
+      completion: null,
     };
     expect(ApprovedInstructionSchema.safeParse(instruction).success).toBe(true);
+    expect(
+      ApprovedInstructionSchema.safeParse({
+        ...instruction,
+        completion: { completedAt: T, evidenceType: "facility_attendance_record" },
+      }).success,
+    ).toBe(true);
     expect(
       ApprovedInstructionSchema.safeParse({ ...instruction, status: "withdrawn" }).success,
     ).toBe(false);
@@ -325,6 +332,15 @@ describe("citizen inputs", () => {
     expect(
       AcknowledgeInstructionInputSchema.safeParse({ idempotencyKey: KEY, patientId: "pat-1" })
         .success,
+    ).toBe(false);
+    // CTZ-04: the read version is optional; when given it must be a positive version.
+    const ack = { idempotencyKey: KEY, patientId: "pat-1", instructionId: "ci-1" };
+    expect(AcknowledgeInstructionInputSchema.safeParse(ack).success).toBe(true);
+    expect(
+      AcknowledgeInstructionInputSchema.safeParse({ ...ack, expectedVersion: 2 }).success,
+    ).toBe(true);
+    expect(
+      AcknowledgeInstructionInputSchema.safeParse({ ...ack, expectedVersion: 0 }).success,
     ).toBe(false);
   });
 

@@ -513,7 +513,9 @@
         "list_viewed": "Results list viewed in the wallet"
       },
       "next_step": {
-        "acknowledged": "Next step marked as read"
+        "acknowledged": "Next step marked as read",
+        "list_viewed": "Next steps list viewed in the wallet",
+        "viewed": "Next step viewed in the wallet"
       },
       "support": {
         "callback_requested": "Call-back requested"
