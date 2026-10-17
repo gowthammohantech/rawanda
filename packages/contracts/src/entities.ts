@@ -229,6 +229,11 @@ export const PatientSchema = z.object({
   identityStatus: z.enum(IDENTITY_STATUSES),
   duplicateCandidateIds: z.array(PatientIdSchema),
   preferredLanguage: z.enum(LANGUAGES),
+  villageLabel: NonEmptyTrimmed.exactOptional(),
+  syntheticPhone: z
+    .string()
+    .regex(/^07\d{8}$/u)
+    .exactOptional(),
 }) satisfies z.ZodType<Patient>;
 
 /**

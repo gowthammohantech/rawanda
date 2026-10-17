@@ -1,0 +1,95 @@
+{
+  "title": "Review queue",
+  "subtitle": "Screenings flagged by the illustrative demo rules for clinician review in {{facility}}. Flags are not clinically validated.",
+  "loading": "Loading the review queue…",
+  "listLabel": "Reviews",
+  "lastUpdated": "Last updated {{time}} — showing the last loaded results",
+  "kpi": {
+    "label": "Review queue summary",
+    "awaiting": "Awaiting review",
+    "awaitingHint": "Pending or in review",
+    "urgent": "Urgent (demo protocol)",
+    "urgentHint": "Urgent per demo protocol — not clinically validated",
+    "overdue": "Overdue (derived)",
+    "overdueHint": "Past the demo review due date",
+    "assignedToMe": "Assigned to me",
+    "assignedToMeHint": "Open reviews assigned to you",
+    "reviewedThisWeek": "Reviewed this week",
+    "reviewedThisWeekHint": "Since Monday, Kigali time",
+    "stale": "Stale — last updated {{time}}"
+  },
+  "tabs": {
+    "label": "Review queue tabs",
+    "pending": "Pending",
+    "urgent": "Urgent",
+    "overdue": "Overdue",
+    "assigned": "Assigned to me",
+    "all": "All in scope",
+    "countLoading": "—"
+  },
+  "filters": {
+    "label": "Queue filters",
+    "search": "Search in queue",
+    "searchPlaceholder": "Patient name or synthetic ID",
+    "facility": "Facility",
+    "facilityOutOfScope": "Facility not in your scope",
+    "assignee": {
+      "label": "Assignee",
+      "any": "Anyone",
+      "me": "Me",
+      "unassigned": "Unassigned"
+    },
+    "sort": {
+      "label": "Sort",
+      "flaggedAt_asc": "Oldest flag first",
+      "flaggedAt_desc": "Newest flag first",
+      "dueAt_asc": "Demo due date (soonest first)",
+      "patient_asc": "Patient name (A–Z)"
+    }
+  },
+  "row": {
+    "status": {
+      "needsReview": "Needs review",
+      "urgentDemo": "Urgent · demo",
+      "overdue": "Overdue",
+      "inReviewBy": "In review · {{name}}",
+      "inReviewByYou": "In review · you"
+    },
+    "flagged": "Flagged {{time}}",
+    "moreReasons_one": "+{{count}} more reason",
+    "moreReasons_other": "+{{count}} more reasons",
+    "manualEscalation": "Escalated manually for human review",
+    "triggeringReadings": "Triggering readings",
+    "noTriggeringReadings": "No reading above a demo threshold — routed to a human because inputs were incomplete",
+    "comparedTo": "demo threshold {{value}}",
+    "whyReview": "Why this needs review",
+    "rulesetVersion": "Ruleset version",
+    "noRuleset": "No ruleset recorded",
+    "source": "Source",
+    "sourceUnknown": "Not available",
+    "measuredAt": "Measured (Kigali time)",
+    "dueAt": "Demo review due",
+    "noDueDate": "No due date set",
+    "assignedTo": "Assigned to",
+    "unassigned": "Unassigned",
+    "openReview": "Open review",
+    "openPatient": "Open patient",
+    "openReviewHint": "Enter or Space expands the row; the right arrow key opens the review.",
+    "patientUnavailable": "Patient not available",
+    "glucoseUnitMissing": "unit missing"
+  },
+  "empty": {
+    "pending": "No screenings are waiting for review in {{facility}}",
+    "urgent": "No urgent (demo protocol) reviews in {{facility}}",
+    "overdue": "No reviews are past their demo due date in {{facility}}",
+    "assigned": "No open reviews are assigned to you in {{facility}}",
+    "all": "No reviews in {{facility}}",
+    "filtered": "No reviews match these filters in {{facility}}",
+    "description": "New flags appear here automatically.",
+    "showAll": "Show all in scope"
+  },
+  "footer": {
+    "showing_one": "Showing {{shown}} of {{count}} review",
+    "showing_other": "Showing {{shown}} of {{count}} reviews"
+  }
+}

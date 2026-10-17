@@ -125,6 +125,29 @@ describe("patients service", () => {
     });
   });
 
+  it("HWM-04: register keeps the optional village label + synthetic phone; replays are idempotent", async () => {
+    const h = await createHarness({ appId: "worker", personaId: PERSONA_IDS.chwAlpha1A });
+    const input = {
+      ...registration,
+      givenName: "Demo",
+      familyName: "Village-Person",
+      villageLabel: "Demo Cell A",
+      syntheticPhone: "0780000001",
+    };
+    const key = h.key();
+    const first = await h.repo.registerPatient(input, key);
+    expect(first.data).toMatchObject({ villageLabel: "Demo Cell A", syntheticPhone: "0780000001" });
+    const again = await h.repo.registerPatient(input, key);
+    expect(again.data.id).toBe(first.data.id);
+    const rows = (await h.store.getAll<Patient>("patients")).filter(
+      (p) => p.displayName === "Demo Village-Person",
+    );
+    expect(rows).toHaveLength(1);
+    const bare = await h.repo.registerPatient({ ...registration, familyName: "Bare" }, h.key());
+    expect("villageLabel" in bare.data).toBe(false);
+    expect("syntheticPhone" in bare.data).toBe(false);
+  });
+
   it("getPatient: null when missing, audited access when found", async () => {
     const h = await createHarness({ personaId: PERSONA_IDS.clinBeta1 });
     const patient = (await h.store.get<Patient>(

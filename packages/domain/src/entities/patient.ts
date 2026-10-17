@@ -22,4 +22,8 @@ export type Patient = PersistedEntity & {
   duplicateCandidateIds: PatientId[];
   // ext: citizen wallet / reminder language (EN ⇄ RW is P0).
   preferredLanguage: Language;
+  // ext: HWM-04 optional registration details (fictional village / cell label).
+  villageLabel?: string;
+  // ext: HWM-04 optional SYNTHETIC phone, 10 digits `07XXXXXXXX` (never a real number).
+  syntheticPhone?: string;
 };
