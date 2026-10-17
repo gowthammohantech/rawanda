@@ -12,7 +12,7 @@
 | Depends on | HWM-05 |
 | Trace | PRD HW-03, HW-04, HW-05, shared lifecycle · FRD HW-03/04/05, §4 (correction reason, no overwrite), §5 · BRD BR-02, BR-03 · Tech spec §2.2 "Screening review", §5.3, WF-01 steps 2–4, §8 "Save offline screening" · FRD T-01, T-04, T-06, T-10 |
 | Size | M |
-| Status | Planned |
+| Status | Done |
 
 ## 2. Goal
 
@@ -121,3 +121,16 @@ Manual (Expo Go): Settings → Network simulation → Offline → Screen → pat
 ## 12. Commit
 
 `feat(worker): HWM-06 screening review with demo flags, offline-first submit and amendments`
+
+## 13. Implementation notes (deviations, recorded at build)
+
+- **Atomic submit = `repo.createScreening(input, key, { fromDraftId })`** (additive FND-07 option): in ONE store transaction the author's draft row is removed, the screening is created with the draft's id, the `screening.submit` op (`dependsOnOpId` = pending `patient.register` op, FND-07 rule) and the `screening.submitted` audit are written. `fromDraftId` is never part of the synced payload; the simulated remote keeps the id via `presetId`. The idempotency key is the draft id (UUID on device; a deterministic UUID-shaped hash for non-UUID test ids, `submitKeyFor`). A screening already present with that id → returned as-is (task 4); concurrent calls share one promise.
+- **Flag preview** uses the ruleset STORED with the dataset via the new read `repo.getActiveRuleset()` (additive, `screening.create`), not a code constant. `preview: true/false` is derived, not stored: the flag shown is the device preview until the create op is acknowledged, then the acknowledged server snapshot (status + flag) is authoritative (`screeningSyncView`). The local row's status is the device evaluation; the UI shows `SUBMITTED` + "waiting for the server" until ack.
+- **Audit mapping**: `screening.flag_evaluated` (T-10) = the `screening.submitted` change summary (`rulesetVersion`, `reasonCodes`, `requiresReview`, `evaluable`; values + units, never notes); server-mirrored `screening.recorded` = the remote's `screening.submitted` + device `sync.op_acknowledged`. No new registry names.
+- **Drain after submit**: FND-07 `SyncTrigger` has no `after_submit`; the post-commit fire-and-forget pass uses `auto` and runs only when the simulated network is online (also after an amendment).
+- **Flag card** is the app's `ExplainableFlagCard` (soft-blue callout built from ui-native `ReadingDisplay`, `KeyValueList`, `RuleDisclaimer`): the FND-10 `ExplainableFlag` has no neutral "No demo rule triggered" copy, no informational split for an explicit `not_recorded` context (still reason `GLUCOSE_CONTEXT_NOT_RECORDED` with `requiresReview=false`) and no generic text for `requiresReview` with empty `reasonCodes` (missing required inputs).
+- **Stale draft**: review re-validates with the form schema + stored ruleset limits; invalid → banner → form opened with `revalidate=1` (error summary shown).
+- **Amend reason presets**: "Wrong time" is "Wrong time entered" (EN; 9 non-space characters would not pass the FND-02 10-character minimum on its own). The reason error under the field is `validation:reasonTooShort`; the banner is `worker:review.amend.reasonRequired`.
+- **Needs decision** links to the Sync tab (`/sync`; the conflict screen is HWM-09). Patient history rows now open the screening detail (needed for the manual / Maestro path).
+- Phase `review.json` area is `packages/i18n/src/locales/{en,rw}/worker/review.json` (wired in `resources/worker.ts`); the HWM-05 `worker:screening.reviewStub.*` keys were removed. RW flagged `needs clinical/linguistic review`.
+

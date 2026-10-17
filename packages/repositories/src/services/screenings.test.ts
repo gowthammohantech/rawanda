@@ -262,4 +262,59 @@ describe("screenings service", () => {
       h.repo.listScreenings({ from: "2026-10-10T00:00:00.000Z", to: "2026-10-01T00:00:00.000Z" }),
     ).rejects.toMatchObject({ fieldErrors: { to: { key: "dateRangeOrder" } } });
   });
+
+  it("createScreening fromDraftId (HWM-06): draft → screening atomically, same id, idempotent", async () => {
+    const h = await createHarness({ appId: "worker", personaId: PERSONA_IDS.chwAlpha1A });
+    const patient = patientOf(h);
+    const draft = await h.repo.saveScreeningDraft(
+      { patientId: patient.id, systolic: 150, diastolic: 95 },
+      h.key(),
+    );
+    const input = {
+      patientId: patient.id,
+      measuredAt: "2026-10-14T05:00:00.000Z",
+      systolic: 150,
+      diastolic: 95,
+    };
+    const key = h.key();
+    const first = await h.repo.createScreening(input, key, { fromDraftId: draft.data.id });
+    expect(first.data).toMatchObject({ id: draft.data.id, status: "review_required", version: 1 });
+    expect((await h.repo.getActiveRuleset()).version).toBe(first.data.rulesetVersion);
+    const rows = (await h.store.getAll<Screening>("screenings")).filter(
+      (s) => s.id === draft.data.id,
+    );
+    expect(rows).toHaveLength(1);
+    expect(rows[0]?.status).not.toBe("draft");
+    const ops = await h.repo.sync.list({ entityId: draft.data.id });
+    expect(ops).toHaveLength(1);
+    expect(ops[0]).toMatchObject({ entityType: "screening", opType: "create" });
+    expect(JSON.stringify(ops[0]?.payload)).not.toContain("fromDraftId");
+
+    // Same key + same input (double tap): replayed, still one screening and one op.
+    const again = await h.repo.createScreening(input, key, { fromDraftId: draft.data.id });
+    expect(again.replayed).toBe(true);
+    expect(await h.repo.sync.list({ entityId: draft.data.id })).toHaveLength(1);
+
+    // Another author's / another patient's draft is refused and nothing is written.
+    const other = await h.repo.saveScreeningDraft(
+      { patientId: patient.id, systolic: 120 },
+      h.key(),
+    );
+    h.as(PERSONA_IDS.chwAlpha1B);
+    await expect(
+      h.repo.createScreening(input, h.key(), { fromDraftId: other.data.id }),
+    ).rejects.toMatchObject({ code: "FORBIDDEN" });
+    h.as(PERSONA_IDS.chwAlpha1A);
+    expect(await h.store.get("screenings", other.data.id)).toMatchObject({ status: "draft" });
+    await expect(
+      h.repo.createScreening(input, h.key(), {
+        fromDraftId: "00000000-0000-4000-8000-000000000000",
+      }),
+    ).rejects.toMatchObject({ code: "NOT_FOUND" });
+    // Ack: the remote keeps the device id; the acknowledged snapshot replaces the local row.
+    await h.repo.sync.process({ trigger: "manual" });
+    expect(await h.store.get("remote_screenings", draft.data.id)).toMatchObject({
+      status: "review_required",
+    });
+  });
 });
