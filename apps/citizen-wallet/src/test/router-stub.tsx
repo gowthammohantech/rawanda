@@ -1,17 +1,20 @@
 /**
  * `expo-router` stand-in for Vitest (the real router needs Metro's route context). Records
- * navigation in `routerLog`; `Redirect` renders a marker with its href; `Tabs` renders its
+ * navigation in `routerLog`; `useFocusEffect` = one focus per mount; `params` feeds
+ * `useLocalSearchParams`; `Redirect` renders a marker with its href; `Tabs` renders its
  * screens as buttons (translated title / accessibility label); `Stack` renders a marker.
  * Usage: `vi.mock("expo-router", () => import("../test/router-stub.tsx"));`
  */
-import type { ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 
 export const routerLog: { method: string; href: unknown }[] = [];
 export const segments: { current: string[] } = { current: [] };
+export const params: { current: Record<string, string> } = { current: {} };
 
-export function resetRouter(next: string[] = []): void {
+export function resetRouter(next: string[] = [], nextParams: Record<string, string> = {}): void {
   routerLog.length = 0;
   segments.current = next;
+  params.current = nextParams;
 }
 
 export function lastHref(): unknown {
@@ -32,7 +35,12 @@ export function useSegments() {
 }
 
 export function useLocalSearchParams() {
-  return {};
+  return params.current;
+}
+
+/** Runs the (memoised) effect on mount and whenever it changes — one "focus" per mount. */
+export function useFocusEffect(effect: () => void | (() => void)) {
+  useEffect(() => effect(), [effect]);
 }
 
 export function Redirect({ href }: { href: string }) {

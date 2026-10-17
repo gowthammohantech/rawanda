@@ -48,6 +48,7 @@ import {
 } from "@laif/domain";
 import { CITIZEN_PERSONA_CODES, createSeed, type SeedDataset } from "@laif/mock-data";
 
+import type { AuditAction } from "../audit/actions.ts";
 import type { RepositoryDeps } from "../care-repository.ts";
 import { Engine, type TxContext } from "../core/engine.ts";
 import { RepositoryError } from "../errors.ts";
@@ -235,12 +236,19 @@ export function createCitizenRepository(input: CitizenRepositoryDeps): CitizenRe
     patient: Patient,
     link: PatientLink,
     resource: { type: CitizenAccessEvent["resourceType"]; id: string },
+    kind: { action: CitizenAccessEvent["action"]; audit: AuditAction; dedupe: boolean } = {
+      action: "result_viewed",
+      audit: "citizen.result.viewed",
+      dedupe: true,
+    },
   ): Promise<void> {
     const actor = ctx.requireActor();
-    const minute = String(Math.floor(ctx.now.getTime() / 60_000));
-    const metaKey = `ctz.access.${actor.personaId}.${resource.id}`;
-    if ((await ctx.tx.getMeta(metaKey)) === minute) return;
-    await ctx.tx.setMeta(metaKey, minute);
+    if (kind.dedupe) {
+      const minute = String(Math.floor(ctx.now.getTime() / 60_000));
+      const metaKey = `ctz.access.${actor.personaId}.${resource.id}`;
+      if ((await ctx.tx.getMeta(metaKey)) === minute) return;
+      await ctx.tx.setMeta(metaKey, minute);
+    }
     const correlationId = asId<CorrelationId>(ctx.ids());
     const event: CitizenAccessEvent = {
       ...ctx.created(),
@@ -248,7 +256,7 @@ export function createCitizenRepository(input: CitizenRepositoryDeps): CitizenRe
       patientId: patient.id,
       actorId: actor.personaId,
       actorRole: actor.role,
-      action: "result_viewed",
+      action: kind.action,
       purpose: link.relationship === "self" ? "self_access" : "representative_access",
       resourceType: resource.type,
       resourceId: resource.id,
@@ -260,7 +268,7 @@ export function createCitizenRepository(input: CitizenRepositoryDeps): CitizenRe
     };
     await ctx.tx.put("accessEvents", event);
     await ctx.audit({
-      action: "citizen.result.viewed",
+      action: kind.audit,
       entityType: resource.type,
       entityId: resource.id,
       correlationId,
@@ -569,10 +577,35 @@ export function createCitizenRepository(input: CitizenRepositoryDeps): CitizenRe
       });
     },
 
+    recordResultsListViewed(patientId) {
+      return engine.write(async (ctx) => {
+        const { patient, link } = await assertPatientAccess(ctx, patientId);
+        await recordOwnView(
+          ctx,
+          patient,
+          link,
+          { type: "patient", id: patient.id },
+          { action: "record_viewed", audit: "citizen.result.list_viewed", dedupe: false },
+        );
+      });
+    },
+
     getObservation(id, patientId) {
       return engine.read(async (ctx) => {
         const { patient, link } = await assertPatientAccess(ctx, patientId);
         const item = (await observationsOf(ctx, patientId)).find((o) => o.id === id);
+        if (!item) {
+          // A result of another patient (e.g. a forged deep link): denied + audited, no data.
+          const other = await ctx.find<Screening>("screening", id);
+          if (other && other.patientId !== patientId) {
+            ctx.deny(
+              "SCOPE",
+              { entityType: "screening", entityId: id },
+              { patientId: other.patientId, facilityId: other.facilityId },
+              { viaPatientId: patientId },
+            );
+          }
+        }
         if (!item || item.kind !== "released") {
           throw new RepositoryError("NOT_FOUND", { details: { entityType: "screening", id } });
         }
