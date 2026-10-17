@@ -170,12 +170,13 @@ export function createMetricsService(engine: Engine) {
         return {
           records: {
             ...redactFreeText(data),
-            patients: data.patients.map((p) => ({
-              ...p,
-              displayName: "",
-              syntheticIdentifier: "",
-              dateOfBirth: null,
-            })),
+            patients: data.patients.map((p) => {
+              // HWM-04 optional contact/location detail never leaves an aggregate read.
+              const rest: Patient = { ...p };
+              delete rest.villageLabel;
+              delete rest.syntheticPhone;
+              return { ...rest, displayName: "", syntheticIdentifier: "", dateOfBirth: null };
+            }),
             timeEntries: await timeEntriesIn(ctx, filter, facilityIds),
           },
           asOf: ctx.nowIso,

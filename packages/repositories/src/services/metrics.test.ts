@@ -1,4 +1,4 @@
-import type { AuditEvent } from "@laif/domain";
+import type { AuditEvent, Patient } from "@laif/domain";
 import { DISTRICT_IDS, FACILITY_IDS, PERSONA_IDS } from "@laif/mock-data";
 import { describe, expect, it } from "vitest";
 
@@ -92,6 +92,17 @@ describe("aggregate metrics + exports", () => {
 describe("ADM-02 metric source reads", () => {
   it("getMetricsRecords: scoped rows, no patient identifiers, demo-clock asOf", async () => {
     const h = await createHarness({ appId: "admin", personaId: PERSONA_IDS.analystAlpha });
+    // HWM-04 optional registration detail on an in-scope patient must be blanked too.
+    const seeded = (await h.store.getAll<Patient>("patients")).find(
+      (p) => p.districtId === DISTRICT_IDS.alpha,
+    );
+    if (seeded === undefined) throw new Error("no seeded patient in district alpha");
+    const withDetail: Patient = {
+      ...seeded,
+      villageLabel: "Demo Cell A",
+      syntheticPhone: "0780000001",
+    };
+    await h.store.put("patients", withDetail);
     const result = await h.repo.getMetricsRecords({ from: "2026-07-17", to: "2026-10-14" });
     expect(result.asOf).toBe("2026-10-14T06:00:00.000Z");
     expect(result.lastWriteAt).not.toBeNull();
@@ -103,6 +114,12 @@ describe("ADM-02 metric source reads", () => {
     );
     expect(
       records.patients.every((p) => p.displayName === "" && p.syntheticIdentifier === ""),
+    ).toBe(true);
+    expect(records.patients.some((p) => p.id === seeded.id)).toBe(true);
+    expect(
+      records.patients.every(
+        (p) => p.dateOfBirth === null && !("villageLabel" in p) && !("syntheticPhone" in p),
+      ),
     ).toBe(true);
     expect(records.timeEntries.every((e) => e.facilityId !== FACILITY_IDS.beta1)).toBe(true);
     // No free text (notes, reasons, evidence references) leaves an aggregate read.
