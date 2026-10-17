@@ -68,6 +68,13 @@ export const VALIDATION_KEYS = [
   "outOfEntryRange",
   /** Non-blocking data-entry prompt: `measuredAt` more than 24 h before the demo now. */
   "measuredAtOld",
+  // ── Appended by HWM-08 (follow-up attempts and outcomes) ──
+  /** Attended / referred onward without the way the visit was confirmed (evidence type). */
+  "followUpEvidenceRequired",
+  /** Unable to reach without at least one recorded unsuccessful attempt. */
+  "attemptRequired",
+  /** An attempt / outcome time earlier than the task's creation. */
+  "dateBeforeTaskCreated",
 ] as const;
 
 export type ValidationMessageKey = (typeof VALIDATION_KEYS)[number];

@@ -445,7 +445,11 @@ function NeedsAttentionCard({ api, data }: { api: AdminFiltersApi; data: Overvie
     <Card title={t("admin:overview.attention.title")} headingLevel={2}>
       <ul className="m-0 list-none space-y-2 p-0 text-[13px]" data-testid="needs-attention">
         {rows.map((row) => (
-          <li key={row.id} className="flex items-baseline justify-between gap-3">
+          <li
+            key={row.id}
+            data-testid={`attention-${row.id}`}
+            className="flex items-baseline justify-between gap-3"
+          >
             <Link to={row.to} className="text-primary-dark hover:underline">
               {row.label}
             </Link>

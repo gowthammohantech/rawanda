@@ -18,6 +18,7 @@ import type { ProgrammeMetrics } from "@laif/analytics";
 import type { ActorContext } from "@laif/auth-demo";
 import type {
   AccessGrant,
+  DataQualityIssue,
   ProgrammeAction,
   AuditFilterSchema,
   CareTaskInputSchema,
@@ -82,6 +83,11 @@ import type {
   ProgrammeActionFilterInput,
   ProgrammeActionUpdateCall,
 } from "./services/programme-actions.ts";
+import type {
+  QualityIssueFilterInput,
+  TriageQualityIssueCall,
+  UpsertDetectedIssuesResult,
+} from "./services/quality-issues.ts";
 import type { StoreAdapter } from "./store/store-adapter.ts";
 import type { FaultConfig, FaultConfigPatch, FaultInjector } from "./transport/faults.ts";
 
@@ -342,6 +348,19 @@ export interface CareRepository {
     i: ProgrammeActionUpdateCall,
     key: string,
   ): Promise<WriteResult<ProgrammeAction>>;
+  /**
+   * ADM-06: data-quality issues + triage. `upsertDetectedIssues` (`metrics.read`, in scope)
+   * inserts new ids only and never resets an existing triage; `triageQualityIssue` needs
+   * `quality.triage` (+ `programme_action.write` to send to the facility), is idempotent on
+   * `key` and carries `expectedVersion`; `listQualityIssues` is limited to the actor's scope.
+   * None of them writes a clinical record.
+   */
+  listQualityIssues(f?: QualityIssueFilterInput): Promise<DataQualityIssue[]>;
+  upsertDetectedIssues(issues: readonly unknown[]): Promise<UpsertDetectedIssuesResult>;
+  triageQualityIssue(
+    i: TriageQualityIssueCall,
+    key: string,
+  ): Promise<WriteResult<DataQualityIssue>>;
   sync: SyncApi;
   demo: DemoApi;
   device: DeviceApi;

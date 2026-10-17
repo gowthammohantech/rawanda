@@ -93,6 +93,7 @@ import {
 } from "@laif/domain";
 import { z } from "zod";
 
+import { DataQualityIssueSchema } from "./dataQualityIssue.ts";
 import { ProgrammeActionSchema } from "./programmeAction.ts";
 
 import {
@@ -606,4 +607,5 @@ export const ENTITY_SCHEMAS = {
   sync_operation: SyncOperationSchema,
   device_session: DeviceSessionSchema,
   programme_action: ProgrammeActionSchema,
+  data_quality_issue: DataQualityIssueSchema,
 } as const satisfies Record<(typeof ENTITY_TYPES)[number], z.ZodType>;

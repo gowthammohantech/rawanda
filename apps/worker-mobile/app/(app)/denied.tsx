@@ -9,7 +9,7 @@ export default function DeniedRoute() {
   const { reason } = useLocalSearchParams<{ reason?: string }>();
   return (
     <DeniedScreen
-      reason={reason === "patient" ? "patient" : "facility"}
+      reason={reason === "patient" || reason === "task" ? reason : "facility"}
       onBack={() =>
         session === null
           ? router.replace("/sign-in")

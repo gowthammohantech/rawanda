@@ -1,0 +1,105 @@
+{
+  "title": "My tasks",
+  "filter": {
+    "label": "Filter tasks",
+    "due": "Due",
+    "overdue": "Overdue",
+    "completed": "Completed"
+  },
+  "search": {
+    "label": "Search tasks",
+    "placeholder": "Search by patient name or ID",
+    "hint": "Narrows this list by patient name or identifier",
+    "clear": "Clear search"
+  },
+  "attempts_one": "{{count}} attempt",
+  "attempts_other": "{{count}} attempts",
+  "noAttempts": "No attempts yet",
+  "pill": {
+    "overdue_one": "Overdue · {{count}} day",
+    "overdue_other": "Overdue · {{count}} days",
+    "dueToday": "Due today · {{time}}",
+    "due": "Due {{date}}",
+    "completed": "Completed {{date}}"
+  },
+  "needsDecision": "Needs decision",
+  "row": {
+    "label": "{{name}}, {{task}}, {{due}}, {{attempts}}",
+    "hint": "Opens the task",
+    "unknownPatient": "Patient not on this device"
+  },
+  "empty": {
+    "due": "No tasks due",
+    "overdue": "No overdue tasks",
+    "completed": "No completed tasks",
+    "search": "No tasks match “{{query}}”",
+    "hint": "Follow-ups appear here when a clinician assigns them to you."
+  },
+  "loading": "Loading your tasks",
+  "error": "Your tasks could not be read from this device",
+  "overdueCaveat": "Overdue = past the demo due date; timing rules not clinically approved",
+  "recordAttempt": "Record contact attempt",
+  "recordOutcome": "Record outcome",
+  "recordAttemptHint": "Opens the contact attempt form",
+  "recordOutcomeHint": "Opens the outcome form",
+  "completedOn": "Completed {{date}}",
+  "setByClinician": "Set by clinician",
+  "relative": {
+    "today": "today",
+    "daysAgo_one": "{{count}} day ago",
+    "daysAgo_other": "{{count}} days ago",
+    "inDays_one": "in {{count}} day",
+    "inDays_other": "in {{count}} days"
+  },
+  "detail": {
+    "title": "Task",
+    "loading": "Loading the task",
+    "error": "This task could not be read from this device",
+    "due": "Due",
+    "dueValue": "{{dateTime}} ({{relative}})",
+    "assignedBy": "Assigned by",
+    "created": "Created",
+    "unknownClinician": "Clinician (not on this device)",
+    "overdue": "Overdue",
+    "overdueCaption": "Past the demo due date. Overdue reflects demo due dates, not approved clinical timing.",
+    "conflictTitle": "This task needs your decision",
+    "conflictBody": "Someone else updated this task — your record is kept. Decide in Sync.",
+    "openSync": "Open Sync center",
+    "patient": {
+      "title": "Patient",
+      "identifier": "Identifier",
+      "age": "Age",
+      "sex": "Sex",
+      "unknown": "This patient's details are not on this device",
+      "open": "Open patient context",
+      "openHint": "Opens the patient's screenings and follow-ups",
+      "latestReading": "Latest reading",
+      "noReading": "No screening recorded yet",
+      "measured": "Measured {{date}}",
+      "reviewStatus": "Review status",
+      "flagReason": "Reason set by clinician: {{reason}}"
+    },
+    "referral": {
+      "title": "Referral",
+      "destination": "Destination",
+      "dueDate": "Referral due",
+      "status": "Status"
+    },
+    "timeline": {
+      "title": "Contact attempts",
+      "label": "Contact attempt history, newest first",
+      "empty": "No contact attempts recorded yet",
+      "attempt": "{{method}} · {{result}}",
+      "note": "Note: {{note}}",
+      "recordedBy": "{{time}} · recorded by {{name}}",
+      "outcome": "Outcome: {{outcome}}",
+      "evidence": "Evidence: {{evidence}}",
+      "occurredAt": "Occurred {{dateTime}}",
+      "unknownWorker": "a health worker"
+    }
+  },
+  "denied": {
+    "title": "This task is not available",
+    "message": "The task is assigned to another health worker or facility, or is not saved on this device. The attempt was recorded."
+  }
+}

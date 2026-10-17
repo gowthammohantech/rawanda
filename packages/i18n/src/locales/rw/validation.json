@@ -35,5 +35,8 @@
   "phonePattern": "Andika nimero ya telefoni nka 07X XXX XXXX.",
   "underPilotAge": "Igerageza risuzuma abantu bakuru — genzura itariki y'amavuko.",
   "outOfEntryRange": "Kiri hanze y'urugero ruteganyijwe ({{min}}–{{max}} {{unit}}). Reba niba nta kosa ryo kwandika.",
-  "measuredAtOld": "Iki gipimo cyafashwe hashize amasaha arenga 24. Reba itariki."
+  "measuredAtOld": "Iki gipimo cyafashwe hashize amasaha arenga 24. Reba itariki.",
+  "followUpEvidenceRequired": "Hitamo uko uruzinduko rwemejwe",
+  "attemptRequired": "Banza wandike nibura igerageza rimwe ritagenze neza",
+  "dateBeforeTaskCreated": "Igihe ntigishobora kuba mbere y'uko iki gikorwa gishyirwaho."
 }

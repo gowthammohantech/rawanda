@@ -238,6 +238,54 @@ describe("follow-ups service", () => {
     ).rejects.toMatchObject({ code: "NOT_FOUND" });
   });
 
+  it("attempt / outcome audits carry method, result, outcome, evidence, occurred-at and base version (HWM-08)", async () => {
+    const h = await createHarness({ appId: "worker", personaId: PERSONA_IDS.chwAlpha1A });
+    const fu = await load(h);
+    const attempt = await h.repo.updateFollowUp(
+      {
+        followUpId: FU,
+        expectedVersion: fu.version,
+        action: "record_attempt",
+        at: "2026-10-14T05:10:00.000Z",
+        method: "home_visit",
+        result: "reached",
+      },
+      h.key(),
+    );
+    const outcome = await h.repo.updateFollowUp(
+      {
+        followUpId: FU,
+        expectedVersion: attempt.entityVersion,
+        action: "record_outcome",
+        outcome: "attended",
+        occurredAt: "2026-10-14T05:20:00.000Z",
+        evidenceType: "facility_register_checked",
+      },
+      h.key(),
+    );
+    const events = await h.store.getAll<AuditEvent>("auditEvents");
+    expect(events.find((e) => e.id === attempt.auditEventId)).toMatchObject({
+      action: "followup.attempt_recorded",
+      changeSummary: {
+        method: "home_visit",
+        result: "reached",
+        at: "2026-10-14T05:10:00.000Z",
+        baseVersion: fu.version,
+      },
+    });
+    expect(events.find((e) => e.id === outcome.auditEventId)).toMatchObject({
+      action: "followup.outcome_recorded",
+      changeSummary: {
+        outcome: "attended",
+        status: "completed",
+        evidenceType: "facility_register_checked",
+        reasonCode: null,
+        occurredAt: "2026-10-14T05:20:00.000Z",
+        baseVersion: attempt.entityVersion,
+      },
+    });
+  });
+
   it("list / count: statuses, purposes, overdue, pending confirmation", async () => {
     const h = await createHarness({ personaId: PERSONA_IDS.clinAlpha1 });
     const counts = await h.repo.countFollowUps({});

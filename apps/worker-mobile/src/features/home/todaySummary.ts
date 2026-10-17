@@ -13,6 +13,7 @@ import type { CareRepository } from "@laif/repositories";
 
 import { listDrafts, type DraftRow } from "../../data/drafts.ts";
 import {
+  countTasks,
   listForWorker,
   prioritiseFollowUps,
   type PrioritisedFollowUp,
@@ -55,7 +56,8 @@ export function computeTodaySummary({
   now,
 }: TodaySummaryInput): TodaySummary {
   const open = prioritiseFollowUps(followUps, now);
-  const overdue = open.filter((row) => row.bucket === "overdue").length;
+  // Shared with the Tasks tab badges (HWM-07 `countTasks`): identical overdue rule and number.
+  const overdue = countTasks(followUps, now).overdue;
   const dueToday = open.filter((row) => row.bucket === "due_today").length;
   const completedToday = followUps.filter(
     ({ followUp }) =>

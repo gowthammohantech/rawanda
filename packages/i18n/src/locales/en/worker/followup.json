@@ -1,0 +1,76 @@
+{
+  "attempt": {
+    "title": "Record contact attempt",
+    "intro": "Record each try to reach the patient, even when it did not succeed.",
+    "attemptedAt": "When",
+    "method": "How",
+    "phoneSimulated": "Phone calls are simulated in this demo — no call is made.",
+    "result": "Result",
+    "note": "Note (optional)",
+    "noteHint": "Short and factual. Do not record diagnoses.",
+    "save": "Save attempt",
+    "reachedHint": "Reaching the patient moves the task to Contacted."
+  },
+  "outcome": {
+    "title": "Record outcome",
+    "legend": "What happened?",
+    "attended": "Attended",
+    "attendedHint": "The patient attended the referred appointment or visit.",
+    "referredOnward": "Referred onward",
+    "referredOnwardHint": "The patient was directed to the destination the clinician set.",
+    "unableToReach": "Unable to reach",
+    "unableToReachHint": "The patient could not be reached after trying.",
+    "occurredAt": "When did it happen?",
+    "useNow": "Use current time",
+    "destination": "Destination (set by clinician)",
+    "noDestination": "No referral destination on this device",
+    "referredCaption": "The clinician confirms when the referral is complete.",
+    "unableCaption": "Your supervisor or clinician will decide next steps.",
+    "attendedCaption": "A clinician confirms the completion afterwards.",
+    "reason": "Why could the patient not be reached?",
+    "reasonText": "Describe the reason",
+    "attemptsRecorded_one": "{{count}} unsuccessful attempt recorded",
+    "attemptsRecorded_other": "{{count}} unsuccessful attempts recorded",
+    "inlineAttempt": "Record the unsuccessful attempt now",
+    "inlineAttemptHint": "Saved as a \"Not reached\" attempt at the time above, before the outcome.",
+    "inlineMethod": "How did you try?",
+    "note": "Note (optional)",
+    "noteHint": "Short and factual. Do not record diagnoses.",
+    "save": "Save outcome",
+    "review": "Review and complete"
+  },
+  "evidenceType": "How was this confirmed?",
+  "evidence": {
+    "facility_register_checked": "You checked the facility register.",
+    "appointment_card_seen": "You saw the patient's appointment card.",
+    "worker_accompanied_visit": "You went with the patient to the visit.",
+    "patient_verbal_confirmation": "The patient told you they attended."
+  },
+  "confirmCompletion": "This marks the follow-up as completed",
+  "confirm": {
+    "title": "Complete this follow-up?",
+    "outcome": "Outcome",
+    "evidence": "Evidence",
+    "time": "Occurred",
+    "confirm": "Confirm",
+    "back": "Back"
+  },
+  "errors": {
+    "summary": "Check the highlighted fields",
+    "conflict": "This task changed since you opened it. Nothing was overwritten — go back and open it again.",
+    "failed": "Could not save on this device. Try again."
+  },
+  "blocked": {
+    "completed": "This follow-up is already completed. No further outcome can be recorded.",
+    "needs_reached_attempt": "Record a contact attempt where the patient was reached before marking them as attended.",
+    "already_unable_to_reach": "Unable to reach is already recorded. Your supervisor or clinician will decide next steps.",
+    "already_referred_onward": "Referred onward is already recorded for this task.",
+    "not_allowed": "This outcome cannot be recorded for the task in its current state."
+  },
+  "savedOnDevice": "Saved on this device",
+  "savedOnDeviceBody": "It will be sent when the simulated sync runs.",
+  "notAccepted": {
+    "title": "Not accepted by the simulated server",
+    "body": "This task is no longer assigned to you or is outside your facility. Your record is kept on this device."
+  }
+}

@@ -12,6 +12,8 @@ import enWorkerNetsim from "../locales/en/worker/netsim.json";
 import enWorkerPatients from "../locales/en/worker/patients.json";
 import enWorkerScreening from "../locales/en/worker/screening.json";
 import enWorkerReview from "../locales/en/worker/review.json";
+import enWorkerTasks from "../locales/en/worker/tasks.json";
+import enWorkerFollowup from "../locales/en/worker/followup.json";
 import rwWorkerBase from "../locales/rw/worker.json";
 import rwWorkerAuth from "../locales/rw/worker/auth.json";
 import rwWorkerHome from "../locales/rw/worker/home.json";
@@ -22,6 +24,8 @@ import rwWorkerNetsim from "../locales/rw/worker/netsim.json";
 import rwWorkerPatients from "../locales/rw/worker/patients.json";
 import rwWorkerScreening from "../locales/rw/worker/screening.json";
 import rwWorkerReview from "../locales/rw/worker/review.json";
+import rwWorkerTasks from "../locales/rw/worker/tasks.json";
+import rwWorkerFollowup from "../locales/rw/worker/followup.json";
 
 export const enWorker = {
   ...enWorkerBase,
@@ -34,6 +38,8 @@ export const enWorker = {
   patients: enWorkerPatients,
   screening: enWorkerScreening,
   review: enWorkerReview,
+  tasks: enWorkerTasks,
+  followup: enWorkerFollowup,
 } as const;
 
 export const rwWorker: object = {
@@ -47,4 +53,6 @@ export const rwWorker: object = {
   patients: rwWorkerPatients,
   screening: rwWorkerScreening,
   review: rwWorkerReview,
+  tasks: rwWorkerTasks,
+  followup: rwWorkerFollowup,
 };

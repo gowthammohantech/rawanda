@@ -12,7 +12,7 @@
 | Depends on | HWM-07 |
 | Trace | PRD HW-07, shared lifecycle ("Completed means an evidenced, timestamped care step") · FRD HW-07, §4 (no completion without timestamp, outcome, evidence type), §5 · BRD BR-05 · Tech spec §2.2 "Follow-up outcome", §5.2 FollowUp, WF-01 step 7, WF-02 step 3 · FRD T-01, T-03, T-04, T-05, T-09 |
 | Size | M |
-| Status | Planned |
+| Status | Done |
 
 ## 2. Goal
 

@@ -35,5 +35,8 @@
   "phonePattern": "Enter a phone number in the format 07X XXX XXXX.",
   "underPilotAge": "The pilot screens adults — check the date of birth.",
   "outOfEntryRange": "Outside the expected entry range ({{min}}–{{max}} {{unit}}). Check for typing errors.",
-  "measuredAtOld": "This reading was taken more than 24 hours ago. Check the date."
+  "measuredAtOld": "This reading was taken more than 24 hours ago. Check the date.",
+  "followUpEvidenceRequired": "Choose how the visit was confirmed",
+  "attemptRequired": "Record at least one unsuccessful attempt first",
+  "dateBeforeTaskCreated": "The time cannot be before the task was created."
 }

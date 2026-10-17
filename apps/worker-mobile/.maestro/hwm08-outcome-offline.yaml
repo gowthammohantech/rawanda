@@ -1,0 +1,105 @@
+# HWM-08 device gate (not part of `pnpm verify`): `pnpm --filter @laif/worker-mobile test:maestro`
+# with the app open in Expo Go / a dev build, starting signed out, all simulation toggles off.
+# Offline → Tasks → Overdue task → Record contact attempt (home visit, not reached) → Record
+# outcome → Attended → skip evidence → error → Facility register checked → confirm sheet →
+# Confirm (tapped twice) → "Saved on this device" → kill + relaunch → task still completed and
+# pending → Online → one sync pass → "Synced".
+appId: host.exp.Exponent
+---
+- launchApp
+- tapOn:
+    id: "persona-card-persona-chw-alpha1-a"
+- tapOn:
+    id: "persona-continue"
+- tapOn:
+    id: "scope-continue"
+- assertVisible:
+    id: "today-screen"
+# Go offline (simulated).
+- tapOn:
+    id: "avatar-button"
+- tapOn:
+    id: "open-network-simulation"
+- tapOn: "Work offline (simulated)"
+- assertVisible: "Offline (simulated)"
+- back
+- back
+# Overdue task.
+- tapOn:
+    id: "tab-tasks"
+- tapOn:
+    text: "Overdue"
+    index: 0
+- tapOn: "Overdue · 5 days"
+- assertVisible:
+    id: "task-detail-screen"
+# Contact attempt: home visit, not reached.
+- tapOn:
+    id: "record-attempt"
+- assertVisible:
+    id: "attempt-screen"
+- tapOn: "Home visit"
+- tapOn: "Not reached"
+- tapOn:
+    id: "attempt-save"
+- assertVisible: "Saved on this device"
+- assertVisible:
+    id: "task-detail-screen"
+- assertVisible: "Home visit · Not reached"
+# Outcome: attended without evidence → error; then evidence → confirm sheet.
+- tapOn:
+    id: "record-outcome"
+- assertVisible:
+    id: "outcome-screen"
+- tapOn: "Attended"
+- tapOn:
+    id: "outcome-save"
+- assertVisible: "Choose how the visit was confirmed"
+- scrollUntilVisible:
+    element: "Facility register checked"
+- tapOn: "Facility register checked"
+- tapOn:
+    id: "outcome-save"
+- assertVisible:
+    id: "confirm-completion-sheet"
+- assertVisible: "This marks the follow-up as completed"
+- tapOn:
+    id: "confirm-completion"
+- tapOn:
+    id: "confirm-completion"
+    optional: true
+- assertVisible: "Saved on this device"
+- assertVisible:
+    id: "task-completed-summary"
+# Kill and relaunch: still completed and pending.
+- killApp
+- launchApp
+- assertVisible:
+    id: "today-screen"
+- tapOn:
+    id: "tab-tasks"
+- tapOn:
+    text: "Completed"
+    index: 0
+- assertVisible: "Saved on this device"
+# Online + one sync pass → Synced.
+- tapOn:
+    id: "avatar-button"
+- tapOn:
+    id: "open-network-simulation"
+- tapOn: "Work offline (simulated)"
+- assertVisible: "Online"
+- tapOn:
+    id: "netsim-run-pass"
+- back
+- back
+- tapOn:
+    id: "tab-tasks"
+- tapOn:
+    text: "Completed"
+    index: 0
+- assertNotVisible: "Saved on this device"
+- tapOn: "Completed 14 Oct 2026"
+- assertVisible:
+    id: "outcome-sync"
+- assertVisible: "Synced"

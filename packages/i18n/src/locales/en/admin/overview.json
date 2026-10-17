@@ -37,7 +37,7 @@
     "overdueReferrals": "Overdue referrals",
     "overdueFollowUps": "Overdue follow-ups",
     "pendingAged": "Reviews waiting 8+ days",
-    "quality": "Data-quality signals",
+    "quality": "Open data-quality issues",
     "note": "Overdue only where a person-set due date has passed. Waiting reviews are shown by age — there is no approved review deadline."
   },
   "dataNote": {
@@ -133,8 +133,8 @@
       "numerator": "Flagged screenings still waiting for review, by days since measurement"
     },
     "openQualityIssues": {
-      "label": "Data-quality signals",
-      "numerator": "Screenings missing a glucose unit plus possible duplicate identities"
+      "label": "Open data-quality issues",
+      "numerator": "Detected data-quality issues not yet triaged — the Open tab on Safety & quality"
     },
     "workloadMinutes": {
       "label": "Staff time per patient-day (proxy)",
@@ -157,12 +157,15 @@
       "flagged": "Flagged screenings in the period",
       "referred": "Referred screenings in the period",
       "patientDays": "Patient-days: distinct (patient, Kigali day) contacts of each worker from screenings and contact attempts, summed over workers",
-      "tasksAssigned": "Follow-up tasks assigned in the period"
+      "tasksAssigned": "Follow-up tasks assigned in the period",
+      "reviewed": "Reviewed flags in the period",
+      "dismissed": "Dismissed flags in the period"
     },
     "inclusion": {
       "cohort": "Submitted screenings only (drafts excluded); people who withdrew consent excluded; an amended screening counts once",
       "deferred": "Not measured in this prototype (deferred)",
-      "proxy": "Synthetic self-reported demo time entries only — a proxy measure, not a measured workload or an individual performance measure"
+      "proxy": "Synthetic self-reported demo time entries only — a proxy measure, not a measured workload or an individual performance measure",
+      "reviewProxy": "Decided reviews of the period's flagged screenings — a proxy derived from review outcomes, not a measure of clinical accuracy"
     },
     "attribution": {
       "period": "Period = Kigali date of the measurement",
@@ -172,7 +175,9 @@
       "reviewWeek": "Week = Kigali ISO week (Monday start) of the review decision",
       "weekEnd": "Counted at each week's end (Sunday 23:59 Kigali); the last point is now (demo clock)",
       "taskCreated": "Exception to cohort attribution: a task counts in the period of its assignment date (createdAt), because workload is about when work happened",
-      "timeEntry": "Period = date of the time entry and Kigali date of each contact"
+      "timeEntry": "Period = date of the time entry and Kigali date of each contact",
+      "detection": "Screening issues count in the period of the measurement; duplicate identifiers in the period of the latest patient registration",
+      "audit": "Period = Kigali date of the audit event"
     },
     "p90DaysToReview": {
       "label": "90th percentile days to review",
@@ -234,6 +239,46 @@
     "weeklyMinutesPerPatientDay": {
       "label": "Minutes per patient-day per week",
       "numerator": "Self-reported demo minutes per Kigali ISO week"
+    },
+    "qualityMissingFields": {
+      "label": "Screenings with missing required fields",
+      "numerator": "Submitted screenings missing at least one mandatory field (patient, facility, author, time, source, ruleset version; glucose unit and context when glucose is recorded; both blood-pressure values)"
+    },
+    "qualityMissingByField": {
+      "label": "Missing fields by field",
+      "numerator": "Screenings missing each mandatory field (one screening can miss several)"
+    },
+    "identityMismatches": {
+      "label": "Possible identity mismatches",
+      "numerator": "Patient records sharing one synthetic identifier (one per group) plus screenings with no patient record in scope"
+    },
+    "overturnedFlagRate": {
+      "label": "Overturned flags (proxy)",
+      "numerator": "Reviewed flags dismissed with a reason — a proxy, not clinical accuracy"
+    },
+    "missedFlagProxy": {
+      "label": "Missed-flag proxy",
+      "numerator": "Manual escalations of screenings the demo rule did not flag — a proxy, not clinical accuracy"
+    },
+    "duplicateSubmissionsPrevented": {
+      "label": "Duplicate submissions prevented",
+      "numerator": "Replayed submissions collapsed by the repository's idempotency check (audit events)"
+    },
+    "completedWithoutEvidence": {
+      "label": "Completed referrals without evidence",
+      "numerator": "Completed referrals lacking a completion time or evidence — must be 0 (invariant check)"
+    },
+    "weeklyQualityTrend": {
+      "label": "Weekly quality trend",
+      "numerator": "Screenings with missing fields and identity mismatches per Kigali ISO week"
+    },
+    "flagReviewOutcomesByGroup": {
+      "label": "Flag review outcomes by group (proxy)",
+      "numerator": "Flagged, overturned and manually escalated screenings by sex and age band — a fairness signal, not a clinical-accuracy measure"
+    },
+    "dismissalReasonDistribution": {
+      "label": "Dismissal reasons",
+      "numerator": "Dismissed flags by structured reason code (free text is never shown)"
     }
   }
 }

@@ -14,6 +14,7 @@ import enAdminFunnel from "../locales/en/admin/funnel.json";
 import enAdminActions from "../locales/en/admin/actions.json";
 import enAdminTimeliness from "../locales/en/admin/timeliness.json";
 import enAdminWorkload from "../locales/en/admin/workload.json";
+import enAdminQuality from "../locales/en/admin/quality.json";
 import rwAdminBase from "../locales/rw/admin.json";
 import rwAdminShell from "../locales/rw/admin/shell.json";
 import rwAdminAuth from "../locales/rw/admin/auth.json";
@@ -26,6 +27,7 @@ import rwAdminFunnel from "../locales/rw/admin/funnel.json";
 import rwAdminActions from "../locales/rw/admin/actions.json";
 import rwAdminTimeliness from "../locales/rw/admin/timeliness.json";
 import rwAdminWorkload from "../locales/rw/admin/workload.json";
+import rwAdminQuality from "../locales/rw/admin/quality.json";
 
 export const enAdmin = {
   ...enAdminBase,
@@ -40,6 +42,7 @@ export const enAdmin = {
   actions: enAdminActions,
   timeliness: enAdminTimeliness,
   workload: enAdminWorkload,
+  quality: enAdminQuality,
 } as const;
 
 export const rwAdmin: object = {
@@ -55,4 +58,5 @@ export const rwAdmin: object = {
   actions: rwAdminActions,
   timeliness: rwAdminTimeliness,
   workload: rwAdminWorkload,
+  quality: rwAdminQuality,
 };

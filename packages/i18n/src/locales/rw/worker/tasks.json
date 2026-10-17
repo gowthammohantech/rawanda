@@ -1,0 +1,105 @@
+{
+  "title": "Imirimo yanjye",
+  "filter": {
+    "label": "Shungura imirimo",
+    "due": "Ibigomba gukorwa",
+    "overdue": "Byarengeje igihe",
+    "completed": "Byarangiye"
+  },
+  "search": {
+    "label": "Shakisha imirimo",
+    "placeholder": "Shakisha ukoresheje izina cyangwa nimero y'umurwayi",
+    "hint": "Igabanya uru rutonde ukurikije izina cyangwa nimero y'umurwayi",
+    "clear": "Siba ibyo washakishije"
+  },
+  "attempts_one": "Igerageza {{count}}",
+  "attempts_other": "Igerageza {{count}}",
+  "noAttempts": "Nta gerageza ririkorwa",
+  "pill": {
+    "overdue_one": "Byarengeje igihe · umunsi {{count}}",
+    "overdue_other": "Byarengeje igihe · iminsi {{count}}",
+    "dueToday": "Bigomba uyu munsi · {{time}}",
+    "due": "Bigomba ku wa {{date}}",
+    "completed": "Byarangiye ku wa {{date}}"
+  },
+  "needsDecision": "Bikeneye icyemezo",
+  "row": {
+    "label": "{{name}}, {{task}}, {{due}}, {{attempts}}",
+    "hint": "Ifungura umurimo",
+    "unknownPatient": "Umurwayi ntari kuri iki gikoresho"
+  },
+  "empty": {
+    "due": "Nta mirimo igomba gukorwa",
+    "overdue": "Nta bikorwa byarengeje igihe",
+    "completed": "Nta mirimo yarangiye",
+    "search": "Nta murimo uhuye na “{{query}}”",
+    "hint": "Ibikurikiranwa bigaragara hano iyo muganga abiguhaye."
+  },
+  "loading": "Imirimo yawe irimo gufungurwa",
+  "error": "Imirimo yawe ntiyashoboye gusomwa kuri iki gikoresho",
+  "overdueCaveat": "Byarengeje igihe = byarenze itariki y'igerageza; amategeko y'igihe ntaremezwa n'abaganga",
+  "recordAttempt": "Andika igerageza ryo guhura",
+  "recordOutcome": "Andika umusaruro",
+  "recordAttemptHint": "Ifungura ifishi y'igerageza ryo guhura",
+  "recordOutcomeHint": "Ifungura ifishi y'umusaruro",
+  "completedOn": "Byarangiye ku wa {{date}}",
+  "setByClinician": "Byashyizweho na muganga",
+  "relative": {
+    "today": "uyu munsi",
+    "daysAgo_one": "hashize umunsi {{count}}",
+    "daysAgo_other": "hashize iminsi {{count}}",
+    "inDays_one": "mu munsi {{count}}",
+    "inDays_other": "mu minsi {{count}}"
+  },
+  "detail": {
+    "title": "Umurimo",
+    "loading": "Umurimo urimo gufungurwa",
+    "error": "Uyu murimo ntiwashoboye gusomwa kuri iki gikoresho",
+    "due": "Itariki ntarengwa",
+    "dueValue": "{{dateTime}} ({{relative}})",
+    "assignedBy": "Wahawe na",
+    "created": "Wakozwe",
+    "unknownClinician": "Muganga (ntari kuri iki gikoresho)",
+    "overdue": "Byarengeje igihe",
+    "overdueCaption": "Byarenze itariki y'igerageza. Byarengeje igihe bishingiye ku matariki y'igerageza, si ku gihe cyemejwe n'abaganga.",
+    "conflictTitle": "Uyu murimo ukeneye icyemezo cyawe",
+    "conflictBody": "Undi muntu yahinduye iki gikorwa — inyandiko yawe irabitswe. Fata icyemezo mu gice cyo guhuza.",
+    "openSync": "Fungura igice cyo guhuza",
+    "patient": {
+      "title": "Umurwayi",
+      "identifier": "Nimero iranga",
+      "age": "Imyaka",
+      "sex": "Igitsina",
+      "unknown": "Amakuru y'uyu murwayi ntari kuri iki gikoresho",
+      "open": "Fungura amakuru y'umurwayi",
+      "openHint": "Ifungura isuzuma n'ibikurikiranwa by'umurwayi",
+      "latestReading": "Igipimo giheruka",
+      "noReading": "Nta suzuma ryanditswe",
+      "measured": "Cyapimwe ku wa {{date}}",
+      "reviewStatus": "Uko isuzuma rihagaze",
+      "flagReason": "Impamvu yashyizweho na muganga: {{reason}}"
+    },
+    "referral": {
+      "title": "Kohereza",
+      "destination": "Aho yoherejwe",
+      "dueDate": "Itariki yo kohereza",
+      "status": "Uko bihagaze"
+    },
+    "timeline": {
+      "title": "Amagerageza yo guhura",
+      "label": "Amateka y'amagerageza yo guhura, aheruka mbere",
+      "empty": "Nta gerageza ryo guhura ryanditswe",
+      "attempt": "{{method}} · {{result}}",
+      "note": "Icyitonderwa: {{note}}",
+      "recordedBy": "{{time}} · byanditswe na {{name}}",
+      "outcome": "Umusaruro: {{outcome}}",
+      "evidence": "Ikimenyetso: {{evidence}}",
+      "occurredAt": "Byabaye ku wa {{dateTime}}",
+      "unknownWorker": "umujyanama w'ubuzima"
+    }
+  },
+  "denied": {
+    "title": "Uyu murimo ntuboneka",
+    "message": "Uyu murimo wahawe undi mujyanama w'ubuzima cyangwa ikindi kigo, cyangwa ntubitswe kuri iki gikoresho. Igerageza ryanditswe."
+  }
+}
