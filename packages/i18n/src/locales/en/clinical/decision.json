@@ -1,0 +1,155 @@
+{
+  "title": "Record decision",
+  "loading": "Loading the review…",
+  "intro": "Choose one outcome. Your decision is recorded with your name, role, facility and time, and cannot be edited after it is saved.",
+  "legend": "Outcome",
+  "outcomes": {
+    "no_further_action": {
+      "label": "Record assessment — no further action",
+      "description": "Record your assessment note. No referral or task is created."
+    },
+    "refer": {
+      "label": "Refer",
+      "description": "Create a referral to a facility you choose, with a reason and a due date."
+    },
+    "request_repeat_screening": {
+      "label": "Request repeat test",
+      "description": "Create a repeat-test task for a community health worker of this facility."
+    },
+    "plan_follow_up": {
+      "label": "Plan follow-up review",
+      "description": "Create a planned review task with a due date you set."
+    },
+    "dismiss": {
+      "label": "Dismiss flag with reason",
+      "description": "Close the flag with a reason. Nothing else is created."
+    }
+  },
+  "fields": {
+    "groupTitle": "Details for: {{outcome}}",
+    "destination": "Destination facility",
+    "destinationOption": "{{name}} (demo)",
+    "destinationPlaceholder": "Choose a facility",
+    "referralReason": "Referral reason",
+    "dueAt": "Due date and time",
+    "dueAtHint": "Set by you — no interval is pre-filled. Africa/Kigali time.",
+    "priority": "Priority",
+    "priorityPlaceholder": "Choose a priority",
+    "assignedWorker": "Community health worker",
+    "assignedWorkerOptional": "Community health worker (optional)",
+    "workerPlaceholder": "Choose a health worker",
+    "workerNone": "Not assigned yet",
+    "workersLoading": "Loading the health workers of this facility…",
+    "workersEmpty": "No authorised community health worker in this facility.",
+    "workersHint": "Only authorised community health workers of the active facility are listed.",
+    "instructions": "Instructions for the health worker",
+    "clinicalNote": "Clinical note",
+    "reasonHint": "At least {{min}} characters.",
+    "dismissReasonCode": {
+      "label": "Dismiss reason",
+      "placeholder": "Choose a reason",
+      "measurement_error_suspected": "Measurement error suspected",
+      "repeat_reading_acceptable": "Repeat reading acceptable",
+      "known_managed_condition": "Known condition already managed",
+      "duplicate_flag": "Duplicate flag",
+      "other": "Other"
+    },
+    "dismissRationale": "Rationale for dismissing"
+  },
+  "actions": {
+    "save": "Save decision",
+    "saveHint": "Ctrl/⌘ + Enter opens the confirmation.",
+    "selectOutcomeFirst": "Choose an outcome first",
+    "cancel": "Back to review",
+    "retry": "Retry with the same request"
+  },
+  "errorSummary": {
+    "title": "Check these fields before saving ({{count}})",
+    "kind": "Outcome"
+  },
+  "confirm": {
+    "title": "Confirm decision",
+    "description": "Check the summary. The decision is saved once and cannot be edited afterwards.",
+    "summary": {
+      "outcome": "Outcome",
+      "creates": "Will create",
+      "createsReferral": "A referral (status Created) to {{destination}}",
+      "createsRepeat": "A repeat-test task assigned to {{worker}}",
+      "createsPlanned": "A planned review task",
+      "createsPlannedFor": "A planned review task assigned to {{worker}}",
+      "createsNothing": "Nothing else — no referral or task",
+      "priority": "Priority",
+      "dueAt": "Due (Kigali time)",
+      "note": "Note",
+      "dismissReason": "Dismiss reason",
+      "reviewStatus": "Review status after saving"
+    },
+    "attribution": "Recorded by {{name}}, {{role}}, {{facility}} at {{time}} (Kigali)",
+    "confirm": "Confirm and save",
+    "cancel": "Go back and edit"
+  },
+  "success": {
+    "title": "Decision recorded",
+    "toast": "Decision recorded",
+    "toastBody": "The review queue has been updated.",
+    "replayed": "This decision had already been saved — it was not submitted twice.",
+    "alreadyTitle": "This review already has a decision",
+    "alreadyBody": "Decisions cannot be edited. The recorded decision is shown read-only.",
+    "outcome": "Outcome",
+    "status": "Review status",
+    "decidedBy": "Recorded by",
+    "decidedAt": "Recorded at (Kigali time)",
+    "note": "Note",
+    "reasonCode": "Dismiss reason",
+    "referral": "Referral",
+    "referralLine": "{{destination}} · due {{due}}",
+    "task": "Task",
+    "taskLine": "{{purpose}} · due {{due}}",
+    "nothingCreated": "No referral or task was created.",
+    "viewReferral": "View referral",
+    "viewTask": "View task",
+    "backToQueue": "Back to queue",
+    "nextCase": "Next pending case",
+    "noNextCase": "No other pending case in this queue view.",
+    "openReview": "Open review detail"
+  },
+  "draft": {
+    "restorePrompt": "Restore unsaved decision draft?",
+    "restoreBody": "A decision draft for this review was saved on this browser and not submitted.",
+    "restore": "Restore draft",
+    "discard": "Discard draft",
+    "discarded": "Draft discarded",
+    "offlineSaved": "Saved as draft on this browser",
+    "offlineBody": "Simulated offline — the decision cannot be saved right now. Your draft is kept."
+  },
+  "guard": {
+    "notStarted": "Start the review before recording a decision",
+    "notStartedBody": "A decision can only be recorded from a review you have started.",
+    "otherReviewer": "This review is in review by {{name}}",
+    "otherReviewerBody": "Only the clinician reviewing the case can record the decision."
+  },
+  "conflict": {
+    "title": "This review changed since you opened it",
+    "description": "Nothing was saved or overwritten. Reload the latest version, or discard your draft.",
+    "referralOpen": "An open referral already exists for this review. Nothing was saved.",
+    "discard": "Discard my draft",
+    "fields": {
+      "status": "Status",
+      "decision": "Decision",
+      "decidedBy": "Decided by",
+      "version": "Version"
+    }
+  },
+  "errors": {
+    "alreadyDecided": "A decision was already recorded for this review (for example in another tab). Nothing was overwritten.",
+    "notSaved": "Not saved yet",
+    "notSavedBody": "Your values are kept. Retry sends the same request again, so the decision cannot be saved twice.",
+    "workerNotAuthorised": "This health worker is not authorised for this facility."
+  },
+  "evidence": {
+    "title": "Evidence summary",
+    "subtitle": "Read-only, from the flag-time snapshot",
+    "openDetail": "Open full evidence",
+    "unavailable": "The evidence snapshot is not available."
+  }
+}

@@ -1,4 +1,4 @@
-import { fireEvent, screen } from "@testing-library/react";
+import { fireEvent, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useState } from "react";
 import { describe, expect, it, vi } from "vitest";
@@ -124,6 +124,28 @@ describe("RadioCardGroup", () => {
     expect(onChange).toHaveBeenLastCalledWith("refer");
     await user.keyboard("{ArrowDown}");
     expect(onChange).toHaveBeenLastCalledWith("dismiss");
+    await expectNoAxeViolations(container);
+  });
+
+  it("required: native required radios + visual marker, no aria-required on the fieldset", async () => {
+    const { container } = renderUi(
+      <RadioCardGroup
+        legend="Decision"
+        required
+        value={null}
+        onChange={() => undefined}
+        options={[
+          { value: "refer", label: "Refer" },
+          { value: "dismiss", label: "Dismiss flag" },
+        ]}
+      />,
+    );
+    // The accessible name stays the legend text (apps query groups by it).
+    const group = screen.getByRole("group", { name: "Decision" });
+    expect(group.hasAttribute("aria-required")).toBe(false);
+    expect(group.querySelector("legend [aria-hidden=true]")?.textContent).toBe("*");
+    const radios = within(group).getAllByRole<HTMLInputElement>("radio");
+    expect(radios.every((radio) => radio.required)).toBe(true);
     await expectNoAxeViolations(container);
   });
 });

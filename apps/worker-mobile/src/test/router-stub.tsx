@@ -15,6 +15,10 @@ export function useRouter() {
     push: (href: unknown) => routerLog.push({ method: "push", href }),
     replace: (href: unknown) => routerLog.push({ method: "replace", href }),
     back: () => routerLog.push({ method: "back", href: null }),
+    setParams: (params: Record<string, string>) => {
+      searchParams.current = { ...searchParams.current, ...params };
+      routerLog.push({ method: "setParams", href: params });
+    },
     canGoBack: () => false,
   };
 }

@@ -12,7 +12,7 @@
 | Depends on | HWM-03 |
 | Trace | PRD HW-06, §2 (pending vs verified completed) · FRD HW-06, §5 (`OVERDUE` derived), §7 · BRD BR-05, BR-06, BO-03 · Tech spec §2.2 "My tasks", §5.2 FollowUp · FRD T-01, T-02 |
 | Size | M |
-| Status | Planned |
+| Status | Done |
 
 ## 2. Goal
 

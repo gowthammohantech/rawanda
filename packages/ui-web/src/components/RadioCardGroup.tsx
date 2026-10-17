@@ -21,6 +21,12 @@ export type RadioCardGroupProps<V extends string = string> = {
   value: V | null;
   onChange: (value: V) => void;
   error?: FieldErrorLike;
+  /**
+   * Required group: native `required` on the radios (announced by screen readers; use it inside a
+   * `noValidate` form to keep app-level validation) + a visual `*` in the legend. The legend text,
+   * i.e. the group's accessible name, is unchanged. Never `aria-required` on the `<fieldset>`
+   * (not allowed there — axe aria-allowed-attr).
+   */
   required?: boolean;
   columns?: 1 | 2 | 3;
   className?: string;
@@ -45,9 +51,15 @@ export function RadioCardGroup<V extends string = string>({
     <fieldset
       className={cx("m-0 min-w-0 border-0 p-0", className)}
       aria-describedby={errorText === undefined ? undefined : errorId}
-      aria-required={required || undefined}
     >
-      <legend className="text-ink mb-2 text-[13px] font-medium">{legend}</legend>
+      <legend className="text-ink mb-2 text-[13px] font-medium">
+        {legend}
+        {required ? (
+          <span aria-hidden="true" className="text-danger ms-1">
+            *
+          </span>
+        ) : null}
+      </legend>
       <div
         className={cx(
           "grid gap-2",
@@ -75,6 +87,7 @@ export function RadioCardGroup<V extends string = string>({
                 value={option.value}
                 checked={checked}
                 disabled={option.disabled}
+                required={required || undefined}
                 onChange={() => onChange(option.value)}
                 className="accent-primary mt-0.5 size-4"
               />

@@ -1,6 +1,6 @@
 /**
  * Worker TanStack Query keys (HWM-02). Every repository mutation hook invalidates `['sync']`,
- * `['home']` and `['patients']` (`invalidateAfterWrite`), so the Sync tab badge, the header
+ * `['home']`, `['tasks']` and `['patients']` (`invalidateAfterWrite`), so the Sync tab badge, the header
  * badge, Today and the Find tab refresh.
  */
 import type { QueryClient } from "@tanstack/react-query";
@@ -38,6 +38,16 @@ export const workerKeys = {
   screeningReview: (draftId: string) => ["screenings", "review", draftId] as const,
   /** Sync ops of one screening (timeline, live "Saved on this device" → "Synced"). */
   screeningOps: (screeningId: string) => ["sync", "screening", screeningId] as const,
+  /** HWM-07 My tasks: filtered list + counts, the audited open, and the refreshable detail. */
+  tasks: ["tasks"] as const,
+  taskList: (workerId: string, facilityId: string, filter: string, query: string) =>
+    ["tasks", "list", workerId, facilityId, filter, query] as const,
+  /** Audited open (`followup.viewed` / `access.denied`) — never re-run by writes. */
+  taskAccess: (facilityId: string, followUpId: string) =>
+    ["tasks", "access", facilityId, followUpId] as const,
+  /** Unaudited re-read of an opened task (refreshed after writes / sync passes). */
+  taskDetail: (facilityId: string, followUpId: string) =>
+    ["tasks", "detail", facilityId, followUpId] as const,
 } as const;
 
 /** After a draft save / create / discard: the drafts list and Today (drafts count). */
@@ -57,6 +67,11 @@ export async function invalidateAfterWrite(queryClient: QueryClient): Promise<vo
     queryClient.invalidateQueries({ queryKey: workerKeys.sync }),
     queryClient.invalidateQueries({ queryKey: workerKeys.home }),
     queryClient.invalidateQueries({ queryKey: workerKeys.screenings }),
+    // Tasks list + detail; the audited open is not re-run by a write.
+    queryClient.invalidateQueries({
+      queryKey: workerKeys.tasks,
+      predicate: (query) => query.queryKey[1] !== "access",
+    }),
     // Search / recent / history only — the audited context read is not re-run by a write.
     queryClient.invalidateQueries({
       queryKey: workerKeys.patients,
