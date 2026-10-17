@@ -267,7 +267,8 @@
     "persona": "Demo persona",
     "ruleset": "Demo ruleset",
     "sync_operation": "Sync operation",
-    "device_session": "Device session"
+    "device_session": "Device session",
+    "programme_action": "Programme action"
   },
   "pathwayStage": {
     "DRAFT_SCREENING": "Draft screening",
@@ -513,7 +514,9 @@
         "list_viewed": "Results list viewed in the wallet"
       },
       "next_step": {
-        "acknowledged": "Next step marked as read"
+        "acknowledged": "Next step marked as read",
+        "list_viewed": "Next steps list viewed in the wallet",
+        "viewed": "Next step viewed in the wallet"
       },
       "support": {
         "callback_requested": "Call-back requested"
@@ -529,6 +532,15 @@
         "verified": "Identity verified (simulated demo code)",
         "verification_failed": "Identity verification failed (simulated)",
         "verification_unavailable": "Verification service unavailable (simulated)"
+      }
+    },
+    "admin": {
+      "drilldown": {
+        "viewed": "Aggregate drill-down viewed"
+      },
+      "programme_action": {
+        "created": "Programme action assigned",
+        "status_changed": "Programme action status changed"
       }
     }
   }

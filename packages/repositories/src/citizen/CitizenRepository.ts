@@ -133,7 +133,24 @@ export interface CitizenRepository {
    */
   getObservation(id: string, patientId: string): Promise<ReleasedObservation>;
   listApprovedInstructions(patientId: string): Promise<ApprovedInstruction[]>;
-  /** "I have read this" — one ack per instruction; replays return the same ack. */
+  /**
+   * CTZ-04: the Next steps list was shown (once per screen focus) — one `next_steps_viewed`
+   * access event + `citizen.next_step.list_viewed`. Link + consent required.
+   */
+  recordNextStepsListViewed(patientId: string): Promise<void>;
+  /**
+   * CTZ-04: one approved next step; writes `citizen.next_step.viewed` (de-duplicated per
+   * persona + step per demo minute). ANY id that is not an approved step of this patient —
+   * another patient's step, a withdrawn step, an unreleased referral, an unknown id — is
+   * `FORBIDDEN` `SCOPE` + one `access.denied` (one answer for all, so existence never leaks).
+   */
+  getInstruction(id: string, patientId: string): Promise<ApprovedInstruction>;
+  /**
+   * "I have read this" — one ack per instruction; replays (same key) and repeats (other key)
+   * return the same ack. `expectedVersion` (the version the citizen read) older than the
+   * current instruction → `CONFLICT` with `latest`, nothing written; the demo-tools
+   * `conflict-next-write` toggle on the patient forces that once (T-05).
+   */
   acknowledgeInstruction(
     i: AcknowledgeInstructionCall,
     key: string,

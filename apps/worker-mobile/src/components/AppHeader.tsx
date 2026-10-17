@@ -14,6 +14,7 @@ import {
   type TranslationKey,
 } from "@laif/ui-native";
 import { useRouter } from "expo-router";
+import type { ReactNode } from "react";
 import { Pressable, StyleSheet } from "react-native";
 
 import { useSession } from "../session/useSession.ts";
@@ -24,9 +25,11 @@ export type WorkerHeaderProps = {
   onBack?: () => void;
   /** The avatar menu is hidden on Settings itself. */
   showAvatar?: boolean;
+  /** Screen actions left of the network badge (e.g. the draft options menu, HWM-05). */
+  actions?: ReactNode;
 };
 
-export function AppHeader({ title, onBack, showAvatar = true }: WorkerHeaderProps) {
+export function AppHeader({ title, onBack, showAvatar = true, actions }: WorkerHeaderProps) {
   const t = useTx();
   const router = useRouter();
   const { session } = useSession();
@@ -41,6 +44,7 @@ export function AppHeader({ title, onBack, showAvatar = true }: WorkerHeaderProp
       {...(onBack === undefined ? {} : { onBack })}
       right={
         <>
+          {actions ?? null}
           <NetworkBadge />
           {showAvatar && session !== null ? (
             <Pressable

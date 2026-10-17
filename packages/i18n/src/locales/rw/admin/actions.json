@@ -1,0 +1,84 @@
+{
+  "banner": "Igikorwa cya porogaramu — si icyemezo cy'ubuvuzi",
+  "assign": "Tanga igikorwa cyo gukurikirana cya porogaramu",
+  "denied": {
+    "role": "Uruhare rwawe ntirwemerewe gutanga ibikorwa bya porogaramu.",
+    "scope": "Iki kigo kiri hanze y'urwego wemerewe."
+  },
+  "dialog": {
+    "title": "Tanga igikorwa cyo gukurikirana cya porogaramu",
+    "description": "Igikorwa kitari icy'ubuvuzi gihabwa umuyobozi w'ikigo {{facility}}. Ntigihindura inyandiko y'ubuvuzi.",
+    "submit": "Tanga igikorwa",
+    "retry": "Ongera ugerageze",
+    "notSaved": "Ntibyabitswe — ongera ugerageze",
+    "notSavedHint": "Ihuza ryanze. Kongera kugerageza nta kibazo: ntibishobora gukora ikindi gisa na cyo.",
+    "failed": "Igikorwa ntikibashije kubikwa."
+  },
+  "field": {
+    "facility": "Ikigo",
+    "category": "Icyiciro",
+    "categoryPlaceholder": "— Hitamo icyiciro mu rutonde —",
+    "title": "Umutwe",
+    "titleHint": "Inyuguti 5 kugeza 120. Ntukandike amazina cyangwa imyirondoro y'abarwayi.",
+    "note": "Icyitonderwa",
+    "noteHint": "Si ngombwa, inyuguti zitarenze 500. Ibisobanuro rusange gusa — nta makuru y'umurwayi.",
+    "dueDate": "Itariki ntarengwa",
+    "dueDateHint": "Kuva {{from}} kugeza {{to}}.",
+    "owner": "Ushinzwe: umuyobozi w'ikigo"
+  },
+  "validation": {
+    "categoryRequired": "Hitamo icyiciro",
+    "titleLength": "Umutwe ugomba kugira inyuguti 5 kugeza 120",
+    "noteLength": "Icyitonderwa ntikigomba kurenza inyuguti {{max}}",
+    "dueDateRange": "Hitamo itariki ntarengwa kuva {{from}} kugeza {{to}}"
+  },
+  "category": {
+    "data_completeness_check": "Kugenzura ko amakuru yuzuye",
+    "supervision_visit": "Uruzinduko rw'igenzura",
+    "workload_review": "Gusuzuma ingano y'akazi",
+    "process_review": "Gusuzuma imikorere",
+    "other": "Ibindi"
+  },
+  "status": {
+    "open": "Gifunguye",
+    "in_progress": "Kirakorwa",
+    "done": "Cyarangiye",
+    "cancelled_with_reason": "Cyahagaritswe hatanzwe impamvu"
+  },
+  "toast": {
+    "assigned": "Igikorwa cya porogaramu cyatanzwe",
+    "updated": "Igikorwa cya porogaramu: {{status}}"
+  },
+  "card": {
+    "title": "Ibikorwa bya porogaramu",
+    "openCount": "{{n}} bifunguye",
+    "note": "Ibikorwa byo gukurikirana bitari iby'ubuvuzi bihabwa abayobozi b'ibigo muri uru rwego.",
+    "error": "Ibikorwa bya porogaramu ntibibashije kuboneka.",
+    "empty": "Nta gikorwa cya porogaramu kirahari",
+    "emptyHint": "Tanga kimwe uhereye ku murongo w'ikigo mu isesengura ry'icyiciro.",
+    "due": "Bigomba kurangira {{date}}",
+    "owner": "Umuyobozi w'ikigo",
+    "updated": "Byahinduwe {{time}}",
+    "reason": "Impamvu: {{reason}}",
+    "start": "Tangira",
+    "done": "Shyira ko cyarangiye",
+    "cancel": "Hagarika"
+  },
+  "conflict": {
+    "title": "Iki gikorwa cyahinduwe n'undi muntu",
+    "description": "Nta cyabitswe. Gereranya maze uhitemo verisiyo ugumana.",
+    "status": "Imiterere",
+    "updatedBy": "Uwagihinduye bwa nyuma",
+    "updatedAt": "Igihe cyahinduriwe"
+  },
+  "demo": {
+    "conflict": "Igerageza: guhindura gukurikira kugongane",
+    "conflictArmed": "Igerageza: guhindura gukurikira kw'iki gikorwa kuzagongana"
+  },
+  "cancel": {
+    "title": "Hagarika igikorwa cya porogaramu",
+    "description": "“{{title}}” kizafungwa nk'icyahagaritswe. Tanga impamvu.",
+    "reason": "Impamvu yo guhagarika",
+    "confirm": "Hagarika igikorwa"
+  }
+}

@@ -60,6 +60,14 @@ export const VALIDATION_KEYS = [
   "phonePattern",
   /** Non-blocking data-entry prompt: derived age under 18 (the pilot screens adults). */
   "underPilotAge",
+  // ── Appended by ADM-03 ──
+  /** Calendar date outside the allowed window `{from}` … `{to}` (e.g. a programme action due date). */
+  "dateOutOfRange",
+  // ── Appended by HWM-05 (screening capture) ──
+  /** Outside the DEMO data-entry range `{min}`–`{max}` `{unit}` (typing check, not clinical). */
+  "outOfEntryRange",
+  /** Non-blocking data-entry prompt: `measuredAt` more than 24 h before the demo now. */
+  "measuredAtOld",
 ] as const;
 
 export type ValidationMessageKey = (typeof VALIDATION_KEYS)[number];

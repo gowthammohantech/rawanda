@@ -26,4 +26,13 @@ export const adminKeys = {
   overview: (scopeKey: ScopeKey, filters: FilterKey, threshold: number) =>
     [...adminKeys.scope(scopeKey), "overview", filters, threshold] as const,
   freshness: (scopeKey: ScopeKey) => [...adminKeys.scope(scopeKey), "freshness"] as const,
+  /** ADM-03: funnel view (derived from the scope-wide dataset; threshold part of the key). */
+  funnel: (scopeKey: ScopeKey, filters: FilterKey, threshold: number) =>
+    [...adminKeys.scope(scopeKey), "funnel", filters, threshold] as const,
+  /** ADM-03: stage drill-down (current + previous equal-length period). */
+  funnelStage: (scopeKey: ScopeKey, stage: string, filters: FilterKey, threshold: number) =>
+    [...adminKeys.scope(scopeKey), "funnelStage", stage, filters, threshold] as const,
+  /** ADM-03: programme follow-up actions in the grant scope. */
+  programmeActions: (scopeKey: ScopeKey) =>
+    [...adminKeys.scope(scopeKey), "programmeActions"] as const,
 };

@@ -621,6 +621,48 @@ export function createCitizenRepository(input: CitizenRepositoryDeps): CitizenRe
       });
     },
 
+    recordNextStepsListViewed(patientId) {
+      return engine.write(async (ctx) => {
+        const { patient, link } = await assertPatientAccess(ctx, patientId);
+        await recordOwnView(
+          ctx,
+          patient,
+          link,
+          { type: "patient", id: patient.id },
+          { action: "next_steps_viewed", audit: "citizen.next_step.list_viewed", dedupe: false },
+        );
+      });
+    },
+
+    getInstruction(id, patientId) {
+      return engine.read(async (ctx) => {
+        const { patient, link } = await assertPatientAccess(ctx, patientId);
+        const item = (await instructionsOf(ctx, patientId)).find((c) => c.id === id);
+        if (!item) {
+          // Not an approved step of this patient (other patient, withdrawn, unreleased, unknown):
+          // the same denial for all so a deep link never reveals whether the id exists.
+          const owner = (await ctx.find<CareInstruction>("care_instruction", id)) ?? null;
+          return ctx.deny(
+            "SCOPE",
+            { entityType: "care_instruction", entityId: id },
+            {
+              patientId: owner?.patientId ?? patient.id,
+              facilityId: owner?.facilityId ?? patient.facilityId,
+            },
+            { viaPatientId: patientId },
+          );
+        }
+        await recordOwnView(
+          ctx,
+          patient,
+          link,
+          { type: "care_instruction", id: item.id },
+          { action: "next_steps_viewed", audit: "citizen.next_step.viewed", dedupe: true },
+        );
+        return item;
+      });
+    },
+
     acknowledgeInstruction(i, key) {
       return engine.mutate({
         op: "citizen.acknowledgeInstruction",
@@ -640,6 +682,23 @@ export function createCitizenRepository(input: CitizenRepositoryDeps): CitizenRe
               details: { entityType: "care_instruction", id: input.instructionId },
             });
           }
+          // Concurrent update (T-05): the citizen must have read the current version. The
+          // demo-tools `conflict-next-write` toggle targets the patient; it is turned into a
+          // one-off conflict on this step (consumed here, nothing written).
+          if (faults.consumeConflictOnce("patient", patient.id)) {
+            faults.set({
+              conflictOnce: [
+                ...faults.get().conflictOnce,
+                { entityType: "care_instruction", entityId: instruction.id },
+              ],
+            });
+          }
+          await ctx.assertVersion(
+            "care_instruction",
+            instruction,
+            input.expectedVersion ?? instruction.version,
+            { patientId: patient.id, facilityId: patient.facilityId },
+          );
           const existing = (await ctx.tx.getAll<NextStepAcknowledgement>("nextStepAcks")).find(
             (a) => a.patientId === patient.id && a.instructionId === instruction.id,
           );
@@ -672,7 +731,11 @@ export function createCitizenRepository(input: CitizenRepositoryDeps): CitizenRe
             after: ack,
             patientId: patient.id,
             facilityId: patient.facilityId,
-            changeSummary: { ackId: ack.id },
+            changeSummary: {
+              ackId: ack.id,
+              idempotencyKey: input.idempotencyKey,
+              instructionVersion: instruction.version,
+            },
           });
           return { data: ack, entityType: "care_instruction", auditEventId: event.id };
         },

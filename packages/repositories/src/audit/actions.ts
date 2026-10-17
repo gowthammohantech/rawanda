@@ -133,6 +133,9 @@ export const AUDIT_ACTIONS = {
   // CTZ-03: the "My health" results list was shown (once per screen focus).
   "citizen.result.list_viewed": access,
   "citizen.next_step.acknowledged": change,
+  // CTZ-04: the Next steps list was shown (once per focus) / one approved step was opened.
+  "citizen.next_step.list_viewed": access,
+  "citizen.next_step.viewed": access,
   "citizen.support.callback_requested": change,
   "citizen.settings.changed": change,
   // CTZ-02: persona choice + simulated identity verification (demo code, never a real check).
@@ -141,6 +144,14 @@ export const AUDIT_ACTIONS = {
   "citizen.identity.verified": change,
   "citizen.identity.verification_failed": security,
   "citizen.identity.verification_unavailable": security,
+
+  // ── Programme admin (ADM-03) ────────────────────────────────────────────
+  // Aggregate drill-down view (PRD §8 sensitive-read logging), recorded by the admin UI once per
+  // (session, stage, search). Denials / conflicts of programme actions use the canonical
+  // `access.denied` / `conflict.detected` (entityType `programme_action`).
+  "admin.drilldown.viewed": accessClient,
+  "admin.programme_action.created": change,
+  "admin.programme_action.status_changed": change,
 
   // ── Sync & devices ───────────────────────────────────────────────────────
   "sync.op_acknowledged": change,

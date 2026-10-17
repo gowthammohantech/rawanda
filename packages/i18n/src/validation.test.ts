@@ -28,6 +28,8 @@ const SAMPLE_PARAMS: Partial<Record<ValidationMessageKey, Record<string, string 
   dateTooOld: { days: 30 },
   unrecognizedKeys: { keys: "foo,bar" },
   ageRange: { min: 0, max: 120 },
+  dateOutOfRange: { from: "14 Oct 2026", to: "12 Apr 2027" },
+  outOfEntryRange: { min: 1, max: 35, unit: "mmol/L" },
 };
 
 beforeEach(() => clearMissingKeyReport());
@@ -64,6 +66,29 @@ describe("translateValidationMessage", () => {
     );
     expect(translateValidationMessage(en.t, vMsg("ageRange"))).toBe(
       translateValidationMessage(en.t, vMsg("invalid")),
+    );
+  });
+
+  it("HWM-05 outOfEntryRange: unit-aware typing-check wording in EN and RW, generic without params", () => {
+    const msg = vMsg("outOfEntryRange", { min: 60, max: 260, unit: "mmHg" });
+    expect(translateValidationMessage(en.t, msg)).toBe(
+      "Outside the expected entry range (60–260 mmHg). Check for typing errors.",
+    );
+    expect(
+      translateValidationMessage(
+        rw.t,
+        vMsg("outOfEntryRange", { min: 1, max: 35, unit: "mmol/L" }),
+      ),
+    ).toBe("Kiri hanze y'urugero ruteganyijwe (1–35 mmol/L). Reba niba nta kosa ryo kwandika.");
+    // Never diagnostic wording.
+    for (const t of [en.t, rw.t]) {
+      expect(translateValidationMessage(t, msg)).not.toMatch(/high|low|abnormal|danger/i);
+    }
+    expect(translateValidationMessage(en.t, vMsg("outOfEntryRange", { min: 60, max: 260 }))).toBe(
+      translateValidationMessage(en.t, vMsg("invalid")),
+    );
+    expect(translateValidationMessage(en.t, vMsg("measuredAtOld"))).toBe(
+      "This reading was taken more than 24 hours ago. Check the date.",
     );
   });
 

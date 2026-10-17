@@ -25,7 +25,24 @@ export const workerKeys = {
     ["patients", "access", facilityId, patientId] as const,
   patientHistory: (facilityId: string, patientId: string) =>
     ["patients", "history", facilityId, patientId] as const,
+  /** HWM-05 screening drafts (device-local). */
+  drafts: ["drafts"] as const,
+  draftList: (workerId: string, facilityId: string) =>
+    ["drafts", "list", workerId, facilityId] as const,
+  /** The draft opened in the form (loaded fresh on every mount, never refetched while open). */
+  draft: (draftId: string) => ["drafts", "detail", draftId] as const,
 } as const;
+
+/** After a draft save / create / discard: the drafts list and Today (drafts count). */
+export async function invalidateDrafts(queryClient: QueryClient): Promise<void> {
+  await Promise.all([
+    queryClient.invalidateQueries({
+      queryKey: workerKeys.drafts,
+      predicate: (query) => query.queryKey[1] !== "detail",
+    }),
+    queryClient.invalidateQueries({ queryKey: workerKeys.home }),
+  ]);
+}
 
 /** Call after every repository write (and after a sync pass / demo change). */
 export async function invalidateAfterWrite(queryClient: QueryClient): Promise<void> {

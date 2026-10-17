@@ -15,6 +15,7 @@
 import { deriveDatePassed, deriveInstructionProgress, effectiveReadings } from "../derive.ts";
 import type {
   AmendableScreeningField,
+  CompletionEvidenceType,
   GlucoseContext,
   GlucoseUnit,
   InstructionProgress,
@@ -273,7 +274,33 @@ export type ApprovedInstruction = CareInstruction & {
   /** Review the step came from (links a result to its next step); null when unknown. */
   reviewId: ReviewId | null;
   acknowledgement: { id: string; acknowledgedAt: IsoUtc } | null;
+  /**
+   * CTZ-04: when the care team recorded the step as done, and with which evidence type (null
+   * when not completed). The wallet shows "Confirmed by your care team" only with an evidence
+   * type; a delivered reminder or an acknowledgement never makes a step completed.
+   */
+  completion: { completedAt: IsoUtc; evidenceType: CompletionEvidenceType | null } | null;
 };
+
+type ReferralSource = Pick<Referral, "id" | "status" | "completionEvidence" | "reviewId">;
+type FollowUpSource = Pick<
+  FollowUp,
+  "id" | "status" | "attempts" | "outcome" | "referralId" | "reviewId"
+>;
+
+/** Completion facts of a `completed` step from its source record (null otherwise). */
+function completionOf(
+  progress: InstructionProgress,
+  source: ReferralSource | FollowUpSource | null,
+): ApprovedInstruction["completion"] {
+  if (progress !== "completed" || source === null) return null;
+  if ("completionEvidence" in source) {
+    const evidence = source.completionEvidence;
+    return evidence ? { completedAt: evidence.recordedAt, evidenceType: evidence.type } : null;
+  }
+  const outcome = source.outcome;
+  return outcome ? { completedAt: outcome.occurredAt, evidenceType: outcome.evidenceType } : null;
+}
 
 /**
  * Only care-team-approved (`released`) instructions of the patient, with derived progress and
@@ -282,11 +309,8 @@ export type ApprovedInstruction = CareInstruction & {
 export function selectApprovedInstructions(input: {
   patientId: string;
   instructions: readonly CareInstruction[];
-  referrals: readonly Pick<Referral, "id" | "status" | "completionEvidence" | "reviewId">[];
-  followUps: readonly Pick<
-    FollowUp,
-    "id" | "status" | "attempts" | "outcome" | "referralId" | "reviewId"
-  >[];
+  referrals: readonly ReferralSource[];
+  followUps: readonly FollowUpSource[];
   acks?: readonly InstructionAckLike[];
   now: Date;
 }): ApprovedInstruction[] {
@@ -302,12 +326,15 @@ export function selectApprovedInstructions(input: {
     if (instruction.patientId !== input.patientId || instruction.status !== "released") continue;
     let progress: InstructionProgress;
     let reviewId: ReviewId | null = null;
+    let source: ReferralSource | FollowUpSource | null = null;
     if (instruction.sourceType === "referral") {
       const referral = referrals.get(instruction.sourceId) ?? null;
+      source = referral;
       progress = deriveInstructionProgress(instruction, referral);
       reviewId = referral?.reviewId ?? null;
     } else if (instruction.sourceType === "follow_up") {
       const followUp = followUps.get(instruction.sourceId) ?? null;
+      source = followUp;
       progress = deriveInstructionProgress(instruction, followUp);
       const viaReferral = followUp?.referralId ? referrals.get(followUp.referralId) : undefined;
       reviewId = followUp?.reviewId ?? viaReferral?.reviewId ?? null;
@@ -323,6 +350,7 @@ export function selectApprovedInstructions(input: {
       datePassed: deriveDatePassed(instruction.appointmentAt, progress, input.now),
       reviewId,
       acknowledgement: ack ? { id: ack.id, acknowledgedAt: ack.acknowledgedAt } : null,
+      completion: completionOf(progress, source),
     });
   }
   return out.sort((a, b) =>
