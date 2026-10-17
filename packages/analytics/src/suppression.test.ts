@@ -11,6 +11,7 @@ import {
   type CountTable,
   type SuppressedNumber,
 } from "./suppression.ts";
+import { derivedCell, rateCell, toCell, toCells } from "./aggregate-cells.ts";
 
 const P: SuppressedNumber = { value: null, suppressed: true, reason: "PRIMARY" };
 const C: SuppressedNumber = { value: null, suppressed: true, reason: "COMPLEMENTARY" };
@@ -183,5 +184,69 @@ describe("rates", () => {
     expect(suppressRate(v(1), v(3), 2)).toEqual(v(0.33));
     expect(suppressRate(v(0), v(0))).toEqual({ value: null, suppressed: false });
     expect(shown(null)).toEqual({ value: null, suppressed: false });
+  });
+});
+
+describe("ADM-02 toCells adapter (over suppressCells)", () => {
+  const values = [
+    { key: "fac-a", value: 12 },
+    { key: "fac-b", value: 3 },
+    { key: "fac-c", value: 7 },
+  ];
+
+  it.each([
+    [3, [12, 3, 7]],
+    [5, [12, null, null]],
+    [10, [12, null, null]],
+  ] as const)("k = %i: primary + complementary with a total", (k, expected) => {
+    const list = toCells(values, k, { withTotal: true });
+    expect(list.cells.map((c) => c.value)).toEqual(expected);
+    expect(list.total?.value).toBe(22);
+    expect(list.threshold).toBe(k);
+  });
+
+  it("k = 5 adds a complementary cell; k = 10 hides both primarily; the total stays shown", () => {
+    expect(toCells(values, 5, { withTotal: true }).cells.map((c) => c.reason)).toEqual([
+      undefined,
+      "PRIMARY",
+      "COMPLEMENTARY",
+    ]);
+    const list = toCells(values, 10, { withTotal: true });
+    expect(list.cells.map((c) => c.reason)).toEqual([undefined, "PRIMARY", "PRIMARY"]);
+    expect(list.total).toEqual({ key: "total", value: 22, suppressed: false });
+  });
+
+  it("without a total only primary suppression applies", () => {
+    const list = toCells(values, 5);
+    expect(list.cells.map((c) => c.value)).toEqual([12, null, 7]);
+    expect(list.total).toBeNull();
+    expect(list.suppressedCount).toBe(1);
+  });
+
+  it("a single suppressed cell under a total hides the total when no other non-zero cell exists", () => {
+    const list = toCells(
+      [
+        { key: "a", value: 2 },
+        { key: "b", value: 0 },
+      ],
+      5,
+      { withTotal: true },
+    );
+    expect(list.cells.map((c) => c.value)).toEqual([null, 0]);
+    expect(list.total).toMatchObject({ value: null, suppressed: true });
+  });
+
+  it("zero is shown; rate cells follow their numerator / denominator", () => {
+    expect(toCell("x", 0, 5)).toEqual({ key: "x", value: 0, suppressed: false });
+    const hidden = toCell("n", 3, 5);
+    const den = toCell("d", 20, 5);
+    expect(rateCell("r", hidden, den)).toMatchObject({ value: null, suppressed: true });
+    expect(rateCell("r", toCell("n", 10, 5), den)).toMatchObject({ value: 0.5, suppressed: false });
+    expect(rateCell("r", toCell("n", 10, 3), toCell("d", 0, 3))).toMatchObject({
+      value: null,
+      suppressed: false,
+    });
+    expect(derivedCell("m", 1.5, hidden)).toMatchObject({ value: null, suppressed: true });
+    expect(derivedCell("m", 1.5, den)).toEqual({ key: "m", value: 1.5, suppressed: false });
   });
 });

@@ -1,0 +1,10 @@
+{
+  "suppressed": {
+    "short": "<{{k}}",
+    "pill": "SUPPRESSED",
+    "sr": "Fewer than {{k}}, hidden to protect privacy",
+    "hidden": "Hidden",
+    "derivedSr": "Hidden to protect privacy (based on fewer than {{k}} records)"
+  },
+  "noValue": "—"
+}

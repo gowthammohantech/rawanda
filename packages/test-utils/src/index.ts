@@ -13,3 +13,10 @@ export * from "./matchers.ts";
 export * from "./repo.ts";
 export * from "./store.ts";
 export * from "./citizen/index.ts";
+/** ADM-02 calculator fixture (hosted in `@laif/mock-data` so `@laif/analytics` tests can use it). */
+export {
+  adminMetricsFixture,
+  ADMIN_METRICS_FIXTURE_NOW,
+  ADMIN_METRICS_FIXTURE_PERIOD,
+  type AdminMetricsFixture,
+} from "@laif/mock-data";

@@ -32,8 +32,8 @@ describe("ScopeGuard", () => {
     );
     expect(screen.getByRole("button", { name: "Switch demo persona" })).toBeTruthy();
     expect(router.state.location.pathname + router.state.location.search).toBe(BETA);
-    // The overview placeholder (and its scope strip) is not mounted.
-    expect(screen.queryByText("Coming in ADM-02")).toBeNull();
+    // The overview (and its scope strip) is not mounted: no metric query ran.
+    expect(screen.queryByTestId("overview-page")).toBeNull();
     expect(screen.queryByTestId("scope-strip")).toBeNull();
   });
 
@@ -71,7 +71,7 @@ describe("ScopeGuard", () => {
 
     // Navigate inside the scope, then back: the same history entry → no new event.
     await act(() => router.navigate(`/admin/overview?district=${DISTRICT_IDS.alpha}`));
-    await screen.findByText("Coming in ADM-02");
+    await screen.findByTestId("overview-page");
     await act(() => router.navigate(-1));
     await screen.findByTestId("forbidden-page");
     await new Promise((resolve) => setTimeout(resolve, 50));
