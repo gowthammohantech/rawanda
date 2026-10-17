@@ -15,6 +15,10 @@ import enAdmin from "./locales/en/admin.json";
 import enAdminAuth from "./locales/en/admin/auth.json";
 import enAdminErrors from "./locales/en/admin/errors.json";
 import enAdminShell from "./locales/en/admin/shell.json";
+import enAdminCharts from "./locales/en/admin/charts.json";
+import enAdminFilters from "./locales/en/admin/filters.json";
+import enAdminOverview from "./locales/en/admin/overview.json";
+import enAdminPrivacy from "./locales/en/admin/privacy.json";
 import enCitizen from "./locales/en/citizen.json";
 import enCitizenErrors from "./locales/en/citizen/errors.json";
 import enClinical from "./locales/en/clinical.json";
@@ -34,6 +38,10 @@ import rwAdmin from "./locales/rw/admin.json";
 import rwAdminAuth from "./locales/rw/admin/auth.json";
 import rwAdminErrors from "./locales/rw/admin/errors.json";
 import rwAdminShell from "./locales/rw/admin/shell.json";
+import rwAdminCharts from "./locales/rw/admin/charts.json";
+import rwAdminFilters from "./locales/rw/admin/filters.json";
+import rwAdminOverview from "./locales/rw/admin/overview.json";
+import rwAdminPrivacy from "./locales/rw/admin/privacy.json";
 import rwCitizen from "./locales/rw/citizen.json";
 import rwCitizenErrors from "./locales/rw/citizen/errors.json";
 import rwClinical from "./locales/rw/clinical.json";
@@ -80,7 +88,16 @@ export const enResources = {
     errors: enClinicalErrors,
   },
   worker: { ...enWorker, auth: enWorkerAuth, nav: enWorkerNav, settings: enWorkerSettings },
-  admin: { ...enAdmin, shell: enAdminShell, auth: enAdminAuth, errors: enAdminErrors },
+  admin: {
+    ...enAdmin,
+    shell: enAdminShell,
+    auth: enAdminAuth,
+    errors: enAdminErrors,
+    filters: enAdminFilters,
+    overview: enAdminOverview,
+    charts: enAdminCharts,
+    privacy: enAdminPrivacy,
+  },
   citizen: { ...enCitizen, errors: enCitizenErrors },
 } as const satisfies Record<Namespace, object>;
 
@@ -98,7 +115,16 @@ export const rwResources: Record<Namespace, object> = {
     errors: rwClinicalErrors,
   },
   worker: { ...rwWorker, auth: rwWorkerAuth, nav: rwWorkerNav, settings: rwWorkerSettings },
-  admin: { ...rwAdmin, shell: rwAdminShell, auth: rwAdminAuth, errors: rwAdminErrors },
+  admin: {
+    ...rwAdmin,
+    shell: rwAdminShell,
+    auth: rwAdminAuth,
+    errors: rwAdminErrors,
+    filters: rwAdminFilters,
+    overview: rwAdminOverview,
+    charts: rwAdminCharts,
+    privacy: rwAdminPrivacy,
+  },
   citizen: { ...rwCitizen, errors: rwCitizenErrors },
 };
 
