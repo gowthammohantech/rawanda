@@ -118,10 +118,11 @@ export const AUDIT_ACTIONS = {
 
   // ── Reminders & instructions ─────────────────────────────────────────────
   "reminder.preference_changed": change,
-  "reminder.scheduled": seedChange,
-  "reminder.delivered_simulated": seedChange,
-  "reminder.acknowledged": seedChange,
-  "reminder.cancelled": seedChange,
+  // CTZ-05: also written by the citizen repository (scheduling / simulated delivery / "Got it").
+  "reminder.scheduled": change,
+  "reminder.delivered_simulated": change,
+  "reminder.acknowledged": change,
+  "reminder.cancelled": change,
   "reminder_preference.set": seedChange,
   "instruction.released": change,
   "instruction.withdrawn": seedChange,
@@ -138,6 +139,8 @@ export const AUDIT_ACTIONS = {
   "citizen.next_step.viewed": access,
   "citizen.support.callback_requested": change,
   "citizen.settings.changed": change,
+  // CTZ-05: an on-device test notification (generic text only) was requested by the citizen.
+  "citizen.reminder.preview_sent": change,
   // CTZ-02: persona choice + simulated identity verification (demo code, never a real check).
   "citizen.persona.selected": access,
   "citizen.identity.verification_attempted": security,

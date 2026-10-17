@@ -9,6 +9,8 @@
  * back). "Review" runs the full validation: errors → summary banner with tap-to-focus links and
  * Review disabled until resolved; valid → `/screenings/draft/[draftId]/review` (HWM-06).
  * Header menu → "Discard draft" (ConfirmSheet, audit `screening.draft_discarded`).
+ * `revalidate` (HWM-06: the review screen found the draft stale / invalid) opens the form with the
+ * full validation already run, i.e. the error summary visible.
  */
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Patient, Screening } from "@laif/domain";
@@ -77,7 +79,14 @@ const FOCUSABLE: ReadonlySet<ScreeningFormField> = new Set([
   "notes",
 ]);
 
-export function ScreeningFormScreen({ draftId }: { draftId: string }) {
+export function ScreeningFormScreen({
+  draftId,
+  revalidate = false,
+}: {
+  draftId: string;
+  /** Opened from the review screen with a stale / invalid draft: show the error summary. */
+  revalidate?: boolean;
+}) {
   const t = useTx();
   const router = useRouter();
   const access = useDraftAccess(draftId);
@@ -138,11 +147,22 @@ export function ScreeningFormScreen({ draftId }: { draftId: string }) {
       draft={access.data.draft}
       patient={access.data.patient}
       now={now}
+      revalidate={revalidate}
     />
   );
 }
 
-function ScreeningForm({ draft, patient, now }: { draft: Screening; patient: Patient; now: Date }) {
+function ScreeningForm({
+  draft,
+  patient,
+  now,
+  revalidate,
+}: {
+  draft: Screening;
+  patient: Patient;
+  now: Date;
+  revalidate: boolean;
+}) {
   const t = useTx();
   const router = useRouter();
   const { toast } = useToast();
@@ -166,7 +186,7 @@ function ScreeningForm({ draft, patient, now }: { draft: Screening; patient: Pat
   });
   const flush = () => void autosave.flush();
 
-  const [submitAttempted, setSubmitAttempted] = useState(false);
+  const [submitAttempted, setSubmitAttempted] = useState(revalidate);
   const [menuOpen, setMenuOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [discarding, setDiscarding] = useState(false);

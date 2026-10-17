@@ -31,6 +31,13 @@ export const workerKeys = {
     ["drafts", "list", workerId, facilityId] as const,
   /** The draft opened in the form (loaded fresh on every mount, never refetched while open). */
   draft: (draftId: string) => ["drafts", "detail", draftId] as const,
+  /** HWM-06 submitted screenings (detail access) — refreshed after every write / sync pass. */
+  screenings: ["screenings"] as const,
+  screening: (screeningId: string) => ["screenings", "detail", screeningId] as const,
+  /** The draft under review (+ stored ruleset preview). */
+  screeningReview: (draftId: string) => ["screenings", "review", draftId] as const,
+  /** Sync ops of one screening (timeline, live "Saved on this device" → "Synced"). */
+  screeningOps: (screeningId: string) => ["sync", "screening", screeningId] as const,
 } as const;
 
 /** After a draft save / create / discard: the drafts list and Today (drafts count). */
@@ -49,6 +56,7 @@ export async function invalidateAfterWrite(queryClient: QueryClient): Promise<vo
   await Promise.all([
     queryClient.invalidateQueries({ queryKey: workerKeys.sync }),
     queryClient.invalidateQueries({ queryKey: workerKeys.home }),
+    queryClient.invalidateQueries({ queryKey: workerKeys.screenings }),
     // Search / recent / history only — the audited context read is not re-run by a write.
     queryClient.invalidateQueries({
       queryKey: workerKeys.patients,

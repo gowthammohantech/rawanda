@@ -14,6 +14,7 @@ import {
 } from "@laif/ui-native";
 import { useRouter } from "expo-router";
 
+import { ConsentRequiredState } from "../../components/ConsentRequiredState.tsx";
 import { WalletHeader } from "../../components/WalletHeader.tsx";
 import { RepresentativeBanner } from "./RepresentativeBanner.tsx";
 import { ResultDetail } from "./ResultDetail.tsx";
@@ -57,6 +58,9 @@ export function ResultDetailScreen({ observationId }: { observationId: string })
         action={backButton}
       />
     );
+  } else if (errorKind === "consent") {
+    // Consent withdrawn while open: explain instead of an endless skeleton.
+    body = <ConsentRequiredState />;
   } else if (errorKind === "other") {
     body = <ErrorState message={t("citizen:health.error")} onRetry={() => result.refetch()} />;
   } else if (result.data === undefined || !nextStep.settled) {

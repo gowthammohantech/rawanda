@@ -1,0 +1,104 @@
+{
+  "title": "Reminders",
+  "eyebrow": "Appointment reminders",
+  "subtitle": "Reminders for appointments your care team has approved.",
+  "loading": "Loading your reminders",
+  "error": "We could not load your reminders.",
+  "demoNote": "Reminders are simulated in this demo. No SMS or push message is sent.",
+  "toggle": {
+    "label": "Appointment reminders",
+    "onSummary": {
+      "dayBefore": "We'll remind you the day before.",
+      "morningOf": "We'll remind you on the morning of your appointment."
+    },
+    "offSummary": "Reminders are off",
+    "hint": "Turns appointment reminders on or off."
+  },
+  "optOut": {
+    "confirmTitle": "Stop reminders?",
+    "confirmBody": "You will not get reminders for your appointments. Your appointments stay the same.",
+    "confirm": "Stop reminders",
+    "cancel": "Keep reminders"
+  },
+  "toast": {
+    "off": "Reminders turned off",
+    "on": "Reminders turned on",
+    "timing": "Reminder time saved"
+  },
+  "timing": {
+    "legend": "When should we remind you?",
+    "dayBefore": "The day before",
+    "dayBeforeHint": "At 09:00 the day before your appointment (demo time).",
+    "morningOf": "The morning of",
+    "morningOfHint": "At 07:00 on the day of your appointment (demo time)."
+  },
+  "section": {
+    "scheduled": "Scheduled",
+    "history": "History"
+  },
+  "empty": {
+    "scheduled": "No upcoming reminders",
+    "scheduledBody": "When your care team approves an appointment, its reminder appears here.",
+    "offBody": "Turn reminders on to get a reminder before your appointments.",
+    "history": "No reminders yet"
+  },
+  "row": {
+    "title": "Appointment reminder",
+    "scheduledFor": "Will be sent {{date}}",
+    "deliveredAt": "Sent {{date}}",
+    "seenAt": "Seen {{date}}",
+    "cancelled": {
+      "opted_out": "Not sent — reminders were turned off",
+      "timing_changed": "Not sent — reminder time was changed",
+      "consent_withdrawn": "Not sent — sharing was stopped",
+      "instruction_cancelled": "Not sent — the appointment changed"
+    }
+  },
+  "chip": {
+    "scheduled": "SCHEDULED",
+    "delivered": "DELIVERED (DEMO)",
+    "seen": "SEEN",
+    "cancelled": "CANCELLED"
+  },
+  "gotIt": "Got it",
+  "gotItHint": "Marks this reminder as seen. Your appointment does not change.",
+  "gotItError": "We could not save this. Nothing was changed. Try again.",
+  "inbox": {
+    "banner": "You have a reminder from your care team",
+    "open": "Open reminders"
+  },
+  "safe": {
+    "title": "CareConnect reminder",
+    "bodyTomorrow": "You have an appointment tomorrow. Open the app for details.",
+    "bodyToday": "You have an appointment today. Open the app for details.",
+    "noteTitle": "What the reminder says",
+    "noteBody": "Reminders never show results, conditions or names, so they are safe to see on a shared phone."
+  },
+  "preview": {
+    "button": "Send a test reminder to this phone",
+    "hint": "A test notification with the text above appears in about 5 seconds.",
+    "sent": "Test reminder on its way",
+    "permissionDenied": "Notifications are turned off for this app. To get the test reminder, allow notifications for Expo Go in your phone settings. Everything else keeps working.",
+    "failed": "We could not send the test reminder. Nothing else changed."
+  },
+  "channel": {
+    "label": "Where reminders appear",
+    "inApp": "In this app (demo)"
+  },
+  "preferences": {
+    "title": "Reminder preferences",
+    "open": "Reminder preferences",
+    "openHint": "Choose when you are reminded.",
+    "offNote": "Reminders are off. Your choice is kept for when you turn them on again."
+  },
+  "validation": {
+    "timingRequired": "Choose when you want to be reminded."
+  },
+  "conflict": {
+    "title": "Your reminder settings changed",
+    "body": "They were changed somewhere else, so nothing was saved. This is what is saved now.",
+    "dismiss": "OK"
+  },
+  "saveError": "We could not save your reminder setting. Nothing was changed.",
+  "retry": "Try again"
+}

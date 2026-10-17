@@ -8,6 +8,7 @@
  */
 import {
   AcknowledgeInstructionInputSchema,
+  AcknowledgeReminderInputSchema,
   CallbackRequestInputSchema,
   CorrectionRequestInputSchema,
   RecordConsentInputSchema,
@@ -28,6 +29,10 @@ import {
 } from "@laif/contracts";
 import {
   asId,
+  planReminders,
+  processDueReminders,
+  REMINDABLE_INSTRUCTION_KINDS,
+  reminderKey,
   selectApprovedInstructions,
   selectReleasedObservations,
   type CareInstruction,
@@ -42,6 +47,8 @@ import {
   type PatientId,
   type Referral,
   type Reminder,
+  type ReminderCancelReason,
+  type ReminderId,
   type ReminderPreference,
   type Review,
   type Screening,
@@ -195,6 +202,138 @@ export function createCitizenRepository(input: CitizenRepositoryDeps): CitizenRe
       acks,
       now: ctx.now,
     });
+  }
+
+  // ── Reminders (CTZ-05) ────────────────────────────────────────────────────
+
+  /** System actor of simulated scheduling / delivery (audit `changeSummary.systemActor`). */
+  const SCHEDULER = "wallet-scheduler";
+  const systemActor = { actorId: null, actorRole: null };
+
+  async function remindersOf(ctx: TxContext, patientId: string): Promise<Reminder[]> {
+    return (await ctx.all<Reminder>("reminder"))
+      .filter((r) => r.patientId === patientId)
+      .sort((a, b) =>
+        a.scheduledAt < b.scheduledAt ? -1 : a.scheduledAt > b.scheduledAt ? 1 : byIdAsc(a, b),
+      );
+  }
+
+  async function prefsOf(ctx: TxContext, patientId: string): Promise<ReminderPreference | null> {
+    return (
+      (await ctx.all<ReminderPreference>("reminder_preference")).find(
+        (p) => p.patientId === patientId,
+      ) ?? null
+    );
+  }
+
+  /** `scheduled → cancelled(reason)` + one `reminder.cancelled` audit. */
+  async function cancelReminder(
+    ctx: TxContext,
+    patient: Patient,
+    reminder: Reminder,
+    reason: ReminderCancelReason,
+  ): Promise<Reminder> {
+    const next = ctx.touch(reminder, { status: "cancelled", cancelReason: reason });
+    await ctx.save("reminder", next);
+    await ctx.audit({
+      action: "reminder.cancelled",
+      entityType: "reminder",
+      entityId: reminder.id,
+      before: reminder,
+      after: next,
+      patientId: patient.id,
+      facilityId: patient.facilityId,
+      changeSummary: { reason, instructionId: reminder.instructionId },
+    });
+    return next;
+  }
+
+  /** Cancels every `scheduled` reminder of the patient (opt-out / consent withdrawal). */
+  async function cancelAllScheduled(
+    ctx: TxContext,
+    patient: Patient,
+    reason: ReminderCancelReason,
+  ): Promise<number> {
+    let cancelled = 0;
+    for (const reminder of await remindersOf(ctx, patient.id)) {
+      if (reminder.status !== "scheduled") continue;
+      await cancelReminder(ctx, patient, reminder, reason);
+      cancelled += 1;
+    }
+    return cancelled;
+  }
+
+  /**
+   * Brings the stored schedule in line with `planReminders` (opted in): scheduled rows that are
+   * not in the plan are cancelled (`timing_changed`, or `instruction_cancelled` when the step no
+   * longer gets reminders); missing plan rows are inserted (unique `(instructionId,
+   * scheduledAt)` among non-cancelled rows, so a repeat never duplicates).
+   */
+  async function replanReminders(
+    ctx: TxContext,
+    patient: Patient,
+    prefs: ReminderPreference,
+  ): Promise<{ cancelled: number; scheduled: number }> {
+    const plans = planReminders(await instructionsOf(ctx, patient.id), prefs, {
+      now: () => ctx.now,
+    });
+    const planned = new Set(plans.map((p) => p.key));
+    const plannedSteps = new Set(plans.map((p) => p.instructionId));
+    const rows = await remindersOf(ctx, patient.id);
+    let cancelled = 0;
+    for (const row of rows) {
+      if (
+        row.status !== "scheduled" ||
+        planned.has(reminderKey(row.instructionId, row.scheduledAt))
+      )
+        continue;
+      const reason = plannedSteps.has(row.instructionId)
+        ? "timing_changed"
+        : "instruction_cancelled";
+      await cancelReminder(ctx, patient, row, reason);
+      cancelled += 1;
+    }
+    const existing = new Set(
+      rows
+        .filter((r) => r.status !== "cancelled")
+        .map((r) => reminderKey(r.instructionId, r.scheduledAt)),
+    );
+    let scheduled = 0;
+    for (const plan of plans) {
+      if (existing.has(plan.key)) continue;
+      const reminder: Reminder = {
+        ...ctx.created(),
+        id: asId<ReminderId>(ctx.ids()),
+        patientId: patient.id,
+        followUpId: plan.followUpId as Reminder["followUpId"],
+        channel: prefs.channel,
+        consentBasis: "citizen_opt_in",
+        scheduledAt: plan.scheduledAt,
+        status: "scheduled",
+        instructionId: plan.instructionId as Reminder["instructionId"],
+        cancelReason: null,
+        deliveredAt: null,
+        acknowledgedAt: null,
+      };
+      await ctx.save("reminder", reminder);
+      await ctx.audit({
+        action: "reminder.scheduled",
+        entityType: "reminder",
+        entityId: reminder.id,
+        after: reminder,
+        patientId: patient.id,
+        facilityId: patient.facilityId,
+        actor: systemActor,
+        changeSummary: {
+          systemActor: SCHEDULER,
+          instructionId: plan.instructionId,
+          scheduledAt: plan.scheduledAt,
+          timing: plan.timing,
+        },
+      });
+      scheduled += 1;
+    }
+    return { cancelled, scheduled };
   }
 
   async function linkedPatients(
@@ -539,17 +678,12 @@ export function createCitizenRepository(input: CitizenRepositoryDeps): CitizenRe
           await ctx.tx.put("consentRecords", record);
           const nextPatient = ctx.touch(patient, { consentState: input.action });
           await ctx.save("patient", nextPatient);
-          let cancelled = 0;
-          if (input.action === "withdrawn") {
-            for (const reminder of await ctx.all<Reminder>("reminder")) {
-              if (reminder.patientId !== patient.id || reminder.status !== "scheduled") continue;
-              await ctx.save(
-                "reminder",
-                ctx.touch(reminder, { status: "cancelled", cancelReason: "consent_withdrawn" }),
-              );
-              cancelled += 1;
-            }
-          }
+          // Withdrawal cancels scheduled reminders; the preference is kept (re-consent restores
+          // the choice, re-planning happens on the next opt-in confirmation — CTZ-05 task 9).
+          const cancelled =
+            input.action === "withdrawn"
+              ? await cancelAllScheduled(ctx, nextPatient, "consent_withdrawn")
+              : 0;
           const event = await ctx.audit({
             action:
               input.action === "granted" ? "citizen.consent.granted" : "citizen.consent.withdrawn",
@@ -745,11 +879,7 @@ export function createCitizenRepository(input: CitizenRepositoryDeps): CitizenRe
     getNotificationPrefs(patientId) {
       return engine.read(async (ctx) => {
         await assertPatientAccess(ctx, patientId);
-        return (
-          (await ctx.all<ReminderPreference>("reminder_preference")).find(
-            (p) => p.patientId === patientId,
-          ) ?? null
-        );
+        return prefsOf(ctx, patientId);
       });
     },
 
@@ -763,12 +893,20 @@ export function createCitizenRepository(input: CitizenRepositoryDeps): CitizenRe
         schema: UpdateNotificationPrefsInputSchema,
         run: async (ctx, input) => {
           const { patient } = await assertPatientAccess(ctx, input.patientId);
-          const existing = (await ctx.all<ReminderPreference>("reminder_preference")).find(
-            (p) => p.patientId === patient.id,
-          );
+          const existing = await prefsOf(ctx, patient.id);
           if (!existing) {
             throw new RepositoryError("NOT_FOUND", {
               details: { entityType: "reminder_preference", patientId: patient.id },
+            });
+          }
+          // T-05: the demo-tools `conflict-next-write` toggle targets the patient; it becomes a
+          // one-off conflict on this preference (consumed here, nothing written).
+          if (faults.consumeConflictOnce("patient", patient.id)) {
+            faults.set({
+              conflictOnce: [
+                ...faults.get().conflictOnce,
+                { entityType: "reminder_preference", entityId: existing.id },
+              ],
             });
           }
           await ctx.assertVersion("reminder_preference", existing, input.expectedVersion, {
@@ -777,18 +915,24 @@ export function createCitizenRepository(input: CitizenRepositoryDeps): CitizenRe
           });
           const next = ctx.touch(existing, { optedIn: input.optedIn, timing: input.timing });
           await ctx.save("reminder_preference", next);
-          let cancelled = 0;
-          if (!input.optedIn) {
-            for (const reminder of await ctx.all<Reminder>("reminder")) {
-              if (reminder.patientId !== patient.id || reminder.status !== "scheduled") continue;
-              await ctx.save(
-                "reminder",
-                ctx.touch(reminder, { status: "cancelled", cancelReason: "opted_out" }),
-              );
-              cancelled += 1;
-            }
-          }
           ctx.useCorrelation(await ctx.correlationOf(existing.id));
+          const change = !next.optedIn
+            ? existing.optedIn
+              ? "opted_out"
+              : "unchanged"
+            : !existing.optedIn
+              ? "opted_in"
+              : existing.timing !== next.timing
+                ? "timing_changed"
+                : "unchanged";
+          // Opted out ⇒ zero scheduled rows; opted in ⇒ the schedule follows the plan.
+          let cancelled = 0;
+          let scheduled = 0;
+          if (!next.optedIn) {
+            cancelled = await cancelAllScheduled(ctx, patient, "opted_out");
+          } else if (change !== "unchanged") {
+            ({ cancelled, scheduled } = await replanReminders(ctx, patient, next));
+          }
           const event = await ctx.audit({
             action: "reminder.preference_changed",
             entityType: "reminder_preference",
@@ -798,9 +942,12 @@ export function createCitizenRepository(input: CitizenRepositoryDeps): CitizenRe
             patientId: patient.id,
             facilityId: patient.facilityId,
             changeSummary: {
+              // `citizen.reminder.opted_in|opted_out|preference_changed` (CTZ-05) map here.
+              change,
               optedIn: next.optedIn,
               timing: next.timing,
               remindersCancelled: cancelled,
+              remindersScheduled: scheduled,
             },
           });
           return { data: next, entityType: "reminder_preference", auditEventId: event.id };
@@ -811,11 +958,140 @@ export function createCitizenRepository(input: CitizenRepositoryDeps): CitizenRe
     listReminders(patientId) {
       return engine.read(async (ctx) => {
         await assertPatientAccess(ctx, patientId);
-        return (await ctx.all<Reminder>("reminder"))
-          .filter((r) => r.patientId === patientId)
-          .sort((a, b) =>
-            a.scheduledAt < b.scheduledAt ? -1 : a.scheduledAt > b.scheduledAt ? 1 : byIdAsc(a, b),
-          );
+        return remindersOf(ctx, patientId);
+      });
+    },
+
+    processDueReminders(patientId) {
+      return engine.write(async (ctx) => {
+        const { patient } = await assertPatientAccess(ctx, patientId);
+        const prefs = await prefsOf(ctx, patient.id);
+        const now = { now: () => ctx.now };
+        const remindable = new Set(
+          (await instructionsOf(ctx, patient.id))
+            .filter(
+              (c) => c.progress === "planned" && REMINDABLE_INSTRUCTION_KINDS.includes(c.kind),
+            )
+            .map((c) => c.id as string),
+        );
+        const rows = await remindersOf(ctx, patient.id);
+        const cancelled: Reminder[] = [];
+        const delivered: Reminder[] = [];
+        // A step that no longer gets reminders (withdrawn / completed / not approved) and an
+        // opted-out person never receive a delivery.
+        for (const row of rows) {
+          if (row.status !== "scheduled") continue;
+          if (!prefs?.optedIn) {
+            cancelled.push(await cancelReminder(ctx, patient, row, "opted_out"));
+          } else if (!remindable.has(row.instructionId)) {
+            cancelled.push(await cancelReminder(ctx, patient, row, "instruction_cancelled"));
+          }
+        }
+        const gone = new Set(cancelled.map((r) => r.id));
+        for (const { reminder, next } of processDueReminders(
+          rows.filter((r) => !gone.has(r.id)),
+          now,
+        )) {
+          const updated = ctx.touch(reminder, next);
+          await ctx.save("reminder", updated);
+          await ctx.audit({
+            action: "reminder.delivered_simulated",
+            entityType: "reminder",
+            entityId: reminder.id,
+            before: reminder,
+            after: updated,
+            patientId: patient.id,
+            facilityId: patient.facilityId,
+            actor: systemActor,
+            changeSummary: {
+              systemActor: SCHEDULER,
+              instructionId: reminder.instructionId,
+              channel: reminder.channel,
+              simulated: true,
+            },
+          });
+          delivered.push(updated);
+        }
+        return { delivered, cancelled };
+      });
+    },
+
+    acknowledgeReminder(i, key) {
+      return engine.mutate({
+        op: "citizen.acknowledgeReminder",
+        key,
+        input: i,
+        entityType: "reminder",
+        permission: "self.reminders.manage",
+        schema: AcknowledgeReminderInputSchema,
+        run: async (ctx, input) => {
+          const { patient } = await assertPatientAccess(ctx, input.patientId);
+          const reminder = await ctx.find<Reminder>("reminder", input.reminderId);
+          if (!reminder || reminder.patientId !== patient.id) {
+            return ctx.deny(
+              "SCOPE",
+              { entityType: "reminder", entityId: input.reminderId },
+              {
+                patientId: reminder?.patientId ?? patient.id,
+                facilityId: patient.facilityId,
+              },
+              { viaPatientId: patient.id },
+            );
+          }
+          if (reminder.status === "acknowledged") {
+            // Already seen (other key / device): the stored row is returned unchanged.
+            const event = await ctx.audit({
+              action: "sync.duplicate_suppressed",
+              entityType: "reminder",
+              entityId: reminder.id,
+              patientId: patient.id,
+              facilityId: patient.facilityId,
+              changeSummary: { op: "citizen.acknowledgeReminder" },
+            });
+            return { data: reminder, entityType: "reminder", auditEventId: event.id };
+          }
+          if (reminder.status !== "delivered_simulated") {
+            throw new RepositoryError("VALIDATION_ERROR", {
+              reason: "INVALID_TRANSITION",
+              details: { from: reminder.status, to: "acknowledged" },
+            });
+          }
+          // Seen ≠ attended: the related next step / follow-up is never touched.
+          const next = ctx.touch(reminder, {
+            status: "acknowledged",
+            acknowledgedAt: ctx.nowIso,
+          });
+          await ctx.save("reminder", next);
+          const event = await ctx.audit({
+            action: "reminder.acknowledged",
+            entityType: "reminder",
+            entityId: reminder.id,
+            before: reminder,
+            after: next,
+            patientId: patient.id,
+            facilityId: patient.facilityId,
+            changeSummary: {
+              instructionId: reminder.instructionId,
+              idempotencyKey: input.idempotencyKey,
+            },
+          });
+          return { data: next, entityType: "reminder", auditEventId: event.id };
+        },
+      });
+    },
+
+    recordReminderPreviewSent(patientId) {
+      return engine.write(async (ctx) => {
+        const { patient } = await assertPatientAccess(ctx, patientId);
+        const prefs = await prefsOf(ctx, patient.id);
+        await ctx.audit({
+          action: "citizen.reminder.preview_sent",
+          entityType: prefs ? "reminder_preference" : "patient",
+          entityId: prefs?.id ?? patient.id,
+          patientId: patient.id,
+          facilityId: patient.facilityId,
+          changeSummary: { channel: "device_local_preview", timing: prefs?.timing ?? null },
+        });
       });
     },
 

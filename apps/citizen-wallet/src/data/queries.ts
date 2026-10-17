@@ -10,6 +10,7 @@
 import { RepositoryError } from "@laif/repositories";
 import type {
   AcknowledgeInstructionCall,
+  AcknowledgeReminderCall,
   CallbackRequestCall,
   CitizenCorrectionCall,
   RecordConsentCall,
@@ -183,6 +184,12 @@ export function useUpdateNotificationPrefs() {
   return useCitizenMutation((i: UpdateNotificationPrefsCall, k) =>
     repo.updateNotificationPrefs(i, k),
   );
+}
+
+/** CTZ-05 "Got it" on a delivered reminder (one key per reminder action, kept across retries). */
+export function useAcknowledgeReminder() {
+  const repo = useCitizenRepo();
+  return useCitizenMutation((i: AcknowledgeReminderCall, k) => repo.acknowledgeReminder(i, k));
 }
 
 export function useCreateCorrectionRequest() {

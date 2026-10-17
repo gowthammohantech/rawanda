@@ -1,0 +1,119 @@
+{
+  "title": "Genzura mbere yo kubika",
+  "loading": "Incamake irimo gufungurwa",
+  "openFailed": "Incamake ntiyashoboye gufungurwa",
+  "readOnly": "Incamake yo gusoma gusa. Kanda Hindura kugira ngo uhindure agaciro.",
+  "label": {
+    "bloodPressure": "UMUVUDUKO W'AMARASO",
+    "glucose": "ISUKARI MU MARASO",
+    "context": "IGIHE CY'IPIMWA",
+    "measuredAt": "IGIHE YAPIMIWE",
+    "observations": "IBYO WABONYE",
+    "source": "INKOMOKO"
+  },
+  "notMeasured": "Ntibyapimwe",
+  "none": "Nta na kimwe",
+  "measuredAtValue": "{{time}} (isaha ya Kigali)",
+  "edit": "Hindura",
+  "editHint": "Gusubira ku ifishi y'isuzuma",
+  "submit": "Bika isuzuma",
+  "submitHint": "Bibikwa kuri iki gikoresho mbere, hanyuma byoherezwe igihe hazaboneka umurongo",
+  "submitFailed": "Isuzuma ntiryashoboye kubikwa kuri iki gikoresho. Ibyo wanditse biracyari mu nyandiko y'agateganyo — ongera ugerageze.",
+  "invalid": {
+    "title": "Hari ibyo wanditse bikeneye gukosorwa",
+    "body": "Iyi nyandiko y'agateganyo ntikigera ku isuzuma ry'ibyanditswe. Subira ku ifishi ubikosore mbere yo kubika.",
+    "back": "Subira ku ifishi"
+  },
+  "mayNeedReview": "Bishobora gusuzumwa na muganga (itegeko ry'igerageza)",
+  "disclaimer": "Itegeko ry'urugero gusa — ntiryemejwe n'abaganga. Muganga ni we ufata icyemezo.",
+  "savedOnDevice": "Byabitswe kuri iki gikoresho",
+  "willSync": "Bizahuzwa igihe hazaboneka umurongo",
+  "flag": {
+    "title": "Igenzura ry'itegeko ry'igerageza",
+    "notTriggered": "Nta tegeko ry'igerageza ryujujwe. Muganga ashobora no kubisuzuma.",
+    "needsPerson": "Bikeneye gusuzumwa n'umuntu: itegeko ry'igerageza ntiryashoboye kugenzura ibi bipimo.",
+    "why": "IMPAMVU",
+    "forInformation": "ICYITONDERWA",
+    "inputs": "IBIPIMO BYAKORESHEJWE",
+    "compared": "BYAGERERANYIJWE N'ITEGEKO RY'IGERAGEZA",
+    "comparedValue": "{{value}} — urugero rw'igerageza {{threshold}}",
+    "ruleset": "Amategeko {{version}}",
+    "preview": "Ibibanziriza kuri iki gikoresho. Seriveri izabyemeza nyuma yo guhuza.",
+    "confirmed": "Byemejwe na seriveri y'igerageza"
+  },
+  "success": {
+    "title": {
+      "pending": "Byabitswe kuri iki gikoresho",
+      "syncing": "Byabitswe kuri iki gikoresho — biroherezwa",
+      "synced": "Byahujwe"
+    },
+    "syncedAt": "Byakiriwe na seriveri y'igerageza saa {{time}}",
+    "sending": "Byoherezwa kuri seriveri y'igerageza…",
+    "backToToday": "Subira ku by'uyu munsi",
+    "view": "Reba isuzuma"
+  },
+  "detail": {
+    "title": "Isuzuma",
+    "loading": "Isuzuma ririmo gufungurwa",
+    "openFailed": "Isuzuma ntiryashoboye gufungurwa",
+    "notFound": "Iri suzuma ntiri kuri iki gikoresho",
+    "immutable": "Isuzuma ryoherejwe ntirihindurwa. Ikosora ryongerwaho n'impamvu, iby'umwimerere bikagumaho.",
+    "correct": "Kosora agaciro",
+    "amended": "Ryakosowe",
+    "amendedNote": "Agaciro kagaragara karimo ibyakosowe.",
+    "submitted": "Ryoherejwe",
+    "awaitingServer": "Dutegereje ko seriveri yemeza uko isuzuma rihagaze",
+    "sentToQueue": "Ryoherejwe ku rutonde rwa muganga (igerageza)",
+    "noReviewRequested": "Ryanditswe. Itegeko ry'igerageza ntiryasabye ko muganga arisuzuma.",
+    "needsDecision": "Bikeneye icyemezo",
+    "needsDecisionBody": "Seriveri ifite verisiyo nshya y'iri suzuma. Hitamo icyo ugumana mu gice cyo guhuza.",
+    "openSync": "Fungura igice cyo guhuza",
+    "notAccepted": "Ntibyemewe",
+    "notAcceptedBody": "Seriveri y'igerageza ntiyemeye iri suzuma ({{code}}). Riguma kuri iki gikoresho.",
+    "willRetry": "Bizongera bigeragezwe"
+  },
+  "timeline": {
+    "title": "GUHUZA",
+    "label": "Amateka yo guhuza y'iri suzuma",
+    "savedOnDevice": "Byabitswe kuri iki gikoresho",
+    "sent_one": "Byoherejwe · igerageza {{count}}",
+    "sent_other": "Byoherejwe · amagerageza {{count}}",
+    "waiting": "Bitegereje koherezwa",
+    "synced": "Byahujwe",
+    "needsDecision": "Bikeneye icyemezo cyawe",
+    "willRetry": "Ntibyoherejwe — bizongera bigeragezwe",
+    "notAccepted": "Ntibyemewe",
+    "blocked": "Bibitswe ku gikoresho — uburenganzira bw'igikoresho bwahagaritswe",
+    "fromServer": "Byakiriwe biturutse kuri seriveri",
+    "amendment": "Ikosora: {{field}}"
+  },
+  "amendments": {
+    "title": "IBYAKOSOWE",
+    "none": "Nta byakosowe",
+    "change": "{{before}} → {{after}}",
+    "reason": "Impamvu: {{reason}}",
+    "by": "{{name}} · {{time}}",
+    "empty": "—",
+    "label": "{{field}} yahinduwe kuva kuri {{before}} ijya kuri {{after}}. Impamvu: {{reason}}. Na {{name}}, {{time}}."
+  },
+  "amend": {
+    "title": "Kosora agaciro",
+    "field": "Agaciro ukosora",
+    "current": "Agaciro kariho: {{value}}",
+    "newValue": "Agaciro gashya",
+    "reason": "Impamvu y'ikosora",
+    "reasonRequired": "Tanga impamvu y'ikosora",
+    "presets": "Impamvu zikunze kubaho",
+    "preset": {
+      "typing": "Ikosa ryo kwandika",
+      "unit": "Hahiswemo igipimo kitari cyo",
+      "time": "Igihe cyanditswe nabi"
+    },
+    "keepsOriginal": "Agaciro k'umwimerere karagumaho. Ikosora ryongerwaho n'izina ryawe, igihe n'impamvu.",
+    "save": "Bika ikosora",
+    "saved": "Ikosora ryabitswe kuri iki gikoresho",
+    "failed": "Ikosora ntiryashoboye kubikwa",
+    "conflict": "Iri suzuma ryahindutse kuri seriveri. Fungura igice cyo guhuza ufate icyemezo.",
+    "chooseField": "Hitamo agaciro ukosora"
+  }
+}

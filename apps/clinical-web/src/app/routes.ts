@@ -21,6 +21,9 @@ export const ROUTE_PATTERNS = {
 /** Every screen of the app except the demo sign-in. */
 export type ClinicalRouteId = Exclude<keyof typeof ROUTE_PATTERNS, "login">;
 
+export const PATIENT_TABS = ["overview", "screenings", "reviews", "referralsTasks"] as const;
+export type PatientTab = (typeof PATIENT_TABS)[number];
+
 export type PatientsRouteParams = { q?: string; facility?: string; page?: number };
 
 const LOGIN = ROUTE_PATTERNS.login;
@@ -42,7 +45,9 @@ export const routes = {
     const query = search.toString();
     return query === "" ? ROUTE_PATTERNS.patients : `${ROUTE_PATTERNS.patients}?${query}`;
   },
-  patient: (id: string) => `${BASE_PATH}/patients/${enc(id)}`,
+  /** `/clinical/patients/:id`, optionally `?tab=` (CLN-06 links straight to the screenings tab). */
+  patient: (id: string, tab?: PatientTab) =>
+    `${BASE_PATH}/patients/${enc(id)}${tab === undefined ? "" : `?tab=${tab}`}`,
   review: (id: string) => `${BASE_PATH}/reviews/${enc(id)}`,
   decision: (id: string) => `${BASE_PATH}/reviews/${enc(id)}/decision`,
   referrals: () => ROUTE_PATTERNS.referrals,

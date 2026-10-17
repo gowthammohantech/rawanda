@@ -1,0 +1,186 @@
+{
+  "title": "Ibisobanuro by'isuzuma",
+  "loading": "Isuzuma riri gufunguka…",
+  "patientLine": "{{name}} · {{syntheticId}}",
+  "notFound": {
+    "title": "Nta suzuma rifite iyi nomero mu bigo byawe",
+    "description": "Reba ihuza, cyangwa ufungure isuzuma uhereye ku rutonde rw'isuzuma.",
+    "back": "Subira ku rutonde rw'isuzuma"
+  },
+  "denied": {
+    "body": "Iri suzuma ni iry'ikigo kiri hanze y'uburenganzira bwawe bw'ubu. Iki gikorwa cyanditswe mu bubiko bw'ibikorwa."
+  },
+  "flag": {
+    "label": "Byagaragajwe ngo bisuzumwe",
+    "heading": "Impamvu iri suzuma ryagaragajwe",
+    "summary": {
+      "DEMO_BP_SYSTOLIC_AT_OR_ABOVE_THRESHOLD": "Umuvuduko wo hejuru ugeze cyangwa urenze urugero rw'igerageza rwashyizwe mu mategeko {{version}}.",
+      "DEMO_BP_DIASTOLIC_AT_OR_ABOVE_THRESHOLD": "Umuvuduko wo hasi ugeze cyangwa urenze urugero rw'igerageza rwashyizwe mu mategeko {{version}}.",
+      "DEMO_GLUCOSE_AT_OR_ABOVE_THRESHOLD": "Isukari mu maraso igeze cyangwa irenze urugero rw'igerageza rujyanye n'igihe yapimiwe, rwashyizwe mu mategeko {{version}}.",
+      "GLUCOSE_UNIT_MISSING": "Igipimo cy'isukari cyanditswe nta gipimo-shingiro, bityo amategeko {{version}} ntiyagisuzumye — umuntu agomba kukireba.",
+      "GLUCOSE_CONTEXT_NOT_RECORDED": "Ntibyanditswe niba yariye; amategeko {{version}} yakoresheje agaciro k'agateganyo k'igihe kitazwi.",
+      "notEvaluable": "Amakuru akenewe ntiyuzuye, bityo amategeko {{version}} ntiyasuzumye iri pimwa — ryoherejwe ku muntu.",
+      "manual": "Ryoherejwe n'umuntu ngo risuzumwe."
+    },
+    "rulesetChip": "Amategeko y'igerageza {{version}} · ntiyemejwe mu buvuzi",
+    "rulesetChipHint": "Erekana amategeko y'iri gerageza",
+    "disclaimer": "Kugaragaza ni ubutumwa bwo gusaba umuganga gusuzuma — si isuzumabumenyi ry'indwara.",
+    "snapshotAt": "Ibimenyetso byafashwe igihe byagaragazwaga · {{time}}",
+    "rulesetModal": {
+      "title": "Amategeko y'igerageza {{version}}",
+      "description": "Amategeko y'urugero agaragaza ipimwa muri iri gerageza. Agaciro kayo ni ak'agateganyo — ntikemejwe mu buvuzi kandi nta rwego rw'ubuvuzi rwakemeje.",
+      "status": "Imimerere",
+      "statusActive": "Arakora (igerageza)",
+      "statusRetired": "Ntagikoreshwa (igerageza)",
+      "validation": "Kwemezwa",
+      "approvedBy": "Yemejwe na",
+      "notApproved": "Ntiyemejwe — ni igerageza gusa",
+      "effectiveFrom": "Atangira gukurikizwa",
+      "requiredInputs": "Amakuru akenewe",
+      "rules": "Amategeko",
+      "placeholder": "Agaciro k'agateganyo k'igerageza: {{value}}",
+      "unknown": "Iyi verisiyo y'amategeko ntiboneka muri iri gerageza, bityo amategeko yayo ntashobora kugaragazwa.",
+      "close": "Funga"
+    }
+  },
+  "rules": {
+    "BP-1": "Umuvuduko wo hejuru ugereranywa n'urugero rw'igerageza rw'umuvuduko wo hejuru.",
+    "BP-2": "Umuvuduko wo hasi ugereranywa n'urugero rw'igerageza rw'umuvuduko wo hasi.",
+    "GLU-1": "Isukari mu maraso (ihinduwe muri mmol/L) igereranywa n'urugero rw'igerageza rujyanye n'igihe yapimiwe.",
+    "GLU-2": "Igipimo cy'isukari gikenera igipimo-shingiro; kitagifite ntigisuzumwa kandi cyoherezwa ku muntu.",
+    "GLU-3": "Bikwiye kwandikwa niba yariye; bitanditswe, hakoreshwa agaciro k'agateganyo k'igihe kitazwi."
+  },
+  "evidence": {
+    "title": "Ibimenyetso",
+    "subtitle": "Amakuru uko yafashwe igihe byagaragazwaga, agereranyijwe n'amategeko y'igerageza {{version}}.",
+    "caption": "Amakuru y'ibimenyetso n'imimerere yayo ku mategeko y'igerageza",
+    "columns": {
+      "input": "Amakuru",
+      "value": "Agaciro kanditswe",
+      "rule": "Itegeko ry'igerageza",
+      "status": "Imimerere"
+    },
+    "inputs": {
+      "systolic": "Umuvuduko w'amaraso wo hejuru",
+      "diastolic": "Umuvuduko w'amaraso wo hasi",
+      "glucoseValue": "Isukari mu maraso",
+      "glucoseUnit": "Igipimo-shingiro cy'isukari",
+      "glucoseContext": "Niba yariye",
+      "repeatReading": "Ipimwa risubiwemo"
+    },
+    "status": {
+      "TRIGGERED": "Ryakozweho",
+      "WITHIN_DEMO_RANGE": "Mu rugero rw'igerageza",
+      "MISSING": "Ntibihari",
+      "NOT_EVALUATED": "Ntibyasuzumwe"
+    },
+    "ruleText": "Urugero rw'igerageza: rwashyizwe muri {{version}}",
+    "noRule": "Nta tegeko ry'igerageza risuzuma aya makuru",
+    "comparedTo": "Bigereranyijwe na {{value}}",
+    "demoPlaceholderValue": "Agaciro k'agateganyo k'igerageza",
+    "notRecorded": "Ntibyanditswe",
+    "amendedAfterFlag": "Ibimenyetso byakosowe nyuma yo kugaragazwa — reba amateka y'ikosora",
+    "amendedAfterFlagBody": "Ipimwa ryakosowe nyuma y'uko rigaragajwe. Ibimenyetso biri hejuru ni ibyafashwe igihe ryagaragazwaga kandi ntibihinduka.",
+    "openHistory": "Fungura amateka y'ikosora",
+    "empty": "Nta bimenyetso byafashwe — ntibishobora gusuzumwa; vugana n'abashinzwe ubwiza bw'amakuru"
+  },
+  "completeness": {
+    "title": "Kuzura kw'amakuru",
+    "label": "Amakuru {{present}} kuri {{total}} akenewe arahari",
+    "missing": "Ibibura: {{inputs}}",
+    "complete": "Amakuru yose akenewe arahari."
+  },
+  "howToRead": {
+    "title": "Uko wabisoma",
+    "body": "Kugaragaza ni ubutumwa busaba umuganga kureba iri pimwa. Si isuzumabumenyi ry'indwara kandi ntigutegeka umuti. Amategeko y'igerageza akoresha agaciro k'agateganyo katemejwe mu buvuzi — koresha ubushishozi bwawe bw'ubuvuzi n'amakuru yose."
+  },
+  "prior": {
+    "title": "Amateka y'ipimwa",
+    "subtitle": "Ipimwa 5 riheruka ry'uyu murwayi",
+    "caption": "Ipimwa 5 riheruka, irya vuba mbere",
+    "columns": {
+      "measuredAt": "Igihe ryapimiwe (isaha ya Kigali)",
+      "bp": "Umuvuduko w'amaraso",
+      "glucose": "Isukari mu maraso",
+      "trend": "Uko umuvuduko wo hejuru uhinduka",
+      "flag": "Kugaragazwa"
+    },
+    "trend": {
+      "up": "↑ Hejuru y'iryabanje",
+      "down": "↓ Hasi y'iryabanje",
+      "same": "→ Kimwe n'iryabanje",
+      "none": "— Nta ipimwa ryabanje"
+    },
+    "thisScreening": "Iri pimwa",
+    "repeat": "Ririmo ipimwa risubiwemo",
+    "flagged": "Ryagaragajwe",
+    "notFlagged": "Ntiryagaragajwe",
+    "empty": "Nta ipimwa ryanditswe kuri uyu murwayi."
+  },
+  "provenance": {
+    "title": "Inkomoko y'amakuru",
+    "recordedBy": "Byanditswe na",
+    "device": "Igikoresho",
+    "deviceUnknown": "Ntibyanditswe muri iri gerageza",
+    "source": "Inkomoko",
+    "facility": "Ikigo",
+    "measuredAt": "Igihe ryapimiwe (isaha ya Kigali)",
+    "syncedAt": "Igihe ryakiriwe (isaha ya Kigali)",
+    "version": "Verisiyo y'ipimwa",
+    "amendments": "Ikosora",
+    "noAmendments": "Nta na rimwe",
+    "amendmentCount_one": "Ikosora {{count}}",
+    "amendmentCount_other": "Ikosora {{count}}",
+    "unavailable": "Inyandiko y'ipimwa ntiboneka."
+  },
+  "responsibility": {
+    "title": "Ushinzwe isuzuma",
+    "assigned": "Umuganga washinzwe",
+    "unassigned": "Nta washinzwe",
+    "status": "Imimerere y'isuzuma",
+    "startedBy": "Ryatangijwe na",
+    "notStarted": "Ntiriratangira",
+    "lastUpdated": "Ryavuguruwe bwa nyuma (isaha ya Kigali)",
+    "decidedBy": "Ryafatiwe icyemezo na",
+    "decidedAt": "Igihe icyemezo cyafatiwe (isaha ya Kigali)",
+    "notDecided": "Nta cyemezo kirafatwa",
+    "you": "{{name}} (wowe)",
+    "reassignNote": "Guhindura ushinzwe isuzuma ntibishoboka muri iri gerageza."
+  },
+  "outcome": {
+    "title": "Umusaruro",
+    "body": "Iri suzuma ryarafunzwe kandi rirasomwa gusa.",
+    "decision": "Icyemezo",
+    "reason": "Impamvu",
+    "note": "Icyitonderwa",
+    "auditTrail": "Reba amateka y'ibikorwa"
+  },
+  "actions": {
+    "openPatient": "Fungura umurwayi",
+    "start": "Tangira isuzuma",
+    "recordDecision": "Andika icyemezo",
+    "takeOver": "Fata isuzuma",
+    "takeOverTitle": "Urashaka gufata iri suzuma?",
+    "takeOverDescription": "{{name}} ari gusuzuma iki kibazo. Gufata isuzuma byandikwa mu mateka y'ibikorwa hamwe n'impamvu yawe.",
+    "takeOverReason": "Impamvu yo gufata isuzuma",
+    "takeOverConfirm": "Fata",
+    "inReviewBy": "Riri gusuzumwa na {{name}}",
+    "readOnlyCoordinator": "Ibyemezo bifatwa n'umuganga cyangwa umusuzumyi wabiherewe uburenganzira",
+    "offline": "Interineti yigana yavuyeho — isuzuma ntirishobora gutangira ubu",
+    "started": "Isuzuma ryatangiye",
+    "startedBody": "Ubu ni wowe usuzuma iki kibazo.",
+    "takenOver": "Isuzuma ryafashwe",
+    "startFailed": "Isuzuma ntiryashoboye gutangira",
+    "retry": "Ongera ugerageze"
+  },
+  "conflict": {
+    "title": "Undi muganga yahinduye iri suzuma",
+    "description": "Nta cyasibwe. Fungura verisiyo iheruka mbere yo gukomeza.",
+    "cancel": "Hagarika",
+    "fields": {
+      "status": "Imimerere",
+      "assigned": "Umuganga washinzwe",
+      "version": "Verisiyo"
+    }
+  }
+}

@@ -35,9 +35,11 @@ const PILL_TONE: Record<QueuePill["kind"], Tone> = {
 export function QueuePillChip({
   pill,
   personaId,
+  testId = "queue-pill",
 }: {
   pill: QueuePill;
   personaId: PersonaId | null;
+  testId?: string;
 }) {
   const t = useTx();
   let text: string;
@@ -65,7 +67,7 @@ export function QueuePillChip({
   }
   return (
     <StatusChip tone={PILL_TONE[pill.kind]} {...(pill.kind === "overdue" ? { icon: "clock" } : {})}>
-      <span data-testid="queue-pill" data-kind={pill.kind}>
+      <span data-testid={testId} data-kind={pill.kind}>
         {text}
       </span>
     </StatusChip>
@@ -129,6 +131,14 @@ export function QueueRow({ item, nowIso, personaId, expanded, onExpandedChange }
         trailing={
           <>
             <QueuePillChip pill={pill} personaId={personaId} />
+            {/* CLN-06: an urgent / overdue review that is already being reviewed says so too. */}
+            {review.status === "in_review" && pill.kind !== "inReview" ? (
+              <QueuePillChip
+                pill={{ kind: "inReview", by: review.startedBy }}
+                personaId={personaId}
+                testId="queue-pill-in-review"
+              />
+            ) : null}
             <span className="text-muted text-xs whitespace-nowrap">
               {t("clinical:queue.row.flagged", { time: flagged })}
             </span>

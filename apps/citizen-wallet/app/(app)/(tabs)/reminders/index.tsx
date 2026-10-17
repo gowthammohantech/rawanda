@@ -1,11 +1,5 @@
-import { PlaceholderTabScreen } from "../../../../src/screens/wallet/PlaceholderTabScreen.tsx";
+import { RemindersScreen } from "../../../../src/features/reminders/RemindersScreen.tsx";
 
 export default function Route() {
-  return (
-    <PlaceholderTabScreen
-      titleKey="citizen:nav.reminders"
-      phase="CTZ-05"
-      testID="reminders-screen"
-    />
-  );
+  return <RemindersScreen />;
 }

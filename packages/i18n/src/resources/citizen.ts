@@ -12,6 +12,7 @@ import enCitizenMore from "../locales/en/citizen/more.json";
 import enCitizenHealth from "../locales/en/citizen/health.json";
 import enCitizenNextSteps from "../locales/en/citizen/nextSteps.json";
 import enCitizenNextStep from "../locales/en/citizen/nextStep.json";
+import enCitizenReminders from "../locales/en/citizen/reminders.json";
 import rwCitizenBase from "../locales/rw/citizen.json";
 import rwCitizenErrors from "../locales/rw/citizen/errors.json";
 import rwCitizenOnboarding from "../locales/rw/citizen/onboarding.json";
@@ -22,6 +23,7 @@ import rwCitizenMore from "../locales/rw/citizen/more.json";
 import rwCitizenHealth from "../locales/rw/citizen/health.json";
 import rwCitizenNextSteps from "../locales/rw/citizen/nextSteps.json";
 import rwCitizenNextStep from "../locales/rw/citizen/nextStep.json";
+import rwCitizenReminders from "../locales/rw/citizen/reminders.json";
 
 export const enCitizen = {
   ...enCitizenBase,
@@ -34,6 +36,7 @@ export const enCitizen = {
   health: enCitizenHealth,
   nextSteps: enCitizenNextSteps,
   nextStep: enCitizenNextStep,
+  reminders: enCitizenReminders,
 } as const;
 
 export const rwCitizen: object = {
@@ -47,4 +50,5 @@ export const rwCitizen: object = {
   health: rwCitizenHealth,
   nextSteps: rwCitizenNextSteps,
   nextStep: rwCitizenNextStep,
+  reminders: rwCitizenReminders,
 };
