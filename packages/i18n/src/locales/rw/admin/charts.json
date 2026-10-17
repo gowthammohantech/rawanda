@@ -1,0 +1,22 @@
+{
+  "viewAsTable": "Reba mu mbonerahamwe",
+  "viewAsChart": "Reba nk'igishushanyo",
+  "legend": "Ibisobanuro by'ibimenyetso",
+  "series": {
+    "screened": "Ibipimo",
+    "flagged": "Byagaragajwe"
+  },
+  "weekly": {
+    "title": "Ibipimo buri cyumweru",
+    "week": "Icyumweru cya",
+    "summary": "Ibyumweru {{weeks}}: ibipimo {{screened}}, byagaragajwe {{flagged}}. Umurongo wuzuye ufite uruziga = ibipimo; umurongo w'uduce ufite kare = byagaragajwe. Ibyumweru {{suppressed}} bifite imibare yahishwe kubera ibanga."
+  },
+  "byFacility": {
+    "title": "Ibipimo kuri buri vuriro",
+    "facility": "Ivuriro",
+    "referred": "Byoherejwe",
+    "completed": "Ikurikirana ryarangiye",
+    "summary": "Amavuriro {{count}}, ibipimo {{total}} byose hamwe.",
+    "link": "Fungura inzira y'ubuvuzi ya {{facility}}"
+  }
+}

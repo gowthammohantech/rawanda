@@ -509,7 +509,8 @@
         "withdrawn": "Uruhushya rwakuweho (agasanduku)"
       },
       "result": {
-        "viewed": "Igisubizo cyarebwe mu gasanduku"
+        "viewed": "Igisubizo cyarebwe mu gasanduku",
+        "list_viewed": "Urutonde rw'ibisubizo rwarebwe mu gasanduku"
       },
       "next_step": {
         "acknowledged": "Intambwe ikurikira yasomwe"

@@ -1,0 +1,170 @@
+{
+  "eyebrow": "IMIKORERE YA GAHUNDA",
+  "greeting": {
+    "morning": "Mwaramutse, {{name}}",
+    "afternoon": "Mwiriwe, {{name}}",
+    "evening": "Mwiriwe, {{name}}"
+  },
+  "subtitle": "{{from}} – {{to}} · {{scope}}",
+  "error": "Imibare ya gahunda ntiyabashije kuboneka. Nta mibare yerekanwa aho kwerekana ishaje cyangwa igereranyo.",
+  "computed": "Byabazwe saa {{time}} (Kigali)",
+  "stale": "Amakuru yahindutse — Vugurura",
+  "kpi": {
+    "label": "Imibare y'ingenzi",
+    "screened": "Ibipimo byafashwe",
+    "screenedSub": "Abantu {{people}} bapimwe",
+    "flagged": "Byagaragajwe ngo bisuzumwe",
+    "flaggedSub": "{{pct}}% by'ibipimo",
+    "pctSuppressed": "Ijanisha ryahishwe kubera ibanga",
+    "reviewed": "Byasuzumwe na muganga",
+    "reviewedSub": "{{dismissed}} byakuweho hatanzwe impamvu",
+    "completed": "Ikurikirana ryarangiye",
+    "completedSub": "{{pct}}% by'ibipimo byoherejwe",
+    "median": "Iminsi yo hagati kugeza ku isuzuma",
+    "days": "Iminsi {{days}}",
+    "medianSub": "Hashingiwe ku bipimo {{n}} byasuzumwe"
+  },
+  "type": {
+    "title": "Ubwoko bw'isuzuma",
+    "bpOnly": "Umuvuduko w'amaraso gusa",
+    "glucoseOnly": "Isukari mu maraso gusa",
+    "both": "Byombi",
+    "neither": "Ibindi byarebwe gusa",
+    "total": "Igiteranyo"
+  },
+  "attention": {
+    "title": "Bikeneye kwitabwaho",
+    "overdueReferrals": "Kohereza byarengeje igihe",
+    "overdueFollowUps": "Ikurikirana ryarengeje igihe",
+    "pendingAged": "Isuzuma rimaze iminsi 8+ ritegereje",
+    "quality": "Ibimenyetso by'ubuziranenge bw'amakuru",
+    "note": "Byarengeje igihe gusa iyo itariki yagenwe n'umuntu yarenze. Isuzuma ritegereje ryerekanwa hakurikijwe igihe rimaze — nta gihe ntarengwa cyemejwe."
+  },
+  "dataNote": {
+    "title": "Icyitonderwa ku makuru",
+    "text": "{{facility}}: {{completed}} kuri {{referred}} by'ibipimo byoherejwe byageze ku ikurikirana ryarangiye ({{pct}}%).",
+    "disclaimer": "Incamake y'imibare yerekanwa — si inama"
+  },
+  "pilot": {
+    "title": "Ibipimo by'igerageza (KPI)",
+    "deferred": "Ntibipimwa muri iyi prototype (byasubitswe)",
+    "measuredHere": "Bipimirwa kuri iyi paji",
+    "measuredIn": {
+      "ADM-04": "Bipimirwa ku Kubahiriza igihe",
+      "ADM-05": "Bipimirwa ku Kazi k'abakozi",
+      "ADM-06": "Bipimirwa ku Mutekano n'ubuziranenge"
+    }
+  },
+  "empty": {
+    "title": "Nta bipimo byafashwe muri iki gihe",
+    "description": "Gerageza igihe kirekire cyangwa ahandi.",
+    "widen": "Ongera igihe"
+  },
+  "footnote": "Amakuru y'igerageza · inyandiko {{n}} ntizabazwe (uburenganzira bwakuweho) · verisiyo y'ibipimo {{version}}",
+  "info": {
+    "button": "Ibyerekeye {{metric}}",
+    "numerator": "Ibibarwa",
+    "denominator": "Kuri",
+    "inclusion": "Ibirimo",
+    "attribution": "Uko bihabwa igihe",
+    "n": "n",
+    "computed": "Byabazwe",
+    "computedAt": "{{time}} (Kigali)",
+    "rulesets": "Verisiyo z'amategeko",
+    "noRulesets": "Nta na kimwe muri iki gihe",
+    "version": "Verisiyo y'ibipimo"
+  },
+  "catalogue": {
+    "screened": {
+      "label": "Ibipimo byafashwe",
+      "numerator": "Ibipimo byoherejwe byafashwe muri icyo gihe"
+    },
+    "peopleScreened": {
+      "label": "Abantu bapimwe",
+      "numerator": "Abantu batandukanye bafite nibura ikipimo kimwe cyoherejwe"
+    },
+    "flagged": {
+      "label": "Byagaragajwe ngo bisuzumwe",
+      "numerator": "Ibipimo itegeko ry'igerageza ryagaragaje ngo bisuzumwe na muganga"
+    },
+    "reviewed": {
+      "label": "Byasuzumwe na muganga",
+      "numerator": "Ibipimo byagaragajwe byafatiwe icyemezo cyangwa byakuweho hatanzwe impamvu"
+    },
+    "dismissed": {
+      "label": "Byakuweho hatanzwe impamvu",
+      "numerator": "Ibipimo byagaragajwe muganga yakuyeho atanze impamvu (ntibibarwa nk'ubuvuzi bwarangiye)"
+    },
+    "actioned": {
+      "label": "Icyemezo cyanditswe",
+      "numerator": "Ibipimo byagaragajwe isuzuma ryabyo ryanditsemo icyemezo"
+    },
+    "referred": {
+      "label": "Byoherejwe cyangwa ikurikirana ryateganyijwe",
+      "numerator": "Ibipimo byasuzumwe bifite kohereza bigikora cyangwa ikurikirana ryateganyijwe"
+    },
+    "followUpCompleted": {
+      "label": "Ikurikirana ryarangiye",
+      "numerator": "Ibipimo bifite kohereza kwarangiye gufite ikimenyetso, cyangwa ikurikirana ryarangiye rifite umusaruro"
+    },
+    "medianDaysToReview": {
+      "label": "Iminsi yo hagati kugeza ku isuzuma",
+      "numerator": "Iminsi yo hagati kuva ku gupima kugeza ku cyemezo cya mbere cy'isuzuma"
+    },
+    "weeklyScreenedVsFlagged": {
+      "label": "Ibipimo buri cyumweru",
+      "numerator": "Ibipimo n'ibyagaragajwe buri cyumweru (gitangira ku wa mbere, isaha ya Kigali)"
+    },
+    "screeningType": {
+      "label": "Ubwoko bw'isuzuma",
+      "numerator": "Ibipimo by'umuvuduko w'amaraso gusa, isukari gusa, cyangwa byombi"
+    },
+    "overdueReferrals": {
+      "label": "Kohereza byarengeje igihe",
+      "numerator": "Kohereza kutarangiye kwarengeje itariki yagenwe n'umuntu"
+    },
+    "overdueFollowUps": {
+      "label": "Ikurikirana ryarengeje igihe",
+      "numerator": "Ikurikirana ritarangiye ryarengeje itariki yagenwe n'umuntu"
+    },
+    "pendingReviewAge": {
+      "label": "Igihe isuzuma rimaze ritegereje",
+      "numerator": "Ibipimo byagaragajwe bigitegereje isuzuma, hakurikijwe iminsi kuva bipimwe"
+    },
+    "openQualityIssues": {
+      "label": "Ibimenyetso by'ubuziranenge bw'amakuru",
+      "numerator": "Ibipimo bitagira igipimo cy'isukari hiyongereyeho imyirondoro ishobora kuba isa"
+    },
+    "workloadMinutes": {
+      "label": "Igihe cy'abakozi ku murwayi ku munsi (igereranya)",
+      "numerator": "Iminota yatanzwe n'abakozi ku murwayi ku munsi — igaragara ku Kazi k'abakozi"
+    },
+    "promptIdReliability": {
+      "label": "Kwizerwa kw'ibibutsa n'imyirondoro",
+      "numerator": "Imyirondoro idahuye n'ibimenyetso byabuze — bigaragara ku Mutekano n'ubuziranenge"
+    },
+    "medicineHistoryCompleteness": {
+      "label": "Kuzura kw'amateka y'imiti",
+      "numerator": "Nta kibanza cy'amateka y'imiti kiri muri iyi verisiyo"
+    },
+    "patientUnderstanding": {
+      "label": "Gusobanukirwa k'umurwayi",
+      "numerator": "Nta kibanza cyo gusobanukirwa k'umurwayi kiri muri iyi verisiyo"
+    },
+    "denominator": {
+      "screened": "Ibipimo byafashwe muri icyo gihe",
+      "flagged": "Ibipimo byagaragajwe muri icyo gihe",
+      "referred": "Ibipimo byoherejwe muri icyo gihe"
+    },
+    "inclusion": {
+      "cohort": "Ibipimo byoherejwe gusa (imishinga ntibarwa); abikuyeho uburenganzira ntibabarwa; ikipimo cyakosowe kibarwa rimwe",
+      "deferred": "Ntibipimwa muri iyi prototype (byasubitswe)"
+    },
+    "attribution": {
+      "period": "Igihe = itariki ya Kigali yo gupima",
+      "cohort": "Isuzuma, kohereza n'ikurikirana bibarwa mu gihe cy'ikipimo byakomotseho",
+      "snapshot": "Inyandiko z'ibipimo by'icyo gihe, uko zimeze ubu (isaha y'igerageza)",
+      "none": "Ntibireba"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "viewAsTable": "View as table",
+  "viewAsChart": "View as chart",
+  "legend": "Legend",
+  "series": {
+    "screened": "Screenings",
+    "flagged": "Flagged"
+  },
+  "weekly": {
+    "title": "Screenings per week",
+    "week": "Week of",
+    "summary": "{{weeks}} weeks: {{screened}} screenings, {{flagged}} flagged. Solid line with circles = screenings; dashed line with squares = flagged. {{suppressed}} weeks have values hidden to protect privacy."
+  },
+  "byFacility": {
+    "title": "Screenings by facility",
+    "facility": "Facility",
+    "referred": "Referred",
+    "completed": "Follow-up completed",
+    "summary": "{{count}} facilities, {{total}} screenings in total.",
+    "link": "Open the pathway funnel for {{facility}}"
+  }
+}

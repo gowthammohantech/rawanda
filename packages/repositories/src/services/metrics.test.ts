@@ -88,3 +88,67 @@ describe("aggregate metrics + exports", () => {
     expect(denied.every((e) => e.outcome === "denied" && e.category === "export")).toBe(true);
   });
 });
+
+describe("ADM-02 metric source reads", () => {
+  it("getMetricsRecords: scoped rows, no patient identifiers, demo-clock asOf", async () => {
+    const h = await createHarness({ appId: "admin", personaId: PERSONA_IDS.analystAlpha });
+    const result = await h.repo.getMetricsRecords({ from: "2026-07-17", to: "2026-10-14" });
+    expect(result.asOf).toBe("2026-10-14T06:00:00.000Z");
+    expect(result.lastWriteAt).not.toBeNull();
+    const { records } = result;
+    expect(records.screenings.length).toBeGreaterThan(0);
+    expect(records.screenings.every((s) => s.districtId === DISTRICT_IDS.alpha)).toBe(true);
+    expect(records.facilities.map((f) => f.id).sort()).toEqual(
+      [FACILITY_IDS.alpha1, FACILITY_IDS.alpha2].sort(),
+    );
+    expect(
+      records.patients.every((p) => p.displayName === "" && p.syntheticIdentifier === ""),
+    ).toBe(true);
+    expect(records.timeEntries.every((e) => e.facilityId !== FACILITY_IDS.beta1)).toBe(true);
+    // No free text (notes, reasons, evidence references) leaves an aggregate read.
+    expect(records.screenings.every((s) => s.notes === "")).toBe(true);
+    expect(records.reviews.every((r) => (r.decision?.note ?? "") === "")).toBe(true);
+    expect(records.reviews.every((r) => [null, "[redacted]"].includes(r.decisionReason))).toBe(
+      true,
+    );
+    expect(
+      records.referrals.every(
+        (r) =>
+          r.referralReason === undefined &&
+          [undefined, "[redacted]"].includes(r.completionEvidence?.reference) &&
+          (r.completionEvidence?.note ?? "") === "",
+      ),
+    ).toBe(true);
+    expect(
+      records.followUps.every(
+        (f) =>
+          f.attempts.every((a) => a.note === "") &&
+          (f.outcome?.note ?? "") === "" &&
+          f.notes.every((n) => n.text === "[redacted]") &&
+          f.clinicianConfirmation.reason === undefined,
+      ),
+    ).toBe(true);
+    await expect(
+      h.repo.getMetricsRecords({ districtIds: [DISTRICT_IDS.beta] }),
+    ).rejects.toMatchObject({ code: "FORBIDDEN" });
+  });
+
+  it("listTimeEntries: scope + date range; clinicians are denied", async () => {
+    const h = await createHarness({ appId: "admin", personaId: PERSONA_IDS.fmgrAlpha1 });
+    const entries = await h.repo.listTimeEntries();
+    expect(entries.length).toBeGreaterThan(0);
+    expect(entries.every((e) => e.facilityId === FACILITY_IDS.alpha1)).toBe(true);
+    const day = entries[0]?.date ?? "2026-10-01";
+    const one = await h.repo.listTimeEntries({ from: day, to: day });
+    expect(one.every((e) => e.date === day)).toBe(true);
+    const c = await createHarness({ personaId: PERSONA_IDS.clinAlpha1 });
+    await expect(c.repo.listTimeEntries()).rejects.toMatchObject({ reason: "ROLE" });
+  });
+
+  it("getMetricsFreshness reports the latest write", async () => {
+    const h = await createHarness({ appId: "admin", personaId: PERSONA_IDS.leadProgramme });
+    const { lastWriteAt } = await h.repo.getMetricsFreshness();
+    const { lastWriteAt: fromRecords } = await h.repo.getMetricsRecords();
+    expect(lastWriteAt).toBe(fromRecords);
+  });
+});

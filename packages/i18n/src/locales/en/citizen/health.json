@@ -1,0 +1,97 @@
+{
+  "eyebrow": "My health",
+  "title": "Muraho, {{firstName}}",
+  "subtitle": "Results your care team has shared with you",
+  "listLabel": "Your shared results",
+  "loading": "Loading your results",
+  "error": "We could not load your results. Nothing was changed. Try again.",
+  "refreshHint": "Pull down to check for new results",
+  "empty": {
+    "title": "No results shared with you yet",
+    "body": "No results shared with you yet. Your care team shares results after they review them."
+  },
+  "kind": {
+    "bpAndGlucose": "Blood pressure and glucose check",
+    "bloodPressure": "Blood pressure check",
+    "glucose": "Blood glucose check",
+    "check": "Health check"
+  },
+  "chip": {
+    "followUpAgreed": "Follow-up agreed",
+    "noActionNeeded": "No action needed",
+    "reviewed": "Reviewed"
+  },
+  "pending": {
+    "title": "Waiting for your care team",
+    "body": "A recent check is waiting for your care team.",
+    "after": "You will see it here after they review it."
+  },
+  "meaning": {
+    "title": "What this means for you",
+    "followUpAgreed": "Your care team wants to see you again about this result.",
+    "seeNextSteps": "See Next steps.",
+    "noAction": "Your care team looked at this result. No extra visit is needed for it right now."
+  },
+  "notDiagnosis": "This result is not a diagnosis.",
+  "askCareTeam": "Talk to your care team if you have questions.",
+  "supportLink": "Contact support",
+  "supportHint": "Opens More, where support options are listed",
+  "nextStepsLink": "See Next steps",
+  "nextStepsHint": "Opens the next step your care team agreed for this result",
+  "reviewedBy": "Reviewed by {{name}} · {{time}}",
+  "sharedNoReview": "Shared by your care team · {{time}}",
+  "openHint": "Opens this result",
+  "card": {
+    "a11y": "{{kind}}, {{date}}, {{status}}"
+  },
+  "detail": {
+    "title": "Result",
+    "measured": "Measured",
+    "facility": "Where",
+    "context": "Before the test",
+    "reviewer": "Reviewed by",
+    "reviewerValue": "{{name}}, {{role}}",
+    "released": "Shared with you",
+    "noReviewer": "No review was needed for this check",
+    "readings": "Your readings",
+    "notFoundTitle": "Result not available",
+    "notFound": "We could not find this result. It may not be shared with you.",
+    "deniedTitle": "Not available",
+    "denied": "This result is not part of the record you can see.",
+    "back": "Back to My health"
+  },
+  "reading": {
+    "bloodPressure": "Blood pressure",
+    "glucose": "Blood glucose",
+    "bloodPressureA11y": "Blood pressure {{systolic}} over {{diastolic}} {{unit}}",
+    "glucoseA11y": "Blood glucose {{value}} {{unit}}"
+  },
+  "context": {
+    "fasting": "Fasting",
+    "nonFasting": "Not fasting",
+    "notRecorded": "Not recorded"
+  },
+  "units": {
+    "mmHg": "mmHg",
+    "mmolL": "mmol/L",
+    "mgdL": "mg/dL",
+    "mmHgSpoken": "millimetres of mercury",
+    "mmolLSpoken": "millimoles per litre",
+    "mgdLSpoken": "milligrams per decilitre"
+  },
+  "understand": {
+    "open": "Understand my result",
+    "title": "Understand my result",
+    "intro": "This explains what the checks measure. It does not explain your own result.",
+    "bpTitle": "Blood pressure check",
+    "bpBody": "A blood pressure check measures how strongly your blood pushes against the walls of your blood vessels. It is written as two numbers, in millimetres of mercury (mmHg).",
+    "glucoseTitle": "Blood glucose check",
+    "glucoseBody": "A blood glucose check measures the amount of sugar in your blood at the time of the test. It is written in millimoles per litre (mmol/L). Eating before the test can change the value, so the check notes whether you were fasting.",
+    "clinician": "Only your care team decides what your result means for you.",
+    "close": "Close"
+  },
+  "representative": {
+    "viewingFor": "Viewing for {{name}}",
+    "body": "You are the legal representative. You see only the results shared for {{name}}."
+  }
+}

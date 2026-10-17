@@ -60,8 +60,8 @@ describe("programme-admin shell", () => {
     expect(services.session.getState().persona?.id).toBe(PERSONA_IDS.analystAlpha);
     expect(window.localStorage.getItem("laif.admin.persona")).toBe(PERSONA_IDS.analystAlpha);
     expect(screen.getByRole("note").textContent).toContain("Demo role switch — not authentication");
-    expect(await screen.findByRole("heading", { level: 1, name: "Overview" })).toBeTruthy();
-    expect(screen.getByText("Coming in ADM-02")).toBeTruthy();
+    expect(await screen.findByTestId("overview-page")).toBeTruthy();
+    expect(await screen.findByTestId("kpi-strip", {}, { timeout: 10_000 })).toBeTruthy();
     expect(screen.getByTestId("scope-strip").textContent).toContain("Viewing aggregate data");
     const nav = screen.getByRole("navigation", { name: "Main navigation" });
     expect(within(nav).getByRole("link", { name: "Pathway funnel" })).toBeTruthy();

@@ -1,7 +1,13 @@
 import { enResources, rwResources } from "@laif/i18n";
 import { describe, expect, it } from "vitest";
 
-import { METRIC_KEYS, metricDescriptionKey, metricLabelKey, PACKAGE } from "./index.ts";
+import {
+  catalogueKeys,
+  METRIC_KEYS,
+  metricDescriptionKey,
+  metricLabelKey,
+  PACKAGE,
+} from "./index.ts";
 
 function lookup(catalogue: object, dotted: string): unknown {
   let node: unknown = catalogue;
@@ -27,5 +33,13 @@ describe("@laif/analytics", () => {
       expect(lookup(res.common, "suppressed")).toMatch(/\{\{threshold\}\}/);
     }
     expect(lookup(enResources.common, "suppressed")).toBe("Suppressed (<{{threshold}})");
+  });
+
+  it("every METRIC_DEFINITIONS key has EN + RW text (ADM-02 catalogue)", () => {
+    for (const res of [enResources, rwResources]) {
+      for (const key of catalogueKeys()) {
+        expect(typeof lookup(res.admin, key.replace(/^admin:/, "")), key).toBe("string");
+      }
+    }
   });
 });

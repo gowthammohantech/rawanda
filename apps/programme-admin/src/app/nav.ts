@@ -8,6 +8,7 @@ import type { ActorContext } from "@laif/auth-demo";
 import type { IconName, SidebarSection, TranslationKey } from "@laif/ui-web";
 
 import { canOpenRoute, type AdminRouteId } from "../auth/capabilities.ts";
+import { filterSearchOf } from "../features/filters/filterSchema.ts";
 import { BASE_PATH, LOGIN_PATH } from "./config.ts";
 
 export const paths = {
@@ -100,14 +101,11 @@ export function sidebarSections(
   }));
 }
 
-/** `?district=…&facility=…` of a search string (other filters are page-specific). */
+/**
+ * The global filter params of a search string (ADM-02: `preset`, `from`, `to`, `district`,
+ * `facility`, `type`), so sidebar links carry the filters across pages; other params are
+ * page-specific and dropped.
+ */
 export function scopeSearchOf(search: string): string {
-  const params = new URLSearchParams(search);
-  const out = new URLSearchParams();
-  for (const name of ["district", "facility"]) {
-    const value = params.get(name);
-    if (value) out.set(name, value);
-  }
-  const text = out.toString();
-  return text === "" ? "" : `?${text}`;
+  return filterSearchOf(search);
 }

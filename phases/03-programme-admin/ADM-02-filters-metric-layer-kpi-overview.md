@@ -1,6 +1,6 @@
 # ADM-02 — Global filters, metric layer, chart kit and KPI overview
 
-Status: Not started
+**Status:** Done
 
 ## 1. Header
 

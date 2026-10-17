@@ -10,7 +10,7 @@
 | Depends on | CTZ-02 |
 | Trace | CW-02; WF-03 step 5; Tech spec §2.4 "My health", §2.4 exclusion (no wellness score/forecast/recommendation), §11 deferred wellness scoring; PRD §6 "avoid presenting clinical flags as diagnoses; show review status and responsible professional"; T-01, T-02, T-10 (citizen variant) |
 | Size | M |
-| Status | Planned |
+| Status | Done |
 
 ## 2. Goal
 
