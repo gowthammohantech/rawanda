@@ -1,4 +1,11 @@
 {
   "codeSixDigits": "Andika imibare 6",
-  "mustConfirmRead": "Emeza ko wabisomye"
+  "mustConfirmRead": "Emeza ko wabisomye",
+  "correction": {
+    "targetRequired": "Hitamo igisa n'aho atari cyo.",
+    "descriptionMin": "Twongerere ibisobanuro (nibura inyuguti 10).",
+    "descriptionMax": "Bigabanye (inyuguti 500 ntarengwa).",
+    "suggestedMax": "Bigabanye (inyuguti 200 ntarengwa).",
+    "mustUnderstand": "Kanda ku kazu kugira ngo ukomeze."
+  }
 }

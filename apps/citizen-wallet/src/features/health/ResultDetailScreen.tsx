@@ -74,6 +74,12 @@ export function ResultDetailScreen({ observationId }: { observationId: string })
           hasNextStep={nextStep.instruction !== null}
           onOpenNextSteps={() => router.push("/next-steps")}
           onOpenSupport={() => router.push("/more")}
+          onReportProblem={() =>
+            router.push({
+              pathname: "/more/privacy/corrections/new",
+              params: { targetType: "screening", targetId: result.data.id },
+            })
+          }
         />
       </>
     );

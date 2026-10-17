@@ -1,0 +1,84 @@
+{
+  "title": "Privacy",
+  "eyebrow": "MY DATA",
+  "subtitle": "See who can see your information, who has looked at it, and ask for a correction.",
+  "loading": "Loading your privacy information…",
+  "error": "We could not load this. Try again.",
+  "whoCanSee": {
+    "title": "Who can see my information",
+    "body": "Your care team at your health centre and the community health worker who visits you can see your checks and next steps. You see what your care team has shared with you.",
+    "noticeLink": "Read the privacy notice"
+  },
+  "whoLooked": "Who has looked at my record",
+  "whoLookedBody": "People who opened your record in this demo, and when.",
+  "seeAll": "See all",
+  "somethingWrong": {
+    "title": "Something wrong?",
+    "body": "If something in your record looks wrong, ask your care team to check it. Your record stays the same until they do."
+  },
+  "myRequests": "My requests",
+  "seeAllRequests": "See all requests",
+  "notice": {
+    "title": "Privacy notice",
+    "heading": "DEMO NOTICE — NOT APPROVED WORDING",
+    "version": "Version {{version}}",
+    "shownTitle": "What is shown",
+    "shownBody": "Your health check results after your care team has reviewed them, the next steps they agreed with you, reminders you chose, and requests you sent.",
+    "whoTitle": "Who sees it",
+    "whoBody": "You, a person legally allowed to act for you, and the care team at your health centre. Everyone who looks at your record is listed in your access history.",
+    "storedTitle": "Where it is stored",
+    "storedBody": "On this device only in the demo. A real service would store data in Rwanda.",
+    "keptTitle": "How long it is kept",
+    "keptBody": "To be decided by the Ministry.",
+    "choicesTitle": "Your choices",
+    "choicesBody": "You can give or withdraw consent at any time, and ask your care team to correct something that looks wrong.",
+    "rightsTitle": "Your rights under Rwanda Law No. 058/2021",
+    "rightsIntro": "The law on the protection of personal data and privacy gives you these rights:",
+    "rights": {
+      "access": "Access — see the information held about you.",
+      "correction": "Correction — ask for wrong information to be corrected.",
+      "portability": "Portability — receive your information to take elsewhere.",
+      "erasure": "Erasure — ask for your information to be deleted."
+    },
+    "rightNotAvailable": "Process to be defined by the Ministry; not available in this demo.",
+    "consentLink": "Manage consent",
+    "correctionLink": "Ask for a correction"
+  },
+  "access": {
+    "title": "Who has looked at my record",
+    "intro": "Everyone who opened your record in this demo. Names of staff are not shown — only their role and health centre.",
+    "listLabel": "Access history",
+    "filter": {
+      "label": "Show",
+      "all": "All",
+      "careTeam": "Care team",
+      "me": "Me"
+    },
+    "empty": "No one has looked at your record in this demo yet.",
+    "filterEmpty": "Nothing to show for this filter.",
+    "showAll": "Show all",
+    "chip": {
+      "viewed": "VIEWED",
+      "updated": "UPDATED",
+      "you": "YOU"
+    },
+    "actor": {
+      "you": "You",
+      "staff": "{{role}} (synthetic) · {{facility}}",
+      "careTeam": "Care team (synthetic)"
+    },
+    "action": {
+      "record_viewed": "Looked at your record",
+      "result_viewed": "Looked at a health check result",
+      "next_steps_viewed": "Looked at your next steps",
+      "record_updated": "Updated your record"
+    },
+    "purpose": {
+      "care_review": "For your care review",
+      "follow_up_visit": "For a follow-up visit",
+      "self_access": "In this wallet",
+      "representative_access": "In this wallet, on behalf of {{name}}",
+      "support": "To help with your request"
+    }
+  }
+}

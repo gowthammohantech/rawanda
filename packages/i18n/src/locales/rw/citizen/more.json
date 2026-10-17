@@ -1,8 +1,6 @@
 {
   "consentRow": "Uburenganzira no gusangiza",
   "demoToolsRow": "Ibikoresho by'igerageza",
-  "languageTitle": "Ururimi",
-  "comingSoon": "Igenamiterere ry'ibanga, iryo korohereza n'ubufasha bizaza mu byiciro bikurikira.",
   "demo": {
     "title": "Ibikoresho by'igerageza",
     "eyebrow": "IGERAGEZA GUSA",
@@ -23,5 +21,18 @@
     "conflictHint": "Impinduka ikurikira ku makuru yawe izavuguruzanya rimwe.",
     "moreTools": "Nta murandasi n'ibigeragezo",
     "failed": "Igikoresho cy'igerageza nticyakoze. Ongera ugerageze."
-  }
+  },
+  "sections": {
+    "myData": "AMAKURU YANJYE",
+    "settings": "IGENAMITERERE",
+    "help": "UBUFASHA",
+    "demo": "IGERAGEZA"
+  },
+  "privacyRow": "Ibanga",
+  "privacySub": "Itangazo, abarebye amakuru yawe, ibikosorwa",
+  "consentSub": "Tanga cyangwa ukureho uruhushya",
+  "accessibilityRow": "Korohereza",
+  "supportRow": "Ubufasha",
+  "laterPhase": "Biraza vuba muri iri gerageza",
+  "demoToolsSub": "Gusubiramo, isaha n'amakosa y'igerageza"
 }

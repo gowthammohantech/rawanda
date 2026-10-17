@@ -542,6 +542,16 @@
       },
       "change": {
         "viewed": "Impinduka ku makuru yarebwe mu gasanduku"
+      },
+      "privacy_notice": {
+        "viewed": "Itangazo ry'ibanga ryarebwe mu gasanduku"
+      },
+      "access_history": {
+        "viewed": "Amateka y'abarebye amakuru yarebwe mu gasanduku"
+      },
+      "correction": {
+        "viewed": "Icyifuzo cyo gukosora cyarebwe mu gasanduku",
+        "duplicate_blocked": "Icyifuzo cya kabiri cyo gukosora ikintu kimwe cyahagaritswe"
       }
     },
     "admin": {

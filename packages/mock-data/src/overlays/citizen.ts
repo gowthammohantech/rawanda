@@ -3,7 +3,8 @@
  * records on top of the FND-05 citizen slice — accounts, patient links, simulated identity
  * verifications, append-only consent records, next-step acknowledgements, settings and a
  * citizen-visible access history — plus the citizen-scenario clinical additions (CTZ-P1 amended
- * observation, resolved correction requests). Registered as `SLICE_OVERLAYS.citizen`.
+ * observation, resolved correction requests with an outcome `resolutionKey` — CTZ-07).
+ * Registered as `SLICE_OVERLAYS.citizen`.
  *
  * Deterministic: IDs are `deterministicUuid('<namespace>', n)`, times are offsets from the pinned
  * demo clock (`seed.meta.demoClockIso`, `2026-10-14T06:00:00.000Z`) and the access history uses
@@ -334,6 +335,8 @@ export function buildCitizenOverlay(seed: Readonly<SeedDataset>): OverlayRecords
         description: "I had not eaten before this check, but it does not say fasting.",
         suggestedValue: { glucoseContext: "fasting" },
         requestStatus: "resolved_amended",
+        assignedRole: "clinician",
+        resolutionKey: "glucose_context_corrected",
       },
       status: "done",
       patientId: p1Patient.id,
@@ -360,6 +363,8 @@ export function buildCitizenOverlay(seed: Readonly<SeedDataset>): OverlayRecords
         description: "I think the reading time on this check is one hour off.",
         suggestedValue: null,
         requestStatus: "resolved_no_change",
+        assignedRole: "clinician",
+        resolutionKey: "reading_time_confirmed",
       },
       status: "done",
       patientId: p2Patient.id,

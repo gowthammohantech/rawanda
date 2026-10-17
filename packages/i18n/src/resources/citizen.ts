@@ -14,6 +14,8 @@ import enCitizenNextSteps from "../locales/en/citizen/nextSteps.json";
 import enCitizenNextStep from "../locales/en/citizen/nextStep.json";
 import enCitizenReminders from "../locales/en/citizen/reminders.json";
 import enCitizenTimeline from "../locales/en/citizen/timeline.json";
+import enCitizenPrivacy from "../locales/en/citizen/privacy.json";
+import enCitizenCorrection from "../locales/en/citizen/correction.json";
 import rwCitizenBase from "../locales/rw/citizen.json";
 import rwCitizenErrors from "../locales/rw/citizen/errors.json";
 import rwCitizenOnboarding from "../locales/rw/citizen/onboarding.json";
@@ -26,6 +28,8 @@ import rwCitizenNextSteps from "../locales/rw/citizen/nextSteps.json";
 import rwCitizenNextStep from "../locales/rw/citizen/nextStep.json";
 import rwCitizenReminders from "../locales/rw/citizen/reminders.json";
 import rwCitizenTimeline from "../locales/rw/citizen/timeline.json";
+import rwCitizenPrivacy from "../locales/rw/citizen/privacy.json";
+import rwCitizenCorrection from "../locales/rw/citizen/correction.json";
 
 export const enCitizen = {
   ...enCitizenBase,
@@ -40,6 +44,8 @@ export const enCitizen = {
   nextStep: enCitizenNextStep,
   reminders: enCitizenReminders,
   timeline: enCitizenTimeline,
+  privacy: enCitizenPrivacy,
+  correction: enCitizenCorrection,
 } as const;
 
 export const rwCitizen: object = {
@@ -55,4 +61,6 @@ export const rwCitizen: object = {
   nextStep: rwCitizenNextStep,
   reminders: rwCitizenReminders,
   timeline: rwCitizenTimeline,
+  privacy: rwCitizenPrivacy,
+  correction: rwCitizenCorrection,
 };
