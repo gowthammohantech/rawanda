@@ -31,9 +31,16 @@ export type InstructionDetailProps = {
   step: ApprovedInstruction;
   onReload: () => unknown;
   onOpenSupport: () => void;
+  /** CTZ-07 "Something wrong?" → correction request with this step preselected. */
+  onReportProblem: () => void;
 };
 
-export function InstructionDetail({ step, onReload, onOpenSupport }: InstructionDetailProps) {
+export function InstructionDetail({
+  step,
+  onReload,
+  onOpenSupport,
+  onReportProblem,
+}: InstructionDetailProps) {
   const t = useTx();
   const { language } = useLanguage();
   const texts = stepTexts(t, step);
@@ -96,6 +103,15 @@ export function InstructionDetail({ step, onReload, onOpenSupport }: Instruction
         testID="next-step-support"
       >
         {t("citizen:nextSteps.supportLink")}
+      </Button>
+      <Button
+        variant="ghost"
+        icon="alert"
+        onPress={onReportProblem}
+        accessibilityHint={t("citizen:correction.somethingWrongHint")}
+        testID="next-step-something-wrong"
+      >
+        {t("citizen:correction.somethingWrong")}
       </Button>
     </View>
   );

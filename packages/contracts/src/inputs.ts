@@ -607,6 +607,11 @@ export const CorrectionRequestInputSchema = z.object({
   targetId: NonEmptyTrimmed,
   description: boundedText(CORRECTION_DESCRIPTION_MIN, CORRECTION_DESCRIPTION_MAX),
   suggestedValue: JsonValueSchema.default(null),
+  /**
+   * ext (CTZ-07): version of the target record the citizen picked (stale → `CONFLICT`, nothing
+   * written). Omitted = no version check.
+   */
+  expectedTargetVersion: Version.optional(),
 });
 export type CorrectionRequestInput = z.output<typeof CorrectionRequestInputSchema>;
 

@@ -2,7 +2,8 @@
  * Result detail body (CTZ-03 task 4): values with units, measurement context, facility,
  * reviewer + release time, one plain-language sentence keyed by the result label, and the fixed
  * "not a diagnosis" line with a link to support. The Next steps CTA shows ONLY when an approved
- * instruction is linked to this result's review (task 5).
+ * instruction is linked to this result's review (task 5). "Something wrong?" (CTZ-07) opens a
+ * correction request with this result preselected.
  */
 import type { ReleasedObservation } from "@laif/domain";
 import { formatDateTime, useLanguage } from "@laif/i18n";
@@ -33,6 +34,8 @@ export type ResultDetailProps = {
   hasNextStep: boolean;
   onOpenNextSteps: () => void;
   onOpenSupport: () => void;
+  /** CTZ-07 "Something wrong?" → correction request with this result preselected. */
+  onReportProblem: () => void;
 };
 
 export function ResultDetail({
@@ -40,6 +43,7 @@ export function ResultDetail({
   hasNextStep,
   onOpenNextSteps,
   onOpenSupport,
+  onReportProblem,
 }: ResultDetailProps) {
   const t = useTx();
   const { language } = useLanguage();
@@ -121,6 +125,16 @@ export function ResultDetail({
       <Section title={t("citizen:health.detail.reviewer")}>
         <ReviewProvenance result={result} variant="detail" />
       </Section>
+
+      <Button
+        variant="ghost"
+        icon="alert"
+        onPress={onReportProblem}
+        accessibilityHint={t("citizen:correction.somethingWrongHint")}
+        testID="result-something-wrong"
+      >
+        {t("citizen:correction.somethingWrong")}
+      </Button>
 
       <Button
         variant="secondary"

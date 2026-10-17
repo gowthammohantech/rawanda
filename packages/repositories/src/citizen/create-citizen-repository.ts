@@ -57,7 +57,7 @@ import { CITIZEN_PERSONA_CODES, createSeed, type SeedDataset } from "@laif/mock-
 
 import type { AuditAction } from "../audit/actions.ts";
 import type { RepositoryDeps } from "../care-repository.ts";
-import { Engine, type TxContext } from "../core/engine.ts";
+import { defer, Engine, type TxContext } from "../core/engine.ts";
 import { RepositoryError } from "../errors.ts";
 import { applyClockOffset, createDemoApi, META_KEYS } from "../services/demo.ts";
 import { createFaultInjector, FAULTS_META_KEY } from "../transport/faults.ts";
@@ -68,6 +68,7 @@ import type {
   CitizenRepository,
   CitizenRepositoryDeps,
   CitizenSession,
+  CorrectionTarget,
 } from "./CitizenRepository.ts";
 
 const byIdAsc = (a: { id: string }, b: { id: string }) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
@@ -436,11 +437,54 @@ export function createCitizenRepository(input: CitizenRepositoryDeps): CitizenRe
       status,
       createdBy: task.createdBy,
       resolvedAt: status.startsWith("resolved") ? (task.completedAt ?? task.updatedAt) : null,
+      suggestedText:
+        typeof task.payload.suggestedValue === "string" && task.payload.suggestedValue !== ""
+          ? task.payload.suggestedValue
+          : null,
+      resolutionKey: status.startsWith("resolved") ? (task.payload.resolutionKey ?? null) : null,
       version: task.version,
       createdAt: task.createdAt,
       updatedAt: task.updatedAt,
       synthetic: true,
     };
+  }
+
+  /** Open = still with the care team (a second request for the same item is blocked). */
+  const isOpenCorrection = (status: CorrectionRequestStatus) =>
+    status === "submitted" || status === "in_review";
+
+  /** CTZ-07 picker items: released results, approved next steps, then personal details. */
+  async function correctionTargetsOf(
+    ctx: TxContext,
+    patient: Patient,
+  ): Promise<CorrectionTarget[]> {
+    const out: CorrectionTarget[] = [];
+    for (const o of await observationsOf(ctx, patient.id)) {
+      if (o.kind !== "released") continue;
+      const stored = await ctx.find<Screening>("screening", o.id);
+      out.push({
+        targetType: "screening",
+        targetId: o.id,
+        version: stored?.version ?? 1,
+        observation: o,
+      });
+    }
+    for (const c of await instructionsOf(ctx, patient.id)) {
+      out.push({
+        targetType: "care_instruction",
+        targetId: c.id,
+        version: c.version,
+        instruction: c,
+      });
+    }
+    out.push({
+      targetType: "patient",
+      targetId: patient.id,
+      version: patient.version,
+      displayName: patient.displayName,
+      dateOfBirth: patient.dateOfBirth,
+    });
+    return out;
   }
 
   // ── Repository ────────────────────────────────────────────────────────────
@@ -1251,9 +1295,49 @@ export function createCitizenRepository(input: CitizenRepositoryDeps): CitizenRe
     listAccessEvents(patientId) {
       return engine.read(async (ctx) => {
         await assertPatientAccess(ctx, patientId);
-        return (await ctx.tx.getAll<CitizenAccessEvent>("accessEvents"))
-          .filter((e) => e.patientId === patientId)
-          .sort(desc((e) => e.occurredAt));
+        return (
+          (await ctx.tx.getAll<CitizenAccessEvent>("accessEvents"))
+            // Wallet-internal system actions (scheduler etc.) have no person behind them.
+            .filter((e) => e.patientId === patientId && e.actorId !== null)
+            // Who / what / when only: staff justifications and change details stay staff-side.
+            .map((e): CitizenAccessEvent => ({ ...e, changeSummary: {}, justification: null }))
+            .sort(desc((e) => e.occurredAt))
+        );
+      });
+    },
+
+    recordAccessHistoryViewed(patientId) {
+      return engine.write(async (ctx) => {
+        const { patient } = await assertPatientAccess(ctx, patientId);
+        await ctx.audit({
+          action: "citizen.access_history.viewed",
+          entityType: "patient",
+          entityId: patient.id,
+          correlationId: asId<CorrelationId>(ctx.ids()),
+          patientId: patient.id,
+          facilityId: patient.facilityId,
+          changeSummary: {},
+        });
+      });
+    },
+
+    recordPrivacyNoticeViewed(noticeVersion) {
+      return engine.write(async (ctx) => {
+        const actor = citizenActor(ctx, "privacy-notice");
+        await ctx.audit({
+          action: "citizen.privacy_notice.viewed",
+          entityType: "persona",
+          entityId: actor.personaId,
+          correlationId: asId<CorrelationId>(ctx.ids()),
+          changeSummary: { noticeVersion },
+        });
+      });
+    },
+
+    listCorrectionTargets(patientId) {
+      return engine.read(async (ctx) => {
+        const { patient } = await assertPatientAccess(ctx, patientId);
+        return correctionTargetsOf(ctx, patient);
       });
     },
 
@@ -1269,19 +1353,62 @@ export function createCitizenRepository(input: CitizenRepositoryDeps): CitizenRe
           const actor = ctx.requireActor();
           const { patient } = await assertPatientAccess(ctx, input.patientId);
           // Only records the citizen can actually see may be the subject of a request.
-          let visible = false;
-          if (input.targetType === "patient") visible = input.targetId === patient.id;
-          else if (input.targetType === "screening") {
-            visible = (await observationsOf(ctx, patient.id)).some(
-              (o) => o.kind === "released" && o.id === input.targetId,
-            );
-          } else if (input.targetType === "care_instruction") {
-            visible = (await instructionsOf(ctx, patient.id)).some((c) => c.id === input.targetId);
-          }
-          if (!visible) {
+          const target = (await correctionTargetsOf(ctx, patient)).find(
+            (t) => t.targetType === input.targetType && t.targetId === input.targetId,
+          );
+          if (!target) {
             throw new RepositoryError("VALIDATION_ERROR", {
               fieldErrors: { targetId: { key: "invalid", params: {} } },
             });
+          }
+          const scope = { patientId: patient.id, facilityId: patient.facilityId };
+          // T-05: the item changed since the citizen picked it (or the demo-tools
+          // `conflict-next-write` toggle on the patient) → CONFLICT, nothing written. `latest`
+          // is the citizen-visible picker item, never the raw clinical record.
+          if (faults.consumeConflictOnce("patient", patient.id)) {
+            faults.set({
+              conflictOnce: [
+                ...faults.get().conflictOnce,
+                { entityType: target.targetType, entityId: target.targetId },
+              ],
+            });
+          }
+          await ctx.assertVersion(
+            target.targetType,
+            { ...target, id: target.targetId, updatedAt: ctx.nowIso },
+            input.expectedTargetVersion ?? target.version,
+            scope,
+          );
+          // One open request per item: a second one is blocked with a link to the first.
+          const open = (await citizenTasks(ctx, patient.id))
+            .filter(
+              (t): t is CareTask & { kind: "correction_request" } =>
+                t.kind === "correction_request",
+            )
+            .find(
+              (t) =>
+                t.payload.targetType === input.targetType &&
+                t.payload.targetId === input.targetId &&
+                isOpenCorrection(correctionStatusOf(t)),
+            );
+          if (open) {
+            throw defer(
+              new RepositoryError("VALIDATION_ERROR", {
+                reason: "DUPLICATE_OPEN_REQUEST",
+                details: { existingId: open.id, existingCreatedAt: open.createdAt },
+              }),
+              {
+                action: "citizen.correction.duplicate_blocked",
+                entityType: "care_task",
+                entityId: open.id,
+                outcome: "denied",
+                ...scope,
+                changeSummary: { targetType: input.targetType, targetId: input.targetId },
+                actorId: actor.personaId,
+                actorRole: actor.role,
+                occurredAt: ctx.nowIso,
+              },
+            );
           }
           const task: CitizenCareTask = {
             ...ctx.created(),
@@ -1293,6 +1420,7 @@ export function createCitizenRepository(input: CitizenRepositoryDeps): CitizenRe
               description: input.description,
               suggestedValue: input.suggestedValue,
               requestStatus: "submitted",
+              assignedRole: "clinician",
             },
             status: "open",
             patientId: patient.id,
@@ -1304,20 +1432,25 @@ export function createCitizenRepository(input: CitizenRepositoryDeps): CitizenRe
             cancelled: null,
           };
           await ctx.save("care_task", task);
+          // Both events share one correlation (the target's chain when it has one).
           ctx.useCorrelation(await ctx.correlationOf(input.targetId));
           const event = await ctx.audit({
             action: "correction.requested",
             entityType: "care_task",
             entityId: task.id,
             after: task,
-            changeSummary: { targetType: input.targetType, targetId: input.targetId },
+            changeSummary: {
+              targetType: input.targetType,
+              targetId: input.targetId,
+              targetVersion: target.version,
+            },
           });
           await ctx.audit({
             action: "task.created",
             entityType: "care_task",
             entityId: task.id,
             after: task,
-            changeSummary: { kind: task.kind },
+            changeSummary: { kind: task.kind, assignedRole: "clinician" },
           });
           return { data: task, entityType: "care_task", auditEventId: event.id };
         },
@@ -1333,6 +1466,40 @@ export function createCitizenRepository(input: CitizenRepositoryDeps): CitizenRe
           )
           .map(toCorrection)
           .sort(desc((c) => c.createdAt));
+      });
+    },
+
+    getCorrectionRequest(id, patientId) {
+      return engine.write(async (ctx) => {
+        const { patient } = await assertPatientAccess(ctx, patientId);
+        const task = await ctx.find<CareTask>("care_task", id);
+        if (task && task.kind === "correction_request" && task.patientId !== patient.id) {
+          ctx.deny(
+            "SCOPE",
+            { entityType: "care_task", entityId: id },
+            { patientId: task.patientId, facilityId: task.facilityId },
+            { viaPatientId: patient.id },
+          );
+        }
+        if (!task || task.kind !== "correction_request") {
+          throw new RepositoryError("NOT_FOUND", { details: { entityType: "care_task", id } });
+        }
+        const actor = ctx.requireActor();
+        const minute = String(Math.floor(ctx.now.getTime() / 60_000));
+        const metaKey = `ctz.correction.${actor.personaId}.${task.id}`;
+        if ((await ctx.tx.getMeta(metaKey)) !== minute) {
+          await ctx.tx.setMeta(metaKey, minute);
+          await ctx.audit({
+            action: "citizen.correction.viewed",
+            entityType: "care_task",
+            entityId: task.id,
+            correlationId: asId<CorrelationId>(ctx.ids()),
+            patientId: patient.id,
+            facilityId: patient.facilityId,
+            changeSummary: {},
+          });
+        }
+        return toCorrection(task);
       });
     },
 

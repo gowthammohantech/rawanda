@@ -111,6 +111,10 @@ export const CorrectionRequestSchema = z.object({
   status: z.enum(CORRECTION_REQUEST_STATUSES),
   createdBy: PersonaIdSchema,
   resolvedAt: IsoUtcString.nullable(),
+  /** CTZ-07: the citizen's own "What should it say?" text (null when not given / not text). */
+  suggestedText: z.string().nullable(),
+  /** CTZ-07: staff outcome vocabulary key once resolved (`citizen:correction.resolution.*`). */
+  resolutionKey: z.string().nullable(),
 });
 export type CorrectionRequest = z.output<typeof CorrectionRequestSchema>;
 

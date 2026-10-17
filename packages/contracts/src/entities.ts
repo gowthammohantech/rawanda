@@ -428,6 +428,12 @@ export const CareTaskPayloadSchemas = {
     description: NonEmptyTrimmed,
     suggestedValue: JsonValueSchema,
     requestStatus: z.enum(CORRECTION_REQUEST_STATUSES).exactOptional(),
+    // ext (CTZ-07): routing role and the staff outcome KEY (vocabulary, never free text).
+    assignedRole: z.enum(ROLES).exactOptional(),
+    resolutionKey: z
+      .string()
+      .regex(/^[a-z][a-z0-9]*(?:_[a-z0-9]+)+$/u)
+      .exactOptional(),
   }),
   callback_request: z.object({
     topic: NonEmptyTrimmed,

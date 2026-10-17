@@ -1,0 +1,104 @@
+{
+  "cta": "Ask for a correction",
+  "unchanged": "Your record has not been changed. Your care team will review your request.",
+  "somethingWrong": "Something wrong?",
+  "somethingWrongHint": "Ask your care team to check this item",
+  "new": {
+    "title": "Ask for a correction",
+    "steps": {
+      "pick": "Choose what looks wrong",
+      "describe": "Tell us what is wrong",
+      "review": "Check and send"
+    },
+    "pickLegend": "What looks wrong?",
+    "groups": {
+      "results": "Health check results",
+      "steps": "Next steps"
+    },
+    "personalDetails": "My personal details",
+    "personalDetailsBody": "Name and date of birth (synthetic)",
+    "loading": "Loading your record…",
+    "continue": "Continue",
+    "back": "Back",
+    "whatWrong": "What is wrong?",
+    "whatWrongHint": "Between 10 and 500 letters. Write it in your own words.",
+    "shouldSay": "What should it say? (optional)",
+    "shouldSayHint": "Up to 200 letters.",
+    "counter": "{{count}} / {{max}}",
+    "understand": "I understand my care team will check this; my record stays the same until they do",
+    "reviewTitle": "Check your request",
+    "reviewItem": "Item",
+    "reviewWhatWrong": "What is wrong",
+    "reviewShouldSay": "What it should say",
+    "reviewNothing": "Not given",
+    "edit": "Change",
+    "send": "Send request",
+    "sendHint": "Sends your request to your care team. Your record is not changed.",
+    "sendError": "We could not send your request. Nothing was sent. Try again.",
+    "retry": "Try again"
+  },
+  "duplicate": {
+    "title": "You already asked about this",
+    "body": "You already asked about this on {{date}}. Your care team is still checking it.",
+    "view": "View that request"
+  },
+  "conflict": {
+    "title": "This item was updated",
+    "body": "This item was updated by your care team. Please check it again before sending.",
+    "reload": "Check it again"
+  },
+  "success": {
+    "title": "Request sent",
+    "reference": "Reference {{ref}}",
+    "view": "View request",
+    "done": "Back to privacy"
+  },
+  "list": {
+    "title": "My correction requests",
+    "empty": "You have not asked for any corrections.",
+    "sentOn": "Sent on {{date}}"
+  },
+  "detail": {
+    "title": "Correction request",
+    "reference": "Reference {{ref}}",
+    "sentOn": "Sent on {{date}}",
+    "description": "What you told us",
+    "suggested": "What you said it should say",
+    "outcome": "Outcome",
+    "seeChange": "See what changed",
+    "notFoundTitle": "Request not found",
+    "notFound": "We could not find this request.",
+    "deniedTitle": "Not available",
+    "denied": "This request is not part of your record.",
+    "back": "Back"
+  },
+  "stepper": {
+    "label": "Request progress",
+    "submitted": "Submitted",
+    "withCareTeam": "With care team",
+    "resolved": "Resolved"
+  },
+  "status": {
+    "submitted": "SUBMITTED",
+    "in_review": "WITH CARE TEAM",
+    "resolved_amended": "CORRECTED",
+    "resolved_no_change": "NO CHANGE NEEDED"
+  },
+  "statusBody": {
+    "submitted": "Your care team has your request.",
+    "in_review": "Your care team is checking your request.",
+    "resolved_amended": "Your care team corrected your record. The original is kept in the record history.",
+    "resolved_no_change": "Your care team checked and no change was needed."
+  },
+  "resolution": {
+    "glucose_context_corrected": "Your care team added that you had not eaten before this check (fasting).",
+    "reading_time_confirmed": "Your care team checked the time of the reading and it was correct.",
+    "unknown": "Your care team has finished checking your request."
+  },
+  "target": {
+    "result": "{{kind}} · {{date}}",
+    "step": "{{type}} · {{heading}}",
+    "personal": "My personal details",
+    "unknown": "An item in your record"
+  }
+}

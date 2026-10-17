@@ -19,7 +19,8 @@
  * - each amendment of a released result → `changed` "Your record was updated" with the change
  *   detail (field, before, after, who, when, reason KEY — clinician free text never reaches it).
  * - correction request → `waiting` while open (`info` once answered) + a resolution row
- *   (`changed` when the record was corrected, `info` when no change was needed).
+ *   (`changed` when the record was corrected, `info` when no change was needed); both open the
+ *   request detail (CTZ-07).
  * - anything that is not an approved (`released`) step is dropped defensively (the repository
  *   already excludes drafts, withdrawn steps and unreleased referrals).
  */
@@ -83,6 +84,7 @@ export type TimelineChange = {
 export type TimelineLink =
   | { pathname: "/health/[observationId]"; params: { observationId: string } }
   | { pathname: "/next-steps/[instructionId]"; params: { instructionId: string } }
+  | { pathname: "/more/privacy/corrections/[requestId]"; params: { requestId: string } }
   | { pathname: "/reminders" };
 
 export type TimelineItem = {
@@ -273,7 +275,11 @@ function correctionItems(corrections: readonly CorrectionRequest[]): TimelineIte
   const out: TimelineItem[] = [];
   for (const c of corrections) {
     const resolved = c.status === "resolved_amended" || c.status === "resolved_no_change";
-    const link = c.targetType === "screening" ? resultLink(c.targetId) : null;
+    // CTZ-07: both rows open the request detail (status, outcome, "what changed").
+    const link: TimelineLink = {
+      pathname: "/more/privacy/corrections/[requestId]",
+      params: { requestId: c.id },
+    };
     out.push(
       item({
         id: `correction:${c.id}`,
