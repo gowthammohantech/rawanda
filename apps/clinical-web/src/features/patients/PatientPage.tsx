@@ -11,9 +11,9 @@
  * browser history.
  */
 import { EmptyState, LoadingSkeleton, PermissionDenied, Tabs, useTx } from "@laif/ui-web";
-import { Link, useParams } from "react-router";
+import { Link, useParams, useSearchParams } from "react-router";
 
-import { routes } from "../../app/routes.ts";
+import { PATIENT_TABS, routes, type PatientTab } from "../../app/routes.ts";
 import { PageHeader } from "../../components/PageHeader.tsx";
 import { QueryErrorState } from "../../components/QueryErrorState.tsx";
 import { toClinicalError } from "../../data/errors.ts";
@@ -28,6 +28,11 @@ import { ScreeningsTab } from "./tabs/ScreeningsTab.tsx";
 export function PatientPage() {
   const t = useTx();
   const { id = "" } = useParams();
+  const [searchParams] = useSearchParams();
+  const tabParam = searchParams.get("tab");
+  const initialTab: PatientTab = (PATIENT_TABS as readonly string[]).includes(tabParam ?? "")
+    ? (tabParam as PatientTab)
+    : "overview";
   const query = usePatient(id);
 
   const breadcrumbs = [
@@ -105,7 +110,7 @@ export function PatientPage() {
         <DuplicateWarning patient={patient} />
         <Tabs
           label={t("clinical:patients.record.tabs.label")}
-          defaultValue="overview"
+          defaultValue={initialTab}
           tabs={[
             {
               value: "overview",

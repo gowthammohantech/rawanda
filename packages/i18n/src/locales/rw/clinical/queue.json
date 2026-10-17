@@ -61,7 +61,7 @@
     "manualEscalation": "Byoherejwe n'umuntu ngo bisuzumwe",
     "triggeringReadings": "Ibipimo byabiteye",
     "noTriggeringReadings": "Nta gipimo kirenze urugero rw'igerageza — byoherejwe ku muntu kuko amakuru atuzuye",
-    "comparedTo": "urugero rw'igerageza {{value}}",
+    "comparedTo": "urugero rw'igerageza {{value}} (agaciro k'agateganyo k'igerageza)",
     "whyReview": "Impamvu bikeneye isuzuma",
     "rulesetVersion": "Verisiyo y'amategeko",
     "noRuleset": "Nta verisiyo y'amategeko yanditswe",
