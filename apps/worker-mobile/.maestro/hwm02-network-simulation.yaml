@@ -1,0 +1,27 @@
+# HWM-02 manual path as a device gate (not part of `pnpm verify`): run with the app signed in as
+# any worker persona, all simulation toggles off. `pnpm --filter @laif/worker-mobile test:maestro`
+appId: host.exp.Exponent
+---
+- launchApp
+- tapOn:
+    id: "avatar-button"
+- tapOn:
+    id: "open-network-simulation"
+- assertVisible: "SIMULATION"
+- assertVisible: "Simulated sync server (on this device)"
+- tapOn: "Work offline (simulated)"
+- assertVisible: "Offline (simulated)"
+- stopApp
+- launchApp
+- tapOn:
+    id: "avatar-button"
+- tapOn:
+    id: "open-network-simulation"
+- assertVisible: "Offline (simulated)"
+- tapOn: "Work offline (simulated)"
+- assertVisible: "Online"
+- tapOn: "100%"
+- tapOn:
+    id: "netsim-run-pass"
+- assertVisible: "Nothing to send."
+- tapOn: "Off"

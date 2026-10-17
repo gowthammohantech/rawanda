@@ -5,6 +5,10 @@
  *   `checkAccess` (facility must be one of the persona's assignments) and, on failure, records
  *   `access.denied` attributed to the attempted persona and answers `FORBIDDEN` (`SCOPE`).
  *   Success writes the `deviceSessions` record + `session.started`, then the local session.
+ *   HWM-02 decision — the device's seed slice follows the signed-in persona: after sign-in (and
+ *   on restore) `repo.demo.refreshSlice()` re-slices the patient-scoped data from the simulated
+ *   remote when the persona differs from the slice on the device (unsynced rows are kept).
+ *   While signed out the device holds the FND default persona's slice.
  * - `signOut()`: ends the device session (`session.ended`) and clears the local session only;
  *   screenings, drafts and queued sync operations stay on the device.
  * - `restore()`: boot / restart — a stored session is kept only while its device session record
@@ -28,7 +32,7 @@ export type SessionRepo = {
 };
 
 export function createSessionRepo(deps: {
-  repo: Pick<CareRepository, "device">;
+  repo: Pick<CareRepository, "device" | "demo">;
   store: SessionStore;
 }): SessionRepo {
   const { repo, store } = deps;
@@ -50,6 +54,7 @@ export function createSessionRepo(deps: {
         store.clear();
         return "signed_out";
       }
+      await repo.demo.refreshSlice();
       return "signed_in";
     },
 
@@ -64,6 +69,7 @@ export function createSessionRepo(deps: {
         });
         const session = store.current();
         if (session === null) return { ok: false, code: "FORBIDDEN", reason: "ROLE" };
+        await repo.demo.refreshSlice();
         return { ok: true, session };
       } catch (error) {
         if (error instanceof RepositoryError) {

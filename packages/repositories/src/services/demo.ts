@@ -7,6 +7,11 @@
  * - `loadScenario(id)` = the same reset over `applyScenario(seed, id)` (scenario records such as
  *   SCN-07/08 queued screenings and ops included) + the scenario clock + `demo.scenario_loaded`.
  * - `ensureSeeded()` seeds on first run only (meta `seedVersion` absent or different).
+ * - `refreshSlice()` (worker, HWM-02): the device slice follows the signed-in worker persona. When
+ *   it differs from the slice on the device (meta `demo.slicePersonaId`), the patient-scoped
+ *   collections are re-sliced from the simulated remote — rows with an unsettled sync op and
+ *   unsynced drafts are kept, nothing else of another persona's facilities stays on the device;
+ *   audit log, sync queue, device sessions and meta are untouched. One `demo.slice_refreshed`.
  * - Faults persist in meta `demo.faults`; the clock offset in meta `demo.clockOffsetMs`.
  * Demo tooling is open to every role (FND-06 `demo.reset`) and works without a signed-in actor.
  */
@@ -15,6 +20,7 @@ import {
   applyScenario,
   DEFAULT_WORKER_PERSONA_ID,
   getScenario,
+  SEED_COLLECTIONS,
   SEED_VERSION,
   sliceForApp,
   type ScenarioId,
@@ -37,7 +43,23 @@ export const META_KEYS = {
   clockOffsetMs: "demo.clockOffsetMs",
   faults: FAULTS_META_KEY,
   localSeq: LOCAL_SEQ_META_KEY,
+  slicePersonaId: "demo.slicePersonaId",
 } as const;
+
+/** Patient-scoped collections a worker slice refresh replaces (reference data is identical). */
+const SLICE_REFRESH_COLLECTIONS = [
+  "patients",
+  "screenings",
+  "reviews",
+  "referrals",
+  "followUps",
+  "careTasks",
+  "reminders",
+  "reminderPreferences",
+  "careInstructions",
+] as const;
+
+const SETTLED_OPS = new Set(["acknowledged", "superseded", "rejected"]);
 
 const WORKER_ROLES = new Set(["community_health_worker", "field_supervisor"]);
 
@@ -76,11 +98,8 @@ export function createDemoApi(options: {
   async function seedInto(ctx: TxContext, dataset: SeedDataset, scenarioId: ScenarioId | null) {
     const tx = ctx.tx;
     await tx.clearAll();
-    const slice = sliceForApp(
-      dataset,
-      engine.appId,
-      engine.appId === "worker" ? slicePersona() : undefined,
-    );
+    const persona = engine.appId === "worker" ? slicePersona() : undefined;
+    const slice = sliceForApp(dataset, engine.appId, persona);
     if (engine.appId === "worker") {
       // Scenario ops (SCN-07/08/09) belong to the device queue; sliceForApp drops base ops.
       const ids = new Set<string>(
@@ -104,6 +123,7 @@ export function createDemoApi(options: {
     await tx.setMeta(META_KEYS.faults, faults.serialize());
     await tx.setMeta(META_KEYS.localSeq, String(localSeq));
     await tx.setMeta(META_KEYS.clockOffsetMs, "0");
+    await tx.setMeta(META_KEYS.slicePersonaId, persona ?? "");
     for (const op of slice.syncOperations) {
       await tx.setMeta(`sync.localVersion.${op.id}`, String(localVersionOf(slice, op)));
     }
@@ -167,6 +187,53 @@ export function createDemoApi(options: {
     },
 
     resetDemo: () => reset(options.seed(), null),
+
+    async refreshSlice() {
+      await engine.ready();
+      const personaId = slicePersona();
+      if (engine.appId !== "worker" || !remote) return { refreshed: false, personaId: null };
+      const current =
+        (await engine.store.getMeta(META_KEYS.slicePersonaId)) || DEFAULT_WORKER_PERSONA_ID;
+      if (current === personaId) return { refreshed: false, personaId };
+      await engine.write(async (ctx) => {
+        const tx = ctx.tx;
+        const remoteView = createRemoteStoreView(tx);
+        const dataset = {} as Record<string, unknown>;
+        for (const name of SEED_COLLECTIONS) dataset[name] = await remoteView.getAll(name);
+        const slice = sliceForApp(dataset as unknown as SeedDataset, "worker", personaId);
+        const ops = await tx.getAll<SyncOperation>("syncOperations");
+        const keep = new Set<string>(
+          ops.filter((o) => !SETTLED_OPS.has(o.status)).map((o) => o.entityId),
+        );
+        const counts: Record<string, number> = {};
+        for (const name of SLICE_REFRESH_COLLECTIONS) {
+          const wanted = slice[name] as unknown as Array<{ id: string }>;
+          const wantedIds = new Set(wanted.map((r) => r.id));
+          let removed = 0;
+          for (const row of await tx.getAll<{ id: string; status?: string }>(name)) {
+            const unsynced = keep.has(row.id) || (name === "screenings" && row.status === "draft");
+            if (unsynced || wantedIds.has(row.id)) continue;
+            await tx.delete(name, row.id);
+            removed += 1;
+          }
+          const incoming = wanted.filter((r) => !keep.has(r.id));
+          if (incoming.length > 0) await tx.bulkPut(name, structuredClone(incoming));
+          counts[name] = incoming.length - removed;
+        }
+        await tx.setMeta(META_KEYS.slicePersonaId, personaId);
+        await ctx.audit({
+          action: "demo.slice_refreshed",
+          entityType: "audit_event",
+          entityId: "slice",
+          changeSummary: {
+            fromPersonaId: current,
+            toPersonaId: personaId,
+            keptUnsynced: keep.size,
+          },
+        });
+      });
+      return { refreshed: true, personaId };
+    },
 
     async loadScenario(id: string) {
       let scenario;

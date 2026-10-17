@@ -8,6 +8,7 @@ export default function SettingsRoute() {
     <SettingsScreen
       onBack={() => (router.canGoBack() ? router.back() : router.replace("/"))}
       onSignedOut={() => router.replace("/sign-in")}
+      onOpenNetwork={() => router.push("/settings/network")}
     />
   );
 }

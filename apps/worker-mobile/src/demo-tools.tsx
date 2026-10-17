@@ -2,6 +2,8 @@
  * Demo tools state (FND-11 task 5): Reset demo, Offline / Slow network / Server errors (mapped
  * onto the FND-07 `FaultConfig` by `faultPatchForToggle`) and Load scenario (`SCENARIOS` for
  * this app). Switches update optimistically, so the OfflineBanner appears in the same render.
+ * HWM-02: the fault state lives in the network-mode store (one view shared with the header badge
+ * and the Network simulation screen).
  */
 import { SCENARIOS } from "@laif/mock-data";
 import {
@@ -12,17 +14,11 @@ import {
 } from "@laif/repositories";
 import { useToast, useTx, type DemoScenarioOption, type TranslationKey } from "@laif/ui-native";
 import { useQueryClient } from "@tanstack/react-query";
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-  type ReactNode,
-} from "react";
+import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
 
 import { APP_ID } from "./config.ts";
+import { invalidateAfterWrite } from "./data/queryKeys.ts";
+import { useNetwork } from "./network/NetworkProvider.tsx";
 import { useRepository } from "./providers.tsx";
 
 export type DemoToolsValue = {
@@ -35,7 +31,6 @@ export type DemoToolsValue = {
   epoch: number;
 };
 
-const ALL_OFF: DemoFaultToggleState = { offline: false, slow: false, errors: false };
 const APP_SCENARIOS = SCENARIOS.filter((scenario) => scenario.apps.includes(APP_ID));
 
 const DemoToolsContext = createContext<DemoToolsValue | null>(null);
@@ -45,21 +40,10 @@ export function DemoToolsProvider({ children }: { children?: ReactNode }) {
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const t = useTx();
-  const [faults, setFaults] = useState<DemoFaultToggleState>(ALL_OFF);
+  const network = useNetwork();
+  const faults = useMemo(() => faultTogglesFromConfig(network.config), [network.config]);
+  const { setFaults, reload } = network;
   const [epoch, setEpoch] = useState(0);
-
-  useEffect(() => {
-    let active = true;
-    void repo.demo.getFaults().then(
-      (config) => {
-        if (active) setFaults(faultTogglesFromConfig(config));
-      },
-      () => undefined,
-    );
-    return () => {
-      active = false;
-    };
-  }, [repo]);
 
   const failed = useCallback(
     () => toast({ title: t("demo:tools.actionFailed"), tone: "danger" }),
@@ -68,26 +52,19 @@ export function DemoToolsProvider({ children }: { children?: ReactNode }) {
 
   const setFault = useCallback(
     (key: DemoFaultToggleKey, enabled: boolean) => {
-      setFaults((previous) => ({ ...previous, [key]: enabled }));
-      repo.demo.setFaults(faultPatchForToggle(key, enabled)).then(
-        (config) => {
-          setFaults(faultTogglesFromConfig(config));
-          void queryClient.invalidateQueries();
-        },
-        () => {
-          setFaults((previous) => ({ ...previous, [key]: !enabled }));
-          failed();
-        },
+      setFaults(faultPatchForToggle(key, enabled)).then(
+        () => void invalidateAfterWrite(queryClient),
+        failed,
       );
     },
-    [repo, queryClient, failed],
+    [setFaults, queryClient, failed],
   );
 
   const afterDatasetChange = useCallback(async () => {
     queryClient.clear();
-    setFaults(faultTogglesFromConfig(await repo.demo.getFaults()));
+    await reload();
     setEpoch((value) => value + 1);
-  }, [repo, queryClient]);
+  }, [reload, queryClient]);
 
   const reset = useCallback(async () => {
     try {

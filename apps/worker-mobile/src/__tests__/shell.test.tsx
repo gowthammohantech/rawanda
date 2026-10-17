@@ -202,7 +202,7 @@ describe("worker-mobile shell (HWM-01)", () => {
     const { store, repo } = await renderShell(
       <>
         <AppLayout />
-        <SettingsScreen onSignedOut={onSignedOut} />
+        <SettingsScreen onSignedOut={onSignedOut} onOpenNetwork={() => undefined} />
       </>,
       { store: view.store, readyTestId: "settings-screen" },
     );
@@ -256,7 +256,7 @@ describe("worker-mobile shell (HWM-01)", () => {
     const { repo, store } = await renderShell(
       <>
         <AppLayout />
-        <SettingsScreen onSignedOut={() => undefined} />
+        <SettingsScreen onSignedOut={() => undefined} onOpenNetwork={() => undefined} />
       </>,
       { store: first.store, readyTestId: "settings-screen" },
     );

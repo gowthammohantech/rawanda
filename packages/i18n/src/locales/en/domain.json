@@ -408,6 +408,7 @@
       "fault_toggled": "Simulated faults changed",
       "clock_changed": "Demo clock changed",
       "concurrent_update_simulated": "Update by another user simulated",
+      "slice_refreshed": "Device data refreshed for the signed-in worker",
       "simulated_staff_action": "Staff action simulated",
       "bundle_exported": "Demo bundle exported",
       "bundle_imported": "Demo bundle imported"

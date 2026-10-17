@@ -4,7 +4,7 @@ import { FACILITY_IDS, PERSONA_IDS } from "@laif/mock-data";
 import { createMemoryStoreAdapter, LOCAL_COLLECTIONS, type StoreAdapter } from "@laif/repositories";
 import { describe, expect, it } from "vitest";
 
-import { createAppRepository } from "../../repository.ts";
+import { createAppRepository } from "../../data/repository.ts";
 import { createSessionRepo } from "../sessionRepo.ts";
 import { createSessionStore, DEVICE_SESSION_STORAGE_KEY } from "../store.ts";
 
@@ -133,5 +133,20 @@ describe("sessionRepo (HWM-01)", () => {
     await restartedRepo.demo.resetDemo();
     expect(await restarted.restore()).toBe("signed_out");
     expect(restartedStore.current()).toBeNull();
+  });
+
+  it("HWM-02: the device slice follows the signed-in persona (default slice while signed out)", async () => {
+    const { sessions, store } = await setup();
+    const facilities = async () =>
+      new Set((await store.getAll<{ facilityId: string }>("patients")).map((p) => p.facilityId));
+    expect(await facilities()).toEqual(new Set([FACILITY_IDS.alpha1]));
+    expect((await sessions.signIn(PERSONA_IDS.chwAlpha2A, FACILITY_IDS.alpha2)).ok).toBe(true);
+    expect(await facilities()).toEqual(new Set([FACILITY_IDS.alpha2]));
+    // Restore keeps it (no second refresh).
+    expect(await sessions.restore()).toBe("signed_in");
+    const refreshed = (await store.getAll<AuditEvent>("auditEvents")).filter(
+      (e) => e.action === "demo.slice_refreshed",
+    );
+    expect(refreshed).toHaveLength(1);
   });
 });

@@ -1,0 +1,35 @@
+{
+  "state": {
+    "pending": "Byabitswe kuri iki gikoresho",
+    "syncing": "Birimo guhuzwa",
+    "synced": "Byahujwe",
+    "conflict": "Bikeneye icyemezo cyawe",
+    "rejected": "Ntibyemewe",
+    "blocked": "Byahagaritswe — uburenganzira bw'igikoresho bwahagaritswe"
+  },
+  "op": {
+    "patient": {
+      "register": "Kwandika umurwayi"
+    },
+    "screening": {
+      "submit": "Isuzuma",
+      "amend": "Gukosora isuzuma"
+    },
+    "followup": {
+      "attempt": "Kugerageza kuvugana",
+      "outcome": "Umusaruro w'ikurikirana",
+      "update": "Ivugurura ry'ikurikirana"
+    },
+    "correction": {
+      "request": "Gusaba gukosora"
+    },
+    "other": "Irindi hinduka",
+    "resolution": "{{label}} (byongeye koherezwa nyuma y'amakimbirane)"
+  },
+  "badge": {
+    "online": "Kuri interineti",
+    "offline": "Nta murandasi (kwigana)",
+    "pending_one": "Ikintu {{count}} gitegereje guhuzwa",
+    "pending_other": "Ibintu {{count}} bitegereje guhuzwa"
+  }
+}
