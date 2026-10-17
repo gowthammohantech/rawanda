@@ -22,3 +22,4 @@ export * from "./scenarios/registry.ts";
 export * from "./slices.ts";
 export * from "./overlays/citizen.ts";
 export * from "./hash.ts";
+export * from "./scenarios/adminAnalytics.ts";

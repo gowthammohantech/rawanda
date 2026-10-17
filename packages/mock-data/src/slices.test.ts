@@ -16,9 +16,17 @@ describe("sliceForApp", () => {
     expect(slice.extraCollections).toEqual({});
   });
 
-  it("admin gets the full seed (overlay registered by ADM-01)", () => {
+  it("admin gets the full seed plus the ADM-01 analytics overlay appended", () => {
     const slice = sliceForApp(seed, "admin");
-    for (const name of SEED_COLLECTIONS) expect(slice[name]).toEqual(seed[name]);
+    for (const name of SEED_COLLECTIONS) {
+      const base = seed[name] as unknown[];
+      expect((slice[name] as unknown[]).slice(0, base.length)).toEqual(base);
+    }
+    expect(slice.screenings.length).toBeGreaterThan(seed.screenings.length);
+    expect(Object.keys(slice.extraCollections).sort()).toEqual(["accessGrants", "timeEntries"]);
+    // Without the registered overlay the admin slice is exactly the base seed.
+    const plain = sliceForApp(seed, "admin", undefined, { overlays: {} });
+    for (const name of SEED_COLLECTIONS) expect(plain[name]).toEqual(seed[name]);
   });
 
   it("worker gets only the patients and tasks of the worker's facility", () => {

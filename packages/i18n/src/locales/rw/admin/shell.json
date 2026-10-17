@@ -1,0 +1,24 @@
+{
+  "nav": {
+    "settings": "Igenamiterere",
+    "locked": "Ntibiboneka ku ruhare rwawe rw'igerageza"
+  },
+  "scopeStrip": "Urareba imibare rusange",
+  "scopeStripLabel": "Aho raporo igarukira: {{scope}}",
+  "scope": {
+    "allDistricts": "Uturere twose nemerewe ({{list}})",
+    "list": "{{list}}"
+  },
+  "search": {
+    "comingLater": "Gushakisha bizaza nyuma"
+  },
+  "persona": {
+    "end": "Soza isomo",
+    "ended": "Isomo ry'igerageza ryarangiye."
+  },
+  "placeholder": {
+    "settings": "Igenamiterere ry'imipaka, amakosa n'isomo bizaza muri ADM-09."
+  },
+  "loading": "Turimo kugenzura amakuru y'igerageza kuri iki gikoresho…",
+  "grantChanged": "Uburenganzira bwawe bw'igerageza bwahindutse. Aho raporo igarukira hashya hatangira gukurikizwa kuri iyi paji."
+}

@@ -12,6 +12,9 @@
  * `pnpm i18n:check` fails if a file on disk is not wired in here.
  */
 import enAdmin from "./locales/en/admin.json";
+import enAdminAuth from "./locales/en/admin/auth.json";
+import enAdminErrors from "./locales/en/admin/errors.json";
+import enAdminShell from "./locales/en/admin/shell.json";
 import enCitizen from "./locales/en/citizen.json";
 import enCitizenConsent from "./locales/en/citizen/consent.json";
 import enCitizenErrors from "./locales/en/citizen/errors.json";
@@ -23,6 +26,7 @@ import enClinical from "./locales/en/clinical.json";
 import enClinicalCommon from "./locales/en/clinical/common.json";
 import enClinicalErrors from "./locales/en/clinical/errors.json";
 import enClinicalLogin from "./locales/en/clinical/login.json";
+import enClinicalSettings from "./locales/en/clinical/settings.json";
 import enCommon from "./locales/en/common.json";
 import enDemo from "./locales/en/demo.json";
 import enDomain from "./locales/en/domain.json";
@@ -33,6 +37,9 @@ import enWorkerAuth from "./locales/en/worker/auth.json";
 import enWorkerNav from "./locales/en/worker/nav.json";
 import enWorkerSettings from "./locales/en/worker/settings.json";
 import rwAdmin from "./locales/rw/admin.json";
+import rwAdminAuth from "./locales/rw/admin/auth.json";
+import rwAdminErrors from "./locales/rw/admin/errors.json";
+import rwAdminShell from "./locales/rw/admin/shell.json";
 import rwCitizen from "./locales/rw/citizen.json";
 import rwCitizenConsent from "./locales/rw/citizen/consent.json";
 import rwCitizenErrors from "./locales/rw/citizen/errors.json";
@@ -44,6 +51,7 @@ import rwClinical from "./locales/rw/clinical.json";
 import rwClinicalCommon from "./locales/rw/clinical/common.json";
 import rwClinicalErrors from "./locales/rw/clinical/errors.json";
 import rwClinicalLogin from "./locales/rw/clinical/login.json";
+import rwClinicalSettings from "./locales/rw/clinical/settings.json";
 import rwCommon from "./locales/rw/common.json";
 import rwDemo from "./locales/rw/demo.json";
 import rwDomain from "./locales/rw/domain.json";
@@ -82,9 +90,10 @@ export const enResources = {
     common: enClinicalCommon,
     login: enClinicalLogin,
     errors: enClinicalErrors,
+    settings: enClinicalSettings,
   },
   worker: { ...enWorker, auth: enWorkerAuth, nav: enWorkerNav, settings: enWorkerSettings },
-  admin: enAdmin,
+  admin: { ...enAdmin, shell: enAdminShell, auth: enAdminAuth, errors: enAdminErrors },
   citizen: {
     ...enCitizen,
     errors: enCitizenErrors,
@@ -108,9 +117,10 @@ export const rwResources: Record<Namespace, object> = {
     common: rwClinicalCommon,
     login: rwClinicalLogin,
     errors: rwClinicalErrors,
+    settings: rwClinicalSettings,
   },
   worker: { ...rwWorker, auth: rwWorkerAuth, nav: rwWorkerNav, settings: rwWorkerSettings },
-  admin: rwAdmin,
+  admin: { ...rwAdmin, shell: rwAdminShell, auth: rwAdminAuth, errors: rwAdminErrors },
   citizen: {
     ...rwCitizen,
     errors: rwCitizenErrors,

@@ -21,7 +21,7 @@ import { createAppSession, FACILITY_STORAGE_KEY } from "../session/session-store
 import { renderApp as renderTestApp } from "../test/render-app.tsx";
 import { App } from "./App.tsx";
 import { APP_ID } from "./config.ts";
-import { createAppRepository } from "./repository.ts";
+import { createAppRepository } from "../data/repository.ts";
 import { appRoutes } from "./router.tsx";
 import { routes } from "./routes.ts";
 import { createAppQueryClient } from "./services.ts";
@@ -135,7 +135,7 @@ describe("clinical-web shell", () => {
     const trigger = screen.getByRole("button", { name: "Demo tools" });
     await user.click(trigger);
     await user.click(await screen.findByRole("menuitemcheckbox", { name: "Offline" }));
-    expect(screen.getByText("You are offline. Changes are saved on this device.")).toBeTruthy();
+    expect(screen.getByText("Simulated offline — changes cannot be saved")).toBeTruthy();
     await waitFor(async () => expect((await services.repo.demo.getFaults()).offline).toBe(true));
 
     await user.keyboard("{Escape}");
@@ -149,7 +149,7 @@ describe("clinical-web shell", () => {
     expect(after.datasetHash).toBe(seeded.datasetHash);
     expect((await services.repo.demo.getFaults()).offline).toBe(false);
     await waitFor(() =>
-      expect(screen.queryByText("You are offline. Changes are saved on this device.")).toBeNull(),
+      expect(screen.queryByText("Simulated offline — changes cannot be saved")).toBeNull(),
     );
   });
 

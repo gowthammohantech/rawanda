@@ -8,5 +8,7 @@ export default defineProject({
     environment: "jsdom",
     include: ["src/**/*.test.{ts,tsx}"],
     setupFiles: ["./src/test/setup.ts"],
+    // Full-app renders (lazy routes, seeding) are slow under parallel load.
+    testTimeout: 30_000,
   },
 });

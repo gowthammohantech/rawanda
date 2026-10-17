@@ -1,5 +1,6 @@
 /** All domain services over one engine (local device / web store, or the simulated remote). */
 import type { Engine } from "../core/engine.ts";
+import { createAccessGrantService } from "./access-grants.ts";
 import { createAuditService } from "./audit.ts";
 import { createFollowUpService } from "./follow-ups.ts";
 import { createInstructionService } from "./instructions.ts";
@@ -24,6 +25,7 @@ export function createServices(engine: Engine) {
     ...createInstructionService(engine),
     ...createMetricsService(engine),
     ...createAuditService(engine),
+    ...createAccessGrantService(engine),
     /** Authorised CHWs for assignment (CLN-07/09); needs `task.assign` in that facility. */
     listWorkers(facilityId: string) {
       return engine.read(async (ctx) => {

@@ -6,6 +6,9 @@
  */
 import {
   applyAmendment,
+  type AuditCategory,
+  type AuditOutcome,
+  type Brand,
   assertCancellationReason,
   assertCompletionEvidence,
   assertDismissalReason,
@@ -98,15 +101,30 @@ type Scope = {
 
 type PendingAudit = Omit<AuditEvent, "id"> & { seq: number };
 
+/** Options of builders other than the base seed (e.g. the ADM-01 admin analytics overlay). */
+export type SeedBuilderOptions = {
+  /** Allowed offsets from the demo clock in days (default `SEED_WINDOW_DAYS`). */
+  windowDays?: { min: number; max: number };
+  /**
+   * Prefix of every ID namespace (default none = the base seed IDs). Overlays use their own
+   * prefix so their records never collide with base records.
+   */
+  idPrefix?: string;
+};
+
 export class SeedBuilder {
   readonly nowMs: number;
   readonly ruleset: DemoRuleset;
+  private readonly window: { min: number; max: number };
+  private readonly idPrefix: string;
   private readonly pending: PendingAudit[] = [];
   private seq = 0;
   private attemptNo = 0;
   private amendmentNo = 0;
 
-  constructor(nowIso: string, ruleset: DemoRuleset) {
+  constructor(nowIso: string, ruleset: DemoRuleset, options: SeedBuilderOptions = {}) {
+    this.window = options.windowDays ?? SEED_WINDOW_DAYS;
+    this.idPrefix = options.idPrefix ?? "";
     this.nowMs = Date.parse(nowIso);
     if (Number.isNaN(this.nowMs)) throw new RangeError(`createSeed: invalid nowIso ${nowIso}`);
     this.ruleset = ruleset;
@@ -115,11 +133,18 @@ export class SeedBuilder {
   // ── Time ─────────────────────────────────────────────────────────────────
   /** ISO instant `days` (fractional allowed) from the demo clock, rounded to the minute. */
   at(days: number): string {
-    if (days < SEED_WINDOW_DAYS.min || days > SEED_WINDOW_DAYS.max) {
-      throw new RangeError(`seed timestamp outside the −60…+14 day window: ${days}`);
+    if (days < this.window.min || days > this.window.max) {
+      throw new RangeError(
+        `seed timestamp outside the ${this.window.min}…+${this.window.max} day window: ${days}`,
+      );
     }
     const ms = Math.round((this.nowMs + days * DAY_MS) / MINUTE_MS) * MINUTE_MS;
     return new Date(ms).toISOString();
+  }
+
+  /** Stable seed ID in this builder's namespace (see `SeedBuilderOptions.idPrefix`). */
+  sid<T extends Brand<string, string>>(namespace: string, n: number): T {
+    return seedId<T>(`${this.idPrefix}${namespace}`, n);
   }
 
   // ── Audit ────────────────────────────────────────────────────────────────
@@ -132,24 +157,34 @@ export class SeedBuilder {
     correlationId: CorrelationId;
     scope: Scope;
     summary: { [key: string]: JsonValue };
+    /** Defaults: `change` / `success` / no justification / role of the seed persona. */
+    category?: AuditCategory;
+    outcome?: AuditOutcome;
+    justification?: string | null;
+    actorRole?: Role | null;
   }): void {
     this.seq += 1;
     this.pending.push({
       seq: this.seq,
       actorId: input.actorId,
-      actorRole: input.actorId === null ? null : (ROLE_BY_PERSONA.get(input.actorId) ?? null),
+      actorRole:
+        input.actorRole !== undefined
+          ? input.actorRole
+          : input.actorId === null
+            ? null
+            : (ROLE_BY_PERSONA.get(input.actorId) ?? null),
       action: input.action,
       entityType: input.entityType,
       entityId: input.entityId,
       occurredAt: input.at,
       correlationId: input.correlationId,
-      category: "change",
-      outcome: "success",
+      category: input.category ?? "change",
+      outcome: input.outcome ?? "success",
       facilityId: input.scope.facilityId,
       districtId: input.scope.districtId,
       patientId: input.scope.patientId,
       changeSummary: input.summary,
-      justification: null,
+      justification: input.justification ?? null,
       version: 1,
       createdAt: input.at,
       updatedAt: input.at,
@@ -164,7 +199,7 @@ export class SeedBuilder {
       .map((event, index) => {
         const { seq, ...rest } = event;
         void seq;
-        return { id: seedId<AuditEventId>(ID_NAMESPACES.auditEvent, index + 1), ...rest };
+        return { id: this.sid<AuditEventId>(ID_NAMESPACES.auditEvent, index + 1), ...rest };
       });
   }
 
@@ -265,8 +300,10 @@ export class SeedBuilder {
     observations?: ScreeningObservation[];
     notes?: string;
     captureDurationSeconds?: number | null;
+    /** Ruleset evaluated at submission (default: the builder's ruleset). */
+    ruleset?: DemoRuleset;
   }): Screening {
-    const id = seedId<ScreeningId>(ID_NAMESPACES.screening, input.n);
+    const id = this.sid<ScreeningId>(ID_NAMESPACES.screening, input.n);
     const s: Screening = {
       id,
       patientId: input.patient.id,
@@ -280,7 +317,7 @@ export class SeedBuilder {
       rulesetVersion: null,
       status: "draft",
       flag: null,
-      clientMutationId: seedId(ID_NAMESPACES.clientMutation, input.n),
+      clientMutationId: this.sid(ID_NAMESPACES.clientMutation, input.n),
       captureDurationSeconds: input.captureDurationSeconds ?? null,
       notes: input.notes ?? "",
       amendments: [],
@@ -310,7 +347,8 @@ export class SeedBuilder {
       "screening.submitted",
       input.correlationId,
     );
-    const flag = evaluateScreening(input.readings, this.ruleset);
+    const ruleset = input.ruleset ?? this.ruleset;
+    const flag = evaluateScreening(input.readings, ruleset);
     const outcome: ScreeningStatus = flag.requiresReview ? "review_required" : "no_review_required";
     if (outcome !== input.expect) {
       throw new Error(
@@ -318,7 +356,7 @@ export class SeedBuilder {
       );
     }
     s.flag = flag;
-    s.rulesetVersion = this.ruleset.version;
+    s.rulesetVersion = ruleset.version;
     this.screeningStatus(
       s,
       outcome,
@@ -345,7 +383,7 @@ export class SeedBuilder {
   ): void {
     this.amendmentNo += 1;
     const next = applyAmendment(s, {
-      id: seedId<ScreeningAmendmentId>(ID_NAMESPACES.amendment, this.amendmentNo),
+      id: this.sid<ScreeningAmendmentId>(ID_NAMESPACES.amendment, this.amendmentNo),
       field,
       after,
       reason,
@@ -379,7 +417,7 @@ export class SeedBuilder {
     }
     const at = screening.updatedAt;
     const r: Review = {
-      id: seedId<ReviewId>(ID_NAMESPACES.review, input.n),
+      id: this.sid<ReviewId>(ID_NAMESPACES.review, input.n),
       screeningId: screening.id,
       patientId: screening.patientId,
       facilityId: screening.facilityId,
@@ -505,7 +543,7 @@ export class SeedBuilder {
   }): Referral {
     const { review } = input;
     const ref: Referral = {
-      id: seedId<ReferralId>(ID_NAMESPACES.referral, input.n),
+      id: this.sid<ReferralId>(ID_NAMESPACES.referral, input.n),
       patientId: review.patientId,
       reviewId: review.id,
       destination: FACILITY_NAME.get(input.destinationFacilityId) ?? input.destinationFacilityId,
@@ -643,7 +681,7 @@ export class SeedBuilder {
     correlationId: CorrelationId;
   }): FollowUp {
     const fu: FollowUp = {
-      id: seedId<FollowUpId>(ID_NAMESPACES.followUp, input.n),
+      id: this.sid<FollowUpId>(ID_NAMESPACES.followUp, input.n),
       patientId: input.patientId,
       referralId: input.referralId,
       reviewId: input.reviewId,
@@ -724,7 +762,7 @@ export class SeedBuilder {
   ): void {
     this.attemptNo += 1;
     fu.attempts.push({
-      id: seedId<ContactAttemptId>(ID_NAMESPACES.attempt, this.attemptNo),
+      id: this.sid<ContactAttemptId>(ID_NAMESPACES.attempt, this.attemptNo),
       at: input.at,
       method: input.method,
       result: input.result,
@@ -931,7 +969,7 @@ export class SeedBuilder {
     correlationId: CorrelationId;
   }): CareInstruction {
     const ci: CareInstruction = {
-      id: seedId<CareInstructionId>(ID_NAMESPACES.careInstruction, input.n),
+      id: this.sid<CareInstructionId>(ID_NAMESPACES.careInstruction, input.n),
       patientId: input.patientId,
       kind: input.kind,
       sourceType: input.source.type,
@@ -998,7 +1036,7 @@ export class SeedBuilder {
   }): Reminder {
     const { instruction } = input;
     const r: Reminder = {
-      id: seedId<ReminderId>(ID_NAMESPACES.reminder, input.n),
+      id: this.sid<ReminderId>(ID_NAMESPACES.reminder, input.n),
       patientId: instruction.patientId,
       followUpId: input.followUpId,
       channel: "in_app",
