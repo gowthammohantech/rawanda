@@ -34,6 +34,7 @@ of `save-exact=true`; `npx expo install --check` and `npx expo-doctor` (20/20 ch
 | `expo-linking`                   | 58.0.13 | expo-router peer                                               |
 | `expo-status-bar`                | 58.0.3  |                                                                |
 | `@expo/metro-runtime`            | 58.0.14 | expo-router peer                                               |
+| `expo-notifications`             | 58.1.5  | citizen wallet only (CTZ-05): device test-reminder preview     |
 | `react-native`                   | 0.88.0  |                                                                |
 | `react-native-web`               | 0.21.4  | Expo web target + Vitest alias                                 |
 | `react-native-svg`               | 15.16.0 |                                                                |

@@ -16,6 +16,7 @@
  */
 import type {
   AcknowledgeInstructionInputSchema,
+  AcknowledgeReminderInputSchema,
   CallbackRequestInputSchema,
   CitizenAccessEvent,
   CitizenAccount,
@@ -52,6 +53,10 @@ import type { DemoApi, MutationInput, RepositoryDeps } from "../care-repository.
 export type RecordConsentCall = MutationInput<typeof RecordConsentInputSchema>;
 export type AcknowledgeInstructionCall = MutationInput<typeof AcknowledgeInstructionInputSchema>;
 export type UpdateNotificationPrefsCall = MutationInput<typeof UpdateNotificationPrefsInputSchema>;
+export type AcknowledgeReminderCall = MutationInput<typeof AcknowledgeReminderInputSchema>;
+
+/** CTZ-05 simulated delivery run: what changed (both empty when nothing was due). */
+export type ProcessDueRemindersResult = { delivered: Reminder[]; cancelled: Reminder[] };
 export type CitizenCorrectionCall = MutationInput<typeof CorrectionRequestInputSchema>;
 export type CallbackRequestCall = MutationInput<typeof CallbackRequestInputSchema>;
 export type UpdateCitizenSettingsCall = MutationInput<typeof UpdateCitizenSettingsInputSchema>;
@@ -156,12 +161,34 @@ export interface CitizenRepository {
     key: string,
   ): Promise<WriteResult<NextStepAcknowledgement>>;
   getNotificationPrefs(patientId: string): Promise<NotificationPreference | null>;
-  /** Opt in / out + timing; opting out cancels scheduled reminders (`opted_out`). */
+  /**
+   * CTZ-05 opt in / out + timing, one transaction: writes the preference; opting out cancels
+   * every `scheduled` reminder (`opted_out`); opting in / changing timing cancels rows that no
+   * longer match the plan (`timing_changed`) and inserts the `planReminders` rows (system actor
+   * `wallet-scheduler`). One `reminder.preference_changed` (`changeSummary.change` =
+   * `opted_in` | `opted_out` | `timing_changed`) + one `reminder.cancelled` / `.scheduled` per
+   * row. Same key = replay (no duplicates, T-04); stale version / `conflict-next-write` →
+   * `CONFLICT`, nothing changed (T-05).
+   */
   updateNotificationPrefs(
     i: UpdateNotificationPrefsCall,
     key: string,
   ): Promise<WriteResult<NotificationPreference>>;
+  /** All reminders of the patient (every status), oldest scheduled time first. */
   listReminders(patientId: string): Promise<Reminder[]>;
+  /**
+   * CTZ-05 simulated delivery (app focus / demo clock change): `scheduled` rows whose time has
+   * come → `delivered_simulated` (`reminder.delivered_simulated`, system actor); rows of steps
+   * that no longer get reminders → `cancelled(instruction_cancelled)`. Idempotent.
+   */
+  processDueReminders(patientId: string): Promise<ProcessDueRemindersResult>;
+  /**
+   * "Got it" on a delivered reminder → `acknowledged`; repeats return the stored row. Never
+   * changes the related next step. Other statuses → `VALIDATION_ERROR` `INVALID_TRANSITION`.
+   */
+  acknowledgeReminder(i: AcknowledgeReminderCall, key: string): Promise<WriteResult<Reminder>>;
+  /** `citizen.reminder.preview_sent` after an on-device test notification was scheduled. */
+  recordReminderPreviewSent(patientId: string): Promise<void>;
   /** Derived progress timeline, newest first (reminders are never `done`). */
   listTimeline(patientId: string): Promise<TimelineItem[]>;
   /** Citizen-visible access history, newest first. */

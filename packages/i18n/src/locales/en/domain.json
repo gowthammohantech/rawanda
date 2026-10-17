@@ -531,6 +531,9 @@
         "verified": "Identity verified (simulated demo code)",
         "verification_failed": "Identity verification failed (simulated)",
         "verification_unavailable": "Verification service unavailable (simulated)"
+      },
+      "reminder": {
+        "preview_sent": "Test reminder sent to this phone (demo)"
       }
     }
   }

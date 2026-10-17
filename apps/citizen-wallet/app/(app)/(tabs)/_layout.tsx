@@ -2,6 +2,7 @@
  * Wallet tabs (CTZ-02 task 10): My health, Next steps, Reminders, Timeline, More. Safe-area
  * aware, item min height 56, labels wrap (two lines) instead of truncating at large font
  * scales; each tab has a `tabBarAccessibilityLabel`. The focused tab is remembered (relaunch).
+ * CTZ-05: the reminder inbox banner sits above the tabs (and runs the simulated delivery).
  */
 import {
   AppText,
@@ -11,9 +12,10 @@ import {
   useTx,
 } from "@laif/ui-native";
 import { Tabs } from "expo-router";
-import type { ColorValue } from "react-native";
+import { StyleSheet, View, type ColorValue } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { ReminderInboxBanner } from "../../../src/features/reminders/ReminderInboxBanner.tsx";
 import { useWalletStore } from "../../../src/providers.tsx";
 import { TAB_ITEM_MIN_HEIGHT, WALLET_TAB_ITEMS } from "../../../src/navigation/tabs.ts";
 import { WALLET_TABS, type WalletTab } from "../../../src/state/session.ts";
@@ -41,35 +43,40 @@ export default function TabsLayout() {
   const wallet = useWalletStore();
   const base = bottomTabBarScreenOptions({ bottomInset: insets.bottom });
   return (
-    <Tabs
-      screenOptions={{
-        ...base,
-        tabBarItemStyle: { minHeight: TAB_ITEM_MIN_HEIGHT, minWidth: minTouchTarget },
-      }}
-      screenListeners={({ route }) => ({
-        focus: () => {
-          const name = route.name;
-          if ((WALLET_TABS as readonly string[]).includes(name)) {
-            wallet.getState().setLastTab(name as WalletTab);
-          }
-        },
-      })}
-    >
-      {WALLET_TAB_ITEMS.map((tab) => {
-        const label = t(tab.labelKey);
-        return (
-          <Tabs.Screen
-            key={tab.name}
-            name={tab.name}
-            options={{
-              title: label,
-              tabBarLabel: tabLabel(label),
-              tabBarAccessibilityLabel: label,
-              tabBarIcon: tabBarIcon(tab.icon),
-            }}
-          />
-        );
-      })}
-    </Tabs>
+    <View style={styles.root}>
+      <ReminderInboxBanner />
+      <Tabs
+        screenOptions={{
+          ...base,
+          tabBarItemStyle: { minHeight: TAB_ITEM_MIN_HEIGHT, minWidth: minTouchTarget },
+        }}
+        screenListeners={({ route }) => ({
+          focus: () => {
+            const name = route.name;
+            if ((WALLET_TABS as readonly string[]).includes(name)) {
+              wallet.getState().setLastTab(name as WalletTab);
+            }
+          },
+        })}
+      >
+        {WALLET_TAB_ITEMS.map((tab) => {
+          const label = t(tab.labelKey);
+          return (
+            <Tabs.Screen
+              key={tab.name}
+              name={tab.name}
+              options={{
+                title: label,
+                tabBarLabel: tabLabel(label),
+                tabBarAccessibilityLabel: label,
+                tabBarIcon: tabBarIcon(tab.icon),
+              }}
+            />
+          );
+        })}
+      </Tabs>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({ root: { flex: 1 } });

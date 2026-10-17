@@ -8,6 +8,7 @@
 import { Button, ErrorState, LoadingState, PermissionDenied, Screen, useTx } from "@laif/ui-native";
 import { useRouter } from "expo-router";
 
+import { ConsentRequiredState } from "../../components/ConsentRequiredState.tsx";
 import { WalletHeader } from "../../components/WalletHeader.tsx";
 import { RepresentativeBanner } from "../health/RepresentativeBanner.tsx";
 import { useActivePatient } from "../health/useResults.ts";
@@ -37,6 +38,9 @@ export function NextStepDetailScreen({ instructionId }: { instructionId: string 
         action={backButton}
       />
     );
+  } else if (errorKind === "consent") {
+    // Consent withdrawn while open: explain instead of an endless skeleton.
+    body = <ConsentRequiredState />;
   } else if (errorKind === "other") {
     body = <ErrorState message={t("citizen:nextSteps.error")} onRetry={() => step.refetch()} />;
   } else if (step.data === undefined) {
