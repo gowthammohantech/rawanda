@@ -381,6 +381,48 @@ describe.each(adapters)("CitizenRepository (%s adapter)", (_name, makeStore) => 
     await forbidden(h.repo.recordNextStepsListViewed(P3), "CONSENT_REQUIRED");
   });
 
+  it("CTZ-06 recordTimelineViewed: one record_viewed event + citizen.timeline.viewed per call", async () => {
+    const h = await setup(makeStore());
+    await h.repo.recordTimelineViewed(P1);
+    await h.repo.recordTimelineViewed(P1);
+    expect(await h.audits("citizen.timeline.viewed")).toHaveLength(2);
+    const events = await h.repo.listAccessEvents(P1);
+    expect(events.slice(0, 2).map((e) => [e.action, e.resourceType, e.purpose])).toEqual([
+      ["record_viewed", "patient", "self_access"],
+      ["record_viewed", "patient", "self_access"],
+    ]);
+    h.as(PERSONA_IDS.citizenWithdrawn);
+    await forbidden(h.repo.recordTimelineViewed(P3), "CONSENT_REQUIRED");
+  });
+
+  it("CTZ-06 recordChangeViewed: amended result only, de-duplicated; others NOT_FOUND / SCOPE", async () => {
+    const h = await setup(makeStore());
+    const amended = CITIZEN_OVERLAY_IDS.amendedScreening;
+    await h.repo.recordChangeViewed(P1, amended);
+    await h.repo.recordChangeViewed(P1, amended); // same demo minute → de-duplicated
+    const audits = await h.audits("citizen.change.viewed");
+    expect(audits).toHaveLength(1);
+    expect(audits[0]).toMatchObject({ entityType: "screening", entityId: amended });
+    expect((await h.repo.listAccessEvents(P1))[0]).toMatchObject({
+      action: "result_viewed",
+      resourceType: "screening",
+      resourceId: amended,
+    });
+    // A released result without amendments → NOT_FOUND (no change to show), no audit.
+    const plain = (await h.repo.listReleasedObservations(P1)).find(
+      (o) => o.kind === "released" && o.amendments.length === 0,
+    );
+    await expect(h.repo.recordChangeViewed(P1, plain!.id)).rejects.toMatchObject({
+      code: "NOT_FOUND",
+    });
+    // Another patient's screening via P1 → FORBIDDEN SCOPE + access.denied.
+    await forbidden(
+      h.repo.recordChangeViewed(P1, SEED_ANCHORS.CTZ_P2_DISMISSED_SCREENING.screeningId),
+      "SCOPE",
+    );
+    expect(await h.audits("citizen.change.viewed")).toHaveLength(1);
+  });
+
   it("CTZ-04 completed follow-up carries completion evidence; ack audit keeps the key", async () => {
     const h = await setup(makeStore());
     const done = (await h.repo.listApprovedInstructions(P1)).find(

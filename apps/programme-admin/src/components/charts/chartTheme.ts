@@ -20,6 +20,8 @@ export const CHART_SERIES = {
   /** ADM-04 overdue trend: referrals solid + circle, follow-ups dashed + square. */
   overdueReferrals: { color: "var(--color-primary)", marker: "circle" },
   overdueFollowUps: { color: "var(--color-risk-warning)", dash: "6 4", marker: "square" },
+  /** ADM-05: pooled minutes per patient-day per week (one series). */
+  minutesPerPatientDay: { color: "var(--color-primary)", marker: "circle" },
 } as const satisfies Record<string, SeriesStyle>;
 export type ChartSeriesId = keyof typeof CHART_SERIES;
 

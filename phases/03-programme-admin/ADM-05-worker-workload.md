@@ -1,6 +1,6 @@
 # ADM-05 — Worker workload and staff-time proxies
 
-Status: Not started
+**Status:** Done
 
 ## 1. Header
 
@@ -144,3 +144,9 @@ Manual:
 ## 12. Commit
 
 `feat(admin): ADM-05 worker workload and staff-time proxy metrics`
+
+## 13. Implementation notes (verifier)
+
+- **Low-volume worker vs the zero rule:** acceptance §9 expects `<5` for the low-volume worker's assigned _and_ completed. HW-032 (Beta-1) has assigned 1–4 → `<5` (PRIMARY) with complementary suppression hiding one more cell, but its completed count is 0, and FND-06 suppression shows zero unsuppressed (`packages/analytics/src/suppression.ts`: "zero is shown"). The FND rule wins; completed shows `0`.
+- **Audit entity:** `admin.drilldown.viewed` is emitted with the facility/district entity and `changeSummary.view = "workload_worker_table"` (the audit `entityType` is a fixed set), once per session + filter key.
+- **Shared changes:** `getMetricsRecords` adds `taskFollowUps` (free text redacted like `followUps`) and a staff directory `workers` (persona id for joining, `workerCode`, facility ids — no names); the selector output (`WorkerRow`) carries only `workerCode`. Fixture: s9–s10 are now recorded by the Alpha-2 CHW (HW-021); ADM-02…04 figures unchanged.
