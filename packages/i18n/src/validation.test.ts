@@ -27,6 +27,7 @@ const SAMPLE_PARAMS: Partial<Record<ValidationMessageKey, Record<string, string 
   tooLong: { max: 500 },
   dateTooOld: { days: 30 },
   unrecognizedKeys: { keys: "foo,bar" },
+  dateOutOfRange: { from: "14 Oct 2026", to: "12 Apr 2027" },
 };
 
 beforeEach(() => clearMissingKeyReport());

@@ -19,6 +19,8 @@ import enAdminCharts from "./locales/en/admin/charts.json";
 import enAdminFilters from "./locales/en/admin/filters.json";
 import enAdminOverview from "./locales/en/admin/overview.json";
 import enAdminPrivacy from "./locales/en/admin/privacy.json";
+import enAdminFunnel from "./locales/en/admin/funnel.json";
+import enAdminActions from "./locales/en/admin/actions.json";
 import enCitizen from "./locales/en/citizen.json";
 import enCitizenConsent from "./locales/en/citizen/consent.json";
 import enCitizenErrors from "./locales/en/citizen/errors.json";
@@ -52,6 +54,8 @@ import rwAdminCharts from "./locales/rw/admin/charts.json";
 import rwAdminFilters from "./locales/rw/admin/filters.json";
 import rwAdminOverview from "./locales/rw/admin/overview.json";
 import rwAdminPrivacy from "./locales/rw/admin/privacy.json";
+import rwAdminFunnel from "./locales/rw/admin/funnel.json";
+import rwAdminActions from "./locales/rw/admin/actions.json";
 import rwCitizen from "./locales/rw/citizen.json";
 import rwCitizenConsent from "./locales/rw/citizen/consent.json";
 import rwCitizenErrors from "./locales/rw/citizen/errors.json";
@@ -127,6 +131,8 @@ export const enResources = {
     overview: enAdminOverview,
     charts: enAdminCharts,
     privacy: enAdminPrivacy,
+    funnel: enAdminFunnel,
+    actions: enAdminActions,
   },
   citizen: {
     ...enCitizen,
@@ -172,6 +178,8 @@ export const rwResources: Record<Namespace, object> = {
     overview: rwAdminOverview,
     charts: rwAdminCharts,
     privacy: rwAdminPrivacy,
+    funnel: rwAdminFunnel,
+    actions: rwAdminActions,
   },
   citizen: {
     ...rwCitizen,

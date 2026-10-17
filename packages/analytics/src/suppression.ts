@@ -106,6 +106,33 @@ export function suppressRate(
 type Node = { raw: number; suppressed: boolean; reason?: SuppressionReason };
 type Line = { members: Node[]; total: Node };
 
+/**
+ * The complementary rule (the single implementation, shared by `suppressCells` and
+ * `suppressLines`). A line leaks when exactly one of its nodes (cells + total) is hidden: the
+ * hidden value is the total minus the shown cells, or the sum of the shown cells. Repeated until
+ * stable.
+ */
+function protectLines(lines: readonly Line[]): void {
+  for (let changed = true; changed;) {
+    changed = false;
+    for (const line of lines) {
+      const hidden =
+        line.members.filter((n) => n.suppressed).length + (line.total.suppressed ? 1 : 0);
+      if (hidden !== 1) continue;
+      let pick: Node | undefined;
+      for (const n of line.members) {
+        if (!n.suppressed && n.raw > 0 && (pick === undefined || n.raw < pick.raw)) pick = n;
+      }
+      // No non-zero cell left: hide the total (a hidden total over all-zero cells stays: 0 is shown).
+      const target = pick ?? (line.total.suppressed ? undefined : line.total);
+      if (target === undefined) continue;
+      target.suppressed = true;
+      target.reason = "COMPLEMENTARY";
+      changed = true;
+    }
+  }
+}
+
 const toOutput = (n: Node): SuppressedNumber =>
   n.suppressed
     ? { value: null, suppressed: true, reason: n.reason ?? "PRIMARY" }
@@ -148,26 +175,7 @@ export function suppressCells(
     if (columnTotals) lines.push({ members: columnTotals, total: grand });
   }
 
-  // A line leaks when exactly one of its nodes (cells + total) is hidden: the hidden value is
-  // the total minus the shown cells, or the sum of the shown cells.
-  for (let changed = true; changed;) {
-    changed = false;
-    for (const line of lines) {
-      const hidden =
-        line.members.filter((n) => n.suppressed).length + (line.total.suppressed ? 1 : 0);
-      if (hidden !== 1) continue;
-      let pick: Node | undefined;
-      for (const n of line.members) {
-        if (!n.suppressed && n.raw > 0 && (pick === undefined || n.raw < pick.raw)) pick = n;
-      }
-      // No non-zero cell left: hide the total (a hidden total over all-zero cells stays: 0 is shown).
-      const target = pick ?? (line.total.suppressed ? undefined : line.total);
-      if (target === undefined) continue;
-      target.suppressed = true;
-      target.reason = "COMPLEMENTARY";
-      changed = true;
-    }
-  }
+  protectLines(lines);
 
   const all = [
     ...grid.flat(),
@@ -200,4 +208,49 @@ export function cellAt(
   const cell = table.cells[r]?.[c];
   if (cell === undefined) throw new RangeError(`no cell ${rowKey} × ${columnKey}`);
   return cell;
+}
+
+/** A published additive relation: `total = sum(members)` (all keys of `suppressLines` nodes). */
+export type SuppressionLine = { members: readonly string[]; total: string };
+
+/**
+ * ADM-03: primary + complementary suppression over an arbitrary set of published counts and
+ * additive lines (e.g. facility → district → programme hierarchies plus weekly series that sum to
+ * a facility count). One node may sit in many lines (shared, so a node hidden for one line is
+ * hidden everywhere it appears). Same rule as `suppressCells` (`protectLines`). Every line's total
+ * must equal the sum of its members (checked).
+ */
+export function suppressLines(
+  values: ReadonlyMap<string, number>,
+  lines: readonly SuppressionLine[],
+  threshold: number = DEMO_SMALL_CELL_THRESHOLD,
+): Map<string, SuppressedNumber> {
+  const nodes = new Map<string, Node>();
+  for (const [key, raw] of values) {
+    assertCount(raw);
+    nodes.set(
+      key,
+      isPrimarySuppressed(raw, threshold)
+        ? { raw, suppressed: true, reason: "PRIMARY" }
+        : { raw, suppressed: false },
+    );
+  }
+  const nodeOf = (key: string): Node => {
+    const node = nodes.get(key);
+    if (node === undefined) throw new RangeError(`suppressLines: unknown node ${key}`);
+    return node;
+  };
+  const resolved: Line[] = lines.map((line) => {
+    const members = line.members.map(nodeOf);
+    const total = nodeOf(line.total);
+    const sum = members.reduce((a, n) => a + n.raw, 0);
+    if (sum !== total.raw) {
+      throw new RangeError(`suppressLines: ${line.total} = ${total.raw} but members sum to ${sum}`);
+    }
+    return { members, total };
+  });
+  protectLines(resolved);
+  const out = new Map<string, SuppressedNumber>();
+  for (const [key, node] of nodes) out.set(key, toOutput(node));
+  return out;
 }

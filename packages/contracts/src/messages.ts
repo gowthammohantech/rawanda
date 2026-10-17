@@ -51,6 +51,9 @@ export const VALIDATION_KEYS = [
   // ── Appended by CLN-03 ──
   /** Free text (e.g. a search query) shorter than `{min}` characters. */
   "minLength",
+  // ── Appended by ADM-03 ──
+  /** Calendar date outside the allowed window `{from}` … `{to}` (e.g. a programme action due date). */
+  "dateOutOfRange",
 ] as const;
 
 export type ValidationMessageKey = (typeof VALIDATION_KEYS)[number];

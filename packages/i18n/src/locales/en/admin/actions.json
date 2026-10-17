@@ -1,0 +1,84 @@
+{
+  "banner": "Programme action — not a clinical decision",
+  "assign": "Assign programme follow-up",
+  "denied": {
+    "role": "Your role cannot assign programme actions.",
+    "scope": "This facility is outside your authorised scope."
+  },
+  "dialog": {
+    "title": "Assign programme follow-up",
+    "description": "A non-clinical task for the facility manager of {{facility}}. It never changes a clinical record.",
+    "submit": "Assign follow-up",
+    "retry": "Retry",
+    "notSaved": "Not saved — retry",
+    "notSavedHint": "The connection failed. Retrying is safe: it cannot create a duplicate.",
+    "failed": "The action could not be saved."
+  },
+  "field": {
+    "facility": "Facility",
+    "category": "Category",
+    "categoryPlaceholder": "— Select a category —",
+    "title": "Title",
+    "titleHint": "5 to 120 characters. Do not enter patient names or identifiers.",
+    "note": "Note",
+    "noteHint": "Optional, up to 500 characters. Aggregate context only — no patient details.",
+    "dueDate": "Due date",
+    "dueDateHint": "From {{from}} to {{to}}.",
+    "owner": "Owner: facility manager"
+  },
+  "validation": {
+    "categoryRequired": "Choose a category",
+    "titleLength": "Title must be 5 to 120 characters",
+    "noteLength": "Note must be at most {{max}} characters",
+    "dueDateRange": "Choose a due date from {{from}} to {{to}}"
+  },
+  "category": {
+    "data_completeness_check": "Data completeness check",
+    "supervision_visit": "Supervision visit",
+    "workload_review": "Workload review",
+    "process_review": "Process review",
+    "other": "Other"
+  },
+  "status": {
+    "open": "Open",
+    "in_progress": "In progress",
+    "done": "Done",
+    "cancelled_with_reason": "Cancelled with reason"
+  },
+  "toast": {
+    "assigned": "Programme action assigned",
+    "updated": "Programme action: {{status}}"
+  },
+  "card": {
+    "title": "Programme actions",
+    "openCount": "{{n}} open",
+    "note": "Non-clinical follow-ups for facility managers in this view.",
+    "error": "Programme actions could not be loaded.",
+    "empty": "No programme actions yet",
+    "emptyHint": "Assign one from a facility row of a stage drill-down.",
+    "due": "Due {{date}}",
+    "owner": "Facility manager",
+    "updated": "Updated {{time}}",
+    "reason": "Reason: {{reason}}",
+    "start": "Start",
+    "done": "Mark done",
+    "cancel": "Cancel"
+  },
+  "conflict": {
+    "title": "This action was changed by someone else",
+    "description": "Nothing was saved. Compare and choose which version to keep.",
+    "status": "Status",
+    "updatedBy": "Last updated by",
+    "updatedAt": "Updated at"
+  },
+  "demo": {
+    "conflict": "Demo: make the next update conflict",
+    "conflictArmed": "Demo: the next update of this action will conflict"
+  },
+  "cancel": {
+    "title": "Cancel programme action",
+    "description": "“{{title}}” will be closed as cancelled. Give a reason.",
+    "reason": "Reason for cancelling",
+    "confirm": "Cancel action"
+  }
+}

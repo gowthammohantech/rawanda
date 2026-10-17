@@ -28,5 +28,6 @@
   "unrecognizedKeys": "Ibice bitari byitezwe: {{keys}}.",
   "noChanges": "Hindura nibura ikintu kimwe.",
   "invalid": "Aka gaciro ntikemewe.",
-  "minLength": "Andika nibura inyuguti {{min}}."
+  "minLength": "Andika nibura inyuguti {{min}}.",
+  "dateOutOfRange": "Hitamo itariki kuva {{from}} kugeza {{to}}."
 }

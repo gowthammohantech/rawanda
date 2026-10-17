@@ -99,6 +99,7 @@ export const ENTITY_COLLECTIONS = {
   ruleset: "rulesets",
   sync_operation: "syncOperations",
   device_session: "deviceSessions",
+  programme_action: "programmeActions",
 } as const satisfies Record<EntityType, LocalCollectionName>;
 
 const ENTITY_ALIASES: Readonly<Record<string, EntityType>> = Object.fromEntries([
@@ -114,6 +115,7 @@ const ENTITY_ALIASES: Readonly<Record<string, EntityType>> = Object.fromEntries(
   ["auditEvent", "audit_event"],
   ["syncOperation", "sync_operation"],
   ["deviceSession", "device_session"],
+  ["programmeAction", "programme_action"],
 ]) as Record<string, EntityType>;
 
 /** Accepts an entity type (`follow_up`), a collection (`followUps`) or camelCase (`followUp`). */

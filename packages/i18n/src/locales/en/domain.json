@@ -267,7 +267,8 @@
     "persona": "Demo persona",
     "ruleset": "Demo ruleset",
     "sync_operation": "Sync operation",
-    "device_session": "Device session"
+    "device_session": "Device session",
+    "programme_action": "Programme action"
   },
   "pathwayStage": {
     "DRAFT_SCREENING": "Draft screening",
@@ -528,6 +529,15 @@
         "verified": "Identity verified (simulated demo code)",
         "verification_failed": "Identity verification failed (simulated)",
         "verification_unavailable": "Verification service unavailable (simulated)"
+      }
+    },
+    "admin": {
+      "drilldown": {
+        "viewed": "Aggregate drill-down viewed"
+      },
+      "programme_action": {
+        "created": "Programme action assigned",
+        "status_changed": "Programme action status changed"
       }
     }
   }

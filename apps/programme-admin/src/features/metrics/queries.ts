@@ -23,11 +23,11 @@ export function useSuppressionThreshold(): number {
   return DEMO_SMALL_CELL_THRESHOLD;
 }
 
-function filterKeyOf(api: Pick<AdminFiltersApi, "filters" | "period">): FilterKey {
+export function filterKeyOf(api: Pick<AdminFiltersApi, "filters" | "period">): FilterKey {
   return { ...api.filters, periodFrom: api.period.from, periodTo: api.period.to };
 }
 
-function useAccess(): { access: ScopeAccess | null; scopeKey: string } {
+export function useAccess(): { access: ScopeAccess | null; scopeKey: string } {
   const persona = useAdminSession((s) => s.persona);
   const grant = useAdminSession((s) => s.grant);
   return {
@@ -36,7 +36,7 @@ function useAccess(): { access: ScopeAccess | null; scopeKey: string } {
   };
 }
 
-function datasetOptions(
+export function datasetOptions(
   repo: ReturnType<typeof useRepository>,
   access: ScopeAccess | null,
   scopeKey: string,
