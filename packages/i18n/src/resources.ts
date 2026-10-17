@@ -35,6 +35,7 @@ import enShell from "./locales/en/shell.json";
 import enValidation from "./locales/en/validation.json";
 import enWorker from "./locales/en/worker.json";
 import enWorkerAuth from "./locales/en/worker/auth.json";
+import enWorkerHome from "./locales/en/worker/home.json";
 import enWorkerNav from "./locales/en/worker/nav.json";
 import enWorkerNetsim from "./locales/en/worker/netsim.json";
 import enWorkerSettings from "./locales/en/worker/settings.json";
@@ -63,6 +64,7 @@ import rwShell from "./locales/rw/shell.json";
 import rwValidation from "./locales/rw/validation.json";
 import rwWorker from "./locales/rw/worker.json";
 import rwWorkerAuth from "./locales/rw/worker/auth.json";
+import rwWorkerHome from "./locales/rw/worker/home.json";
 import rwWorkerNav from "./locales/rw/worker/nav.json";
 import rwWorkerNetsim from "./locales/rw/worker/netsim.json";
 import rwWorkerSettings from "./locales/rw/worker/settings.json";
@@ -102,6 +104,7 @@ export const enResources = {
   worker: {
     ...enWorker,
     auth: enWorkerAuth,
+    home: enWorkerHome,
     nav: enWorkerNav,
     settings: enWorkerSettings,
     sync: enWorkerSync,
@@ -137,6 +140,7 @@ export const rwResources: Record<Namespace, object> = {
   worker: {
     ...rwWorker,
     auth: rwWorkerAuth,
+    home: rwWorkerHome,
     nav: rwWorkerNav,
     settings: rwWorkerSettings,
     sync: rwWorkerSync,
