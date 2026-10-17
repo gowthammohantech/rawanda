@@ -199,7 +199,8 @@ export function RemindersScreen() {
         description={t("citizen:reminders.optOut.confirmBody")}
         confirmLabel={t("citizen:reminders.optOut.confirm")}
         cancelLabel={t("citizen:reminders.optOut.cancel")}
-        variant="destructive"
+        // Not "destructive": that variant adds "This cannot be undone." — reminders can be
+        // turned back on at any time.
         onConfirm={() => {
           setConfirmOff(false);
           const shown = saver.shown;
