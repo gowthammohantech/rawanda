@@ -18,10 +18,16 @@ import { AppText } from "./AppText.tsx";
 import { IconButton } from "./IconButton.tsx";
 import { TONE_COLORS, TONE_ICON, type Tone } from "./tone.ts";
 
+/**
+ * Toast copy: a translated string, or `(t) => string` resolved at render time with the current
+ * language — so a toast still on screen re-translates when the user switches EN ⇄ RW.
+ */
+export type ToastText = string | ((t: ReturnType<typeof useTx>) => string);
+
 export type ToastInput = {
-  /** Translated title. */
-  title: string;
-  description?: string;
+  /** Translated title, or a resolver (preferred: follows language switches). */
+  title: ToastText;
+  description?: ToastText;
   tone?: Tone;
   /** ms before auto-dismiss; 0 keeps it until dismissed. Default 5000. */
   duration?: number;
@@ -47,13 +53,17 @@ export function ToastProvider({ children }: { children?: ReactNode }) {
     timers.current.delete(id);
   }, []);
 
+  const resolve = useCallback(
+    (text: ToastText): string => (typeof text === "function" ? text(t) : text),
+    [t],
+  );
+
   const toast = useCallback(
     (input: ToastInput) => {
       const id = nextId.current++;
       setToasts((current) => [...current, { ...input, id }]);
-      announce(
-        input.description === undefined ? input.title : `${input.title}. ${input.description}`,
-      );
+      const title = resolve(input.title);
+      announce(input.description === undefined ? title : `${title}. ${resolve(input.description)}`);
       const duration = input.duration ?? 5000;
       if (duration > 0)
         timers.current.set(
@@ -62,7 +72,7 @@ export function ToastProvider({ children }: { children?: ReactNode }) {
         );
       return id;
     },
-    [dismiss],
+    [dismiss, resolve],
   );
 
   useEffect(() => {
@@ -98,10 +108,10 @@ export function ToastProvider({ children }: { children?: ReactNode }) {
               >
                 <Icon name={TONE_ICON[tone]} size={18} color={palette.fg} />
                 <View style={styles.text}>
-                  <AppText weight="semibold">{item.title}</AppText>
+                  <AppText weight="semibold">{resolve(item.title)}</AppText>
                   {item.description === undefined ? null : (
                     <AppText variant="caption" color="muted">
-                      {item.description}
+                      {resolve(item.description)}
                     </AppText>
                   )}
                 </View>

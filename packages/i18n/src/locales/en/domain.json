@@ -510,7 +510,8 @@
         "withdrawn": "Consent withdrawn (wallet)"
       },
       "result": {
-        "viewed": "Result viewed in the wallet"
+        "viewed": "Result viewed in the wallet",
+        "list_viewed": "Results list viewed in the wallet"
       },
       "next_step": {
         "acknowledged": "Next step marked as read"

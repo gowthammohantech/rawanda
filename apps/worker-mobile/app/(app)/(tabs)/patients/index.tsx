@@ -1,9 +1,6 @@
-import { useTx } from "@laif/ui-native";
+import { FindPatientScreen } from "../../../../src/features/patients/FindPatientScreen.tsx";
 
-import { TabPlaceholder } from "../../../../src/components/TabPlaceholder.tsx";
-
-/** Placeholder (built in HWM-04). */
+/** Find tab (HWM-04): cached facility-scoped patient search. */
 export default function FindTab() {
-  const t = useTx();
-  return <TabPlaceholder title={t("worker:nav.find")} phase="HWM-04" testID="find-screen" />;
+  return <FindPatientScreen />;
 }

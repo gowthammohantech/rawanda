@@ -54,10 +54,11 @@ export function ScopeScreen({
           onConfirm={async (facilityId) => {
             const result = await signIn(persona.id, facilityId);
             if (result.ok) {
+              const facilityId = result.session.facilityId;
+              // Resolved at render time: re-translates if the language switches while visible.
               toast({
-                title: t("worker:auth.signedIn", {
-                  facility: facilityName(result.session.facilityId, t),
-                }),
+                title: (tx) =>
+                  tx("worker:auth.signedIn", { facility: facilityName(facilityId, tx) }),
                 tone: "positive",
               });
               onSignedIn();

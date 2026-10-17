@@ -23,6 +23,7 @@ const REQUIRED_PARAMS: Partial<Record<ValidationMessageKey, readonly string[]>> 
   tooShort: ["min"],
   minLength: ["min"],
   tooLong: ["max"],
+  ageRange: ["min", "max"],
   dateTooOld: ["days"],
   dateOutOfRange: ["from", "to"],
   unrecognizedKeys: ["keys"],

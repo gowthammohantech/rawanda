@@ -1,0 +1,68 @@
+# HWM-04 device gate (not part of `pnpm verify`): `pnpm --filter @laif/worker-mobile test:maestro`
+# with the app open in Expo Go / a dev build, starting signed out, all simulation toggles off.
+# Offline → register a synthetic patient → restart → patient still listed, SAVED ON THIS DEVICE.
+appId: host.exp.Exponent
+---
+- launchApp
+- tapOn:
+    id: "persona-card-persona-chw-alpha1-a"
+- tapOn:
+    id: "persona-continue"
+- tapOn:
+    id: "scope-continue"
+- assertVisible:
+    id: "today-screen"
+# Work offline (simulated).
+- tapOn:
+    id: "avatar-button"
+- tapOn:
+    id: "open-network-simulation"
+- tapOn: "Work offline (simulated)"
+- assertVisible: "Offline (simulated)"
+- back
+- back
+# Find tab: offline note, search by identifier prefix.
+- tapOn:
+    id: "tab-patients"
+- assertVisible:
+    id: "find-screen"
+- assertVisible: "Search covers patients saved on this device"
+- tapOn:
+    id: "patient-search-input"
+- inputText: "Zzyzx Maestro"
+- assertVisible: "No patient matches 'Zzyzx Maestro' on this device"
+- tapOn:
+    id: "register-prefilled"
+# Registration form (prefilled name), submit empty fields → errors.
+- assertVisible:
+    id: "register-form"
+- assertVisible: "National identity service not connected in this demo"
+- tapOn:
+    id: "register-save"
+- assertVisible: ".*fields? needs? attention"
+- tapOn:
+    id: "field-dateOfBirth"
+- inputText: "1984-05-06"
+- tapOn: "Female"
+- tapOn:
+    id: "register-save"
+- assertVisible:
+    id: "patient-context-screen"
+- assertVisible: "Saved on this device"
+# Restart: the patient is still on the device, still waiting to sync.
+- stopApp
+- launchApp
+- tapOn:
+    id: "tab-patients"
+- assertVisible: "Zzyzx Maestro"
+- tapOn: "Zzyzx Maestro"
+- assertVisible:
+    id: "patient-context-screen"
+- assertVisible: "Saved on this device"
+# Back online for the next flow.
+- tapOn:
+    id: "avatar-button"
+- tapOn:
+    id: "open-network-simulation"
+- tapOn: "Work offline (simulated)"
+- assertVisible: "Online"

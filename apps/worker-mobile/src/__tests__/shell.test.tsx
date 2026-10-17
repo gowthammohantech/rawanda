@@ -109,6 +109,13 @@ describe("worker-mobile shell (HWM-01)", () => {
     expect(screen.getByText(EN_BANNER)).toBeTruthy();
     expect(within(screen.getByTestId("app-header")).getByText("Demo Health Centre Alpha-1"));
     expect(screen.getByTestId("network-badge")).toBeTruthy();
+    // The visible "Signed in to …" toast follows a language switch (HWM-03 gap, fixed in HWM-04).
+    const switcher = () => within(screen.getAllByTestId("language-switcher")[0]!);
+    fireEvent.click(switcher().getByRole("radio", { name: "Ikinyarwanda" }));
+    expect(await screen.findByText(/^Winjiye muri /)).toBeTruthy();
+    expect(screen.queryByText("Signed in to Demo Health Centre Alpha-1")).toBeNull();
+    fireEvent.click(switcher().getByRole("radio", { name: "English" }));
+    expect(await screen.findByText("Signed in to Demo Health Centre Alpha-1")).toBeTruthy();
 
     const sessions = await first.store.getAll<DeviceSession>("deviceSessions");
     expect(sessions).toHaveLength(1);

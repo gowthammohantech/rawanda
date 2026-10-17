@@ -170,6 +170,8 @@ export function createPatientService(engine: Engine) {
           };
           if (input.estimatedAgeYears !== undefined)
             patient.estimatedAgeYears = input.estimatedAgeYears;
+          if (input.villageLabel !== undefined) patient.villageLabel = input.villageLabel;
+          if (input.syntheticPhone !== undefined) patient.syntheticPhone = input.syntheticPhone;
           await ctx.save("patient", patient);
           ctx.useCorrelation(null);
           const event = await ctx.audit({

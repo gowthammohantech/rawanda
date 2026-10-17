@@ -29,5 +29,9 @@
   "noChanges": "Hindura nibura ikintu kimwe.",
   "invalid": "Aka gaciro ntikemewe.",
   "minLength": "Andika nibura inyuguti {{min}}.",
-  "dateOutOfRange": "Hitamo itariki kuva {{from}} kugeza {{to}}."
+  "dateOutOfRange": "Hitamo itariki kuva {{from}} kugeza {{to}}.",
+  "namePattern": "Koresha inyuguti, umwanya, akarongo cyangwa apositorofe gusa.",
+  "ageRange": "Imyaka igomba kuba hagati ya {{min}} na {{max}}.",
+  "phonePattern": "Andika nimero ya telefoni nka 07X XXX XXXX.",
+  "underPilotAge": "Igerageza risuzuma abantu bakuru — genzura itariki y'amavuko."
 }

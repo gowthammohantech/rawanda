@@ -51,6 +51,15 @@ export const VALIDATION_KEYS = [
   // ── Appended by CLN-03 ──
   /** Free text (e.g. a search query) shorter than `{min}` characters. */
   "minLength",
+  // ── Appended by HWM-04 (patient registration) ──
+  /** A person name with characters other than letters, spaces, hyphens or apostrophes. */
+  "namePattern",
+  /** Age (from a date of birth or an estimate) outside `{min}`–`{max}` years. */
+  "ageRange",
+  /** Phone number not in the `07X XXX XXXX` format. */
+  "phonePattern",
+  /** Non-blocking data-entry prompt: derived age under 18 (the pilot screens adults). */
+  "underPilotAge",
   // ── Appended by ADM-03 ──
   /** Calendar date outside the allowed window `{from}` … `{to}` (e.g. a programme action due date). */
   "dateOutOfRange",

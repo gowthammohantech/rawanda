@@ -2,7 +2,7 @@
  * CLN-03 patient record: WF-04 direct URL → permission denied, no PHI in the DOM, exactly one
  * `access.denied`; unknown id → not-found EmptyState; DUPLICATE_IDENTITY_PAIR warning (icon +
  * text, in-scope candidate listed, out-of-scope counted, never merged); one `patient.viewed`
- * under StrictMode; overview (provenance, KPI strip, latest screening) and placeholder tabs.
+ * under StrictMode; overview (provenance, KPI strip, latest screening) and the CLN-04 tabs.
  */
 import type { AuditEvent, Patient } from "@laif/domain";
 import { createSeed, FACILITY_IDS, PERSONA_IDS, SEED_ANCHORS } from "@laif/mock-data";
@@ -68,7 +68,7 @@ describe("PatientPage", () => {
     expect(viewed[0]?.patientId).toBe(WF01.id);
   });
 
-  it("overview: provenance, KPI strip, latest screening and placeholder tabs", async () => {
+  it("overview: provenance, KPI strip, latest screening and the record tabs", async () => {
     const user = userEvent.setup();
     await renderApp({ path: routes.patient(WF01.id), signIn: CLINICIAN });
     const provenance = await screen.findByTestId("identity-provenance");
@@ -84,7 +84,18 @@ describe("PatientPage", () => {
     expect(screen.queryByTestId("duplicate-warning")).toBeNull();
 
     await user.click(screen.getByRole("tab", { name: "Screenings" }));
-    expect(await screen.findByText("Delivered in CLN-04")).toBeTruthy();
+    expect(await screen.findByTestId("screening-timeline")).toBeTruthy();
+    await user.click(screen.getByRole("tab", { name: "Reviews" }));
+    expect(await screen.findByTestId("patient-reviews")).toBeTruthy();
+    await user.click(screen.getByRole("tab", { name: "Referrals & tasks" }));
+    await waitFor(() =>
+      expect(
+        screen.queryByTestId("followup-timeline") ??
+          screen.queryByText(
+            "No referrals, follow-ups or review decisions for this synthetic patient",
+          ),
+      ).not.toBeNull(),
+    );
   });
 
   it("DUPLICATE_IDENTITY_PAIR shows the warning with icon + text and the in-scope candidate", async () => {
