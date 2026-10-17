@@ -268,7 +268,8 @@
     "ruleset": "Demo ruleset",
     "sync_operation": "Sync operation",
     "device_session": "Device session",
-    "programme_action": "Programme action"
+    "programme_action": "Programme action",
+    "data_quality_issue": "Data-quality issue"
   },
   "pathwayStage": {
     "DRAFT_SCREENING": "Draft screening",
@@ -544,6 +545,10 @@
       "programme_action": {
         "created": "Programme action assigned",
         "status_changed": "Programme action status changed"
+      },
+      "quality_issue": {
+        "detected": "Data-quality issue detected (system)",
+        "triaged": "Data-quality issue triaged"
       }
     }
   }

@@ -57,4 +57,9 @@ export type {
   ProgrammeActionFilterInput,
   ProgrammeActionUpdateCall,
 } from "./services/programme-actions.ts";
+export type {
+  QualityIssueFilterInput,
+  TriageQualityIssueCall,
+  UpsertDetectedIssuesResult,
+} from "./services/quality-issues.ts";
 export { Engine, TxContext, type EngineMode, type MutationSpec } from "./core/engine.ts";

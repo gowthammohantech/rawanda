@@ -1,6 +1,6 @@
 # ADM-06 — Safety & quality monitor and data-quality review queue
 
-Status: Not started
+**Status:** Done
 
 ## 1. Header
 

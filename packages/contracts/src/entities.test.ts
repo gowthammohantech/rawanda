@@ -328,6 +328,38 @@ const fixtures: Record<(typeof ENTITY_TYPES)[number], Record<string, unknown>> =
     updatedBy: "persona-analyst-alpha",
     sourceContext: { page: "funnel_stage", stage: "reviewed", filters: { preset: "90d" } },
   },
+  data_quality_issue: {
+    ...base,
+    id: "dqi_0123456789abcdef",
+    type: "missing_field",
+    subjectRef: "SCR-6e4e8f18",
+    facilityId: "fac-alpha-1",
+    districtId: "dis-alpha",
+    detectedAt: NOW_ISO,
+    sourceApp: "import",
+    details: {
+      rule: "DQ-01-MANDATORY-FIELDS",
+      fields: ["glucoseUnit"],
+      rulesetVersion: "demo-ruleset-2026.10-v1",
+      records: 1,
+    },
+    status: "acknowledged",
+    note: null,
+    programmeActionId: null,
+    updatedBy: "persona-analyst-alpha",
+    history: [
+      {
+        at: NOW_ISO,
+        by: "persona-analyst-alpha",
+        role: "district_analyst",
+        action: "acknowledge",
+        fromStatus: "open",
+        toStatus: "acknowledged",
+        noteLength: null,
+        programmeActionId: null,
+      },
+    ],
+  },
 };
 
 const entries = Object.entries(ENTITY_SCHEMAS) as [

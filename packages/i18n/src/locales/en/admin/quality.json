@@ -1,0 +1,214 @@
+{
+  "eyebrow": "SAFETY & QUALITY",
+  "title": "Safety & quality",
+  "subtitle": "Data-quality and safety signals, {{from}} – {{to}} · {{scope}}",
+  "error": "Safety and quality figures could not be computed.",
+  "empty": "No screenings or issues in this period",
+  "emptyBody": "Choose a longer period or another scope.",
+  "proxy": "PROXY",
+  "proxyTitle": "Proxy derived from review outcomes — not a measure of clinical accuracy",
+  "correctAtSource": "Corrected at source by the facility; this page never edits clinical records.",
+  "readOnly": "Read-only: your role can view this issue but not triage it.",
+  "readOnlyQueue": "Read-only: your role can view the queue but cannot acknowledge, resolve or send issues.",
+  "denied": "You do not have permission to triage this issue.",
+  "sendTitle": "Review {{type}} issue {{ref}}",
+  "callout": {
+    "title": "Corrected at source",
+    "body": "Issues are corrected at source by the facility through amendment events. Triage here tracks follow-up; it never edits clinical records."
+  },
+  "kpi": {
+    "label": "Safety and quality key figures",
+    "missingFields": "Screenings with missing required fields",
+    "missingSub": "{{pct}} of screenings",
+    "rateNone": "Share hidden or not available",
+    "identity": "Possible identity mismatches",
+    "identitySub": "Duplicate IDs {{duplicates}} · no patient record {{orphans}}",
+    "overturned": "Overturned flags",
+    "overturnedSub": "{{pct}} of reviewed",
+    "missed": "Missed-flag proxy",
+    "missedSub": "Manual escalations of unflagged screenings",
+    "duplicates": "Duplicate submissions prevented",
+    "duplicatesSub": "Collapsed by the idempotency check"
+  },
+  "bars": {
+    "title": "Missing fields by field"
+  },
+  "field": {
+    "patientId": "Patient",
+    "facilityId": "Facility",
+    "workerId": "Author (health worker)",
+    "measuredAt": "Measurement time",
+    "source": "Source",
+    "rulesetVersion": "Ruleset version",
+    "glucoseUnit": "Glucose unit",
+    "glucoseContext": "Glucose context (fasting / random)",
+    "systolic": "Systolic blood pressure",
+    "diastolic": "Diastolic blood pressure"
+  },
+  "type": {
+    "missing_field": "MISSING FIELD",
+    "duplicate_identifier": "DUPLICATE ID",
+    "orphan_screening": "ORPHAN",
+    "overturned_flag": "OVERTURNED",
+    "manual_escalation": "MANUAL ESCALATION"
+  },
+  "typeChip": {
+    "missing_field": "Missing field",
+    "duplicate_identifier": "Duplicate ID",
+    "orphan_screening": "Orphan",
+    "overturned_flag": "Overturned",
+    "manual_escalation": "Manual escalation"
+  },
+  "status": {
+    "open": "Open",
+    "acknowledged": "Acknowledged",
+    "resolved_with_note": "Resolved",
+    "sent_to_facility": "Sent to facility"
+  },
+  "tab": {
+    "open": "Open",
+    "acknowledged": "Acknowledged",
+    "resolved_with_note": "Resolved",
+    "sent_to_facility": "Sent to facility"
+  },
+  "detected": {
+    "missing_field": "Required fields not recorded: {{fields}}. Units are never inferred.",
+    "duplicate_identifier": "{{n}} patient records share one synthetic identifier.",
+    "orphan_screening": "The screening has no patient record in the reporting scope.",
+    "overturned_flag": "A demo-rule flag was dismissed with a reason at review.",
+    "manual_escalation": "A screening the demo rule did not flag was escalated for review manually."
+  },
+  "rule": {
+    "missing_field": "Mandatory screening fields (FRD §4)",
+    "duplicate_identifier": "More than one patient with the same synthetic identifier",
+    "orphan_screening": "Screening without a patient record in scope",
+    "overturned_flag": "Flag dismissed after review (proxy, not clinical accuracy)",
+    "manual_escalation": "Manual escalation of a no-review-required screening (missed-flag proxy)"
+  },
+  "source": {
+    "worker": "Health worker app",
+    "clinical": "Clinical web",
+    "import": "Imported register",
+    "registry": "Patient registry"
+  },
+  "row": {
+    "subtitle_one": "Detected {{date}} · {{days}} day ago",
+    "subtitle_other": "Detected {{date}} · {{days}} days ago",
+    "whatDetected": "What was detected",
+    "rule": "Rule",
+    "ruleset": "Ruleset version",
+    "rulesetNone": "Not recorded",
+    "source": "Source",
+    "detectedAt": "Detected",
+    "ref": "Record reference",
+    "programmeAction": "Programme action",
+    "programmeActionLinked": "Linked — see Programme follow-ups on the Funnel",
+    "note": "Resolution note",
+    "history": "Triage history",
+    "historyDetected": "Detected by the system · {{time}}",
+    "historyEntry": "{{status}} by {{actor}} ({{role}}) · {{time}}"
+  },
+  "action": {
+    "acknowledge": "Acknowledge",
+    "resolve": "Resolve with note…",
+    "send": "Send to facility…"
+  },
+  "dialog": {
+    "resolveTitle": "Resolve issue",
+    "resolveDescription": "{{type}} · {{ref}} · {{facility}}",
+    "note": "Resolution note",
+    "noteHint": "{{min}}–{{max}} characters. Describe the follow-up; do not include patient details.",
+    "resolveSubmit": "Resolve",
+    "retry": "Retry",
+    "notSaved": "Not saved — retry",
+    "notSavedHint": "Your input is kept. Retrying is safe: the same change is never applied twice.",
+    "failed": "The change could not be saved."
+  },
+  "validation": {
+    "noteLength": "Add a note of 10 to 500 characters"
+  },
+  "toast": {
+    "acknowledged": "Issue acknowledged",
+    "resolved": "Issue resolved",
+    "sent": "Issue sent to the facility"
+  },
+  "conflict": {
+    "title": "This issue was changed by someone else",
+    "description": "Nothing was saved. Compare your change with the latest triage state.",
+    "status": "Status",
+    "updatedBy": "Updated by",
+    "updatedAt": "Updated at"
+  },
+  "queue": {
+    "title": "Data-quality review queue",
+    "meta": "Mock review queue",
+    "tabs": "Issue status",
+    "typeFilter": "Filter by issue type",
+    "allTypes": "All types",
+    "list": "Issues",
+    "error": "The review queue could not be loaded.",
+    "empty": {
+      "open": "No open issues in this period",
+      "acknowledged": "No acknowledged issues in this period",
+      "resolved_with_note": "No resolved issues in this period",
+      "sent_to_facility": "No issues sent to a facility in this period"
+    },
+    "emptyBody": "Issues are detected automatically from the period's records."
+  },
+  "outcomes": {
+    "title": "Flag review outcomes",
+    "overturnedRate": "Overturned-flag rate",
+    "ofReviewed": "Dismissed / reviewed:",
+    "missed": "Missed-flag proxy",
+    "proxyLabel": "PROXY · not clinical accuracy"
+  },
+  "fairness": {
+    "title": "By sex and age band",
+    "label": "PROXY · fairness signal, not a clinical-accuracy measure",
+    "caption": "Flagged, overturned and manually escalated screenings by sex and age band",
+    "group": "Group",
+    "column": {
+      "flagged": "Flagged",
+      "overturned": "Overturned",
+      "manualEscalation": "Escalated"
+    },
+    "sex": {
+      "female": "Female",
+      "male": "Male",
+      "not_recorded": "Sex not recorded"
+    },
+    "age": {
+      "18-39": "Age 18–39",
+      "40-59": "Age 40–59",
+      "60+": "Age 60+",
+      "unknown": "Age not recorded"
+    }
+  },
+  "reasons": {
+    "title": "Dismissal reasons",
+    "measurement_error_suspected": "Measurement error suspected",
+    "repeat_reading_acceptable": "Repeat reading acceptable",
+    "known_managed_condition": "Known, managed condition",
+    "duplicate_flag": "Duplicate flag",
+    "other": "Other",
+    "not_recorded": "Reason code not recorded"
+  },
+  "invariants": {
+    "title": "Invariant checks",
+    "evidence": "Completed referrals without evidence",
+    "holds": "Invariant holds: every completed referral has a completion time and evidence.",
+    "broken": "Invariant broken: investigate the completed referrals without evidence.",
+    "duplicates": "Duplicate submissions prevented",
+    "duplicatesSub": "Replays collapsed by the repository's idempotency check in the period"
+  },
+  "openByFacility": {
+    "title": "Open issues by facility"
+  },
+  "trend": {
+    "title": "Weekly quality trend",
+    "missing": "Missing fields",
+    "mismatches": "Identity mismatches",
+    "week": "Week of",
+    "summary": "Screenings with missing fields and identity mismatches over {{weeks}} weeks; {{hidden}} weeks have hidden values."
+  }
+}

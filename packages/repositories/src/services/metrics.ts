@@ -4,7 +4,9 @@
  * denial (WF-04, T-02); without explicit ids the result is restricted to the actor's scope.
  */
 import {
+  ageBandOf,
   applyMetricsFilter,
+  duplicateIdentifierGroupsOf,
   isDayInRange,
   kigaliDate,
   getProgrammeMetrics,
@@ -13,12 +15,15 @@ import {
   type WorkerRef,
 } from "@laif/analytics";
 import {
+  DataQualityIssueSchema,
   MetricsFilterSchema,
   TimeEntrySchema,
+  type DataQualityIssueStatus,
   type MetricsFilter,
   type TimeEntry,
 } from "@laif/contracts";
 import type {
+  AuditEvent,
   DemoPersona,
   District,
   DistrictId,
@@ -125,6 +130,45 @@ function workerDirectory(
   );
 }
 
+/**
+ * ADM-06 quality sources of an aggregate read, computed HERE so identifiers and dates of birth
+ * never leave the repository: duplicate-identifier groups (patient ids only), age bands,
+ * `sync.duplicate_suppressed` events (facility + time) and the stored triage status per issue.
+ */
+async function qualitySourcesOf(
+  ctx: TxContext,
+  patients: readonly Patient[],
+  filter: MetricsFilter,
+  facilityIds: ReadonlySet<string>,
+): Promise<{
+  duplicateIdentifierGroups: string[][];
+  patientAgeBands: Record<string, ReturnType<typeof ageBandOf>>;
+  duplicateSubmissions: Array<{ facilityId: string; occurredAt: string }>;
+  qualityIssueStatus: Record<string, DataQualityIssueStatus>;
+}> {
+  const duplicateSubmissions = (await ctx.tx.getAll<AuditEvent>("auditEvents"))
+    .filter(
+      (e) =>
+        e.action === "sync.duplicate_suppressed" &&
+        e.facilityId !== null &&
+        facilityIds.has(e.facilityId) &&
+        isDayInRange(kigaliDate(e.occurredAt), filter),
+    )
+    .map((e) => ({ facilityId: e.facilityId as string, occurredAt: e.occurredAt }))
+    .sort((a, b) => (a.occurredAt < b.occurredAt ? -1 : a.occurredAt > b.occurredAt ? 1 : 0));
+  const qualityIssueStatus: Record<string, DataQualityIssueStatus> = {};
+  for (const row of await ctx.all<unknown>("data_quality_issue")) {
+    const issue = DataQualityIssueSchema.parse(row);
+    if (facilityIds.has(issue.facilityId)) qualityIssueStatus[issue.id] = issue.status;
+  }
+  return {
+    duplicateIdentifierGroups: duplicateIdentifierGroupsOf(patients),
+    patientAgeBands: Object.fromEntries(patients.map((p) => [p.id, ageBandOf(p, ctx.nowIso)])),
+    duplicateSubmissions,
+    qualityIssueStatus,
+  };
+}
+
 /** Placeholder for required non-empty free text removed from aggregate reads. */
 export const REDACTED_TEXT = "[redacted]";
 
@@ -213,9 +257,11 @@ export function createMetricsService(engine: Engine) {
           referrals: [],
           followUps: taskFollowUpsIn(allFollowUps, filter, facilityIds),
         }).followUps;
+        const quality = await qualitySourcesOf(ctx, data.patients, filter, facilityIds);
         return {
           records: {
             ...redactFreeText(data),
+            ...quality,
             taskFollowUps: tasks,
             workers: workerDirectory(await ctx.tx.getAll<DemoPersona>("personas"), facilityIds),
             patients: data.patients.map((p) => {

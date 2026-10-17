@@ -102,7 +102,9 @@ describe("programme-admin shell", () => {
 
   it("Offline shows the OfflineBanner at once; Reset demo restores the seed slice", async () => {
     const user = userEvent.setup();
-    const { services, store } = await signedIn("/admin/quality");
+    // A read-only page: /admin/quality persists detected data-quality issues on load (ADM-06),
+    // which would change the dataset hash concurrently with this test.
+    const { services, store } = await signedIn("/admin/overview");
     const seeded = await services.repo.demo.getDemoState();
 
     // Programme personas have no clinical writes: change the local dataset directly.
