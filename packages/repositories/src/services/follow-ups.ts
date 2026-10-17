@@ -307,7 +307,13 @@ export function createFollowUpService(engine: Engine) {
                 ],
               });
               action = "followup.attempt_recorded";
-              summary = { ...summary, method: input.method, result: input.result };
+              summary = {
+                ...summary,
+                method: input.method,
+                result: input.result,
+                at: input.at,
+                baseVersion: input.expectedVersion,
+              };
               break;
             }
             case "record_outcome": {
@@ -341,7 +347,16 @@ export function createFollowUpService(engine: Engine) {
               });
               if (completed) assertCompletionEvidence(next);
               action = "followup.outcome_recorded";
-              summary = { ...summary, outcome: input.outcome, status };
+              // HWM-08: outcome, evidence type, occurred-at and the base version it was recorded on.
+              summary = {
+                ...summary,
+                outcome: input.outcome,
+                status,
+                evidenceType: outcome.evidenceType,
+                reasonCode: outcome.reasonCode,
+                occurredAt: input.occurredAt,
+                baseVersion: input.expectedVersion,
+              };
               break;
             }
             case "add_note":

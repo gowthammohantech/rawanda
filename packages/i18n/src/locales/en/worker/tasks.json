@@ -63,7 +63,7 @@
     "overdue": "Overdue",
     "overdueCaption": "Past the demo due date. Overdue reflects demo due dates, not approved clinical timing.",
     "conflictTitle": "This task needs your decision",
-    "conflictBody": "A change saved on this device conflicts with a newer version. Decide in the Sync center.",
+    "conflictBody": "Someone else updated this task — your record is kept. Decide in Sync.",
     "openSync": "Open Sync center",
     "patient": {
       "title": "Patient",

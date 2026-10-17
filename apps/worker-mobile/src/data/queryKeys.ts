@@ -48,6 +48,9 @@ export const workerKeys = {
   /** Unaudited re-read of an opened task (refreshed after writes / sync passes). */
   taskDetail: (facilityId: string, followUpId: string) =>
     ["tasks", "detail", facilityId, followUpId] as const,
+  /** HWM-08 attempt / outcome form: the task as opened (never refetched while the form is open). */
+  taskForm: (facilityId: string, followUpId: string) =>
+    ["tasks", "form", facilityId, followUpId] as const,
 } as const;
 
 /** After a draft save / create / discard: the drafts list and Today (drafts count). */
@@ -67,10 +70,10 @@ export async function invalidateAfterWrite(queryClient: QueryClient): Promise<vo
     queryClient.invalidateQueries({ queryKey: workerKeys.sync }),
     queryClient.invalidateQueries({ queryKey: workerKeys.home }),
     queryClient.invalidateQueries({ queryKey: workerKeys.screenings }),
-    // Tasks list + detail; the audited open is not re-run by a write.
+    // Tasks list + detail; the audited open and an open form are not re-run by a write.
     queryClient.invalidateQueries({
       queryKey: workerKeys.tasks,
-      predicate: (query) => query.queryKey[1] !== "access",
+      predicate: (query) => query.queryKey[1] !== "access" && query.queryKey[1] !== "form",
     }),
     // Search / recent / history only — the audited context read is not re-run by a write.
     queryClient.invalidateQueries({

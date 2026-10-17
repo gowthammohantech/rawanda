@@ -255,7 +255,13 @@ export async function counts(
 
 // ── HWM-07 task detail ──────────────────────────────────────────────────────
 
-export type TimelineSyncState = EntitySyncState;
+/** Entity sync state, or `failed` for an item whose op is waiting to retry ("Will retry"). */
+export type TimelineSyncState = EntitySyncState | "failed";
+
+/** Sync state of one op for the timeline (`retryable_failure` → "Not sent — will retry"). */
+function itemSyncState(op: Pick<SyncOperation, "entityId" | "status" | "localSeq">) {
+  return op.status === "retryable_failure" ? "failed" : deriveSyncState(op.entityId, [op]);
+}
 
 export type TaskAttemptView = ContactAttempt & { syncState: TimelineSyncState };
 
@@ -314,7 +320,7 @@ export function attemptSyncStates(
   const offset = followUp.attempts.length - attemptOps.length;
   attemptOps.forEach((op, index) => {
     const at = offset + index;
-    if (at >= 0) states[at] = deriveSyncState(op.entityId, [op]);
+    if (at >= 0) states[at] = itemSyncState(op);
   });
   const outcomeOp = own.filter((op) => opAction(op) === "record_outcome").at(-1);
   const outcome =
@@ -322,7 +328,7 @@ export function attemptSyncStates(
       ? null
       : outcomeOp === undefined
         ? "synced"
-        : deriveSyncState(outcomeOp.entityId, [outcomeOp]);
+        : itemSyncState(outcomeOp);
   return { attempts: states, outcome };
 }
 
@@ -355,7 +361,8 @@ export async function getDetail(
   repo: DetailRepo,
   scope: WorkerScopeInput,
   followUpId: string,
-  { audit = true }: { audit?: boolean } = {},
+  /** `true`: audit the open and a denial; `"denied"`: audit only a denial (forms); `false`: none. */
+  { audit = true }: { audit?: boolean | "denied" } = {},
 ): Promise<TaskAccess> {
   let rows: WorkerFollowUp[];
   try {
@@ -403,7 +410,7 @@ export async function getDetail(
     .map((attempt, index) => ({ ...attempt, syncState: sync.attempts[index] ?? "synced" }))
     .sort((a, b) => b.at.localeCompare(a.at) || b.id.localeCompare(a.id));
 
-  if (audit) {
+  if (audit === true) {
     await repo.recordAuditEvent({
       action: "followup.viewed",
       entityType: "follow_up",

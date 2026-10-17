@@ -1,0 +1,76 @@
+{
+  "attempt": {
+    "title": "Andika igerageza ryo kuvugana",
+    "intro": "Andika buri gerageza ryo kugera ku murwayi, n'iyo ritagenze neza.",
+    "attemptedAt": "Ryari",
+    "method": "Gute",
+    "phoneSimulated": "Guhamagara kuri telefoni ni ikigereranyo muri iyi demo — nta guhamagara gukorwa.",
+    "result": "Igisubizo",
+    "note": "Icyitonderwa (si ngombwa)",
+    "noteHint": "Bivuge mu magambo make kandi y'ukuri. Ntukandike indwara wakekaga.",
+    "save": "Bika igerageza",
+    "reachedHint": "Kugera ku murwayi bishyira iki gikorwa muri \"Yavuganywe\"."
+  },
+  "outcome": {
+    "title": "Andika umusaruro",
+    "legend": "Byagenze bite?",
+    "attended": "Yitabiriye",
+    "attendedHint": "Umurwayi yitabiriye gahunda cyangwa uruzinduko yoherejwemo.",
+    "referredOnward": "Yoherejwe ahandi",
+    "referredOnwardHint": "Umurwayi yerekejwe aho umuganga yagennye.",
+    "unableToReach": "Ntibyashobotse kumubona",
+    "unableToReachHint": "Umurwayi ntiyabonetse nyuma yo kugerageza.",
+    "occurredAt": "Byabaye ryari?",
+    "useNow": "Koresha igihe cy'ubu",
+    "destination": "Aho yoherejwe (byagenwe n'umuganga)",
+    "noDestination": "Nta hantu yoherejwe hari kuri iki gikoresho",
+    "referredCaption": "Umuganga ni we wemeza ko kohereza byarangiye.",
+    "unableCaption": "Umugenzuzi wawe cyangwa umuganga ni bo bazafata icyemezo gikurikira.",
+    "attendedCaption": "Umuganga yemeza nyuma ko byarangiye.",
+    "reason": "Kubera iki umurwayi atabonetse?",
+    "reasonText": "Sobanura impamvu",
+    "attemptsRecorded_one": "Igerageza {{count}} ritagenze neza ryanditswe",
+    "attemptsRecorded_other": "Igerageza {{count}} ritagenze neza ryanditswe",
+    "inlineAttempt": "Andika ubu igerageza ritagenze neza",
+    "inlineAttemptHint": "Ribikwa nk'igerageza \"Ntiyabonetse\" ku gihe kiri hejuru, mbere y'umusaruro.",
+    "inlineMethod": "Wagerageje ute?",
+    "note": "Icyitonderwa (si ngombwa)",
+    "noteHint": "Bivuge mu magambo make kandi y'ukuri. Ntukandike indwara wakekaga.",
+    "save": "Bika umusaruro",
+    "review": "Suzuma kandi urangize"
+  },
+  "evidenceType": "Byemejwe gute?",
+  "evidence": {
+    "facility_register_checked": "Wagenzuye igitabo cy'ivuriro.",
+    "appointment_card_seen": "Wabonye ikarita ya gahunda y'umurwayi.",
+    "worker_accompanied_visit": "Waherekeje umurwayi muri urwo ruzinduko.",
+    "patient_verbal_confirmation": "Umurwayi yakubwiye ko yitabiriye."
+  },
+  "confirmCompletion": "Ibi byemeza ko ikurikirana ryarangiye",
+  "confirm": {
+    "title": "Urangize iri kurikirana?",
+    "outcome": "Umusaruro",
+    "evidence": "Gihamya",
+    "time": "Byabaye",
+    "confirm": "Emeza",
+    "back": "Subira inyuma"
+  },
+  "errors": {
+    "summary": "Reba ahagaragajwe",
+    "conflict": "Iki gikorwa cyahindutse kuva wagifungura. Nta cyasimbujwe — subira inyuma ugifungure bundi bushya.",
+    "failed": "Ntibyabashije kubikwa kuri iki gikoresho. Ongera ugerageze."
+  },
+  "blocked": {
+    "completed": "Iri kurikirana ryarangiye. Nta wundi musaruro ushobora kwandikwa.",
+    "needs_reached_attempt": "Banza wandike igerageza ryo kuvugana aho umurwayi yabonetse mbere yo kwemeza ko yitabiriye.",
+    "already_unable_to_reach": "\"Ntibyashobotse kumubona\" byamaze kwandikwa. Umugenzuzi wawe cyangwa umuganga ni bo bazafata icyemezo.",
+    "already_referred_onward": "\"Yoherejwe ahandi\" byamaze kwandikwa kuri iki gikorwa.",
+    "not_allowed": "Uyu musaruro ntushobora kwandikwa kuri iki gikorwa uko kimeze ubu."
+  },
+  "savedOnDevice": "Byabitswe kuri iki gikoresho",
+  "savedOnDeviceBody": "Bizoherezwa igihe ihuza ry'ikigereranyo rikora.",
+  "notAccepted": {
+    "title": "Ntibyemewe na seriveri y'ikigereranyo",
+    "body": "Iki gikorwa ntikigushinzwe cyangwa kiri hanze y'ivuriro ryawe. Inyandiko yawe ibitswe kuri iki gikoresho."
+  }
+}

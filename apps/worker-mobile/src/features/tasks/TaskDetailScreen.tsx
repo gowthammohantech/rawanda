@@ -5,7 +5,9 @@
  * (status, due, assigned by, created, derived overdue), patient context with the latest reading
  * + units, the linked referral ("Set by clinician"), the attempt timeline and the sticky actions.
  *
- * States: loading → skeleton cards; conflict → `NEEDS DECISION` banner linking to Sync; offline →
+ * States: loading → skeleton cards; conflict → `NEEDS DECISION` banner linking to Sync ("Someone
+ * else updated this task — your record is kept"); rejected (`FORBIDDEN` / `TASK_REASSIGNED`,
+ * HWM-08) → `NOT ACCEPTED` banner, local record retained; offline →
  * full read access, actions stay enabled; read failure → ErrorState + Retry.
  */
 import {
@@ -16,6 +18,7 @@ import {
   LoadingState,
   Screen,
   StatusChip,
+  SyncStatusPill,
   AppText,
   spacing,
   useTx,
@@ -102,6 +105,15 @@ export function TaskDetailScreen({ followUpId }: { followUpId: string }) {
             >
               {t("worker:tasks.detail.openSync")}
             </Button>
+          </View>
+        </Card>
+      ) : null}
+      {detail.syncState === "rejected" ? (
+        <Card testID="task-rejected-banner">
+          <View style={styles.banner}>
+            <SyncStatusPill state="rejected" />
+            <AppText weight="semibold">{t("worker:followup.notAccepted.title")}</AppText>
+            <AppText color="muted">{t("worker:followup.notAccepted.body")}</AppText>
           </View>
         </Card>
       ) : null}
