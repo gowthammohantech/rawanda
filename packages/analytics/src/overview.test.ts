@@ -19,11 +19,11 @@ import {
   countReferred,
   countReviewed,
   countScreened,
-  medianDaysToReview,
   needsAttention,
   OVERVIEW_COUNT_METRICS,
   weeklyScreenedVsFlagged,
 } from "./metrics/screening-overview.ts";
+import { medianDaysToReview } from "./metrics/timeliness.ts";
 
 const now = new Date(ADMIN_METRICS_FIXTURE_NOW);
 const fixtureDs = (type: "all" | "bp" | "glucose" = "all") =>

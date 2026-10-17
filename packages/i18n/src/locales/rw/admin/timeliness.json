@@ -1,0 +1,89 @@
+{
+  "eyebrow": "Igihe",
+  "title": "Igihe cy'isuzuma",
+  "subtitle": "{{from}} – {{to}} · {{scope}} · ibihe rusange by'isuzuma rya muganga n'ikurikiranwa",
+  "error": "Igihe nticyashoboye kubarwa. Nta mibare yerekanwa aho kwerekana iyo gukeka.",
+  "asOf": "Kugeza {{datetime}} (Kigali)",
+  "demoClock": "Ibyarengeje igihe bibarwa hakoreshejwe isaha y'igerageza kandi ntibibikwa.",
+  "noTarget": "Nta ntego y'isuzuma yemejwe",
+  "unit": {
+    "days_one": "umunsi {{value}}",
+    "days_other": "iminsi {{value}}"
+  },
+  "kpi": {
+    "label": "Imibare y'igihe",
+    "median": "Iminsi yo hagati kugeza isuzuma",
+    "medianSub": "n = isuzuma {{n}}",
+    "noReviews": "Nta suzuma ryarangiye muri iki gihe",
+    "p90": "Ijanisha rya 90",
+    "p90Sub": "Iminsi kugeza isuzuma (ibarwa hagati)",
+    "pending": "Isuzuma ritegerejwe",
+    "pendingSub": "{{n}} imaze iminsi 8+ itegereje",
+    "overdueReferrals": "Ibyoherezwa byarengeje igihe",
+    "overdueFollowUps": "Ikurikiranwa ryarengeje igihe",
+    "noneOverdue": "Nta na kimwe cyarengeje itariki",
+    "overdueLink": "Fungura ibisobanuro by'icyiciro cyo kohereza",
+    "completion": "Iminsi yo hagati kugeza kohereza birangiye",
+    "completionSub": "n = ibyoherezwa {{n}} byarangiye"
+  },
+  "median": {
+    "title": "Iminsi yo hagati kugeza isuzuma, buri cyumweru",
+    "week": "Icyumweru cy'isuzuma (gitangira)",
+    "median": "Iminsi yo hagati",
+    "n": "n isuzuma",
+    "tooltip": "{{value}} (n = {{n}})",
+    "summary": "Iminsi yo hagati kugeza isuzuma kuri buri cyumweru cya Kigali mu byumweru {{weeks}}, {{first}} mu cyumweru cya mbere gifite agaciro kagaragara na {{last}} mu cya vuba; agaciro {{hidden}} k'icyumweru kahishwe hagamijwe kurinda ibanga.",
+    "summaryNone": "Nta gaciro ko hagati k'icyumweru kashobora kwerekanwa muri ibi byumweru {{weeks}} (nta suzuma, cyangwa ni bike cyane)."
+  },
+  "overdue": {
+    "title": "Ibyoherezwa n'ikurikiranwa byarengeje itariki, buri cyumweru",
+    "referrals": "Ibyoherezwa byarengeje itariki",
+    "followUps": "Ikurikiranwa ryarengeje itariki",
+    "week": "Icyumweru (gitangira)",
+    "current": "{{week}} (kugeza ubu)",
+    "summary": "{{referrals}}; {{followUps}}.",
+    "trend": {
+      "referrals": {
+        "rose": "Ibyoherezwa byarengeje igihe byazamutse biva kuri {{from}} bigera kuri {{to}} mu byumweru {{weeks}}",
+        "fell": "Ibyoherezwa byarengeje igihe byagabanutse biva kuri {{from}} bigera kuri {{to}} mu byumweru {{weeks}}",
+        "same": "Ibyoherezwa byarengeje igihe byagumye kuri {{to}} mu byumweru {{weeks}}",
+        "hidden": "Ibyoherezwa byarengeje igihe mu byumweru {{weeks}}: agaciro kamwe k'icyumweru kahishwe hagamijwe kurinda ibanga"
+      },
+      "followUps": {
+        "rose": "ikurikiranwa ryarengeje igihe ryazamutse riva kuri {{from}} rigera kuri {{to}}",
+        "fell": "ikurikiranwa ryarengeje igihe ryagabanutse riva kuri {{from}} rigera kuri {{to}}",
+        "same": "ikurikiranwa ryarengeje igihe ryagumye kuri {{to}}",
+        "hidden": "agaciro kamwe k'ikurikiranwa ryarengeje igihe kahishwe hagamijwe kurinda ibanga"
+      }
+    }
+  },
+  "aging": {
+    "title": "Isuzuma ritegerejwe hakurikijwe igihe",
+    "label": "Isuzuma ritegerejwe hakurikijwe iminsi kuva ipimwa",
+    "bucket": {
+      "0-2": "Iminsi 0–2",
+      "3-7": "Iminsi 3–7",
+      "8-14": "Iminsi 8–14",
+      "15+": "Iminsi 15 cyangwa irenga"
+    },
+    "share": "{{bucket}}: {{n}} kuri {{total}} by'isuzuma ritegerejwe",
+    "none": "Nta suzuma ritegerejwe muri aka gace",
+    "total": "Isuzuma ritegerejwe"
+  },
+  "facility": {
+    "title": "Iminsi yo hagati kugeza isuzuma hakurikijwe ivuriro",
+    "facility": "Ivuriro",
+    "median": "Iminsi yo hagati",
+    "n": "n isuzuma",
+    "nLabel": "n = {{n}}",
+    "link": "{{facility}}: erekana igihe cy'iri vuriro gusa",
+    "summary": "Iminsi yo hagati kugeza isuzuma ku mavuriro {{count}}; {{hidden}} yahishwe hagamijwe kurinda ibanga (isuzuma riri munsi ya {{k}}, cyangwa ryahishwe hamwe na ryo)."
+  },
+  "callout": {
+    "title": "Icyo kurenza igihe bisobanura hano",
+    "text": "Kurenza igihe bisobanura ko itariki yashyizweho na muganga yarenze kandi intambwe itarangiye. Intego z'isuzuma ntiziremezwa n'ushinzwe amabwiriza y'ubuvuzi, bityo isuzuma ritegerejwe ryerekanwa hakurikijwe igihe gusa."
+  },
+  "empty": {
+    "noOverdue": "Nta na kimwe cyarengeje itariki yacyo"
+  }
+}

@@ -61,7 +61,7 @@
     "manualEscalation": "Escalated manually for human review",
     "triggeringReadings": "Triggering readings",
     "noTriggeringReadings": "No reading above a demo threshold — routed to a human because inputs were incomplete",
-    "comparedTo": "demo threshold {{value}}",
+    "comparedTo": "demo threshold {{value}} (demo placeholder value)",
     "whyReview": "Why this needs review",
     "rulesetVersion": "Ruleset version",
     "noRuleset": "No ruleset recorded",

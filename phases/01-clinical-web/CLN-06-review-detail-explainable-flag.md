@@ -10,7 +10,7 @@
 | Depends on | CLN-05 |
 | Trace | PRD CL-04, PRD §6 (flags are not diagnoses; show review status and responsible professional); FRD CL-04, T-10, T-05 (concurrent reviews); spec §2.1 `/clinical/reviews/:id`, §5.3 `FlagResult`; WF-01 step 5, WF-03 step 1; BRD BR-03 |
 | Size | M |
-| Status | Not started |
+| Status | Done |
 
 ## 2. Goal
 

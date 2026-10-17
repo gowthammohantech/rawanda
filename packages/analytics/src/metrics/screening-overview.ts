@@ -2,20 +2,14 @@
  * Screening overview (FND-06). ADM-02 extends this file in place (countByScreeningType,
  * needsAttention, weekly series) — no parallel `overview.ts`.
  */
-import {
-  isFollowUpOverdue,
-  isReferralOverdue,
-  type DistrictId,
-  type FacilityId,
-  type Screening,
-  type ScreeningId,
-} from "@laif/domain";
+import type { DistrictId, FacilityId, ScreeningId } from "@laif/domain";
 
 import { hasBp, hasGlucose, isoWeeksBetween, type MetricsDataset } from "../dataset.ts";
 import { applyMetricsFilter, kigaliDate, kigaliIsoWeekStart } from "../filters.ts";
 import type { AnalyticsInput, MetricsFilter, Rate } from "../types.ts";
 import { classifyPathway } from "./funnel.ts";
 import { dataQuality } from "./quality.ts";
+import { overdueSnapshot, pendingAgeBuckets } from "./timeliness.ts";
 import {
   groupBy,
   isFlagged,
@@ -24,9 +18,7 @@ import {
   isReferralCompletedWithEvidence,
   isReviewDecided,
   isReviewPending,
-  median,
   rate,
-  round,
 } from "./shared.ts";
 
 export type OverviewCounts = {
@@ -108,8 +100,6 @@ export const OVERVIEW_COUNT_METRICS = [
   "followUpCompleted",
 ] as const;
 export type OverviewCountMetric = (typeof OVERVIEW_COUNT_METRICS)[number];
-
-const DAY_MS_OVERVIEW = 86_400_000;
 
 /** Submitted cohort screenings (drafts are already excluded by `filterDataset`). */
 export function countScreened(ds: MetricsDataset): number {
@@ -195,34 +185,6 @@ export function followUpCompletedScreeningIds(ds: MetricsDataset): Set<Screening
 
 export function countFollowUpCompleted(ds: MetricsDataset): number {
   return followUpCompletedScreeningIds(ds).size;
-}
-
-/** Review delays in days (first decided review per flagged cohort screening). */
-export function reviewDelaysDays(ds: MetricsDataset): number[] {
-  const flagged = new Map(
-    ds.cohort.screenings.filter((s) => isRecorded(s) && isFlagged(s)).map((s) => [s.id, s]),
-  );
-  const first = new Map<string, number>();
-  for (const r of ds.cohort.reviews) {
-    const s = flagged.get(r.screeningId);
-    if (!s || !isReviewDecided(r) || r.reviewedAt === null) continue;
-    const at = Date.parse(r.reviewedAt);
-    const prev = first.get(s.id);
-    if (prev === undefined || at < prev) first.set(s.id, at);
-  }
-  return [...first.entries()].map(
-    ([id, at]) =>
-      (at - Date.parse((flagged.get(id as ScreeningId) as Screening).measuredAt)) / DAY_MS_OVERVIEW,
-  );
-}
-
-/**
- * Median of (reviewedAt − measuredAt) in days over reviewed cohort screenings, 1 decimal; mean of
- * the two middle values for an even n; null with no reviews.
- */
-export function medianDaysToReview(ds: MetricsDataset): number | null {
-  const m = median(reviewDelaysDays(ds));
-  return m === null ? null : round(m, 1);
 }
 
 export type WeeklyScreenedVsFlagged = { weekStart: string; screened: number; flagged: number };
@@ -315,29 +277,23 @@ export type NeedsAttention = {
   openQualityIssues: number;
 };
 
+/**
+ * Wired to the ADM-04 timeliness calculators (`overdueSnapshot`, `pendingAgeBuckets`), so the
+ * overview card and `/admin/timeliness` reconcile: `8+` = `8-14` + `15+`.
+ */
 export function needsAttention(ds: MetricsDataset): NeedsAttention {
   const now = new Date(ds.nowIso);
-  const nowMs = now.getTime();
-  const decided = reviewOutcomes(ds).reviewed;
-  const flagged = new Map(
-    ds.cohort.screenings.filter((s) => isRecorded(s) && isFlagged(s)).map((s) => [s.id, s]),
-  );
-  const pending = new Set<ScreeningId>();
-  for (const r of ds.cohort.reviews) {
-    if (flagged.has(r.screeningId) && isReviewPending(r) && !decided.has(r.screeningId)) {
-      pending.add(r.screeningId);
-    }
-  }
-  const ages: Record<PendingReviewAgeBucket, number> = { "0-2": 0, "3-7": 0, "8+": 0 };
-  for (const id of pending) {
-    const s = flagged.get(id) as Screening;
-    const days = Math.floor((nowMs - Date.parse(s.measuredAt)) / DAY_MS_OVERVIEW);
-    ages[days >= 8 ? "8+" : days >= 3 ? "3-7" : "0-2"] += 1;
-  }
+  const buckets = pendingAgeBuckets(ds, now);
+  const ages: Record<PendingReviewAgeBucket, number> = {
+    "0-2": buckets["0-2"],
+    "3-7": buckets["3-7"],
+    "8+": buckets["8-14"] + buckets["15+"],
+  };
+  const overdue = overdueSnapshot(ds, now);
   const quality = dataQuality(ds.cohort, {}, now);
   return {
-    overdueReferrals: ds.cohort.referrals.filter((r) => isReferralOverdue(r, now)).length,
-    overdueFollowUps: ds.cohort.followUps.filter((f) => isFollowUpOverdue(f, now)).length,
+    overdueReferrals: overdue.referrals,
+    overdueFollowUps: overdue.followUps,
     pendingReviewAges: ages,
     pendingReviewsAged8Plus: ages["8+"],
     openQualityIssues: quality.missingGlucoseUnit + quality.possibleDuplicateIdentities,

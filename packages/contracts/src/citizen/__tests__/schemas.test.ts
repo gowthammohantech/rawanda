@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   AcknowledgeInstructionInputSchema,
+  AcknowledgeReminderInputSchema,
   ApprovedInstructionSchema,
   CitizenAccessEventSchema,
   CitizenAccountSchema,
@@ -342,6 +343,19 @@ describe("citizen inputs", () => {
     expect(
       AcknowledgeInstructionInputSchema.safeParse({ ...ack, expectedVersion: 0 }).success,
     ).toBe(false);
+  });
+
+  it("reminder acknowledgements need patient and reminder (CTZ-05)", () => {
+    expect(
+      AcknowledgeReminderInputSchema.safeParse({ idempotencyKey: KEY, patientId: "pat-1" }).success,
+    ).toBe(false);
+    expect(
+      AcknowledgeReminderInputSchema.safeParse({
+        idempotencyKey: KEY,
+        patientId: "pat-1",
+        reminderId: "rem-1",
+      }).success,
+    ).toBe(true);
   });
 
   it("preference updates require expectedVersion", () => {

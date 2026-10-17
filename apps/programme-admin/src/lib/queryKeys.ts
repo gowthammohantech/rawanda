@@ -32,6 +32,12 @@ export const adminKeys = {
   /** ADM-03: stage drill-down (current + previous equal-length period). */
   funnelStage: (scopeKey: ScopeKey, stage: string, filters: FilterKey, threshold: number) =>
     [...adminKeys.scope(scopeKey), "funnelStage", stage, filters, threshold] as const,
+  /**
+   * ADM-04: timeliness view. `nowIso` is the demo-clock instant (to the minute), so a clock
+   * reset / time travel invalidates the derived overdue figures; the threshold is part of the key.
+   */
+  timeliness: (scopeKey: ScopeKey, filters: FilterKey, nowIso: string, threshold: number) =>
+    [...adminKeys.scope(scopeKey), "timeliness", filters, nowIso, threshold] as const,
   /** ADM-03: programme follow-up actions in the grant scope. */
   programmeActions: (scopeKey: ScopeKey) =>
     [...adminKeys.scope(scopeKey), "programmeActions"] as const,

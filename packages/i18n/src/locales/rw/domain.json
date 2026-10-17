@@ -532,6 +532,9 @@
         "verified": "Umwirondoro wemejwe (kode y'igerageza)",
         "verification_failed": "Kugenzura umwirondoro byanze (by'igerageza)",
         "verification_unavailable": "Serivisi yo kugenzura ntiboneka (by'igerageza)"
+      },
+      "reminder": {
+        "preview_sent": "Kwibutsa kw'igerageza koherejwe kuri iyi telefoni (demo)"
       }
     },
     "admin": {

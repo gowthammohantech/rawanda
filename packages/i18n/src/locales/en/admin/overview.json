@@ -72,7 +72,8 @@
     "computedAt": "{{time}} (Kigali)",
     "rulesets": "Ruleset versions",
     "noRulesets": "None in this period",
-    "version": "Metrics version"
+    "version": "Metrics version",
+    "method": "Method"
   },
   "catalogue": {
     "screened": {
@@ -164,7 +165,36 @@
       "period": "Period = Kigali date of the measurement",
       "cohort": "Reviews, referrals and follow-ups count in the period of their originating screening",
       "snapshot": "Records of the period's screenings, as of now (demo clock)",
-      "none": "Not applicable"
+      "none": "Not applicable",
+      "reviewWeek": "Week = Kigali ISO week (Monday start) of the review decision",
+      "weekEnd": "Counted at each week's end (Sunday 23:59 Kigali); the last point is now (demo clock)"
+    },
+    "p90DaysToReview": {
+      "label": "90th percentile days to review",
+      "numerator": "90th percentile of days from measurement to the first clinical review decision"
+    },
+    "reviewsPending": {
+      "label": "Reviews pending",
+      "numerator": "Flagged screenings whose review is pending or in review (shown by age; no review target is approved)"
+    },
+    "medianDaysToReferralCompletion": {
+      "label": "Median days to referral completion",
+      "numerator": "Median of days from measurement to the recorded completion evidence of a completed referral"
+    },
+    "weeklyMedianDaysToReview": {
+      "label": "Median days to review per week",
+      "numerator": "Median days to review per Kigali ISO week of the review decision, with n"
+    },
+    "weeklyOverdueTrend": {
+      "label": "Overdue trend",
+      "numerator": "Incomplete referrals and follow-ups whose clinician-set due date had passed at the end of each week (the last point is now)"
+    },
+    "medianDaysByFacility": {
+      "label": "Median days to review by facility",
+      "numerator": "Median days to review per facility, with n"
+    },
+    "method": {
+      "percentile": "Linear interpolation between closest ranks: rank h = (n − 1) × p / 100; value = x[⌊h⌋] + (h − ⌊h⌋) × (x[⌊h⌋+1] − x[⌊h⌋]). Hidden when n is below the small-cell threshold."
     }
   }
 }

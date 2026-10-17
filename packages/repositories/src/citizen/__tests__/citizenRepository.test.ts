@@ -690,3 +690,182 @@ describe.each(adapters)("CitizenRepository CTZ-02 access (%s adapter)", (_name, 
     expect(denied.at(-1)).toMatchObject({ outcome: "denied", entityId: P3 });
   });
 });
+
+describe.each(adapters)("CitizenRepository CTZ-05 reminders (%s adapter)", (_name, makeStore) => {
+  const DAY = 86_400_000;
+  const APPOINTMENT = SEED_ANCHORS.CTZ_P1_APPOINTMENT_INSTRUCTION.careInstructionId;
+  const prefsOf = async (h: Awaited<ReturnType<typeof setup>>) =>
+    (await h.repo.getNotificationPrefs(P1))!;
+  /** Audits written by this test (seed history is older than the pinned demo clock). */
+  const audits = async (h: Awaited<ReturnType<typeof setup>>, action: string) =>
+    (await h.audits(action))
+      .filter((e) => e.occurredAt >= "2026-10-14T06:00:00.000Z")
+      .map((e) => ({ ...e, changeSummary: (e.changeSummary ?? {}) as Record<string, unknown> }));
+  const scheduledOf = async (h: Awaited<ReturnType<typeof setup>>) =>
+    (await h.repo.listReminders(P1)).filter((r) => r.status === "scheduled");
+
+  it("seed: CTZ-P1 opted in with 1 scheduled + 2 history rows (1 seen)", async () => {
+    const h = await setup(makeStore());
+    expect(await prefsOf(h)).toMatchObject({ optedIn: true, timing: "day_before" });
+    const rows = await h.repo.listReminders(P1);
+    expect(rows.filter((r) => r.status === "scheduled")).toHaveLength(1);
+    expect(rows.filter((r) => r.status !== "scheduled")).toHaveLength(2);
+    expect(rows.filter((r) => r.status === "acknowledged")).toHaveLength(1);
+  });
+
+  it("opt out: every scheduled row cancelled + one reminder.cancelled each; clock advance delivers nothing", async () => {
+    const h = await setup(makeStore());
+    const prefs = await prefsOf(h);
+    const before = await scheduledOf(h);
+    await h.repo.updateNotificationPrefs(
+      { patientId: P1, expectedVersion: prefs.version, optedIn: false, timing: prefs.timing },
+      h.key(),
+    );
+    expect(await scheduledOf(h)).toHaveLength(0);
+    const cancelled = await audits(h, "reminder.cancelled");
+    expect(cancelled).toHaveLength(before.length);
+    expect(cancelled.every((e) => e.changeSummary["reason"] === "opted_out")).toBe(true);
+    const changed = await audits(h, "reminder.preference_changed");
+    expect(changed.at(-1)?.changeSummary).toMatchObject({ change: "opted_out", optedIn: false });
+
+    const total = (await h.repo.listReminders(P1)).length;
+    await h.repo.demo.advanceClock(7 * DAY);
+    const result = await h.repo.processDueReminders(P1);
+    expect(result.delivered).toHaveLength(0);
+    const after = await h.repo.listReminders(P1);
+    expect(after).toHaveLength(total);
+    expect(after.some((r) => r.status === "scheduled")).toBe(false);
+    expect(await audits(h, "reminder.delivered_simulated")).toHaveLength(0);
+  });
+
+  it("opt in with morning_of: exactly one reminder per future approved appointment; replay / repeat never duplicate", async () => {
+    const h = await setup(makeStore());
+    let prefs = await prefsOf(h);
+    await h.repo.updateNotificationPrefs(
+      { patientId: P1, expectedVersion: prefs.version, optedIn: false, timing: "day_before" },
+      h.key(),
+    );
+    prefs = await prefsOf(h);
+    const key = h.key();
+    const input = {
+      patientId: P1,
+      expectedVersion: prefs.version,
+      optedIn: true,
+      timing: "morning_of" as const,
+    };
+    const first = await h.repo.updateNotificationPrefs(input, key);
+    const scheduled = await scheduledOf(h);
+    expect(scheduled).toHaveLength(1);
+    expect(scheduled[0]).toMatchObject({
+      instructionId: APPOINTMENT,
+      // Appointment 19 Oct 10:30 Kigali → 07:00 Kigali the same day.
+      scheduledAt: "2026-10-19T05:00:00.000Z",
+      consentBasis: "citizen_opt_in",
+    });
+    const replay = await h.repo.updateNotificationPrefs(input, key);
+    expect(replay.replayed).toBe(true);
+    expect(replay.data).toEqual(first.data);
+    expect(await scheduledOf(h)).toHaveLength(1);
+    // Same choice again with a new key: still one row.
+    await h.repo.updateNotificationPrefs(
+      { ...input, expectedVersion: first.data.version },
+      h.key(),
+    );
+    expect(await scheduledOf(h)).toHaveLength(1);
+    const scheduledAudits = await audits(h, "reminder.scheduled");
+    expect(scheduledAudits).toHaveLength(1);
+    expect(scheduledAudits[0]).toMatchObject({ actorId: null });
+    expect(scheduledAudits[0]?.changeSummary["systemActor"]).toBe("wallet-scheduler");
+    expect(
+      (await audits(h, "reminder.preference_changed")).map((e) => e.changeSummary["change"]),
+    ).toEqual(["opted_out", "opted_in", "unchanged"]);
+  });
+
+  it("timing change replaces the scheduled row (timing_changed)", async () => {
+    const h = await setup(makeStore());
+    const prefs = await prefsOf(h);
+    const [seeded] = await scheduledOf(h);
+    await h.repo.updateNotificationPrefs(
+      { patientId: P1, expectedVersion: prefs.version, optedIn: true, timing: "morning_of" },
+      h.key(),
+    );
+    const rows = await h.repo.listReminders(P1);
+    expect(rows.find((r) => r.id === seeded!.id)).toMatchObject({
+      status: "cancelled",
+      cancelReason: "timing_changed",
+    });
+    expect((await scheduledOf(h)).map((r) => r.scheduledAt)).toEqual(["2026-10-19T05:00:00.000Z"]);
+  });
+
+  it("clock past scheduledAt → delivered_simulated; Got it → acknowledged; next step stays planned", async () => {
+    const h = await setup(makeStore());
+    const [row] = await scheduledOf(h);
+    expect((await h.repo.processDueReminders(P1)).delivered).toHaveLength(0);
+    await h.repo.demo.advanceClock(5 * DAY);
+    const { delivered } = await h.repo.processDueReminders(P1);
+    expect(delivered.map((r) => r.id)).toEqual([row!.id]);
+    expect(delivered[0]).toMatchObject({ status: "delivered_simulated" });
+    expect(delivered[0]?.deliveredAt).toBeTruthy();
+    // Idempotent.
+    expect((await h.repo.processDueReminders(P1)).delivered).toHaveLength(0);
+    expect(await audits(h, "reminder.delivered_simulated")).toHaveLength(1);
+
+    const key = h.key();
+    const ack = await h.repo.acknowledgeReminder({ patientId: P1, reminderId: row!.id }, key);
+    expect(ack.data).toMatchObject({ status: "acknowledged" });
+    expect(
+      (await h.repo.acknowledgeReminder({ patientId: P1, reminderId: row!.id }, key)).replayed,
+    ).toBe(true);
+    const again = await h.repo.acknowledgeReminder({ patientId: P1, reminderId: row!.id }, h.key());
+    expect(again.data).toEqual(ack.data);
+    expect(await audits(h, "reminder.acknowledged")).toHaveLength(1);
+    const step = (await h.repo.listApprovedInstructions(P1)).find((s) => s.id === APPOINTMENT);
+    expect(step).toMatchObject({ progress: "planned", completion: null });
+  });
+
+  it("acknowledging a scheduled reminder is an invalid transition; another patient's is denied", async () => {
+    const h = await setup(makeStore());
+    const [row] = await scheduledOf(h);
+    await expect(
+      h.repo.acknowledgeReminder({ patientId: P1, reminderId: row!.id }, h.key()),
+    ).rejects.toMatchObject({ code: "VALIDATION_ERROR", reason: "INVALID_TRANSITION" });
+    h.as(PERSONA_IDS.citizen2);
+    await forbidden(
+      h.repo.acknowledgeReminder({ patientId: P2, reminderId: row!.id }, h.key()),
+      "SCOPE",
+    );
+  });
+
+  it("conflict-next-write on the patient → CONFLICT, nothing changed (T-05)", async () => {
+    const h = await setup(makeStore());
+    const prefs = await prefsOf(h);
+    const before = await h.repo.listReminders(P1);
+    await h.repo.demo.setFaults({ conflictOnce: [{ entityType: "patient", entityId: P1 }] });
+    await expect(
+      h.repo.updateNotificationPrefs(
+        { patientId: P1, expectedVersion: prefs.version, optedIn: false, timing: prefs.timing },
+        h.key(),
+      ),
+    ).rejects.toMatchObject({ code: "CONFLICT" });
+    expect(await prefsOf(h)).toEqual(prefs);
+    expect(await h.repo.listReminders(P1)).toEqual(before);
+  });
+
+  it("consent withdrawal cancels scheduled reminders with audits; prefs untouched; re-consent does not re-plan", async () => {
+    const h = await setup(makeStore());
+    const prefs = await prefsOf(h);
+    await h.repo.recordConsent({ patientId: P1, action: "withdrawn" }, h.key());
+    const cancelled = await audits(h, "reminder.cancelled");
+    expect(cancelled).toHaveLength(1);
+    expect(cancelled[0]?.changeSummary["reason"]).toBe("consent_withdrawn");
+    await h.repo.recordConsent({ patientId: P1, action: "granted" }, h.key());
+    expect(await prefsOf(h)).toEqual(prefs);
+    expect(await scheduledOf(h)).toHaveLength(0);
+  });
+
+  it("preview sent is audited", async () => {
+    const h = await setup(makeStore());
+    await h.repo.recordReminderPreviewSent(P1);
+    expect(await h.audits("citizen.reminder.preview_sent")).toHaveLength(1);
+  });
+});

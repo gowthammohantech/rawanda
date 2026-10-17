@@ -1,0 +1,104 @@
+{
+  "title": "Kwibutsa",
+  "eyebrow": "Kwibutsa gahunda",
+  "subtitle": "Kwibutsa gahunda itsinda rikwitaho ryemeje.",
+  "loading": "Turimo gufungura ibyo kwibutsa byawe",
+  "error": "Ntitwashoboye gufungura ibyo kwibutsa byawe.",
+  "demoNote": "Kwibutsa ni ukwigana muri iyi demo. Nta SMS cyangwa ubutumwa bwoherezwa.",
+  "toggle": {
+    "label": "Kwibutsa gahunda",
+    "onSummary": {
+      "dayBefore": "Tuzakwibutsa umunsi ubanziriza gahunda.",
+      "morningOf": "Tuzakwibutsa mu gitondo cy'umunsi wa gahunda."
+    },
+    "offSummary": "Kwibutsa birahagaritswe",
+    "hint": "Gufungura cyangwa guhagarika kwibutsa gahunda."
+  },
+  "optOut": {
+    "confirmTitle": "Guhagarika kwibutsa?",
+    "confirmBody": "Ntuzongera kwibutswa gahunda zawe. Gahunda zawe ntizihinduka.",
+    "confirm": "Hagarika kwibutsa",
+    "cancel": "Komeza kwibutswa"
+  },
+  "toast": {
+    "off": "Kwibutsa byahagaritswe",
+    "on": "Kwibutsa byafunguwe",
+    "timing": "Igihe cyo kwibutsa cyabitswe"
+  },
+  "timing": {
+    "legend": "Ni ryari twakwibutsa?",
+    "dayBefore": "Umunsi ubanziriza",
+    "dayBeforeHint": "Saa tatu za mu gitondo (09:00) umunsi ubanziriza gahunda (igihe cya demo).",
+    "morningOf": "Mu gitondo cy'umunsi",
+    "morningOfHint": "Saa moya za mu gitondo (07:00) ku munsi wa gahunda (igihe cya demo)."
+  },
+  "section": {
+    "scheduled": "Biteganyijwe",
+    "history": "Amateka"
+  },
+  "empty": {
+    "scheduled": "Nta kwibutsa guteganyijwe",
+    "scheduledBody": "Iyo itsinda rikwitaho ryemeje gahunda, kwibutsa kwayo kugaragara hano.",
+    "offBody": "Fungura kwibutsa kugira ngo wibutswe mbere ya gahunda zawe.",
+    "history": "Nta kwibutsa kurabaho"
+  },
+  "row": {
+    "title": "Kwibutsa gahunda",
+    "scheduledFor": "Kuzoherezwa {{date}}",
+    "deliveredAt": "Byoherejwe {{date}}",
+    "seenAt": "Byabonywe {{date}}",
+    "cancelled": {
+      "opted_out": "Ntibyoherejwe — kwibutsa byahagaritswe",
+      "timing_changed": "Ntibyoherejwe — igihe cyo kwibutsa cyahinduwe",
+      "consent_withdrawn": "Ntibyoherejwe — gusangiza byahagaritswe",
+      "instruction_cancelled": "Ntibyoherejwe — gahunda yahindutse"
+    }
+  },
+  "chip": {
+    "scheduled": "BITEGANYIJWE",
+    "delivered": "BYOHEREJWE (DEMO)",
+    "seen": "BYABONYWE",
+    "cancelled": "BYAHAGARITSWE"
+  },
+  "gotIt": "Ndabibonye",
+  "gotItHint": "Bigaragaza ko wabonye uku kwibutsa. Gahunda yawe ntihinduka.",
+  "gotItError": "Ntitwashoboye kubika ibi. Nta cyahindutse. Ongera ugerageze.",
+  "inbox": {
+    "banner": "Ufite kwibutsa kuvuye ku itsinda rikwitaho",
+    "open": "Fungura kwibutsa"
+  },
+  "safe": {
+    "title": "Kwibutsa kwa CareConnect",
+    "bodyTomorrow": "Ufite gahunda ejo. Fungura porogaramu urebe ibisobanuro.",
+    "bodyToday": "Ufite gahunda uyu munsi. Fungura porogaramu urebe ibisobanuro.",
+    "noteTitle": "Icyo kwibutsa kuvuga",
+    "noteBody": "Kwibutsa ntikwigera kugaragaza ibisubizo, indwara cyangwa amazina, bityo ni byiza kubibona kuri telefoni musangiye."
+  },
+  "preview": {
+    "button": "Ohereza kwibutsa kw'igerageza kuri iyi telefoni",
+    "hint": "Ubutumwa bw'igerageza bufite amagambo ari hejuru buzagaragara nyuma y'amasegonda 5.",
+    "sent": "Kwibutsa kw'igerageza kuri mu nzira",
+    "permissionDenied": "Ubutumwa (notifications) bwahagaritswe kuri iyi porogaramu. Kugira ngo ubone kwibutsa kw'igerageza, emerera Expo Go kohereza ubutumwa mu igenamiterere rya telefoni. Ibindi byose bikomeza gukora.",
+    "failed": "Ntitwashoboye kohereza kwibutsa kw'igerageza. Nta kindi cyahindutse."
+  },
+  "channel": {
+    "label": "Aho kwibutsa kugaragara",
+    "inApp": "Muri iyi porogaramu (demo)"
+  },
+  "preferences": {
+    "title": "Uko wibutswa",
+    "open": "Uko wibutswa",
+    "openHint": "Hitamo igihe wibutswa.",
+    "offNote": "Kwibutsa birahagaritswe. Amahitamo yawe arabitswe igihe uzongera kubifungura."
+  },
+  "validation": {
+    "timingRequired": "Hitamo igihe ushaka kwibutswa."
+  },
+  "conflict": {
+    "title": "Igenamiterere ryo kwibutsa ryahindutse",
+    "body": "Ryahinduriwe ahandi, bityo nta cyabitswe. Ibi ni byo bibitswe ubu.",
+    "dismiss": "Sawa"
+  },
+  "saveError": "Ntitwashoboye kubika igenamiterere ryo kwibutsa. Nta cyahindutse.",
+  "retry": "Ongera ugerageze"
+}

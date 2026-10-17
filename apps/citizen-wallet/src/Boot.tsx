@@ -8,6 +8,7 @@ import { BrandSplash, Button, ErrorState, Screen, useTx } from "@laif/ui-native"
 import { useEffect, useState, type ReactNode } from "react";
 
 import { DemoToolsProvider } from "./demo-tools.tsx";
+import { ReminderNotificationsProvider } from "./features/reminders/notifications.tsx";
 import { CitizenRepoProvider, createAppRepository, type CitizenRepository } from "./data/repo.tsx";
 import { useSession } from "./providers.tsx";
 
@@ -74,7 +75,9 @@ export function Boot({ openStore, noLatency, children }: BootProps) {
   if (state.status === "ready") {
     return (
       <CitizenRepoProvider repo={state.repo}>
-        <DemoToolsProvider>{children}</DemoToolsProvider>
+        <DemoToolsProvider>
+          <ReminderNotificationsProvider>{children}</ReminderNotificationsProvider>
+        </DemoToolsProvider>
       </CitizenRepoProvider>
     );
   }

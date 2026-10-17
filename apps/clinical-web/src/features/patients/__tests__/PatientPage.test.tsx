@@ -131,4 +131,10 @@ describe("PatientPage", () => {
     expect(warning.textContent).not.toContain(WF01.displayName);
     expect(within(warning).getByRole("link", { name: DUP_B.displayName })).toBeTruthy();
   });
+
+  it("?tab=screenings opens the Screenings tab (CLN-06 correction-history link)", async () => {
+    await renderApp({ path: routes.patient(WF01.id, "screenings"), signIn: CLINICIAN });
+    const tab = await screen.findByRole("tab", { name: "Screenings" });
+    expect(tab.getAttribute("aria-selected")).toBe("true");
+  });
 });

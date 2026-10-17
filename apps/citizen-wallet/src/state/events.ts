@@ -25,3 +25,26 @@ export function emitConsentWithdrawn(event: ConsentWithdrawnEvent): void {
     }
   }
 }
+
+/**
+ * CTZ-05: the demo clock moved (Demo tools +1 day / +7 days / baseline). The reminder processor
+ * listens and runs the simulated delivery at once.
+ */
+const clockListeners = new Set<() => void>();
+
+export function onDemoClockChanged(listener: () => void): () => void {
+  clockListeners.add(listener);
+  return () => {
+    clockListeners.delete(listener);
+  };
+}
+
+export function emitDemoClockChanged(): void {
+  for (const listener of [...clockListeners]) {
+    try {
+      listener();
+    } catch {
+      // Never blocks the demo tool.
+    }
+  }
+}
