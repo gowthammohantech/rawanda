@@ -8,7 +8,7 @@ import { createRoot } from "react-dom/client";
 
 import { App } from "./app/App.tsx";
 import { APP_ID } from "./app/config.ts";
-import { createAppRepository } from "./app/repository.ts";
+import { createAppRepository } from "./data/repository.ts";
 import { createAppRouter } from "./app/router.tsx";
 import { createAppQueryClient } from "./app/services.ts";
 import { createAppSession } from "./session/session-store.ts";

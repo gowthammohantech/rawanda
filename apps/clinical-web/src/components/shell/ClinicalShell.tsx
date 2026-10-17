@@ -3,16 +3,14 @@
  * grouped Sidebar (capability-aware items, count-badge slots, Settings / Help footer), the Topbar
  * (search link → Patients, bell, Demo tools, EN/RW LanguageSwitcher, role chip + active facility,
  * PersonaSwitcher with facility switch and Sign out) and the RoleBanner
- * ("… — demo role switch, not authentication") + OfflineBanner under it.
+ * ("… — demo role switch, not authentication") + the ConnectionBanner (CLN-02) under it.
  */
 import { roleLabelKey } from "@laif/auth-demo";
-import { queryKeys } from "@laif/repositories";
 import {
   AppShell,
   DemoToolsMenu,
   Drawer,
   Icon,
-  OfflineBanner,
   PersonaSwitcher,
   RoleBanner,
   Sidebar,
@@ -25,8 +23,10 @@ import { useMemo, useState } from "react";
 import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router";
 
 import { useDemoTools } from "../../app/demo-tools.tsx";
+import { ConnectionBanner } from "../ConnectionBanner.tsx";
 import { facilityLabel, personaOption } from "../../app/persona-labels.ts";
-import { useRepository } from "../../app/providers.tsx";
+import { clinicalKeys } from "../../data/queryKeys.ts";
+import { useRepository } from "../../data/useRepository.ts";
 import { routes } from "../../app/routes.ts";
 import { recordSessionEnded, recordSessionStarted } from "../../session/session-audit.ts";
 import { permittedFacilityIdsFor } from "../../session/session-store.ts";
@@ -63,7 +63,7 @@ function ShellChrome({ badgeCounts = {} }: ClinicalShellProps) {
 
   const canReadQueue = can("review.read");
   const pending = useQuery({
-    queryKey: queryKeys.reviews.count({ shell: "pending" }),
+    queryKey: clinicalKeys.reviewCounts(state?.activeFacilityId ?? "none", { shell: "pending" }),
     queryFn: () => repo.countReviews(),
     select: (counts) => counts.pending,
     retry: false,
@@ -260,7 +260,7 @@ function ShellChrome({ badgeCounts = {} }: ClinicalShellProps) {
               roleLabel={roleLabel}
               scopeLabel={activeFacility}
             />
-            {faults.offline ? <OfflineBanner /> : null}
+            <ConnectionBanner />
           </>
         }
       >

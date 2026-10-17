@@ -13,5 +13,40 @@
   "routeError": {
     "title": "This screen could not be shown",
     "description": "Something went wrong while showing this screen. Try again, or reset the demo from Demo tools."
+  },
+  "VALIDATION_ERROR": {
+    "title": "Check the highlighted fields",
+    "body": "Some information is missing or not valid. Correct the highlighted fields and save again.",
+    "action": "Review the form"
+  },
+  "FORBIDDEN": {
+    "title": "Not permitted for this demo role or facility",
+    "body": "This record is outside the active demo role or facility. The attempt was recorded in the audit log.",
+    "action": "Switch persona or facility"
+  },
+  "NOT_FOUND": {
+    "title": "Record not found",
+    "body": "This record does not exist in the demo data, or it was removed by a demo reset.",
+    "action": "Go back"
+  },
+  "CONFLICT": {
+    "title": "Someone else changed this record",
+    "body": "A newer version was saved while you were working. Review the latest version before saving again.",
+    "action": "Review the latest version"
+  },
+  "DEPENDENCY_UNAVAILABLE": {
+    "title": "The service could not complete this request",
+    "body": "A service needed for this action is unavailable. Nothing extra was saved; try again.",
+    "action": "Try again"
+  },
+  "OFFLINE": {
+    "title": "You are offline",
+    "body": "Simulated offline — changes cannot be saved. Turn the fault off in Settings and try again.",
+    "action": "Try again"
+  },
+  "TIMEOUT": {
+    "title": "The request timed out",
+    "body": "The response did not arrive. It may already be saved — trying again is safe and will not save twice.",
+    "action": "Try again"
   }
 }

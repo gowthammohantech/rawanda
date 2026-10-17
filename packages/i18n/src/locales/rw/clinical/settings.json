@@ -1,0 +1,52 @@
+{
+  "subtitle": "Ibikoresho by'igerageza ku bayobora imurika. Amakuru yose ni ay'igerageza kandi aguma muri iyi mushakisha.",
+  "everyRole": "Uruhare rwose rw'igerageza rushobora gukoresha ibi bikoresho — ni ibikoresho by'igerageza, si uburenganzira. Buri gikorwa cyandikwa mu gitabo cy'igenzura.",
+  "reset": {
+    "title": "Subiza igerageza uko ryari",
+    "body": "Ibi bigarura amakuru y'igerageza y'ibanze, igitabo cy'igenzura n'isaha y'igerageza. Impinduka zakozwe mu igerageza zirasibwa.",
+    "open": "Subiza igerageza uko ryari…",
+    "confirmTitle": "Usubize igerageza uko ryari riri mbere?",
+    "confirm": "Subiza igerageza uko ryari",
+    "success": "Igerageza ryasubijwe uko ryari riri",
+    "failedTitle": "Igerageza ntiryashoboye gusubizwa uko ryari",
+    "failedBody": "Nta cyahindutse. Ongera ugerageze."
+  },
+  "language": {
+    "title": "Ururimi",
+    "body": "Hitamo ururimi rw'urubuga. Amahitamo abikwa muri iyi mushakisha kandi agumaho nyuma yo kongera gufungura no gusubiza igerageza uko ryari.",
+    "legend": "Ururimi rw'urubuga",
+    "en": "English",
+    "rw": "Ikinyarwanda",
+    "savedNotice": "Ururimi rwabitswe"
+  },
+  "faults": {
+    "title": "Kwigana ibibazo by'itumanaho",
+    "body": "Igana ibibazo by'itumanaho kugira ngo werekane uko amakosa agaragara. Ibibazo bibikwa hamwe n'amakuru y'igerageza kandi bivanwaho no gusubiza igerageza uko ryari.",
+    "latency": "Gutinda kwiganwa",
+    "latencyValue": "{{ms}} ms",
+    "latencyHint": "Byongerwa kuri buri hamagara rya repository (0–3000 ms).",
+    "timeout": "Igihe kirarenga nyuma yo kubika",
+    "timeoutHint": "Kubika birarangira ariko igisubizo kikabura; kongera kugerageza n'icyifuzo kimwe nta kibazo.",
+    "serverError": "Ikosa rya seriveri 500",
+    "serverErrorHint": "Buri hamagara rya repository ryanga n'ikosa rya seriveri mbere yo gukora.",
+    "offline": "Nta murandasi (kwiganwa)",
+    "offlineHint": "Buri hamagara rya repository ryanga nk'aho nta murandasi uhari.",
+    "conflict": "Ukutumvikana ku kubika gukurikira",
+    "conflictHint": "Kubika gukurikira ku makuru y'igerageza ya WF-01, WF-02 cyangwa WF-03 kugaragaza ukutumvikana kwa verisiyo.",
+    "activeBadge": "Ibibazo byiganwa birakora",
+    "allOff": "Zimya ibibazo byose",
+    "offlineBanner": "Nta murandasi (kwiganwa) — impinduka ntizishobora kubikwa"
+  },
+  "scenario": {
+    "title": "Ibikorwa by'ibyiciro by'igerageza",
+    "body": "Tegura ibihe by'imikorere y'igerageza. Ibikorwa by'abandi bantu biraganwa kandi bikamenyekanishwa gutyo.",
+    "snapshot": "Uko ibyiciro bihagaze",
+    "pendingReviews": "Isuzuma ritegereje",
+    "wf02Version": "Verisiyo y'ikurikirana rya WF-02",
+    "wf02Missing": "Ikurikirana rya WF-02 ni irya Demo Health Centre Alpha-1. Jya kuri icyo kigo kugira ngo ukoreshe iki gikorwa.",
+    "simulateWf02": "Igana umukozi uvugurura ikurikirana (WF-02)",
+    "simulateWf02Hint": "Ibika verisiyo nshya y'ikurikirana rya WF-02 nk'umujyanama w'ubuzima wiganwa, ku buryo kubika gukurikira mu rubuga kugaragaza ukutumvikana kwa verisiyo.",
+    "simulatedActor": "Umukozi wiganwa",
+    "simulatedDone": "Ikurikirana ryavuguruwe n'umukozi wiganwa (verisiyo {{version}})"
+  }
+}

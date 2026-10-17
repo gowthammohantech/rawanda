@@ -13,5 +13,40 @@
   "routeError": {
     "title": "Iyi paji ntiyashoboye kugaragara",
     "description": "Habaye ikibazo mu kugaragaza iyi paji. Ongera ugerageze, cyangwa usubize igerageza uko ryari riri ukoresheje Ibikoresho by'igerageza."
+  },
+  "VALIDATION_ERROR": {
+    "title": "Reba ahagaragajwe",
+    "body": "Hari amakuru abura cyangwa atari yo. Kosora ahagaragajwe hanyuma wongere ubike.",
+    "action": "Reba ifishi"
+  },
+  "FORBIDDEN": {
+    "title": "Ntibyemewe kuri uru ruhare cyangwa iki kigo",
+    "body": "Aya makuru ari hanze y'uruhare cyangwa ikigo by'igerageza bikoreshwa. Iki gikorwa cyanditswe mu gitabo cy'igenzura.",
+    "action": "Hindura umukozi cyangwa ikigo"
+  },
+  "NOT_FOUND": {
+    "title": "Amakuru ntiyabonetse",
+    "body": "Aya makuru ntabaho mu makuru y'igerageza, cyangwa yavanywemo no gusubiza igerageza uko ryari.",
+    "action": "Subira inyuma"
+  },
+  "CONFLICT": {
+    "title": "Undi muntu yahinduye aya makuru",
+    "body": "Verisiyo nshya yabitswe ukiri gukora. Reba verisiyo iheruka mbere yo kongera kubika.",
+    "action": "Reba verisiyo iheruka"
+  },
+  "DEPENDENCY_UNAVAILABLE": {
+    "title": "Serivisi ntiyashoboye kurangiza iki cyifuzo",
+    "body": "Serivisi ikenewe kuri iki gikorwa ntiboneka. Nta kindi cyabitswe; ongera ugerageze.",
+    "action": "Ongera ugerageze"
+  },
+  "OFFLINE": {
+    "title": "Nta murandasi",
+    "body": "Nta murandasi (kwiganwa) — impinduka ntizishobora kubikwa. Zimya iki kibazo muri Igenamiterere hanyuma wongere ugerageze.",
+    "action": "Ongera ugerageze"
+  },
+  "TIMEOUT": {
+    "title": "Igihe cy'icyifuzo cyarenze",
+    "body": "Igisubizo nticyageze. Bishobora kuba byabitswe — kongera kugerageza nta kibazo kandi ntibizabika kabiri.",
+    "action": "Ongera ugerageze"
   }
 }

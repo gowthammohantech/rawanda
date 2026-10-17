@@ -10,7 +10,7 @@
 | Depends on | CLN-01; FND-05 (`SEED_ANCHORS`), FND-07 (repository, faults, `demo.*`), FND-08 (Dexie adapter) |
 | Trace | FRD §6 (idempotency, `If-Match`, error codes), FRD §2 "Exceptions" (all CL-xx), CL-08; spec §4 (Mode A, fault simulation), §10 (seed, `Reset demo`); WF-01..WF-04 (clinical part); D3; Implementation_notes (saved language preference) |
 | Size | L |
-| Status | Not started |
+| Status | Done |
 
 ## 2. Goal
 

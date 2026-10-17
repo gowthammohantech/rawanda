@@ -14,7 +14,7 @@ import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 
 import { facilityLabel, personaFacilitiesLabel } from "../../app/persona-labels.ts";
-import { useRepository } from "../../app/providers.tsx";
+import { useRepository } from "../../data/useRepository.ts";
 import { HOME_PATH, safeRedirect } from "../../app/routes.ts";
 import { PageHeader } from "../../components/PageHeader.tsx";
 import { PublicShell } from "../../components/shell/PublicShell.tsx";
