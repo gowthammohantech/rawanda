@@ -1,9 +1,9 @@
 /**
  * CTZ-02 consent: the read confirmation is required (translated), Give consent writes exactly
  * one consent record + one `citizen.consent.granted` even on double tap, "Not now" ends the
- * session, and a pending (unlinked) account sees the calm "no record linked" state.
+ * session, and CTZ-P5 (pending) reaches consent for its own record once verified.
  */
-import { PERSONA_IDS, SEED_ANCHORS } from "@laif/mock-data";
+import { CITIZEN_OVERLAY_IDS, PERSONA_IDS, SEED_ANCHORS } from "@laif/mock-data";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -76,19 +76,31 @@ describe("consent", () => {
     expect(await auditsOf(store, "citizen.consent.granted")).toHaveLength(1);
   });
 
-  it("a verified account without a linked record sees the 'no record linked' state", async () => {
+  it("CTZ-P5 after verification: own record linked, consent given once → tabs", async () => {
     const view = await renderShell(<span data-testid="booted" />, {
       ...as(PERSONA_IDS.citizenPending),
       readyTestId: "booted",
     });
     await view.repo().verifyIdentity({ code: "246810" }, crypto.randomUUID());
     view.unmount();
-    await renderShell(<ConsentScreen />, {
+    const { store } = await renderShell(<ConsentScreen />, {
       store: view.store,
       ...as(PERSONA_IDS.citizenPending),
-      readyTestId: "consent-screen",
+      readyTestId: "consent-give",
     });
-    expect(await screen.findByText("Your wallet is set up")).toBeTruthy();
-    expect(screen.queryByTestId("consent-give")).toBeNull();
+    fireEvent.click(screen.getByRole("checkbox", { name: "I have read this" }));
+    fireEvent.click(screen.getByTestId("consent-give"));
+    fireEvent.click(screen.getByTestId("consent-give"));
+    await waitFor(() => expect(lastHref()).toBe("/health"));
+    const granted = (await auditsOf(store, "citizen.consent.granted")) as unknown as {
+      entityId: string;
+    }[];
+    expect(granted.filter((e) => e.entityId === CITIZEN_OVERLAY_IDS.pendingPatient)).toHaveLength(
+      1,
+    );
+    const records = (await store.getAll<{ patientId: string }>("consentRecords")).filter(
+      (r) => r.patientId === CITIZEN_OVERLAY_IDS.pendingPatient,
+    );
+    expect(records).toHaveLength(1);
   });
 });

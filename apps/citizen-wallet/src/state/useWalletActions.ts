@@ -14,6 +14,13 @@ import { useCitizenRepo } from "../data/repo.tsx";
 import { useSession, useWalletStore } from "../providers.tsx";
 import { accountGate, landingHref, type GateHref } from "./access.ts";
 
+/**
+ * The in-flight `endSession` (header "Switch persona" navigates first, then ends the session). A
+ * persona chosen before it finishes must wait for it, or its `signOut()` would sign the NEW
+ * persona out ("This persona could not be opened").
+ */
+let pendingEnd: Promise<void> | null = null;
+
 export function useWalletActions() {
   const repo = useCitizenRepo();
   const session = useSession();
@@ -22,6 +29,7 @@ export function useWalletActions() {
 
   const selectPersona = useCallback(
     async (personaId: string): Promise<GateHref> => {
+      if (pendingEnd !== null) await pendingEnd.catch(() => undefined);
       const previous = session.current()?.id ?? null;
       if (previous !== null && previous !== personaId) {
         await repo.endSession().catch(() => null);
@@ -47,11 +55,19 @@ export function useWalletActions() {
   );
 
   const endSession = useCallback(async () => {
-    await repo.endSession().catch(() => null);
-    session.signOut();
-    wallet.getState().clear();
-    queryClient.removeQueries({ predicate: (q) => q.queryKey[1] !== "personas" });
-    await queryClient.invalidateQueries({ queryKey: ["ctz", "personas"] });
+    const run = (async () => {
+      await repo.endSession().catch(() => null);
+      session.signOut();
+      wallet.getState().clear();
+      queryClient.removeQueries({ predicate: (q) => q.queryKey[1] !== "personas" });
+      await queryClient.invalidateQueries({ queryKey: ["ctz", "personas"] });
+    })();
+    pendingEnd = run;
+    try {
+      await run;
+    } finally {
+      if (pendingEnd === run) pendingEnd = null;
+    }
   }, [repo, session, wallet, queryClient]);
 
   return { selectPersona, endSession };

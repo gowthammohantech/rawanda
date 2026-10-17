@@ -65,7 +65,8 @@ describe("sliceForApp", () => {
   });
 
   it("citizen gets exactly the patients linked to the five citizen personas and released instructions only", () => {
-    const slice = sliceForApp(seed, "citizen");
+    // Base slicing only (the CTZ-01 overlay adds CTZ-P5's pending enrolment record on top).
+    const slice = sliceForApp(seed, "citizen", undefined, { overlays: {} });
     const linked = seed.personas
       .filter((p) => p.role === "citizen")
       .flatMap((p) => p.linkedPatientIds);

@@ -95,7 +95,7 @@ describe("buildCitizenOverlay", () => {
     ]);
   });
 
-  it("CTZ-P5 is pending verification with the demo code and no link", () => {
+  it("CTZ-P5 is pending verification with the demo code and only a pending link", () => {
     expect(accountOf(PERSONA_IDS.citizenPending)?.status).toBe("pending_verification");
     const verification = verifications.find((v) => v.personaId === PERSONA_IDS.citizenPending);
     expect(verification).toMatchObject({
@@ -104,11 +104,37 @@ describe("buildCitizenOverlay", () => {
       attempts: 0,
     });
     expect(CITIZEN_DEMO_VERIFICATION_CODE).toBe("246810");
-    expect(links.some((l) => l.personaId === PERSONA_IDS.citizenPending)).toBe(false);
+    // Its own (newly enrolled) record is linked `pending` — hidden until verification.
+    const pending = links.filter((l) => l.personaId === PERSONA_IDS.citizenPending);
+    expect(pending).toMatchObject([
+      { patientId: CITIZEN_OVERLAY_IDS.pendingPatient, status: "pending", relationship: "self" },
+    ]);
+    expect(consents.some((c) => c.patientId === CITIZEN_OVERLAY_IDS.pendingPatient)).toBe(false);
+    expect(accessEvents.some((e) => e.patientId === CITIZEN_OVERLAY_IDS.pendingPatient)).toBe(
+      false,
+    );
+  });
+
+  it("CTZ-P5's record is a citizen-slice-only patient with no health data", () => {
+    const patients = rows<{ id: string; consentState: string; displayName: string }>("patients");
+    expect(patients).toMatchObject([
+      { id: CITIZEN_OVERLAY_IDS.pendingPatient, consentState: "not_recorded" },
+    ]);
+    expect(seed.patients.some((p) => p.id === CITIZEN_OVERLAY_IDS.pendingPatient)).toBe(false);
+    const slice = sliceForApp(seed, "citizen");
+    expect(slice.patients.some((p) => p.id === CITIZEN_OVERLAY_IDS.pendingPatient)).toBe(true);
+    expect(slice.screenings.some((s) => s.patientId === CITIZEN_OVERLAY_IDS.pendingPatient)).toBe(
+      false,
+    );
+    expect(
+      sliceForApp(seed, "clinical").patients.some(
+        (p) => p.id === CITIZEN_OVERLAY_IDS.pendingPatient,
+      ),
+    ).toBe(false);
   });
 
   it("has 6–10 staff reads per linked patient plus own views", () => {
-    for (const link of links) {
+    for (const link of links.filter((l) => l.status === "active")) {
       const events = accessEvents.filter((e) => e.patientId === link.patientId);
       const staff = events.filter((e) => e.actorRole !== "citizen");
       const own = events.filter((e) => e.actorId === link.personaId);

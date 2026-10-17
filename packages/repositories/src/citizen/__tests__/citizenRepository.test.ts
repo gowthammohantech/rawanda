@@ -449,6 +449,12 @@ describe.each(adapters)("CitizenRepository CTZ-02 access (%s adapter)", (_name, 
     const wrong = await h.repo.verifyIdentity({ code: "111111" }, h.key());
     expect(wrong.data).toMatchObject({ status: "failed", attempts: 1, verifiedAt: null });
     expect((await h.repo.getSession())?.account?.status).toBe("pending_verification");
+    // The enrolment record stays hidden until verified.
+    expect((await h.repo.getSession())?.activePatientId).toBeNull();
+    await expect(h.repo.getConsent(CITIZEN_OVERLAY_IDS.pendingPatient)).rejects.toMatchObject({
+      code: "FORBIDDEN",
+      reason: "SCOPE",
+    });
     expect(await h.audits("citizen.identity.verification_failed")).toHaveLength(1);
 
     const ok = await h.repo.verifyIdentity({ code: "246810" }, h.key());
@@ -460,6 +466,28 @@ describe.each(adapters)("CitizenRepository CTZ-02 access (%s adapter)", (_name, 
       code: "VALIDATION_ERROR",
       reason: "INVALID_TRANSITION",
     });
+    // Verified → own record linked, but still behind consent (no health data before consent).
+    const session = await h.repo.getSession();
+    expect(session?.activePatientId).toBe(CITIZEN_OVERLAY_IDS.pendingPatient);
+    expect(session?.patients).toMatchObject([
+      { relationship: "self", consentState: "not_recorded" },
+    ]);
+    await expect(
+      h.repo.listReleasedObservations(CITIZEN_OVERLAY_IDS.pendingPatient),
+    ).rejects.toMatchObject({
+      code: "FORBIDDEN",
+      reason: "CONSENT_REQUIRED",
+    });
+    await h.repo.recordConsent(
+      {
+        patientId: CITIZEN_OVERLAY_IDS.pendingPatient,
+        action: "granted",
+        noticeVersion: "demo-notice-v0.1",
+      },
+      h.key(),
+    );
+    expect((await h.repo.getConsent(CITIZEN_OVERLAY_IDS.pendingPatient)).state).toBe("granted");
+    expect(await h.repo.listReleasedObservations(CITIZEN_OVERLAY_IDS.pendingPatient)).toEqual([]);
   });
 
   it("locks after five wrong codes; the demo code no longer works", async () => {

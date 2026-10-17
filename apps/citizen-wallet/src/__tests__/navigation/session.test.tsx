@@ -99,6 +99,38 @@ describe("persona picker and session", () => {
     expect(window.localStorage.getItem(WALLET_STORAGE_KEY)).toBeNull();
   });
 
+  it("a persona chosen while 'Switch persona' is still ending the old session stays signed in", async () => {
+    const view = await renderShell(
+      <>
+        <WalletHeader title="My health" />
+        <PersonaScreen />
+      </>,
+      {
+        before: (s) => void s.session.switchTo(PERSONA_IDS.citizen2),
+        readyTestId: `persona-card-${PERSONA_IDS.citizen1}`,
+      },
+    );
+    // The header's `session.ended` write is slow (simulated latency) …
+    const repo = view.repo();
+    const original = repo.endSession.bind(repo);
+    let calls = 0;
+    vi.spyOn(repo, "endSession").mockImplementation(async () => {
+      calls += 1;
+      if (calls === 1) await new Promise((resolve) => setTimeout(resolve, 300));
+      return original();
+    });
+    fireEvent.click(screen.getByTestId("wallet-menu"));
+    fireEvent.click(await screen.findByTestId("switch-persona"));
+    // … and the next persona is picked while it is still in flight: pick the next persona while `session.ended` is still in flight.
+    fireEvent.click(screen.getByTestId(`persona-card-${PERSONA_IDS.citizen1}`));
+    await waitFor(() => expect(lastHref()).toBe("/health"));
+    await new Promise((resolve) => setTimeout(resolve, 500)); // the slow end has settled
+    expect(view.services.session.current()?.id).toBe(PERSONA_IDS.citizen1);
+    expect(
+      screen.queryByText("This persona could not be opened. Nothing was changed. Try again."),
+    ).toBeNull();
+  });
+
   it("five labelled tabs with item min height 56", async () => {
     await renderShell(<TabsLayout />, { readyTestId: "tab-bar" });
     const bar = screen.getByTestId("tab-bar");

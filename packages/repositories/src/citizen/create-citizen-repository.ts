@@ -425,6 +425,18 @@ export function createCitizenRepository(input: CitizenRepositoryDeps): CitizenRe
               }),
             );
           }
+          if (matched) {
+            // The enrolment record (`pending` link) becomes visible only now — still behind consent.
+            const pending = (await ctx.tx.getAll<PatientLink>("patientLinks")).filter(
+              (l) => l.personaId === actor.personaId && l.status === "pending",
+            );
+            for (const link of pending) {
+              await ctx.tx.put(
+                "patientLinks",
+                ctx.touch(link, { status: "active", linkedAt: ctx.nowIso }),
+              );
+            }
+          }
           const summary = {
             attempts,
             attemptsRemaining: Math.max(0, MAX_VERIFICATION_ATTEMPTS - attempts),
