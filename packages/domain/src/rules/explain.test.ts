@@ -55,6 +55,23 @@ describe("explainFlag", () => {
     });
   });
 
+  it("uses the snapshot's ruleset version, not the ruleset passed in", () => {
+    const snapshot = snapshotOf({
+      systolic: 200,
+      diastolic: 60,
+      glucoseValue: null,
+      glucoseUnit: null,
+      glucoseContext: null,
+    });
+    const later = { ...ruleset, version: "demo-ruleset-2099.01-v9" };
+    const result = explainFlag(snapshot, null, later);
+    expect(result.rulesetVersion).toBe(snapshot.flag.rulesetVersion);
+    expect(result.items.find((i) => i.inputKey === "systolic")?.ruleRef).toBe(
+      `${snapshot.flag.rulesetVersion}/BP-1`,
+    );
+    expect(result.items.find((i) => i.inputKey === "systolic")?.status).toBe("TRIGGERED");
+  });
+
   it("a missing glucose unit → unit MISSING, glucose NOT_EVALUATED, 4 of 5 present", () => {
     const snapshot = snapshotOf({
       systolic: 120,

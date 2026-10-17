@@ -33,6 +33,7 @@ import {
   KeyValueList,
   LoadingSkeleton,
   PermissionDenied,
+  RuleDisclaimer,
   StatusChip,
   useToast,
   useTx,
@@ -477,7 +478,10 @@ function ReviewDetailLoaded({ detail }: { detail: ReviewDetail }) {
                 completeness={explanation.completeness}
                 ruleset={ruleset}
               />
-            ) : null}
+            ) : (
+              // No usable snapshot: the DEMO_RULE disclaimer is still always shown.
+              <RuleDisclaimer />
+            )}
             <EvidencePanel
               items={explanation?.items ?? []}
               flag={snapshot?.flag ?? null}

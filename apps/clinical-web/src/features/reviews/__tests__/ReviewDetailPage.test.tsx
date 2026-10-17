@@ -179,6 +179,17 @@ describe("ReviewDetailPage", () => {
     expect((await storedReview(store, WF01.reviewId)).startedBy).toBe(PERSONA_IDS.clinAlpha1);
   });
 
+  it("no usable evidence snapshot → cannot-be-reviewed state, DEMO_RULE disclaimer still shown", async () => {
+    const store = createMemoryStoreAdapter();
+    await createTestClinicalRepo(CLINICIAN, store);
+    const review = await storedReview(store, WF01.reviewId);
+    await store.put("reviews", { ...review, evidenceSnapshot: null } as unknown as Review);
+    await renderApp({ path: routes.review(WF01.reviewId), signIn: CLINICIAN, store });
+    expect(await screen.findByTestId("evidence-empty")).toBeTruthy();
+    expect(screen.getAllByText("DEMO_RULE_NOT_CLINICALLY_VALIDATED").length).toBeGreaterThan(0);
+    expect(screen.queryByTestId("start-review")).toBeNull();
+  });
+
   it("MISSING_UNIT_SCREENING shows MISSING / NOT EVALUATED with icon + text", async () => {
     await renderApp({ path: routes.review(MISSING.reviewId), signIn: NURSE });
     const detail = await screen.findByTestId("review-detail");

@@ -6,7 +6,7 @@
  * the review detail.
  */
 import AxeBuilder from "@axe-core/playwright";
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 
 import { signIn } from "./helpers.ts";
 
@@ -94,4 +94,48 @@ test("coordinator: evidence visible, no Start / Record decision", async ({ page 
   );
   await expect(page.getByTestId("start-review")).toHaveCount(0);
   await expect(page.getByTestId("record-decision")).toHaveCount(0);
+});
+
+/** Reads the persisted FND-07 fault config (IndexedDB meta `demo.faults`) of this browser context. */
+function persistedFaults(page: Page): Promise<string> {
+  return page.evaluate(
+    () =>
+      new Promise<string>((resolve, reject) => {
+        const open = indexedDB.open("laif-clinical");
+        open.onerror = () => reject(new Error(String(open.error)));
+        open.onsuccess = () => {
+          const db = open.result;
+          const get = db.transaction("meta", "readonly").objectStore("meta").get("demo.faults");
+          get.onerror = () => reject(new Error(String(get.error)));
+          get.onsuccess = () => {
+            resolve(JSON.stringify(get.result ?? null));
+            db.close();
+          };
+        };
+      }),
+  );
+}
+
+test("conflict fault persists across a full reload and still conflicts", async ({ page }) => {
+  await page.goto("/clinical/login?redirect=%2Fclinical%2Fsettings");
+  await signIn(page, "Zorvel Quorandi", "Demo Health Centre Alpha-1");
+  const toggle = page.getByRole("switch", { name: "Conflict on next write" });
+  await toggle.click();
+  await expect(toggle).toHaveAttribute("aria-checked", "true");
+  // The switch is optimistic; wait until the IndexedDB write committed before reloading.
+  await expect.poll(() => persistedFaults(page)).toContain(WF03_REVIEW);
+
+  await page.reload();
+  await expect(page.getByTestId("app-shell")).toBeVisible();
+  await expect(page.getByRole("switch", { name: "Conflict on next write" })).toHaveAttribute(
+    "aria-checked",
+    "true",
+  );
+
+  await page.goto(`/clinical/reviews/${WF03_REVIEW}`);
+  await page.getByTestId("start-review").click();
+  await expect(page.getByTestId("conflict-panel")).toContainText(
+    "Another clinician changed this review",
+  );
+  await expect(page.getByTestId("review-status")).toHaveText("Pending");
 });
