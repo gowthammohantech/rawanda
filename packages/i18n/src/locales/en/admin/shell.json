@@ -1,0 +1,24 @@
+{
+  "nav": {
+    "settings": "Settings",
+    "locked": "Not available for your demo role"
+  },
+  "scopeStrip": "Viewing aggregate data",
+  "scopeStripLabel": "Reporting scope: {{scope}}",
+  "scope": {
+    "allDistricts": "All districts in my scope ({{list}})",
+    "list": "{{list}}"
+  },
+  "search": {
+    "comingLater": "Search coming later"
+  },
+  "persona": {
+    "end": "End session",
+    "ended": "Demo session ended."
+  },
+  "placeholder": {
+    "settings": "Threshold, fault and session settings arrive in ADM-09."
+  },
+  "loading": "Checking the demo data on this device…",
+  "grantChanged": "Your demo access grant changed. The new scope applies from this page on."
+}

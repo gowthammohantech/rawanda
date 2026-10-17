@@ -43,6 +43,7 @@ import { z } from "zod";
 import {
   CareTaskIdSchema,
   CareTaskPayloadSchemas,
+  CorrelationIdSchema,
   DistrictIdSchema,
   FacilityIdSchema,
   FollowUpIdSchema,
@@ -708,6 +709,8 @@ export const ClientAuditInputSchema = z.object({
   outcome: z.enum(AUDIT_OUTCOMES).default("success"),
   changeSummary: z.record(z.string(), JsonValueSchema).default({}),
   justification: optionalNote(),
+  /** ext (ADM-01): links UI events to a session (e.g. the admin session's correlation id). */
+  correlationId: CorrelationIdSchema.optional(),
 });
 export type ClientAuditInput = z.input<typeof ClientAuditInputSchema>;
 export type ParsedClientAuditInput = z.output<typeof ClientAuditInputSchema>;

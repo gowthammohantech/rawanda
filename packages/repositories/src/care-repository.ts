@@ -17,6 +17,7 @@
 import type { ProgrammeMetrics } from "@laif/analytics";
 import type { ActorContext } from "@laif/auth-demo";
 import type {
+  AccessGrant,
   AuditFilterSchema,
   CareTaskInputSchema,
   CareTaskUpdateInputSchema,
@@ -290,6 +291,12 @@ export interface CareRepository {
   listAuditEvents(f?: AuditFilterInput): Promise<Page<AuditEvent>>;
   /** UI-originated access / session / demo events only (registry `client: true`). */
   recordAuditEvent(i: ClientAuditInput): Promise<AuditEvent>;
+  /**
+   * ADM-01: the demo AccessGrants (reporting scope of each admin persona), ordered by persona.
+   * Readable without a session: the demo sign-in shows every persona's scope, and grants hold no
+   * patient data. ADM-08 adds the grant edits.
+   */
+  listAccessGrants(): Promise<AccessGrant[]>;
   sync: SyncApi;
   demo: DemoApi;
   device: DeviceApi;

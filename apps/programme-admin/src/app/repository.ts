@@ -1,10 +1,11 @@
 /**
  * Repository bootstrap (FND-11 task 3): IndexedDB `laif-admin` (Dexie) + the pinned, ticking
- * demo clock + browser UUIDs + the persona session as actor. `createCareRepository` wraps every
- * call in `withSimulatedTransport` (latency, offline, 500/503, timeout) for this web app.
+ * demo clock + browser UUIDs + the admin session as actor (scope from its AccessGrant, ADM-01).
+ * `createCareRepository` wraps every call in `withSimulatedTransport` (latency, offline, 500/503,
+ * timeout) for this web app. Seeding = FND-07 `ensureSeeded` / `resetDemo` with the admin slice
+ * (base seed + `buildAdminAnalyticsOverlay`), idempotent via `meta.seedVersion`.
  */
-import { actorForPersona } from "@laif/auth-demo";
-import { createDemoClock, DEMO_CLOCK_DEFAULT_ISO } from "@laif/domain";
+import type { DemoClock, IdGenerator } from "@laif/domain";
 import {
   createCareRepository,
   dexieDbName,
@@ -12,13 +13,14 @@ import {
   type StoreAdapter,
 } from "@laif/repositories";
 import { createDexieStoreAdapter } from "@laif/repositories/dexie";
-import { createWebIdGenerator } from "@laif/repositories/ids/web";
 
+import type { AdminSessionStore } from "../auth/sessionStore.ts";
 import { APP_ID, IS_E2E } from "./config.ts";
-import type { AppSession } from "./session.ts";
 
 export type CreateAppRepositoryOptions = {
-  session: AppSession;
+  session: AdminSessionStore;
+  clock: DemoClock;
+  ids: IdGenerator;
   /** Test seam: e.g. a memory adapter (default: Dexie `laif-admin`). */
   store?: StoreAdapter;
   /** Skip the simulated latency (default: on in `VITE_LAIF_E2E=1` builds). */
@@ -26,17 +28,13 @@ export type CreateAppRepositoryOptions = {
 };
 
 export function createAppRepository(options: CreateAppRepositoryOptions): CareRepository {
-  const { session, store, noLatency = IS_E2E } = options;
+  const { session, store, clock, ids, noLatency = IS_E2E } = options;
   return createCareRepository({
     store: store ?? createDexieStoreAdapter({ dbName: dexieDbName(APP_ID) }),
-    // The seed's `meta.demoClockIso` is DEMO_CLOCK_DEFAULT_ISO (08:00 Kigali, 14 Oct 2026).
-    clock: createDemoClock({ pinnedIso: DEMO_CLOCK_DEFAULT_ISO, mode: "ticking" }),
-    ids: createWebIdGenerator(),
+    clock,
+    ids,
     appId: APP_ID,
-    getActor: () => {
-      const persona = session.current();
-      return persona === null ? null : actorForPersona(persona);
-    },
+    getActor: () => session.actor(),
     ...(noLatency ? { sleep: () => Promise.resolve() } : {}),
   });
 }

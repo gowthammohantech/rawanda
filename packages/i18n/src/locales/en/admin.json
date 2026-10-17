@@ -90,7 +90,7 @@
     "governance": "Governance"
   },
   "placeholder": {
-    "comingSoon": "Built in {{phase}}",
+    "comingSoon": "Coming in {{phase}}",
     "description": "This screen is a placeholder in the foundation shell. It is delivered in a later phase."
   },
   "notFound": {

@@ -115,6 +115,7 @@ export function createAuditService(engine: Engine) {
           patientId: input.patientId ?? null,
           changeSummary: { ...input.changeSummary, origin: "client" },
           justification: input.justification ?? null,
+          ...(input.correlationId === undefined ? {} : { correlationId: input.correlationId }),
         });
       });
     },

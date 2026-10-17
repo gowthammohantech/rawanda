@@ -6,7 +6,7 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import { useLocation } from "react-router";
 
-import { useRepository } from "../app/providers.tsx";
+import { useRepository } from "../data/useRepository.ts";
 import { PermissionDenied } from "../components/PermissionDenied.tsx";
 import type { ClinicalCapability } from "./capabilities.ts";
 import { recordRouteDenied } from "./session-audit.ts";

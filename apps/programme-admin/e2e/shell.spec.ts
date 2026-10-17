@@ -1,14 +1,19 @@
 /**
- * FND-11 shell gate in a real browser (Chromium): banner on every route, EN ⇄ RW persisted
+ * FND-11 shell gate (ADM-01: behind the demo sign-in) in a real browser (Chromium): banner on every route, EN ⇄ RW persisted
  * across reload with `<html lang>`, Offline banner, Reset demo, no axe violations on the shell.
  */
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
+import { signInAs } from "./helpers.ts";
+
 test("admin shell: banner, language persistence, demo tools", async ({ page }) => {
   await page.goto("/");
-  await expect(page).toHaveURL(/\/admin\/overview$/);
+  await expect(page).toHaveURL(/\/admin\/login\?next=%2Fadmin%2Foverview$/);
   const banner = page.getByTestId("demo-banner");
+  await expect(banner).toBeVisible();
+  await signInAs(page, /Quavel Quoriqua/);
+  await expect(page).toHaveURL(/\/admin\/overview$/); // `next` wins over the home scope
   await expect(banner).toContainText(
     "DEMONSTRATION — SYNTHETIC PATIENT DATA — NOT FOR CLINICAL USE",
   );

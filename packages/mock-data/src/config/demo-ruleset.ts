@@ -32,3 +32,24 @@ export const DEMO_RULESET_V1: DemoRuleset = {
   plausibility: DEMO_PLAUSIBILITY_LIMITS,
   synthetic: true,
 };
+
+/**
+ * The retired ruleset of the ADM-01 admin analytics overlay (ruleset history, ADM-06/08). Same
+ * DEMO_RULE_NOT_CLINICALLY_VALIDATED status; placeholder numbers only, never clinical guidance.
+ */
+export const DEMO_RULESET_V0: DemoRuleset = {
+  version: DEMO_RULESET_RETIRED_VERSION,
+  status: "retired",
+  label: DEMO_RULE_DISCLAIMER,
+  approvedBy: null,
+  effectiveFrom: "2026-05-01T00:00:00.000Z",
+  effectiveTo: DEMO_RULESET_V1.effectiveFrom,
+  requiredInputs: ["systolic", "diastolic"],
+  thresholds: {
+    DEMO_SYSTOLIC_REVIEW_AT_OR_ABOVE: 140,
+    DEMO_DIASTOLIC_REVIEW_AT_OR_ABOVE: 90,
+    DEMO_GLUCOSE_REVIEW_AT_OR_ABOVE_MMOL: { fasting: 7.0, non_fasting: 11.1, not_recorded: 11.1 },
+  },
+  plausibility: DEMO_PLAUSIBILITY_LIMITS,
+  synthetic: true,
+};

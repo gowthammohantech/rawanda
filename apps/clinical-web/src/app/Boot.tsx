@@ -6,7 +6,7 @@ import { isStorageUnavailableError, RepositoryError } from "@laif/repositories";
 import { BrandLoader, Button, DemoBanner, ErrorState, useTx } from "@laif/ui-web";
 import { useEffect, useState, type ReactNode } from "react";
 
-import { useRepository } from "./providers.tsx";
+import { useRepository } from "../data/useRepository.ts";
 
 type BootState = { status: "seeding" } | { status: "ready" } | { status: "failed"; error: unknown };
 

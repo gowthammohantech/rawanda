@@ -31,14 +31,14 @@ test("clinical shell: banner, language persistence, demo tools", async ({ page }
   await expect(banner).toBeVisible();
   await page.getByRole("button", { name: "Demo tools" }).click();
   await page.getByRole("menuitemcheckbox", { name: "Offline" }).click();
-  await expect(page.getByText("You are offline. Changes are saved on this device.")).toBeVisible();
+  await expect(page.getByText("Simulated offline — changes cannot be saved")).toBeVisible();
   await page.keyboard.press("Escape");
 
   await page.getByRole("button", { name: "Demo tools" }).click();
   await page.getByRole("menuitem", { name: "Reset demo" }).click();
   await page.getByRole("dialog").getByRole("button", { name: "Reset demo" }).click();
   await expect(page.getByText("Demo data was reset to the baseline.")).toBeVisible();
-  await expect(page.getByText("You are offline. Changes are saved on this device.")).toBeHidden();
+  await expect(page.getByText("Simulated offline — changes cannot be saved")).toBeHidden();
 
   const results = await new AxeBuilder({ page }).include("[data-testid=app-shell]").analyze();
   expect(results.violations.map((violation) => violation.id)).toEqual([]);

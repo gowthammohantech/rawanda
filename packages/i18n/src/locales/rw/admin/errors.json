@@ -1,0 +1,19 @@
+{
+  "forbidden": {
+    "status": "403 · Ntabwo wemerewe kubona aya makuru",
+    "title": "Ntabwo wemerewe kubona aya makuru",
+    "description": "Uruhare rwawe rw'igerageza ntirwemerewe kubona ibi. Nta makuru y'iyi paji yafunguwe, kandi iki gikorwa cyanditswe mu gitabo cy'igenzura cy'igerageza.",
+    "requested": "Ibyasabwe",
+    "yourScope": "Ibyo wemerewe",
+    "requires": "Bisaba ubushobozi: {{permission}}",
+    "district": "Akarere: {{name}}",
+    "facility": "Ikigo nderabuzima: {{name}}",
+    "page": "Paji: {{name}}",
+    "back": "Subira ku byo wemerewe",
+    "switch": "Hindura umukoresha w'igerageza"
+  },
+  "unknownScope": {
+    "title": "Ntibyabonetse",
+    "description": "Nta karere cyangwa ikigo nderabuzima gifite iyi nomero mu makuru y'igerageza."
+  }
+}
