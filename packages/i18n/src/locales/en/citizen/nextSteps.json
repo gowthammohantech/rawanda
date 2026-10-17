@@ -1,0 +1,95 @@
+{
+  "title": "Next steps",
+  "eyebrow": "Your care plan",
+  "subtitle": "Only steps your care team has approved for you appear here.",
+  "loading": "Loading your next steps",
+  "error": "We could not load your next steps. Nothing was changed. Try again.",
+  "listLabel": "Your next steps",
+  "refreshHint": "Pull down to check for updated steps",
+  "kicker": "Your next step",
+  "sectionCount": "{{title}} ({{count}})",
+  "section": {
+    "upcoming": "Upcoming",
+    "done": "Done",
+    "cancelled": "Cancelled"
+  },
+  "chip": {
+    "approved": "Approved by your care team"
+  },
+  "type": {
+    "appointment": "Appointment",
+    "referral": "Referral",
+    "followUp": "Follow-up"
+  },
+  "heading": {
+    "appointment": "Appointment at {{facility}}",
+    "referral": "Referral to {{facility}}",
+    "followUp": "Follow-up from your care team"
+  },
+  "approvedBy": "Agreed by {{name}} · {{date}}",
+  "approvedByTeam": "Agreed by your care team · {{date}}",
+  "appointmentRow": "{{date}} · {{time}} · {{place}}",
+  "noDate": "Your care team will tell you the date.",
+  "open": "View details",
+  "openHint": "Opens this next step",
+  "card": {
+    "a11y": "{{type}}. {{title}}. {{when}}"
+  },
+  "acknowledge": "I have read this",
+  "acknowledgeHint": "Tells your care team you have read this step. It does not change the step.",
+  "acknowledging": "Saving",
+  "acknowledgedOn": "Read on {{date}}",
+  "acknowledgedAnnounce": "Saved. You marked this step as read.",
+  "ackError": "We could not save this. Nothing was changed. Try again.",
+  "retry": "Try again",
+  "conflict": {
+    "title": "This step was updated",
+    "body": "Your care team updated this step. Please read the latest version.",
+    "reload": "Show the latest version"
+  },
+  "datePassed": "The date for this step has passed. Your care team will contact you, or you can contact them.",
+  "cancelledByTeam": "Your care team cancelled this step",
+  "confirmedByTeam": "Confirmed by your care team",
+  "completedOn": "Done on {{date}}",
+  "toChangeContact": "To change this, contact your care team.",
+  "noAdvice": "The wallet only shows what your care team agreed. It does not give medical advice.",
+  "supportLink": "Contact support",
+  "supportHint": "Opens More, where support options are listed",
+  "empty": {
+    "title": "No next steps shared yet",
+    "body": "Your care team has not shared any next steps. If you were told to come back, contact them."
+  },
+  "contact": {
+    "title": "Contact your care team",
+    "phone": "Phone",
+    "hours": "Opening hours",
+    "address": "Address",
+    "hoursValue": "{{days}}, {{opens}}–{{closes}}",
+    "days": {
+      "mon_fri": "Monday to Friday",
+      "mon_sat": "Monday to Saturday",
+      "every_day": "Every day"
+    },
+    "call": "Call",
+    "callHint": "Shows the demo phone number. It does not dial.",
+    "demoNumber": "Demo number — does not connect",
+    "sheetTitle": "Demo phone number",
+    "sheetBody": "{{phone}} is a synthetic number for this demo. It does not connect to a real phone line, so the wallet does not dial it.",
+    "close": "Close",
+    "unavailable": "Contact details for this place are not available in the demo."
+  },
+  "detail": {
+    "title": "Next step",
+    "back": "Back",
+    "when": "When",
+    "where": "Where",
+    "instructions": "What to do",
+    "bring": "What to bring",
+    "deniedTitle": "Step not available",
+    "denied": "This step is not part of the record you can see."
+  },
+  "home": {
+    "open": "See next step",
+    "openHint": "Opens Next steps"
+  }
+}

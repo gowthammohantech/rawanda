@@ -160,6 +160,7 @@ export function anInstruction(overrides: Partial<ApprovedInstruction> = {}): App
     datePassed: false,
     reviewId: asId<never>("rev-test-1"),
     acknowledgement: null,
+    completion: null,
     ...overrides,
   };
 }

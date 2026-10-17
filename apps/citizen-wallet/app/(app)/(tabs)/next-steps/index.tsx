@@ -1,11 +1,5 @@
-import { PlaceholderTabScreen } from "../../../../src/screens/wallet/PlaceholderTabScreen.tsx";
+import { NextStepsListScreen } from "../../../../src/features/next-steps/NextStepsListScreen.tsx";
 
 export default function Route() {
-  return (
-    <PlaceholderTabScreen
-      titleKey="citizen:nav.nextSteps"
-      phase="CTZ-04"
-      testID="next-steps-screen"
-    />
-  );
+  return <NextStepsListScreen />;
 }

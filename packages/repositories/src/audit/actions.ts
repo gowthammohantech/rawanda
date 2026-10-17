@@ -133,6 +133,9 @@ export const AUDIT_ACTIONS = {
   // CTZ-03: the "My health" results list was shown (once per screen focus).
   "citizen.result.list_viewed": access,
   "citizen.next_step.acknowledged": change,
+  // CTZ-04: the Next steps list was shown (once per focus) / one approved step was opened.
+  "citizen.next_step.list_viewed": access,
+  "citizen.next_step.viewed": access,
   "citizen.support.callback_requested": change,
   "citizen.settings.changed": change,
   // CTZ-02: persona choice + simulated identity verification (demo code, never a real check).
