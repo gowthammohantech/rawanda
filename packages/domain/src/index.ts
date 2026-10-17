@@ -10,6 +10,7 @@ export type * from "./entities/index.ts";
 export * from "./machines/index.ts";
 export * from "./invariants.ts";
 export * from "./derive.ts";
+export * from "./due-bucket.ts";
 export * from "./queue.ts";
 export * from "./matching.ts";
 export * from "./rules/types.ts";

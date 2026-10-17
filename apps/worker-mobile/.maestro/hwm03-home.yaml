@@ -1,0 +1,44 @@
+# HWM-03 device gate (not part of `pnpm verify`): `pnpm --filter @laif/worker-mobile test:maestro`
+# with the app open in Expo Go / a dev build, starting signed out, all simulation toggles off.
+appId: host.exp.Exponent
+---
+- launchApp
+- tapOn:
+    id: "persona-card-persona-chw-alpha1-a"
+- tapOn:
+    id: "persona-continue"
+- tapOn:
+    id: "scope-continue"
+- assertVisible:
+    id: "today-screen"
+- assertVisible: "WEDNESDAY, 14 OCTOBER"
+- assertVisible: "Demo Health Centre Alpha-1"
+- assertVisible:
+    id: "worklist-summary"
+- assertVisible: "Overdue"
+- assertVisible: "Due today"
+- assertVisible: "Completed"
+- assertVisible: "NEXT FOLLOW-UPS"
+- assertVisible:
+    id: "start-screening"
+- tapOn:
+    id: "avatar-button"
+- tapOn:
+    id: "open-network-simulation"
+- tapOn: "Work offline (simulated)"
+- assertVisible: "Offline (simulated)"
+- back
+- back
+- assertVisible:
+    id: "today-screen"
+- assertVisible: "Working offline \\(simulated\\).*"
+- tapOn: "Ikinyarwanda"
+- assertVisible: "Mwaramutse.*"
+- assertVisible: "KUWA GATATU, 14 UKWAKIRA"
+- tapOn: "English"
+- tapOn:
+    id: "avatar-button"
+- tapOn:
+    id: "open-network-simulation"
+- tapOn: "Work offline (simulated)"
+- assertVisible: "Online"
