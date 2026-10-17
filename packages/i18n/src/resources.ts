@@ -12,6 +12,9 @@
  * `pnpm i18n:check` fails if a file on disk is not wired in here.
  */
 import enAdmin from "./locales/en/admin.json";
+import enAdminAuth from "./locales/en/admin/auth.json";
+import enAdminErrors from "./locales/en/admin/errors.json";
+import enAdminShell from "./locales/en/admin/shell.json";
 import enCitizen from "./locales/en/citizen.json";
 import enClinical from "./locales/en/clinical.json";
 import enCommon from "./locales/en/common.json";
@@ -21,6 +24,9 @@ import enShell from "./locales/en/shell.json";
 import enValidation from "./locales/en/validation.json";
 import enWorker from "./locales/en/worker.json";
 import rwAdmin from "./locales/rw/admin.json";
+import rwAdminAuth from "./locales/rw/admin/auth.json";
+import rwAdminErrors from "./locales/rw/admin/errors.json";
+import rwAdminShell from "./locales/rw/admin/shell.json";
 import rwCitizen from "./locales/rw/citizen.json";
 import rwClinical from "./locales/rw/clinical.json";
 import rwCommon from "./locales/rw/common.json";
@@ -55,7 +61,7 @@ export const enResources = {
   shell: enShell,
   clinical: enClinical,
   worker: enWorker,
-  admin: enAdmin,
+  admin: { ...enAdmin, shell: enAdminShell, auth: enAdminAuth, errors: enAdminErrors },
   citizen: enCitizen,
 } as const satisfies Record<Namespace, object>;
 
@@ -68,7 +74,7 @@ export const rwResources: Record<Namespace, object> = {
   shell: rwShell,
   clinical: rwClinical,
   worker: rwWorker,
-  admin: rwAdmin,
+  admin: { ...rwAdmin, shell: rwAdminShell, auth: rwAdminAuth, errors: rwAdminErrors },
   citizen: rwCitizen,
 };
 

@@ -1,6 +1,6 @@
 # ADM-01 — Admin shell, demo sign-in, scope guard and analytics seed
 
-Status: Not started
+**Status:** Done
 
 ## 1. Header
 

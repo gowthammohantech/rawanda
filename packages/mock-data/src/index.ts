@@ -21,3 +21,4 @@ export * from "./anchors.ts";
 export * from "./scenarios/registry.ts";
 export * from "./slices.ts";
 export * from "./hash.ts";
+export * from "./scenarios/adminAnalytics.ts";

@@ -12,13 +12,29 @@
  * Overlays are deterministic, registered in `SLICE_OVERLAYS` below, never change the base seed
  * (counts asserted in counts.test.ts stay fixed) and keep record IDs so REL-01 bundles merge.
  */
-import { asId, type AppId, type DemoPersona, type PatientId, type PersonaId } from "@laif/domain";
+import {
+  asId,
+  type AppId,
+  type DemoPersona,
+  type DemoRuleset,
+  type PatientId,
+  type PersonaId,
+} from "@laif/domain";
 
 import { PERSONA_IDS } from "./reference/personas.ts";
+import { buildAdminAnalyticsOverlay } from "./scenarios/adminAnalytics.ts";
 import { SEED_COLLECTIONS, type SeedCollectionName, type SeedDataset } from "./seed/types.ts";
 
-/** Records an overlay adds: base collection names are appended to; any other name is a new collection. */
-export type OverlayRecords = Partial<Record<string, ReadonlyArray<{ readonly id: string }>>>;
+/**
+ * Records an overlay adds: base collection names are appended to; any other name is a new
+ * collection. Rows are keyed by `id` (rulesets, which have no `id`, by `version`).
+ */
+export type OverlayRecords = Partial<
+  Record<string, ReadonlyArray<{ readonly id: string } | DemoRuleset>>
+>;
+
+const rowKey = (row: object): string =>
+  String((row as { id?: unknown }).id ?? (row as { version?: unknown }).version);
 
 /** A deterministic overlay builder; must not mutate `base`. */
 export type SliceOverlay = (base: Readonly<SeedDataset>) => OverlayRecords;
@@ -27,7 +43,9 @@ export type SliceOverlay = (base: Readonly<SeedDataset>) => OverlayRecords;
  * The overlay registry. ADM-01 registers `admin: buildAdminAnalyticsOverlay`; CTZ-01 registers
  * `citizen: buildCitizenOverlay`. Until then the slices carry no overlay records.
  */
-export const SLICE_OVERLAYS: Readonly<Partial<Record<AppId, SliceOverlay>>> = {};
+export const SLICE_OVERLAYS: Readonly<Partial<Record<AppId, SliceOverlay>>> = {
+  admin: (base) => buildAdminAnalyticsOverlay(base),
+};
 
 export type SeedSlice = SeedDataset & {
   slice: { appId: AppId; personaId: PersonaId | null };
@@ -92,18 +110,18 @@ export function sliceForApp(
     const records = overlay(structuredClone(seed));
     for (const [name, rows] of Object.entries(records)) {
       if (!rows) continue;
-      const copy = structuredClone([...rows]) as Array<{ id: string }>;
+      const copy = structuredClone([...rows]) as object[];
       if ((SEED_COLLECTIONS as readonly string[]).includes(name)) {
-        const target = sliced[name as SeedCollectionName] as Array<{ id: string }>;
-        const existing = new Set(target.map((r) => r.id));
+        const target = sliced[name as SeedCollectionName] as object[];
+        const existing = new Set(target.map(rowKey));
         for (const row of copy) {
-          if (existing.has(row.id)) {
-            throw new Error(`overlay for ${appId} re-uses base ${name} id ${row.id}`);
+          if (existing.has(rowKey(row))) {
+            throw new Error(`overlay for ${appId} re-uses base ${name} id ${rowKey(row)}`);
           }
           target.push(row);
         }
       } else {
-        (extraCollections[name] ??= []).push(...copy);
+        (extraCollections[name] ??= []).push(...(copy as Array<{ id: string }>));
       }
     }
   }

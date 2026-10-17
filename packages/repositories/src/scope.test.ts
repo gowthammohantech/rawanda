@@ -46,10 +46,12 @@ describe("scope enforcement (WF-04, T-02)", () => {
 
   it("District-Alpha analyst asking for District Beta metrics → FORBIDDEN + denied audit", async () => {
     const h = await createHarness({ appId: "admin", personaId: PERSONA_IDS.analystAlpha });
+    // The ADM-01 admin overlay seeds one prior denied access; only new events count here.
+    const seeded = new Set((await denied(h)).map((e) => e.id));
     await expect(
       h.repo.getAggregateMetrics({ districtIds: [DISTRICT_IDS.beta] }),
     ).rejects.toMatchObject({ code: "FORBIDDEN", reason: "SCOPE" });
-    const events = await denied(h);
+    const events = (await denied(h)).filter((e) => !seeded.has(e.id));
     expect(events).toHaveLength(1);
     expect(events[0]).toMatchObject({
       action: "access.denied",

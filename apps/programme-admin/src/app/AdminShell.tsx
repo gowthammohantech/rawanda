@@ -1,0 +1,140 @@
+/**
+ * Admin shell (ADM-01 task 8, ref-images): AppShell (grey canvas, rounded shell, DemoBanner
+ * always) + grouped Sidebar (mono section labels, active state, items the role lacks are locked)
+ * + Topbar (disabled search placeholder, demo tools, EN/RW switcher, persona menu with "Switch
+ * demo persona" / "End session") + RoleBanner ("Demo role … not authentication") +
+ * OfflineBanner (demo Offline switch or `navigator.onLine === false`) + the routed page.
+ */
+import { actorForPersona } from "@laif/auth-demo";
+import {
+  AppShell,
+  DemoToolsMenu,
+  OfflineBanner,
+  PersonaSwitcher,
+  RoleBanner,
+  SearchInput,
+  Sidebar,
+  useToast,
+  useTx,
+} from "@laif/ui-web";
+import { useEffect, useMemo, useRef } from "react";
+import { NavLink, Outlet, useLocation, useNavigate } from "react-router";
+
+import { ADMIN_PERSONAS } from "../auth/personas.ts";
+import { resolveScopeFromSearch } from "../auth/scope.ts";
+import { endAdminSession, loginPathFor } from "../auth/signIn.ts";
+import { useDemoTools } from "./demo-tools.tsx";
+import { scopeSearchOf, sidebarSections } from "./nav.ts";
+import { grantScopeLabel, personaOption, reportingScopeLabel } from "./persona-labels.ts";
+import { useAdminSession, useServices } from "./providers.tsx";
+import { useOnline } from "./useOnline.ts";
+
+export function AdminShell() {
+  const { epoch } = useDemoTools();
+  return <ShellChrome key={epoch} />;
+}
+
+function ShellChrome() {
+  const t = useTx();
+  const services = useServices();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { toast } = useToast();
+  const online = useOnline();
+  const persona = useAdminSession((s) => s.persona);
+  const grant = useAdminSession((s) => s.grant);
+  const session = useAdminSession((s) => s.session);
+  const grantChanges = useAdminSession((s) => s.grantChanges);
+  const { faults, setFault, reset, loadScenario, scenarios } = useDemoTools();
+
+  const scopeSearch = scopeSearchOf(location.search);
+  const sections = useMemo(
+    () =>
+      sidebarSections(
+        persona === null ? null : actorForPersona(persona, { grant }),
+        scopeSearch,
+        t("admin:shell.nav.locked"),
+      ),
+    [persona, grant, scopeSearch, t],
+  );
+  const personas = useMemo(
+    () => ADMIN_PERSONAS.map((p) => personaOption(p, t, grantScopeLabel(p, null, t))),
+    [t],
+  );
+
+  const seenChanges = useRef(grantChanges);
+  useEffect(() => {
+    if (grantChanges > seenChanges.current) toast({ title: t("admin:shell.grantChanged") });
+    seenChanges.current = grantChanges;
+  }, [grantChanges, toast, t]);
+
+  const end = async (next?: string) => {
+    await endAdminSession(services);
+    if (next === undefined) toast({ title: t("admin:shell.persona.ended") });
+    void navigate(next ?? loginPathFor(null), { replace: true });
+  };
+
+  const scopeLabel =
+    persona === null
+      ? undefined
+      : reportingScopeLabel(persona, grant, session, resolveScopeFromSearch(location.search), t);
+
+  return (
+    <AppShell
+      sidebar={<Sidebar sections={sections} LinkComponent={NavLink} />}
+      topbar={{
+        searchSlot: (
+          <div role="search" className="max-w-md" title={t("admin:shell.search.comingLater")}>
+            <SearchInput
+              label={t("shell:search.label")}
+              placeholder={t("admin:shell.search.comingLater")}
+              value=""
+              onValueChange={() => undefined}
+              disabled
+            />
+          </div>
+        ),
+        demoTools: (
+          <DemoToolsMenu
+            faults={faults}
+            onFaultChange={setFault}
+            onReset={reset}
+            scenarios={scenarios}
+            onLoadScenario={(id) => void loadScenario(id)}
+          />
+        ),
+        persona: (
+          <PersonaSwitcher
+            personas={personas}
+            value={persona?.id ?? ""}
+            onChange={(personaId) => {
+              if (personaId !== persona?.id) void end(loginPathFor(null, personaId));
+            }}
+            extraItems={[
+              {
+                id: "switch",
+                label: t("shell:persona.switch"),
+                onSelect: () => void end(loginPathFor(null)),
+              },
+              { id: "end", label: t("admin:shell.persona.end"), onSelect: () => void end() },
+            ]}
+          />
+        ),
+      }}
+      banners={
+        <>
+          {persona === null ? null : (
+            <RoleBanner
+              personaName={persona.displayName}
+              roleLabel={personaOption(persona, t).roleLabel}
+              {...(scopeLabel === undefined ? {} : { scopeLabel })}
+            />
+          )}
+          {faults.offline || !online ? <OfflineBanner /> : null}
+        </>
+      }
+    >
+      <Outlet />
+    </AppShell>
+  );
+}

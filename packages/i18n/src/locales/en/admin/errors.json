@@ -1,0 +1,19 @@
+{
+  "forbidden": {
+    "status": "403 · Outside your authorised scope",
+    "title": "Outside your authorised scope",
+    "description": "Your demo role cannot view this. Nothing from this page was loaded, and the attempt was recorded in the demo audit log.",
+    "requested": "Requested",
+    "yourScope": "Your scope",
+    "requires": "Requires the capability: {{permission}}",
+    "district": "District: {{name}}",
+    "facility": "Facility: {{name}}",
+    "page": "Page: {{name}}",
+    "back": "Back to my scope",
+    "switch": "Switch demo persona"
+  },
+  "unknownScope": {
+    "title": "Not found",
+    "description": "No district or facility with this ID exists in the demo data."
+  }
+}

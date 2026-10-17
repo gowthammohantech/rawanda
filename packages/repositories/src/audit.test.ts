@@ -276,4 +276,19 @@ describe("audit trail behaviour", () => {
     const anon = await h.repo.recordAuditEvent({ action: "session.expired" });
     expect(anon).toMatchObject({ actorId: null, entityType: "audit_event" });
   });
+
+  it("recordAuditEvent keeps a given session correlationId (ADM-01)", async () => {
+    const h = await createHarness({ appId: "admin", personaId: PERSONA_IDS.analystAlpha });
+    const correlationId = "corr-admin-session-1";
+    const started = await h.repo.recordAuditEvent({ action: "session.started", correlationId });
+    const denied = await h.repo.recordAuditEvent({
+      action: "access.denied",
+      outcome: "denied",
+      entityType: "district",
+      entityId: "/admin/overview",
+      correlationId,
+    });
+    expect(started.correlationId).toBe(correlationId);
+    expect(denied).toMatchObject({ correlationId, entityType: "district", outcome: "denied" });
+  });
 });
