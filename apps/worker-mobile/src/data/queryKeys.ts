@@ -10,6 +10,11 @@ export const workerKeys = {
   status: ["sync", "status"] as const,
   entity: (entityId: string) => ["sync", "entity", entityId] as const,
   home: ["home"] as const,
+  /** Demo clock instant read from the repository (Today's date). */
+  homeClock: ["home", "clock"] as const,
+  /** HWM-03 Today summary for the worker on the Kigali demo date. */
+  homeSummary: (workerId: string, facilityId: string, demoDate: string) =>
+    ["home", "summary", workerId, facilityId, demoDate] as const,
 } as const;
 
 /** Call after every repository write (and after a sync pass / demo change). */

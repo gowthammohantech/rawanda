@@ -1,0 +1,40 @@
+{
+  "label": "Filters",
+  "dateRange": "Date range",
+  "preset": {
+    "30d": "Last 30 days",
+    "90d": "Last 90 days",
+    "ytd": "Year to date",
+    "custom": "Custom range"
+  },
+  "district": "District",
+  "facility": "Facility",
+  "type": "Screening type",
+  "typeOption": {
+    "all": "All types",
+    "bp": "Blood pressure",
+    "glucose": "Blood glucose"
+  },
+  "allDistricts": "All districts in my scope",
+  "allFacilities": "All facilities",
+  "lockedToScope": "Fixed by your reporting scope",
+  "reset": "Reset filters",
+  "customRange": "Custom date range",
+  "from": "From",
+  "to": "To",
+  "apply": "Apply",
+  "notice": {
+    "title": "Some filters in the link were not valid and were reset to defaults",
+    "dismiss": "Dismiss"
+  },
+  "validation": {
+    "invalidPreset": "Unknown date range; showing the last 90 days",
+    "invalidDate": "Enter dates as YYYY-MM-DD",
+    "invalidType": "Unknown screening type; showing all types",
+    "customRangeMissing": "A custom range needs a start and an end date",
+    "rangeOrder": "Start date must be on or before end date",
+    "futureDate": "End date cannot be after today",
+    "rangeTooLong": "A date range can cover at most 366 days",
+    "facilityDistrict": "The facility does not belong to the selected district"
+  }
+}

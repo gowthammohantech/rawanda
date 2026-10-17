@@ -44,6 +44,7 @@ import type {
   ScreeningInputSchema,
   StartReviewInputSchema,
   TaskFilterSchema,
+  TimeEntry,
   WriteResult,
 } from "@laif/contracts";
 import type {
@@ -72,6 +73,7 @@ import type {
 import type { ScenarioId, SeedDataset } from "@laif/mock-data";
 import type { z } from "zod";
 
+import type { MetricsRecordsResult } from "./services/metrics.ts";
 import type { StoreAdapter } from "./store/store-adapter.ts";
 import type { FaultConfig, FaultConfigPatch, FaultInjector } from "./transport/faults.ts";
 
@@ -287,6 +289,15 @@ export interface CareRepository {
     key: string,
   ): Promise<WriteResult<CareInstruction>>;
   getAggregateMetrics(f?: MetricsFilterInput): Promise<ProgrammeMetrics>;
+  /**
+   * ADM-02: scoped metric source rows for the admin metric layer (`metrics.read`, aggregate
+   * scope; patients reduced to non-identifying fields) + demo-clock `asOf` and `lastWriteAt`.
+   */
+  getMetricsRecords(f?: MetricsFilterInput): Promise<MetricsRecordsResult>;
+  /** ADM-02: self-reported demo `TimeEntry` rows in the actor's scope (`metrics.read`). */
+  listTimeEntries(f?: MetricsFilterInput): Promise<TimeEntry[]>;
+  /** ADM-02: latest write to a metric source (stale-data chip); `metrics.read`. */
+  getMetricsFreshness(): Promise<{ lastWriteAt: string | null }>;
   recordExport(i: ExportRecordCall, key: string): Promise<WriteResult<AuditEvent>>;
   listAuditEvents(f?: AuditFilterInput): Promise<Page<AuditEvent>>;
   /** UI-originated access / session / demo events only (registry `client: true`). */

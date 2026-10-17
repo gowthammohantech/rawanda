@@ -12,7 +12,7 @@
 | Depends on | HWM-02 |
 | Trace | PRD HW-06, §5 (home/worklist), §6 · FRD HW-06, §5 (`OVERDUE` derived) · Tech spec §2.2 "Home", §5.2 FollowUp overdue invariant · BRD BO-03 |
 | Size | M |
-| Status | Planned |
+| Status | Done |
 
 ## 2. Goal
 

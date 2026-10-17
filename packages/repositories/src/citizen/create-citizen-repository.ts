@@ -13,6 +13,8 @@ import {
   RecordConsentInputSchema,
   UpdateCitizenSettingsInputSchema,
   UpdateNotificationPrefsInputSchema,
+  VerifyIdentityInputSchema,
+  MAX_VERIFICATION_ATTEMPTS,
   type CitizenAccessEvent,
   type CitizenAccount,
   type CitizenCareTask,
@@ -51,7 +53,7 @@ import { Engine, type TxContext } from "../core/engine.ts";
 import { RepositoryError } from "../errors.ts";
 import { applyClockOffset, createDemoApi, META_KEYS } from "../services/demo.ts";
 import { createFaultInjector, FAULTS_META_KEY } from "../transport/faults.ts";
-import { realSleep, withSimulatedTransport } from "../transport/simulated.ts";
+import { realSleep, simulateTransport, withSimulatedTransport } from "../transport/simulated.ts";
 import type {
   CitizenLinkedPatient,
   CitizenPersonaSummary,
@@ -332,7 +334,7 @@ export function createCitizenRepository(input: CitizenRepositoryDeps): CitizenRe
       });
     },
 
-    startSession() {
+    startSession(options = {}) {
       return engine.write(async (ctx) => {
         const actor = citizenActor(ctx, "session");
         const persona = await ctx.tx.get<DemoPersona>("personas", actor.personaId);
@@ -347,7 +349,134 @@ export function createCitizenRepository(input: CitizenRepositoryDeps): CitizenRe
           correlationId: asId<CorrelationId>(ctx.ids()),
           changeSummary: { appId: "citizen", accountStatus: session.account?.status ?? null },
         });
+        if (options.personaSelected === true) {
+          await ctx.audit({
+            action: "citizen.persona.selected",
+            entityType: "persona",
+            entityId: persona.id,
+            correlationId: asId<CorrelationId>(ctx.ids()),
+            changeSummary: { citizenCode: CITIZEN_CODES[persona.id] ?? null, demoOnly: true },
+          });
+        }
         return session;
+      });
+    },
+
+    endSession() {
+      return engine.write(async (ctx) => {
+        if (!ctx.actor || ctx.actor.role !== "citizen") return null;
+        const personaId = ctx.actor.personaId;
+        await ctx.audit({
+          action: "session.ended",
+          entityType: "persona",
+          entityId: personaId,
+          correlationId: asId<CorrelationId>(ctx.ids()),
+          changeSummary: { appId: "citizen" },
+        });
+        return { personaId };
+      });
+    },
+
+    verifyIdentity(i, key) {
+      return engine.mutate({
+        op: "citizen.verifyIdentity",
+        key,
+        input: i,
+        entityType: "persona",
+        permission: "self.read",
+        schema: VerifyIdentityInputSchema,
+        run: async (ctx, input) => {
+          const actor = citizenActor(ctx, "identity");
+          const verification = (
+            await ctx.tx.getAll<IdentityVerification>("identityVerifications")
+          ).find((v) => v.personaId === actor.personaId);
+          const account = (await ctx.tx.getAll<CitizenAccount>("citizenAccounts")).find(
+            (a) => a.personaId === actor.personaId,
+          );
+          if (!verification || !account) {
+            throw new RepositoryError("NOT_FOUND", {
+              details: { entityType: "persona", personaId: actor.personaId },
+            });
+          }
+          if (verification.status === "verified" || verification.status === "locked") {
+            throw new RepositoryError("VALIDATION_ERROR", {
+              reason: "INVALID_TRANSITION",
+              details: { from: verification.status, to: "attempt" },
+            });
+          }
+          const correlationId = ctx.useCorrelation(null);
+          const attempts = verification.attempts + 1;
+          // Simulated: only the labelled demo code ever verifies (T-07: never auto-verify).
+          const matched = input.code === verification.demoCode;
+          const locked = !matched && attempts >= MAX_VERIFICATION_ATTEMPTS;
+          const next = ctx.touch(verification, {
+            attempts,
+            lastAttemptAt: ctx.nowIso,
+            status: matched ? "verified" : locked ? "locked" : "failed",
+            verifiedAt: matched ? ctx.nowIso : null,
+          });
+          await ctx.tx.put("identityVerifications", next);
+          if (matched || locked) {
+            await ctx.tx.put(
+              "citizenAccounts",
+              ctx.touch(account, {
+                status: matched ? "active" : "locked",
+                ...(matched ? { verifiedAt: ctx.nowIso } : { lockedAt: ctx.nowIso }),
+              }),
+            );
+          }
+          if (matched) {
+            // The enrolment record (`pending` link) becomes visible only now — still behind consent.
+            const pending = (await ctx.tx.getAll<PatientLink>("patientLinks")).filter(
+              (l) => l.personaId === actor.personaId && l.status === "pending",
+            );
+            for (const link of pending) {
+              await ctx.tx.put(
+                "patientLinks",
+                ctx.touch(link, { status: "active", linkedAt: ctx.nowIso }),
+              );
+            }
+          }
+          const summary = {
+            attempts,
+            attemptsRemaining: Math.max(0, MAX_VERIFICATION_ATTEMPTS - attempts),
+            method: verification.method,
+          };
+          const attempted = await ctx.audit({
+            action: "citizen.identity.verification_attempted",
+            entityType: "persona",
+            entityId: actor.personaId,
+            correlationId,
+            changeSummary: summary,
+          });
+          await ctx.audit({
+            action: matched ? "citizen.identity.verified" : "citizen.identity.verification_failed",
+            entityType: "persona",
+            entityId: actor.personaId,
+            correlationId,
+            before: verification,
+            after: next,
+            changeSummary: { ...summary, locked },
+          });
+          return { data: next, entityType: "persona", auditEventId: attempted.id };
+        },
+      });
+    },
+
+    recordGuardDenial(i) {
+      return engine.write(async (ctx) => {
+        const actor = citizenActor(ctx, i.patientId);
+        const linked = (await linksOf(ctx, actor.personaId)).some(
+          (l) => l.patientId === i.patientId,
+        );
+        await ctx.audit({
+          action: "access.denied",
+          entityType: "patient",
+          entityId: i.patientId,
+          outcome: "denied",
+          patientId: linked ? asId<PatientId>(i.patientId) : null,
+          changeSummary: { reason: "CONSENT_REQUIRED", route: i.route, guard: true },
+        });
       });
     },
 
@@ -900,7 +1029,38 @@ export function createCitizenRepository(input: CitizenRepositoryDeps): CitizenRe
     demo: createDemoApi({ engine, remote: null, faults, seed }),
   };
 
-  return withSimulatedTransport(repository, faults, { sleep, ready: () => engine.ready() });
+  const wrapped = withSimulatedTransport(repository, faults, {
+    sleep,
+    ready: () => engine.ready(),
+  });
+
+  /** "Nothing was changed" — but the unavailable attempt itself is attributable (audit only). */
+  async function recordVerificationUnavailable(): Promise<void> {
+    await engine.write(async (ctx) => {
+      if (!ctx.actor || ctx.actor.role !== "citizen") return;
+      await ctx.audit({
+        action: "citizen.identity.verification_unavailable",
+        entityType: "persona",
+        entityId: ctx.actor.personaId,
+        changeSummary: { simulated: true, changed: false },
+      });
+    });
+  }
+
+  return {
+    ...wrapped,
+    async verifyIdentity(i, key) {
+      await engine.ready();
+      try {
+        return await simulateTransport(faults, sleep, () => repository.verifyIdentity(i, key));
+      } catch (error) {
+        if (error instanceof RepositoryError && error.code === "DEPENDENCY_UNAVAILABLE") {
+          await recordVerificationUnavailable().catch(() => undefined);
+        }
+        throw error;
+      }
+    },
+  };
 }
 
 /** persona id → `CTZ-P1` … `CTZ-P5` (inverse of FND-05 `CITIZEN_PERSONA_CODES`). */

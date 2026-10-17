@@ -51,4 +51,5 @@ export { META_KEYS } from "./services/demo.ts";
 export { DEVICE_ID_META_KEY, DEVICE_SIGN_IN_PERMISSION } from "./services/devices.ts";
 export { activeRuleset } from "./services/screenings.ts";
 export { PATIENT_MATCH_MIN_SCORE } from "./services/patients.ts";
+export type { MetricsRecordsResult } from "./services/metrics.ts";
 export { Engine, TxContext, type EngineMode, type MutationSpec } from "./core/engine.ts";

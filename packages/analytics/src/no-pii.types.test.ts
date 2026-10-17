@@ -8,6 +8,12 @@ import { createSeed } from "@laif/mock-data";
 import { describe, expect, expectTypeOf, it } from "vitest";
 
 import type {
+  AggregateCell,
+  CellList,
+  FacilityCount,
+  NeedsAttention,
+  ScreeningTypeCounts,
+  WeeklyScreenedVsFlagged,
   DataQuality,
   PathwayFunnel,
   ProgrammeMetrics,
@@ -46,6 +52,12 @@ describe("no PII in analytics result types", () => {
     expectTypeOf<Extract<DeepKeys<WorkerWorkload>, Forbidden>>().toBeNever();
     expectTypeOf<Extract<DeepKeys<DataQuality>, Forbidden>>().toBeNever();
     expectTypeOf<Extract<DeepKeys<SuppressedTable>, Forbidden>>().toBeNever();
+    expectTypeOf<Extract<DeepKeys<AggregateCell>, Forbidden>>().toBeNever();
+    expectTypeOf<Extract<DeepKeys<CellList>, Forbidden>>().toBeNever();
+    expectTypeOf<Extract<DeepKeys<FacilityCount>, Forbidden>>().toBeNever();
+    expectTypeOf<Extract<DeepKeys<NeedsAttention>, Forbidden>>().toBeNever();
+    expectTypeOf<Extract<DeepKeys<ScreeningTypeCounts>, Forbidden>>().toBeNever();
+    expectTypeOf<Extract<DeepKeys<WeeklyScreenedVsFlagged>, Forbidden>>().toBeNever();
   });
 
   it("computed results contain no patient names, ids or synthetic identifiers", () => {

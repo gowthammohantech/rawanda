@@ -430,3 +430,111 @@ describe.each(adapters)("CitizenRepository (%s adapter)", (_name, makeStore) => 
     ).rejects.toMatchObject({ code: "CONFLICT" });
   });
 });
+
+describe.each(adapters)("CitizenRepository CTZ-02 access (%s adapter)", (_name, makeStore) => {
+  it("startSession({ personaSelected }) records the choice; endSession records session.ended", async () => {
+    const h = await setup(makeStore());
+    await h.repo.startSession({ personaSelected: true });
+    expect(await h.audits("citizen.persona.selected")).toHaveLength(1);
+    await h.repo.startSession();
+    expect(await h.audits("citizen.persona.selected")).toHaveLength(1);
+    expect(await h.repo.endSession()).toEqual({ personaId: PERSONA_IDS.citizen1 });
+    expect(await h.audits("session.ended")).toHaveLength(1);
+    h.as(null);
+    expect(await h.repo.endSession()).toBeNull();
+  });
+
+  it("CTZ-P5: only the demo code verifies; wrong codes are recorded attempts", async () => {
+    const h = await setup(makeStore(), PERSONA_IDS.citizenPending);
+    const wrong = await h.repo.verifyIdentity({ code: "111111" }, h.key());
+    expect(wrong.data).toMatchObject({ status: "failed", attempts: 1, verifiedAt: null });
+    expect((await h.repo.getSession())?.account?.status).toBe("pending_verification");
+    // The enrolment record stays hidden until verified.
+    expect((await h.repo.getSession())?.activePatientId).toBeNull();
+    await expect(h.repo.getConsent(CITIZEN_OVERLAY_IDS.pendingPatient)).rejects.toMatchObject({
+      code: "FORBIDDEN",
+      reason: "SCOPE",
+    });
+    expect(await h.audits("citizen.identity.verification_failed")).toHaveLength(1);
+
+    const ok = await h.repo.verifyIdentity({ code: "246810" }, h.key());
+    expect(ok.data).toMatchObject({ status: "verified", attempts: 2 });
+    expect((await h.repo.getSession())?.account?.status).toBe("active");
+    expect(await h.audits("citizen.identity.verification_attempted")).toHaveLength(2);
+    expect(await h.audits("citizen.identity.verified")).toHaveLength(1);
+    await expect(h.repo.verifyIdentity({ code: "246810" }, h.key())).rejects.toMatchObject({
+      code: "VALIDATION_ERROR",
+      reason: "INVALID_TRANSITION",
+    });
+    // Verified → own record linked, but still behind consent (no health data before consent).
+    const session = await h.repo.getSession();
+    expect(session?.activePatientId).toBe(CITIZEN_OVERLAY_IDS.pendingPatient);
+    expect(session?.patients).toMatchObject([
+      { relationship: "self", consentState: "not_recorded" },
+    ]);
+    await expect(
+      h.repo.listReleasedObservations(CITIZEN_OVERLAY_IDS.pendingPatient),
+    ).rejects.toMatchObject({
+      code: "FORBIDDEN",
+      reason: "CONSENT_REQUIRED",
+    });
+    await h.repo.recordConsent(
+      {
+        patientId: CITIZEN_OVERLAY_IDS.pendingPatient,
+        action: "granted",
+        noticeVersion: "demo-notice-v0.1",
+      },
+      h.key(),
+    );
+    expect((await h.repo.getConsent(CITIZEN_OVERLAY_IDS.pendingPatient)).state).toBe("granted");
+    expect(await h.repo.listReleasedObservations(CITIZEN_OVERLAY_IDS.pendingPatient)).toEqual([]);
+  });
+
+  it("locks after five wrong codes; the demo code no longer works", async () => {
+    const h = await setup(makeStore(), PERSONA_IDS.citizenPending);
+    let last = null as Awaited<ReturnType<typeof h.repo.verifyIdentity>> | null;
+    for (let n = 0; n < 5; n += 1) last = await h.repo.verifyIdentity({ code: "000000" }, h.key());
+    expect(last?.data).toMatchObject({ status: "locked", attempts: 5 });
+    expect((await h.repo.getSession())?.account?.status).toBe("locked");
+    await expect(h.repo.verifyIdentity({ code: "246810" }, h.key())).rejects.toMatchObject({
+      code: "VALIDATION_ERROR",
+    });
+  });
+
+  it("malformed codes are VALIDATION_ERROR (nothing recorded)", async () => {
+    const h = await setup(makeStore(), PERSONA_IDS.citizenPending);
+    await expect(h.repo.verifyIdentity({ code: "12a" }, h.key())).rejects.toMatchObject({
+      code: "VALIDATION_ERROR",
+    });
+    expect(await h.audits("citizen.identity.verification_attempted")).toHaveLength(0);
+  });
+
+  it("unavailable service changes nothing, audits it, and never verifies (T-07)", async () => {
+    const h = await setup(makeStore(), PERSONA_IDS.citizenPending);
+    await h.repo.demo.setFaults({ dependencyUnavailableRate: 1 });
+    const key = h.key();
+    await expect(h.repo.verifyIdentity({ code: "246810" }, key)).rejects.toMatchObject({
+      code: "DEPENDENCY_UNAVAILABLE",
+    });
+    expect(await h.audits("citizen.identity.verification_unavailable")).toHaveLength(1);
+    expect(await h.audits("citizen.identity.verification_attempted")).toHaveLength(0);
+    await h.repo.demo.setFaults({ dependencyUnavailableRate: 0 });
+    expect((await h.repo.getSession())?.verification?.status).toBe("pending");
+    // Retry with the SAME key (T-09) runs once; a second replay returns the same outcome.
+    const first = await h.repo.verifyIdentity({ code: "246810" }, key);
+    const replay = await h.repo.verifyIdentity({ code: "246810" }, key);
+    expect(first.replayed).toBe(false);
+    expect(replay.replayed).toBe(true);
+    expect(replay.data.id).toBe(first.data.id);
+    expect(await h.audits("citizen.identity.verified")).toHaveLength(1);
+  });
+
+  it("recordGuardDenial writes one access.denied CONSENT_REQUIRED", async () => {
+    const h = await setup(makeStore(), PERSONA_IDS.citizenWithdrawn);
+    const before = (await h.audits("access.denied")).length;
+    await h.repo.recordGuardDenial({ patientId: P3, route: "/health" });
+    const denied = await h.audits("access.denied");
+    expect(denied).toHaveLength(before + 1);
+    expect(denied.at(-1)).toMatchObject({ outcome: "denied", entityId: P3 });
+  });
+});

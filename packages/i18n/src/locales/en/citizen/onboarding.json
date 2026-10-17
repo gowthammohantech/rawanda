@@ -1,0 +1,72 @@
+{
+  "title": "Your care information, in one place",
+  "synthetic": "Everything here is made-up demonstration data. It is not your real health record.",
+  "syntheticNotForMedicalUse": "Everything here is made-up demonstration data. It is not your real health record and not for medical use.",
+  "syntheticTitle": "Demonstration only",
+  "subtitle": "See the results and next steps your care team has shared with you.",
+  "languageLabel": "Choose your language",
+  "continue": "Continue",
+  "whatIsThis": "What is this demo?",
+  "demoToolsLink": "Demo tools",
+  "about": {
+    "title": "About this demo",
+    "eyebrow": "PROTOTYPE",
+    "showsTitle": "What the wallet shows",
+    "showsBody": "Only results and next steps your care team has reviewed and released to you.",
+    "neverTitle": "What it never does",
+    "neverBody": "It never gives a diagnosis or treatment advice, never shows a health score, and is never used for insurance or credit decisions.",
+    "contactTitle": "Who to contact",
+    "contactBody": "For questions about your care, talk to your care team at your health facility. In an emergency, go to your nearest health facility.",
+    "back": "Back"
+  },
+  "persona": {
+    "title": "Choose a demo persona",
+    "intro": "Each persona is a made-up person that shows one situation in the wallet.",
+    "disclaimer": "Demo persona — role switching is not real sign-in",
+    "relationshipSelf": "Self",
+    "relationshipRepresentative": "Representative for {{name}}",
+    "relationshipNone": "No linked record yet",
+    "stateConsentGiven": "CONSENT GIVEN",
+    "stateConsentWithdrawn": "CONSENT WITHDRAWN",
+    "stateNoConsent": "CONSENT NOT GIVEN",
+    "stateNotVerified": "NOT VERIFIED",
+    "stateLocked": "LOCKED",
+    "cardA11y": "{{name}}, {{relationship}}, {{state}}. Demo persona.",
+    "cardHint": "Opens the wallet as this demo persona",
+    "emptyTitle": "No demo personas found",
+    "emptyBody": "The demo data may be missing. Reset the demo to restore it.",
+    "loadError": "The demo personas could not be loaded.",
+    "startError": "This persona could not be opened. Nothing was changed. Try again."
+  },
+  "verify": {
+    "title": "Confirm it is you",
+    "intro": "Enter the 6-number code to finish setting up your wallet.",
+    "codeLabel": "Verification code",
+    "digitLabel": "Digit {{n}} of 6",
+    "submit": "Verify",
+    "hintEyebrow": "DEMO ONLY",
+    "hintTitle": "Demo code",
+    "hintBody": "In this demo the code is {{code}}. This is a simulated check — it does not confirm anyone's real identity.",
+    "wrongCode": "That code is not right. {{count}} attempts left.",
+    "attempts": "Attempts used: {{used}} of {{max}}",
+    "unavailableTitle": "Verification is not available",
+    "unavailable": "Verification service is not available right now. Nothing was changed. Try again later.",
+    "error": "The code could not be checked. Nothing was changed. Try again.",
+    "back": "Back to personas"
+  },
+  "recover": {
+    "title": "Get help at your facility",
+    "body": "Too many wrong codes were entered, so this wallet is locked. Your care team can unlock it and check who you are in person at the facility.",
+    "contactTitle": "Contact (synthetic)",
+    "contactBody": "Reception desk, Demo Health Centre Alpha — open weekdays 07:00–17:00.",
+    "back": "Back to start"
+  },
+  "header": {
+    "demoPill": "Demo persona",
+    "menu": "Wallet menu",
+    "menuTitle": "Wallet",
+    "switchPersona": "Switch persona",
+    "switchPersonaHint": "Ends this demo session and returns to the persona list.",
+    "signedInAs": "Demo persona: {{name}}"
+  }
+}

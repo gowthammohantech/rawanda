@@ -10,23 +10,24 @@ import {
 } from "@laif/auth-demo";
 import { DEMO_PERSONAS, type PersonaSpec } from "@laif/mock-data";
 
-import { APP_ID, DEFAULT_PERSONA_ID } from "./config.ts";
+import { APP_ID } from "./config.ts";
 
 export type AppPersona = PersonaSpec;
 export type AppSession = PersonaSession<AppPersona>;
 
-/** Restores the stored persona, or signs in the app's default persona. */
+/**
+ * Restores the stored persona (CTZ-02: there is NO default persona — no stored persona means
+ * signed out, and the wallet starts at the welcome screen).
+ */
 export function createAppSession(storage: KeyValueStorage): AppSession {
   const create = (backing: KeyValueStorage) =>
     createPersonaSession({ storage: backing, appId: APP_ID, personas: DEMO_PERSONAS });
-  let session: AppSession;
   try {
-    session = create(storage);
-    if (session.current() === null) session.switchTo(DEFAULT_PERSONA_ID);
+    const session = create(storage);
+    session.current();
+    return session;
   } catch {
     // Unreadable key/value store: keep the persona in memory for this run.
-    session = create(createMemoryStorage());
-    session.switchTo(DEFAULT_PERSONA_ID);
+    return create(createMemoryStorage());
   }
-  return session;
 }

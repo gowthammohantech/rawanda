@@ -1,0 +1,27 @@
+{
+  "consentRow": "Uburenganzira no gusangiza",
+  "demoToolsRow": "Ibikoresho by'igerageza",
+  "languageTitle": "Ururimi",
+  "comingSoon": "Igenamiterere ry'ibanga, iryo korohereza n'ubufasha bizaza mu byiciro bikurikira.",
+  "demo": {
+    "title": "Ibikoresho by'igerageza",
+    "eyebrow": "IGERAGEZA GUSA",
+    "intro": "Ibi bigenzura bihindura amakuru y'igerageza kuri iki gikoresho gusa.",
+    "reset": "Ongera utangire igerageza",
+    "resetTitle": "Ongera utangire amakuru y'igerageza?",
+    "resetBody": "Amakuru yose y'igerageza kuri iki gikoresho asubira aho yatangiriye. Porogaramu yongera kugenzura uburenganzira bw'umuntu wawe w'igerageza.",
+    "clockTitle": "Isaha y'igerageza",
+    "clockNow": "Igihe cy'igerageza: {{time}}",
+    "advanceDay": "Igiza imbere umunsi 1",
+    "advanceWeek": "Igiza imbere iminsi 7",
+    "baseline": "Subira ku ntangiriro",
+    "faultsTitle": "Amakosa y'igerageza",
+    "slow": "Umuyoboro utinda",
+    "error500": "Amakosa ya seriveri (500)",
+    "unavailable": "Serivisi ntiboneka",
+    "conflict": "Kuvuguruzanya ku kubika gukurikira",
+    "conflictHint": "Impinduka ikurikira ku makuru yawe izavuguruzanya rimwe.",
+    "moreTools": "Nta murandasi n'ibigeragezo",
+    "failed": "Igikoresho cy'igerageza nticyakoze. Ongera ugerageze."
+  }
+}

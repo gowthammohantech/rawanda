@@ -34,6 +34,7 @@ import type {
   TimelineItem,
   UpdateCitizenSettingsInputSchema,
   UpdateNotificationPrefsInputSchema,
+  VerifyIdentityInputSchema,
   WriteResult,
 } from "@laif/contracts";
 import type {
@@ -54,6 +55,13 @@ export type UpdateNotificationPrefsCall = MutationInput<typeof UpdateNotificatio
 export type CitizenCorrectionCall = MutationInput<typeof CorrectionRequestInputSchema>;
 export type CallbackRequestCall = MutationInput<typeof CallbackRequestInputSchema>;
 export type UpdateCitizenSettingsCall = MutationInput<typeof UpdateCitizenSettingsInputSchema>;
+export type VerifyIdentityCall = MutationInput<typeof VerifyIdentityInputSchema>;
+
+/** CTZ-02: `personaSelected` also records `citizen.persona.selected` (persona picker). */
+export type StartCitizenSessionOptions = { personaSelected?: boolean };
+
+/** CTZ-02 route-guard denial (no data read happened; audit only). */
+export type GuardDenialCall = { patientId: string; route: string };
 
 /** One linked patient as the persona picker / session sees it (no health data). */
 export type CitizenLinkedPatient = {
@@ -92,8 +100,21 @@ export interface CitizenRepository {
   listPersonas(): Promise<CitizenPersonaSummary[]>;
   /** Session of the signed-in persona; null when signed out or not a citizen. */
   getSession(): Promise<CitizenSession | null>;
-  /** Records `session.started` for the signed-in persona and returns its session. */
-  startSession(): Promise<CitizenSession>;
+  /** Records `session.started` (and `citizen.persona.selected` when chosen in the picker) for
+   * the signed-in persona and returns its session. */
+  startSession(options?: StartCitizenSessionOptions): Promise<CitizenSession>;
+  /** Records `session.ended` for the signed-in persona (call BEFORE clearing the persona). */
+  endSession(): Promise<{ personaId: PersonaId } | null>;
+  /**
+   * Simulated identity verification (CTZ-02, never a real check): the demo code verifies the
+   * account (`active`); a wrong code is a recorded attempt (`failed`, `locked` after
+   * `MAX_VERIFICATION_ATTEMPTS`) — both return the updated record. `DEPENDENCY_UNAVAILABLE`
+   * (fault injector) changes nothing and audits `citizen.identity.verification_unavailable`.
+   * Replays with the same key return the first outcome (T-09).
+   */
+  verifyIdentity(i: VerifyIdentityCall, key: string): Promise<WriteResult<IdentityVerification>>;
+  /** `access.denied` (`CONSENT_REQUIRED`) when the wallet route guard blocks a health route. */
+  recordGuardDenial(i: GuardDenialCall): Promise<void>;
   /** Consent of a linked patient (link required; works while consent is withdrawn). */
   getConsent(patientId: string): Promise<ConsentStatus>;
   /** Appends a consent record, mirrors `Patient.consentState`; withdrawal cancels scheduled

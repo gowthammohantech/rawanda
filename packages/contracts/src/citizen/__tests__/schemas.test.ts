@@ -18,6 +18,7 @@ import {
   ReleasedObservationSchema,
   UpdateCitizenSettingsInputSchema,
   UpdateNotificationPrefsInputSchema,
+  VerifyIdentityInputSchema,
 } from "../index.ts";
 
 const T = "2026-10-14T06:00:00.000Z";
@@ -343,5 +344,16 @@ describe("citizen inputs", () => {
     expect(
       UpdateCitizenSettingsInputSchema.safeParse({ idempotencyKey: KEY, textScale: 3 }).success,
     ).toBe(false);
+  });
+
+  it("verification attempts need exactly six digits (CTZ-02)", () => {
+    expect(
+      VerifyIdentityInputSchema.safeParse({ idempotencyKey: KEY, code: "246810" }).success,
+    ).toBe(true);
+    for (const code of ["24681", "2468100", "24681a", ""]) {
+      expect(VerifyIdentityInputSchema.safeParse({ idempotencyKey: KEY, code }).success).toBe(
+        false,
+      );
+    }
   });
 });

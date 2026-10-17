@@ -11,6 +11,23 @@ import { DemoToolsProvider } from "./demo-tools.tsx";
 import { CitizenRepoProvider, createAppRepository, type CitizenRepository } from "./data/repo.tsx";
 import { useSession } from "./providers.tsx";
 
+/**
+ * A device seeded by the FND-11 shell has the same `seedVersion` but no CTZ-01 citizen overlay
+ * (no accounts / links): every persona would be "not verified" and every read `SCOPE`-denied.
+ * Re-seed this app's own database once instead of bumping the global `SEED_VERSION` (which would
+ * re-seed every app). Best effort: a failure leaves the seeded data as it is.
+ */
+async function repairMissingOverlay(repo: CitizenRepository): Promise<void> {
+  try {
+    const personas = await repo.listPersonas();
+    if (personas.length > 0 && personas.every((p) => p.accountId === null)) {
+      await repo.demo.resetDemo();
+    }
+  } catch {
+    // Keep the existing data; screens show their own error states.
+  }
+}
+
 type BootState =
   | { status: "starting" }
   | { status: "ready"; repo: CitizenRepository }
@@ -41,6 +58,7 @@ export function Boot({ openStore, noLatency, children }: BootProps) {
           ...(noLatency === undefined ? {} : { noLatency }),
         });
         await repo.demo.ensureSeeded();
+        await repairMissingOverlay(repo);
         if (active) setState({ status: "ready", repo });
       } catch (error) {
         if (active) setState({ status: "failed", error, repo });

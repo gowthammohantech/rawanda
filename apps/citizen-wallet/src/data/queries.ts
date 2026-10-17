@@ -15,6 +15,7 @@ import type {
   RecordConsentCall,
   UpdateCitizenSettingsCall,
   UpdateNotificationPrefsCall,
+  VerifyIdentityCall,
 } from "@laif/repositories/citizen";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -145,7 +146,11 @@ function useCitizenMutation<I, R>(write: (input: I, key: string) => Promise<R>) 
   const personaId = usePersonaId();
   return useMutation({
     mutationFn: ({ input, key }: Vars<I>) => write(input, key),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ctzKeys.all(personaId) }),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ctzKeys.all(personaId) });
+      // The persona picker shows account / consent chips too.
+      await queryClient.invalidateQueries({ queryKey: ctzKeys.personas() });
+    },
     onError: (error) => {
       // A conflict carries `latest`: refetch so the screen shows the current version.
       if (error instanceof RepositoryError && error.code === "CONFLICT") {
@@ -157,17 +162,13 @@ function useCitizenMutation<I, R>(write: (input: I, key: string) => Promise<R>) 
 
 export function useRecordConsent() {
   const repo = useCitizenRepo();
-  const queryClient = useQueryClient();
-  const mutation = useCitizenMutation((i: RecordConsentCall, k) => repo.recordConsent(i, k));
-  return {
-    ...mutation,
-    // The persona picker shows consent chips too.
-    mutateAsync: async (vars: Vars<RecordConsentCall>) => {
-      const result = await mutation.mutateAsync(vars);
-      await queryClient.invalidateQueries({ queryKey: ctzKeys.personas() });
-      return result;
-    },
-  };
+  return useCitizenMutation((i: RecordConsentCall, k) => repo.recordConsent(i, k));
+}
+
+/** CTZ-02 simulated verification (the caller keeps the key across retries, T-09). */
+export function useVerifyIdentity() {
+  const repo = useCitizenRepo();
+  return useCitizenMutation((i: VerifyIdentityCall, k) => repo.verifyIdentity(i, k));
 }
 
 export function useAcknowledgeInstruction() {

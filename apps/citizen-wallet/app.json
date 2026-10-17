@@ -4,7 +4,7 @@
     "slug": "laif-citizen-wallet",
     "version": "0.0.0",
     "orientation": "portrait",
-    "scheme": "laifwallet",
+    "scheme": ["laifwallet", "citizen-wallet"],
     "userInterfaceStyle": "light",
     "ios": { "supportsTablet": false },
     "android": {},

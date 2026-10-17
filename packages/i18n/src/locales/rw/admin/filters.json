@@ -1,0 +1,40 @@
+{
+  "label": "Ayungurura",
+  "dateRange": "Igihe",
+  "preset": {
+    "30d": "Iminsi 30 ishize",
+    "90d": "Iminsi 90 ishize",
+    "ytd": "Kuva intangiriro y'umwaka",
+    "custom": "Igihe wihitiyemo"
+  },
+  "district": "Akarere",
+  "facility": "Ivuriro",
+  "type": "Ubwoko bw'isuzuma",
+  "typeOption": {
+    "all": "Ubwoko bwose",
+    "bp": "Umuvuduko w'amaraso",
+    "glucose": "Isukari mu maraso"
+  },
+  "allDistricts": "Uturere twose mfitiye uburenganzira",
+  "allFacilities": "Amavuriro yose",
+  "lockedToScope": "Byagenwe n'uburenganzira bwawe bwo gutanga raporo",
+  "reset": "Subiza ayungurura uko yari ari",
+  "customRange": "Igihe wihitiyemo",
+  "from": "Kuva",
+  "to": "Kugeza",
+  "apply": "Emeza",
+  "notice": {
+    "title": "Bimwe mu byo kuyungurura biri mu murongo ntibyari byemewe, byasubijwe uko bisanzwe",
+    "dismiss": "Funga"
+  },
+  "validation": {
+    "invalidPreset": "Igihe kitazwi; harerekanwa iminsi 90 ishize",
+    "invalidDate": "Andika amatariki nka YYYY-MM-DD",
+    "invalidType": "Ubwoko bw'isuzuma butazwi; harerekanwa ubwoko bwose",
+    "customRangeMissing": "Igihe wihitiyemo gikenera itariki itangira n'irangiriraho",
+    "rangeOrder": "Itariki itangira igomba kuba mbere y'itariki irangiriraho",
+    "futureDate": "Itariki irangiriraho ntishobora kurenga uyu munsi",
+    "rangeTooLong": "Igihe ntigishobora kurenza iminsi 366",
+    "facilityDistrict": "Iryo vuriro ntiri mu karere katoranyijwe"
+  }
+}
