@@ -12,6 +12,7 @@ import {
   type WriteResult,
 } from "@laif/contracts";
 import {
+  DEFAULT_REVIEW_QUEUE_SORT,
   assertAttributable,
   assertDismissalReason,
   isReviewOpen,
@@ -23,6 +24,7 @@ import {
   type Referral,
   type Review,
   type ReviewDecision,
+  type ReviewQueueSort,
   type Screening,
 } from "@laif/domain";
 
@@ -55,18 +57,68 @@ async function scopedReviews(ctx: TxContext, f: ReviewFilterInput | undefined) {
   });
   assertRequestedScope(ctx, permission, filter);
   const context = { now: ctx.now, personaId: ctx.actorId };
-  const rows = (await ctx.all<Review>("review")).filter(
-    (r) =>
-      ctx.can(permission, reviewResource(r)) &&
-      (!filter.priorities || filter.priorities.includes(r.priority)) &&
-      (!filter.origins || filter.origins.includes(r.origin)) &&
-      (filter.assignedClinicianId === undefined ||
-        r.assignedClinicianId === filter.assignedClinicianId) &&
-      (!filter.patientId || r.patientId === filter.patientId) &&
-      (!filter.facilityIds || (filter.facilityIds as string[]).includes(r.facilityId)) &&
-      (!filter.overdueOnly || matchesReviewQueueTab(r, "overdue", context)),
-  );
-  return { filter, rows, context };
+  const q = filter.q === undefined || filter.q === "" ? undefined : filter.q.toLowerCase();
+  // Patient names: needed for the CLN-05 queue search and the patient sort only.
+  const patients =
+    q !== undefined || filter.sort === "patient_asc"
+      ? new Map((await ctx.all<Patient>("patient")).map((p) => [p.id as string, p]))
+      : null;
+  const decidedSince = filter.decidedSince === undefined ? null : Date.parse(filter.decidedSince);
+  const rows = (await ctx.all<Review>("review")).filter((r) => {
+    if (!ctx.can(permission, reviewResource(r))) return false;
+    if (filter.priorities && !filter.priorities.includes(r.priority)) return false;
+    if (filter.origins && !filter.origins.includes(r.origin)) return false;
+    if (
+      filter.assignedClinicianId !== undefined &&
+      r.assignedClinicianId !== filter.assignedClinicianId
+    ) {
+      return false;
+    }
+    if (filter.patientId && r.patientId !== filter.patientId) return false;
+    if (filter.facilityIds && !(filter.facilityIds as string[]).includes(r.facilityId)) {
+      return false;
+    }
+    if (filter.overdueOnly && !matchesReviewQueueTab(r, "overdue", context)) return false;
+    if (
+      decidedSince !== null &&
+      (r.reviewedAt === null || Date.parse(r.reviewedAt) < decidedSince)
+    ) {
+      return false;
+    }
+    if (q !== undefined) {
+      const patient = patients?.get(r.patientId);
+      if (
+        patient === undefined ||
+        !(
+          patient.displayName.toLowerCase().includes(q) ||
+          patient.syntheticIdentifier.toLowerCase().includes(q)
+        )
+      ) {
+        return false;
+      }
+    }
+    return true;
+  });
+  return { filter, rows, context, patients };
+}
+
+/** CLN-05 queue order; ties broken by id (deterministic). Reviews without a due date sort last. */
+function sortReviews(
+  rows: Review[],
+  sort: ReviewQueueSort | undefined,
+  patients: ReadonlyMap<string, Patient> | null,
+): Review[] {
+  switch (sort ?? DEFAULT_REVIEW_QUEUE_SORT) {
+    case "flaggedAt_asc":
+      return sortBy(rows, (r) => r.createdAt);
+    case "flaggedAt_desc":
+      return sortBy(rows, (r) => r.createdAt, "desc");
+    case "dueAt_asc":
+      // "\uffff" sorts after every ISO instant.
+      return sortBy(rows, (r) => r.reviewDueAt ?? "\uffff");
+    case "patient_asc":
+      return sortBy(rows, (r) => (patients?.get(r.patientId)?.displayName ?? "").toLowerCase());
+  }
 }
 
 function alreadyDecided(review: Review): RepositoryError {
@@ -86,20 +138,28 @@ function alreadyDecided(review: Review): RepositoryError {
 
 export function createReviewService(engine: Engine) {
   return {
-    /** Oldest first (queue order); `statuses` filter applied on top of the shared predicates. */
+    /**
+     * Queue order (`sort`, default oldest flag first); `statuses` and the CLN-05 `tab` predicate
+     * are applied on top of the shared filter, so `items.length` over all pages of a tab equals
+     * `countReviews(sameFilter)[tab]`.
+     */
     listReviews(f?: ReviewFilterInput): Promise<Page<Review>> {
       return engine.read(async (ctx) => {
-        const { filter, rows } = await scopedReviews(ctx, f);
-        const visible = rows.filter((r) => !filter.statuses || filter.statuses.includes(r.status));
-        return paginate(
-          sortBy(visible, (r) => r.createdAt),
-          filter.page,
-          filter.pageSize,
+        const { filter, rows, context, patients } = await scopedReviews(ctx, f);
+        const tab = filter.tab;
+        const visible = rows.filter(
+          (r) =>
+            (!filter.statuses || filter.statuses.includes(r.status)) &&
+            (tab === undefined || matchesReviewQueueTab(r, tab, context)),
         );
+        return paginate(sortReviews(visible, filter.sort, patients), filter.page, filter.pageSize);
       });
     },
 
-    /** `{ pending, urgent, overdue, assigned, all }` over the same filter (minus `statuses`). */
+    /**
+     * `{ pending, urgent, overdue, assigned, all }` over the same filter (facility, assignee, `q`
+     * …) minus `statuses`, `tab`, `sort` and paging.
+     */
     countReviews(f?: ReviewFilterInput): Promise<ReviewCounts> {
       return engine.read(async (ctx) => {
         const { rows, context } = await scopedReviews(ctx, f);

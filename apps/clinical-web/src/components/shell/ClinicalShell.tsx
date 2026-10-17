@@ -23,9 +23,10 @@ import { useMemo, useState } from "react";
 import { NavLink, Outlet, useLocation, useNavigate } from "react-router";
 
 import { useDemoTools } from "../../app/demo-tools.tsx";
+import { UNFILTERED_SCOPE } from "../../features/queue/model.ts";
+import { reviewCountsQuery } from "../../features/queue/useReviewQueue.ts";
 import { ConnectionBanner } from "../ConnectionBanner.tsx";
 import { facilityLabel, personaOption } from "../../app/persona-labels.ts";
-import { clinicalKeys } from "../../data/queryKeys.ts";
 import { useRepository } from "../../data/useRepository.ts";
 import { routes } from "../../app/routes.ts";
 import { recordSessionEnded, recordSessionStarted } from "../../session/session-audit.ts";
@@ -62,12 +63,15 @@ function ShellChrome({ badgeCounts = {} }: ClinicalShellProps) {
   const switchFacility = useSwitchFacility();
 
   const canReadQueue = can("review.read");
+  // CLN-05 task 7: the same cache entry as the queue's KPI strip (unfiltered facility counts).
   const pending = useQuery({
-    queryKey: clinicalKeys.reviewCounts(state?.activeFacilityId ?? "none", { shell: "pending" }),
-    queryFn: () => repo.countReviews(),
+    ...reviewCountsQuery(
+      repo,
+      { fac: state?.activeFacilityId ?? "none", personaId: state?.persona.id ?? null },
+      UNFILTERED_SCOPE,
+      canReadQueue && state !== null,
+    ),
     select: (counts) => counts.pending,
-    retry: false,
-    enabled: canReadQueue,
   });
 
   const counts: Partial<Record<NavItemId, number>> = useMemo(

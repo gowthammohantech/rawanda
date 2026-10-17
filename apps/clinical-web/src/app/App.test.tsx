@@ -46,7 +46,7 @@ describe("clinical-web shell", () => {
     expect(window.localStorage.getItem(FACILITY_STORAGE_KEY)).toBe(FACILITY_IDS.alpha1);
     expect(screen.getByRole("note").textContent).toContain("Demo role switch — not authentication");
     expect(screen.getByRole("heading", { level: 1, name: "Review queue" })).toBeTruthy();
-    expect(screen.getByText("Delivered in CLN-05")).toBeTruthy();
+    expect(screen.getByTestId("queue-kpis")).toBeTruthy();
     const nav = screen.getByRole("navigation", { name: "Main navigation" });
     // WORKSPACE › Review queue carries the pending-review count badge.
     const pending = (await services.repo.countReviews()).pending;

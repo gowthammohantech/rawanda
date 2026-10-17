@@ -13,7 +13,7 @@ import { AuditPage } from "../features/audit/AuditPage.tsx";
 import { LoginPage } from "../features/login/LoginPage.tsx";
 import { PatientPage } from "../features/patients/PatientPage.tsx";
 import { PatientSearchPage } from "../features/patients/PatientSearchPage.tsx";
-import { QueuePage } from "../features/queue/QueuePage.tsx";
+import { ReviewQueuePage } from "../features/queue/ReviewQueuePage.tsx";
 import { ReferralsPage } from "../features/referrals/ReferralsPage.tsx";
 import { DecisionPage } from "../features/reviews/DecisionPage.tsx";
 import { ReviewPage } from "../features/reviews/ReviewPage.tsx";
@@ -49,7 +49,7 @@ export const appRoutes: RouteObject[] = [
         ),
         children: [
           { path: BASE_PATH, element: <Navigate to={HOME_PATH} replace /> },
-          screen("queue", <QueuePage />),
+          screen("queue", <ReviewQueuePage />),
           screen("patients", <PatientSearchPage />),
           screen("patient", <PatientPage />),
           screen("review", <ReviewPage />),
