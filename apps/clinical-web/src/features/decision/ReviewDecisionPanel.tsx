@@ -254,17 +254,8 @@ export function ReviewDecisionPanel({
         }}
       >
         <RadioCardGroup<DecisionKind>
-          // `required` would put aria-required on the <fieldset> (axe aria-allowed-attr), so the
-          // required marker is part of the legend instead.
-          legend={
-            <>
-              {t("clinical:decision.legend")}
-              <span className="text-danger ms-1">
-                <span aria-hidden="true">*</span>
-                <span className="sr-only">{t("common:ui.required")}</span>
-              </span>
-            </>
-          }
+          legend={t("clinical:decision.legend")}
+          required
           name="decision-outcome"
           columns={1}
           options={options}

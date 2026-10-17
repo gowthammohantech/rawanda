@@ -270,6 +270,12 @@ describe("DecisionPage", () => {
         "Repeat reading within the demo range",
       ),
     );
+    const savedKey = (
+      JSON.parse(window.sessionStorage.getItem(draftStorageKey(WF03.reviewId)) ?? "{}") as {
+        idempotencyKey?: string;
+      }
+    ).idempotencyKey;
+    expect(savedKey).toBeTruthy();
     first.unmount();
 
     await renderApp({ path: routes.decision(WF03.reviewId), signIn: CLINICIAN, store });
@@ -283,6 +289,12 @@ describe("DecisionPage", () => {
     expect(screen.getByLabelText<HTMLTextAreaElement>(/^Rationale for dismissing/).value).toBe(
       "Repeat reading within the demo range",
     );
+    // The restored draft keeps its form-session idempotency key for the actual write.
+    await user.click(screen.getByTestId("decision-save"));
+    await user.click(confirmButton());
+    await screen.findByTestId("decision-success");
+    expect(await store.get("idempotency", savedKey ?? "")).toBeDefined();
+    expect(await forEntity(store, "review.dismissed", WF03.reviewId)).toHaveLength(1);
   });
 
   it("discarding the draft starts an empty form", async () => {
