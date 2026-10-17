@@ -518,6 +518,15 @@
       },
       "settings": {
         "changed": "Igenamiterere ry'agasanduku ryahinduwe"
+      },
+      "persona": {
+        "selected": "Umuntu w'igerageza yatoranyijwe muri porogaramu"
+      },
+      "identity": {
+        "verification_attempted": "Kugenzura umwirondoro byageragejwe (by'igerageza)",
+        "verified": "Umwirondoro wemejwe (kode y'igerageza)",
+        "verification_failed": "Kugenzura umwirondoro byanze (by'igerageza)",
+        "verification_unavailable": "Serivisi yo kugenzura ntiboneka (by'igerageza)"
       }
     }
   }

@@ -10,7 +10,7 @@
 | Depends on | CTZ-01 |
 | Trace | CW-01, CW-06 (consent/notice), CW-07 (language on first run); FRD Scenario 1 step "enroll through approved verification"; T-01, T-02, T-07, T-09; Tech spec §2.4 "Welcome / consent", §10 "consent withdrawn" |
 | Size | L |
-| Status | Planned |
+| Status | Done |
 
 ## 2. Goal
 

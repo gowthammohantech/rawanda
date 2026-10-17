@@ -17,6 +17,7 @@ describe("citizen data layer", () => {
   it("boots on SQLite, seeds the overlay and serves released data for the signed-in persona", async () => {
     const executor = createTestSqliteExecutor();
     const session = createAppSession(createMemoryStorage());
+    session.switchTo(PERSONA_IDS.citizen1);
     const repo = createAppRepository({
       session,
       store: createSqliteStoreAdapter(executor),

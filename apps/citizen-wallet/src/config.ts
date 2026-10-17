@@ -1,11 +1,13 @@
 /** Citizen Health Wallet constants (FND-11). */
 import type { AppId } from "@laif/domain";
-import { PERSONA_IDS } from "@laif/mock-data";
 
 export const APP_ID = "citizen" as const satisfies AppId;
 
-/** Signed-in persona until CTZ-02 adds the welcome / persona choice (CTZ-P1). */
-export const DEFAULT_PERSONA_ID: string = PERSONA_IDS.citizen1;
+/**
+ * Deep-link schemes (app.json `scheme`): `laifwallet` (FND-11) and `citizen-wallet` (CTZ-02
+ * phase prose) both open the app, e.g. `citizen-wallet://health` → `/health` (route guard).
+ */
+export const DEEP_LINK_SCHEMES = ["laifwallet", "citizen-wallet"] as const;
 
 /**
  * E2E/test builds (`EXPO_PUBLIC_LAIF_E2E=1 expo export …`): repository calls skip the
