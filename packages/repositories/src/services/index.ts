@@ -6,6 +6,7 @@ import { createFollowUpService } from "./follow-ups.ts";
 import { createInstructionService } from "./instructions.ts";
 import { createMetricsService } from "./metrics.ts";
 import { createPatientService } from "./patients.ts";
+import { createProgrammeActionService } from "./programme-actions.ts";
 import { createReferralService } from "./referrals.ts";
 import { createReminderService } from "./reminders.ts";
 import { createReviewService } from "./reviews.ts";
@@ -26,6 +27,7 @@ export function createServices(engine: Engine) {
     ...createMetricsService(engine),
     ...createAuditService(engine),
     ...createAccessGrantService(engine),
+    ...createProgrammeActionService(engine),
     /** Authorised CHWs for assignment (CLN-07/09); needs `task.assign` in that facility. */
     listWorkers(facilityId: string) {
       return engine.read(async (ctx) => {

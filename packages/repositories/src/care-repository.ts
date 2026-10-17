@@ -18,6 +18,7 @@ import type { ProgrammeMetrics } from "@laif/analytics";
 import type { ActorContext } from "@laif/auth-demo";
 import type {
   AccessGrant,
+  ProgrammeAction,
   AuditFilterSchema,
   CareTaskInputSchema,
   CareTaskUpdateInputSchema,
@@ -74,6 +75,11 @@ import type { ScenarioId, SeedDataset } from "@laif/mock-data";
 import type { z } from "zod";
 
 import type { MetricsRecordsResult } from "./services/metrics.ts";
+import type {
+  ProgrammeActionCall,
+  ProgrammeActionFilterInput,
+  ProgrammeActionUpdateCall,
+} from "./services/programme-actions.ts";
 import type { StoreAdapter } from "./store/store-adapter.ts";
 import type { FaultConfig, FaultConfigPatch, FaultInjector } from "./transport/faults.ts";
 
@@ -308,6 +314,18 @@ export interface CareRepository {
    * patient data. ADM-08 adds the grant edits.
    */
   listAccessGrants(): Promise<AccessGrant[]>;
+  /**
+   * ADM-03: non-clinical programme follow-up actions for a facility manager. Create needs
+   * `programme_action.write` in the facility's scope and is idempotent on `key`; update carries
+   * `expectedVersion` (stale → `CONFLICT` with `latest`); terminal actions cannot be edited.
+   * List needs `metrics.read` and is limited to the actor's scope (newest change first).
+   */
+  listProgrammeActions(f?: ProgrammeActionFilterInput): Promise<ProgrammeAction[]>;
+  createProgrammeAction(i: ProgrammeActionCall, key: string): Promise<WriteResult<ProgrammeAction>>;
+  updateProgrammeAction(
+    i: ProgrammeActionUpdateCall,
+    key: string,
+  ): Promise<WriteResult<ProgrammeAction>>;
   sync: SyncApi;
   demo: DemoApi;
   device: DeviceApi;

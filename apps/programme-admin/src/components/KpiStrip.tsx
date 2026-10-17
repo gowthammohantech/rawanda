@@ -11,6 +11,8 @@ import { SuppressedValue } from "./SuppressedValue.tsx";
 
 export type KpiCell = {
   id: MetricDefinitionId;
+  /** Distinct key / test id when several cells share a metric (default `id`). */
+  key?: string;
   label: string;
   value: AggregateCell;
   /** Basis count for the info popover (defaults to `value`). */
@@ -38,8 +40,8 @@ export function KpiStrip({ label, items, threshold, computedAt, rulesetVersions 
     >
       {items.map((item, index) => (
         <div
-          key={item.id}
-          data-testid={`kpi-${item.id}`}
+          key={item.key ?? item.id}
+          data-testid={`kpi-${item.key ?? item.id}`}
           className={cx(
             "min-w-0 px-4 first:ps-0",
             index > 0 && "xl:border-border-soft xl:border-s",

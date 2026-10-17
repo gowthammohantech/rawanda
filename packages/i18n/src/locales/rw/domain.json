@@ -267,7 +267,8 @@
     "persona": "Uruhare rw'igerageza",
     "ruleset": "Amategeko y'igerageza",
     "sync_operation": "Igikorwa cyo guhuza",
-    "device_session": "Igikoresho cyinjiwemo"
+    "device_session": "Igikoresho cyinjiwemo",
+    "programme_action": "Igikorwa cya porogaramu"
   },
   "pathwayStage": {
     "DRAFT_SCREENING": "Ipimwa ritararangira",
@@ -534,6 +535,15 @@
       },
       "reminder": {
         "preview_sent": "Kwibutsa kw'igerageza koherejwe kuri iyi telefoni (demo)"
+      }
+    },
+    "admin": {
+      "drilldown": {
+        "viewed": "Isesengura rirambuye ry'imibare rusange ryarebwe"
+      },
+      "programme_action": {
+        "created": "Igikorwa cya porogaramu cyahawe ushinzwe",
+        "status_changed": "Imiterere y'igikorwa cya porogaramu yahindutse"
       }
     }
   }

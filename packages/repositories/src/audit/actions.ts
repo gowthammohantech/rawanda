@@ -148,6 +148,14 @@ export const AUDIT_ACTIONS = {
   "citizen.identity.verification_failed": security,
   "citizen.identity.verification_unavailable": security,
 
+  // ── Programme admin (ADM-03) ────────────────────────────────────────────
+  // Aggregate drill-down view (PRD §8 sensitive-read logging), recorded by the admin UI once per
+  // (session, stage, search). Denials / conflicts of programme actions use the canonical
+  // `access.denied` / `conflict.detected` (entityType `programme_action`).
+  "admin.drilldown.viewed": accessClient,
+  "admin.programme_action.created": change,
+  "admin.programme_action.status_changed": change,
+
   // ── Sync & devices ───────────────────────────────────────────────────────
   "sync.op_acknowledged": change,
   "sync.op_rejected": change,

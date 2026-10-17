@@ -12,7 +12,7 @@
 | Depends on | HWM-04 |
 | Trace | PRD HW-03, HW-04, HW-05 · FRD HW-03, HW-04, HW-05, §4 (units/source mandatory) · BRD BR-02 · Tech spec §2.2 "New screening", §5.1 Screening · Implementation notes (translated validation) · FRD T-03 · PRD §10 "app termination during capture" |
 | Size | L |
-| Status | Planned |
+| Status | Done |
 
 ## 2. Goal
 
@@ -136,3 +136,11 @@ Manual (Expo Go): Screen tab → Choose patient → form → enter glucose 7.8 o
 ## 12. Commit
 
 `feat(worker): HWM-05 screening form with sqlite draft autosave and translated validation`
+
+## 13. Implementation notes (deviations, recorded at verification)
+
+- **Blood pressure is required** (task 3 asked for "at least one of BP or glucose"): the FND-03 submit contract `createScreeningInputSchema` requires integer `systolic` + `diastolic`, so a glucose-only screening could never be submitted in HWM-06. The form gates Review on the BP pair; glucose stays optional (value → unit + context required). Relaxing this is a contract/PO change, not an app change.
+- **Audit names**: `screening.draft_created` is the FND-07 registry's `screening.draft_saved` with `before: null`. The repository audits every `saveScreeningDraft`, so autosave writes one `screening.draft_saved` per actual write; noise is bounded by the 600 ms debounce, flush-on-blur and skipping identical payloads (signature). `screening.draft_discarded` as specified.
+- **Validation keys** reuse existing FND-03 keys where equivalent (`diastolicNotBelowSystolic` for `systolicGtDiastolic`, `unitRequired`, `contextRequired`); `outOfEntryRange` and `measuredAtOld` (non-blocking) were added to `@laif/contracts` `VALIDATION_KEYS` with EN + RW.
+- `source` is stored as FND-02 `worker_mobile` (shown as "entered manually on this device"). Drafts are FND-07 screening records with `status: 'draft'` (no sync op), not a separate `screening_drafts` table.
+- Survive-kill is covered by `src/data/__tests__/drafts.sqlite.test.ts` (better-sqlite3 file DB closed and reopened) in addition to the Maestro flow.

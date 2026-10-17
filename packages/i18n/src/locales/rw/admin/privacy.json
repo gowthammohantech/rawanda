@@ -4,7 +4,8 @@
     "pill": "BYAHISHWE",
     "sr": "Biri munsi ya {{k}}, byahishwe kubera ibanga",
     "hidden": "Byahishwe",
-    "derivedSr": "Byahishwe kubera ibanga (bishingiye ku bitarenze {{k}})"
+    "derivedSr": "Byahishwe kubera ibanga (bishingiye ku bitarenze {{k}})",
+    "complementarySr": "Byahishwe kubera ibanga (byagaragaza umubare muto ahandi)"
   },
   "noValue": "—"
 }

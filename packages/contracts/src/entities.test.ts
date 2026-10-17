@@ -312,6 +312,22 @@ const fixtures: Record<(typeof ENTITY_TYPES)[number], Record<string, unknown>> =
     facilityId: "fac-alpha-1",
     status: "active",
   },
+  programme_action: {
+    ...base,
+    id: "pa-000001",
+    idempotencyKey: "3f1c2a9e-8b7d-4c6e-9a1b-2d3e4f5a6b7d",
+    facilityId: "fac-alpha-1",
+    districtId: "dis-alpha",
+    category: "data_completeness_check",
+    title: "Check missing glucose units",
+    note: "",
+    ownerRole: "facility_manager",
+    dueDate: "2026-10-30",
+    status: "open",
+    createdBy: "persona-analyst-alpha",
+    updatedBy: "persona-analyst-alpha",
+    sourceContext: { page: "funnel_stage", stage: "reviewed", filters: { preset: "90d" } },
+  },
 };
 
 const entries = Object.entries(ENTITY_SCHEMAS) as [

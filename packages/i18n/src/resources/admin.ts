@@ -10,6 +10,8 @@ import enAdminFilters from "../locales/en/admin/filters.json";
 import enAdminOverview from "../locales/en/admin/overview.json";
 import enAdminCharts from "../locales/en/admin/charts.json";
 import enAdminPrivacy from "../locales/en/admin/privacy.json";
+import enAdminFunnel from "../locales/en/admin/funnel.json";
+import enAdminActions from "../locales/en/admin/actions.json";
 import rwAdminBase from "../locales/rw/admin.json";
 import rwAdminShell from "../locales/rw/admin/shell.json";
 import rwAdminAuth from "../locales/rw/admin/auth.json";
@@ -18,6 +20,8 @@ import rwAdminFilters from "../locales/rw/admin/filters.json";
 import rwAdminOverview from "../locales/rw/admin/overview.json";
 import rwAdminCharts from "../locales/rw/admin/charts.json";
 import rwAdminPrivacy from "../locales/rw/admin/privacy.json";
+import rwAdminFunnel from "../locales/rw/admin/funnel.json";
+import rwAdminActions from "../locales/rw/admin/actions.json";
 
 export const enAdmin = {
   ...enAdminBase,
@@ -28,6 +32,8 @@ export const enAdmin = {
   overview: enAdminOverview,
   charts: enAdminCharts,
   privacy: enAdminPrivacy,
+  funnel: enAdminFunnel,
+  actions: enAdminActions,
 } as const;
 
 export const rwAdmin: object = {
@@ -39,4 +45,6 @@ export const rwAdmin: object = {
   overview: rwAdminOverview,
   charts: rwAdminCharts,
   privacy: rwAdminPrivacy,
+  funnel: rwAdminFunnel,
+  actions: rwAdminActions,
 };

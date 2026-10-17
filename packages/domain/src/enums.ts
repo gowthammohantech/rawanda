@@ -361,6 +361,8 @@ export const ENTITY_TYPES = [
   "ruleset",
   "sync_operation",
   "device_session",
+  // ext (ADM-03): non-clinical programme follow-up action (collection `programmeActions`).
+  "programme_action",
 ] as const;
 export type EntityType = (typeof ENTITY_TYPES)[number];
 
