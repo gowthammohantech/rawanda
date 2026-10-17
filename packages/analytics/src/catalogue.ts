@@ -44,6 +44,16 @@ export const METRIC_DEFINITION_IDS = [
   "minutesByActivity",
   "weeklyMinutesPerPatientDay",
   "promptIdReliability",
+  "qualityMissingFields",
+  "qualityMissingByField",
+  "identityMismatches",
+  "overturnedFlagRate",
+  "missedFlagProxy",
+  "duplicateSubmissionsPrevented",
+  "completedWithoutEvidence",
+  "weeklyQualityTrend",
+  "flagReviewOutcomesByGroup",
+  "dismissalReasonDistribution",
   "medicineHistoryCompleteness",
   "patientUnderstanding",
 ] as const;
@@ -82,6 +92,10 @@ const ATTRIBUTION_WEEK_END = `${K}.attribution.weekEnd`;
 const ATTRIBUTION_TASK_CREATED = `${K}.attribution.taskCreated`;
 const ATTRIBUTION_TIME_ENTRY = `${K}.attribution.timeEntry`;
 const INCLUSION_PROXY = `${K}.inclusion.proxy`;
+/** ADM-06: review outcomes as proxies (not clinical accuracy). */
+const INCLUSION_REVIEW_PROXY = `${K}.inclusion.reviewProxy`;
+const ATTRIBUTION_DETECTION = `${K}.attribution.detection`;
+const ATTRIBUTION_AUDIT = `${K}.attribution.audit`;
 /** ADM-05: pooled minutes per patient-day = Σ minutes ÷ Σ patient-days (ratio of sums). */
 const METHOD_RATIO_OF_SUMS = `${K}.method.ratioOfSums`;
 const METHOD_BASELINE_INDEX = `${K}.method.baselineIndex`;
@@ -184,6 +198,28 @@ export const METRIC_DEFINITIONS: readonly MetricDefinition[] = Object.freeze([
     shownIn: "ADM-05",
   }),
   def("promptIdReliability", { pilotKpi: "KPI06", shownIn: "ADM-06" }),
+  def("qualityMissingFields", {
+    denominator: DEN_SCREENED,
+    attribution: ATTRIBUTION_PERIOD,
+    shownIn: "ADM-06",
+  }),
+  def("qualityMissingByField", { attribution: ATTRIBUTION_PERIOD, shownIn: "ADM-06" }),
+  def("identityMismatches", { attribution: ATTRIBUTION_DETECTION, shownIn: "ADM-06" }),
+  def("overturnedFlagRate", {
+    denominator: `${K}.denominator.reviewed`,
+    inclusion: INCLUSION_REVIEW_PROXY,
+    shownIn: "ADM-06",
+  }),
+  def("missedFlagProxy", { inclusion: INCLUSION_REVIEW_PROXY, shownIn: "ADM-06" }),
+  def("duplicateSubmissionsPrevented", { attribution: ATTRIBUTION_AUDIT, shownIn: "ADM-06" }),
+  def("completedWithoutEvidence", { shownIn: "ADM-06" }),
+  def("weeklyQualityTrend", { attribution: ATTRIBUTION_DETECTION, shownIn: "ADM-06" }),
+  def("flagReviewOutcomesByGroup", { inclusion: INCLUSION_REVIEW_PROXY, shownIn: "ADM-06" }),
+  def("dismissalReasonDistribution", {
+    denominator: `${K}.denominator.dismissed`,
+    inclusion: INCLUSION_REVIEW_PROXY,
+    shownIn: "ADM-06",
+  }),
   def("medicineHistoryCompleteness", {
     pilotKpi: "KPI03",
     status: "deferred",

@@ -158,6 +158,13 @@ export const AUDIT_ACTIONS = {
   "admin.drilldown.viewed": accessClient,
   "admin.programme_action.created": change,
   "admin.programme_action.status_changed": change,
+  // ── Programme admin (ADM-06) ────────────────────────────────────────────
+  // Phase prose `system.quality_issue.detected` → app-area prefix rule: `admin.quality_issue.detected`
+  // (actor = system: actorId / actorRole null), one per NEW issue id. `admin.quality_issue.conflict`
+  // / `.denied` map to the canonical `conflict.detected` / `access.denied` (entityType
+  // `data_quality_issue`). Triage audits carry the note LENGTH, never the note text.
+  "admin.quality_issue.detected": change,
+  "admin.quality_issue.triaged": change,
 
   // ── Sync & devices ───────────────────────────────────────────────────────
   "sync.op_acknowledged": change,

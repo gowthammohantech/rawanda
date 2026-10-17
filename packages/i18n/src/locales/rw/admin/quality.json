@@ -1,0 +1,214 @@
+{
+  "eyebrow": "UMUTEKANO N'UBUZIRANENGE",
+  "title": "Umutekano n'ubuziranenge",
+  "subtitle": "Ibimenyetso by'ubuziranenge bw'amakuru n'umutekano, {{from}} – {{to}} · {{scope}}",
+  "error": "Imibare y'umutekano n'ubuziranenge ntiyashoboye kubarwa.",
+  "empty": "Nta bipimo cyangwa ibibazo muri iki gihe",
+  "emptyBody": "Hitamo igihe kirekire cyangwa urundi rwego.",
+  "proxy": "IGERERANYA",
+  "proxyTitle": "Igereranya rikomoka ku byavuye mu isuzuma — si igipimo cy'ukuri kw'ubuvuzi",
+  "correctAtSource": "Bikosorerwa aho byanditswe n'ikigo; iyi paji ntihindura inyandiko z'ubuvuzi.",
+  "readOnly": "Gusoma gusa: uruhare rwawe rushobora kureba iki kibazo ariko ntirushobora kugisuzuma.",
+  "readOnlyQueue": "Gusoma gusa: uruhare rwawe rushobora kureba urutonde ariko ntirushobora kwemeza, gukemura cyangwa kohereza ibibazo.",
+  "denied": "Ntufite uburenganzira bwo gusuzuma iki kibazo.",
+  "sendTitle": "Suzuma ikibazo {{type}} {{ref}}",
+  "callout": {
+    "title": "Bikosorerwa aho byanditswe",
+    "body": "Ibibazo bikosorerwa aho byanditswe n'ikigo binyuze mu bikorwa byo gukosora. Isuzuma rikorerwa hano rikurikirana ibikorwa; ntirijya rihindura inyandiko z'ubuvuzi."
+  },
+  "kpi": {
+    "label": "Imibare y'ingenzi y'umutekano n'ubuziranenge",
+    "missingFields": "Ibipimo bibura amakuru ya ngombwa",
+    "missingSub": "{{pct}} by'ibipimo",
+    "rateNone": "Igipimo cyahishwe cyangwa ntikiboneka",
+    "identity": "Amakuru y'umwirondoro ashobora kuba atavuguruzanya",
+    "identitySub": "Nimero zisubiramo {{duplicates}} · nta nyandiko y'umurwayi {{orphans}}",
+    "overturned": "Ibimenyetso byakuweho",
+    "overturnedSub": "{{pct}} by'ibyasuzumwe",
+    "missed": "Igereranya ry'ibimenyetso byasimbutswe",
+    "missedSub": "Ibipimo bitagaragajwe byazamuwe n'intoki",
+    "duplicates": "Ibyoherejwe kabiri byakumiriwe",
+    "duplicatesSub": "Byahurijwe hamwe n'igenzura ryo kudasubiramo"
+  },
+  "bars": {
+    "title": "Amakuru abura ku buryo bw'umwanya"
+  },
+  "field": {
+    "patientId": "Umurwayi",
+    "facilityId": "Ikigo",
+    "workerId": "Uwanditse (umukozi w'ubuzima)",
+    "measuredAt": "Igihe cyo gupima",
+    "source": "Inkomoko",
+    "rulesetVersion": "Verisiyo y'amategeko",
+    "glucoseUnit": "Igipimo cy'isukari",
+    "glucoseContext": "Imiterere y'isukari (ku gifu cyambaye ubusa / igihe icyo ari cyo cyose)",
+    "systolic": "Umuvuduko w'amaraso wo hejuru",
+    "diastolic": "Umuvuduko w'amaraso wo hasi"
+  },
+  "type": {
+    "missing_field": "AMAKURU ABURA",
+    "duplicate_identifier": "NIMERO ISUBIRAMO",
+    "orphan_screening": "NTA MURWAYI",
+    "overturned_flag": "CYAKUWEHO",
+    "manual_escalation": "CYAZAMUWE N'INTOKI"
+  },
+  "typeChip": {
+    "missing_field": "Amakuru abura",
+    "duplicate_identifier": "Nimero isubiramo",
+    "orphan_screening": "Nta murwayi",
+    "overturned_flag": "Cyakuweho",
+    "manual_escalation": "Cyazamuwe n'intoki"
+  },
+  "status": {
+    "open": "Bifunguye",
+    "acknowledged": "Byemejwe",
+    "resolved_with_note": "Byakemuwe",
+    "sent_to_facility": "Byoherejwe ku kigo"
+  },
+  "tab": {
+    "open": "Bifunguye",
+    "acknowledged": "Byemejwe",
+    "resolved_with_note": "Byakemuwe",
+    "sent_to_facility": "Byoherejwe ku kigo"
+  },
+  "detected": {
+    "missing_field": "Amakuru ya ngombwa atanditswe: {{fields}}. Ibipimo ntibikekwa.",
+    "duplicate_identifier": "Inyandiko {{n}} z'abarwayi zisangiye nimero imwe y'igerageza.",
+    "orphan_screening": "Igipimo nticyifitiye inyandiko y'umurwayi mu rwego rwa raporo.",
+    "overturned_flag": "Ikimenyetso cy'itegeko ry'igerageza cyakuweho hatanzwe impamvu mu isuzuma.",
+    "manual_escalation": "Igipimo itegeko ry'igerageza ritagaragaje cyazamuwe n'intoki ngo gisuzumwe."
+  },
+  "rule": {
+    "missing_field": "Amakuru ya ngombwa y'igipimo (FRD §4)",
+    "duplicate_identifier": "Abarwayi barenze umwe bafite nimero imwe y'igerageza",
+    "orphan_screening": "Igipimo kidafite inyandiko y'umurwayi mu rwego",
+    "overturned_flag": "Ikimenyetso cyakuweho nyuma y'isuzuma (igereranya, si ukuri kw'ubuvuzi)",
+    "manual_escalation": "Kuzamura n'intoki igipimo kitari gikeneye isuzuma (igereranya ry'ibyasimbutswe)"
+  },
+  "source": {
+    "worker": "Porogaramu y'umukozi w'ubuzima",
+    "clinical": "Urubuga rw'ubuvuzi",
+    "import": "Igitabo cyinjijwe",
+    "registry": "Igitabo cy'abarwayi"
+  },
+  "row": {
+    "subtitle_one": "Cyagaragaye {{date}} · hashize umunsi {{days}}",
+    "subtitle_other": "Cyagaragaye {{date}} · hashize iminsi {{days}}",
+    "whatDetected": "Icyagaragaye",
+    "rule": "Itegeko",
+    "ruleset": "Verisiyo y'amategeko",
+    "rulesetNone": "Ntiyanditswe",
+    "source": "Inkomoko",
+    "detectedAt": "Cyagaragaye",
+    "ref": "Indango y'inyandiko",
+    "programmeAction": "Igikorwa cya porogaramu",
+    "programmeActionLinked": "Byahujwe — reba ibikorwa bya porogaramu ku Nzira",
+    "note": "Icyitonderwa cyo gukemura",
+    "history": "Amateka y'isuzuma",
+    "historyDetected": "Cyagaragajwe na sisitemu · {{time}}",
+    "historyEntry": "{{status}} na {{actor}} ({{role}}) · {{time}}"
+  },
+  "action": {
+    "acknowledge": "Emeza",
+    "resolve": "Kemura wandike icyitonderwa…",
+    "send": "Ohereza ku kigo…"
+  },
+  "dialog": {
+    "resolveTitle": "Kemura ikibazo",
+    "resolveDescription": "{{type}} · {{ref}} · {{facility}}",
+    "note": "Icyitonderwa cyo gukemura",
+    "noteHint": "Inyuguti {{min}}–{{max}}. Sobanura igikorwa; ntushyiremo amakuru y'umurwayi.",
+    "resolveSubmit": "Kemura",
+    "retry": "Ongera ugerageze",
+    "notSaved": "Ntibyabitswe — ongera ugerageze",
+    "notSavedHint": "Ibyo wanditse birabitswe. Kongera kugerageza nta ngaruka: impinduka imwe ntishyirwamo kabiri.",
+    "failed": "Impinduka ntiyashoboye kubikwa."
+  },
+  "validation": {
+    "noteLength": "Andika icyitonderwa gifite inyuguti 10 kugeza 500"
+  },
+  "toast": {
+    "acknowledged": "Ikibazo cyemejwe",
+    "resolved": "Ikibazo cyakemuwe",
+    "sent": "Ikibazo cyoherejwe ku kigo"
+  },
+  "conflict": {
+    "title": "Iki kibazo cyahinduwe n'undi muntu",
+    "description": "Nta cyabitswe. Gereranya impinduka yawe n'imiterere iheruka y'isuzuma.",
+    "status": "Imiterere",
+    "updatedBy": "Byahinduwe na",
+    "updatedAt": "Byahinduwe ku wa"
+  },
+  "queue": {
+    "title": "Urutonde rw'isuzuma ry'ubuziranenge bw'amakuru",
+    "meta": "Urutonde rw'igerageza",
+    "tabs": "Imiterere y'ikibazo",
+    "typeFilter": "Shungura ukurikije ubwoko bw'ikibazo",
+    "allTypes": "Ubwoko bwose",
+    "list": "Ibibazo",
+    "error": "Urutonde rw'isuzuma ntirwashoboye gufunguka.",
+    "empty": {
+      "open": "Nta bibazo bifunguye muri iki gihe",
+      "acknowledged": "Nta bibazo byemejwe muri iki gihe",
+      "resolved_with_note": "Nta bibazo byakemuwe muri iki gihe",
+      "sent_to_facility": "Nta bibazo byoherejwe ku kigo muri iki gihe"
+    },
+    "emptyBody": "Ibibazo bigaragazwa ubwabyo uhereye ku nyandiko z'icyo gihe."
+  },
+  "outcomes": {
+    "title": "Ibyavuye mu isuzuma ry'ibimenyetso",
+    "overturnedRate": "Igipimo cy'ibimenyetso byakuweho",
+    "ofReviewed": "Byakuweho / byasuzumwe:",
+    "missed": "Igereranya ry'ibimenyetso byasimbutswe",
+    "proxyLabel": "IGERERANYA · si ukuri kw'ubuvuzi"
+  },
+  "fairness": {
+    "title": "Ku gitsina n'ikigero cy'imyaka",
+    "label": "IGERERANYA · ikimenyetso cy'ubutabera, si igipimo cy'ukuri kw'ubuvuzi",
+    "caption": "Ibipimo byagaragajwe, ibyakuweho n'ibyazamuwe n'intoki ku gitsina n'ikigero cy'imyaka",
+    "group": "Itsinda",
+    "column": {
+      "flagged": "Byagaragajwe",
+      "overturned": "Byakuweho",
+      "manualEscalation": "Byazamuwe"
+    },
+    "sex": {
+      "female": "Gore",
+      "male": "Gabo",
+      "not_recorded": "Igitsina ntikanditswe"
+    },
+    "age": {
+      "18-39": "Imyaka 18–39",
+      "40-59": "Imyaka 40–59",
+      "60+": "Imyaka 60+",
+      "unknown": "Imyaka ntiyanditswe"
+    }
+  },
+  "reasons": {
+    "title": "Impamvu zo gukuraho",
+    "measurement_error_suspected": "Hakekwa ikosa ry'ipimwa",
+    "repeat_reading_acceptable": "Ipimwa risubiwemo ryemewe",
+    "known_managed_condition": "Indwara izwi kandi ikurikiranwa",
+    "duplicate_flag": "Ikimenyetso gisubiramo",
+    "other": "Ibindi",
+    "not_recorded": "Kode y'impamvu ntiyanditswe"
+  },
+  "invariants": {
+    "title": "Igenzura ry'amahame",
+    "evidence": "Kohereza byarangiye nta gihamya",
+    "holds": "Ihame ryubahirijwe: buri kohereza kwarangiye gufite igihe cyo kurangiza n'igihamya.",
+    "broken": "Ihame ntiryubahirijwe: genzura kohereza byarangiye nta gihamya.",
+    "duplicates": "Ibyoherejwe kabiri byakumiriwe",
+    "duplicatesSub": "Ibyasubiwemo byahurijwe hamwe n'igenzura ry'ububiko muri icyo gihe"
+  },
+  "openByFacility": {
+    "title": "Ibibazo bifunguye ku kigo"
+  },
+  "trend": {
+    "title": "Imigendekere y'ubuziranenge buri cyumweru",
+    "missing": "Amakuru abura",
+    "mismatches": "Umwirondoro utavuguruzanya",
+    "week": "Icyumweru cya",
+    "summary": "Ibipimo bibura amakuru n'umwirondoro utavuguruzanya mu byumweru {{weeks}}; ibyumweru {{hidden}} bifite imibare yahishwe."
+  }
+}

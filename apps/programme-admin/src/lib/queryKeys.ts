@@ -16,6 +16,9 @@ export function scopeKeyOf(grant: Pick<AccessGrant, "id" | "version"> | null): S
 /** Filters as a stable key part (period already resolved, so a new day is a new key). */
 export type FilterKey = AdminFilters & { periodFrom: string; periodTo: string };
 
+/** ADM-06: the queue's filters (global filters + the issue-type chip). */
+export type QualityQueueKey = FilterKey & { issueType: string | null };
+
 export const adminKeys = {
   all: ["admin"] as const,
   scoped: ["admin", "scoped"] as const,
@@ -44,6 +47,15 @@ export const adminKeys = {
    */
   workload: (scopeKey: ScopeKey, filters: FilterKey, nowIso: string, threshold: number) =>
     [...adminKeys.scope(scopeKey), "workload", filters, nowIso, threshold] as const,
+  /** ADM-06: Safety & quality view (KPIs, bars, trend, flag outcomes; threshold in the key). */
+  quality: (scopeKey: ScopeKey, filters: FilterKey, threshold: number) =>
+    [...adminKeys.scope(scopeKey), "quality", filters, threshold] as const,
+  /** ADM-06: every cached queue page (detection upserts mark them stale). */
+  qualityIssuesAll: (scopeKey: ScopeKey) =>
+    [...adminKeys.scope(scopeKey), "qualityIssues"] as const,
+  /** ADM-06: one queue page (tab + page; the filters include the issue-type chip). */
+  qualityIssues: (scopeKey: ScopeKey, filters: QualityQueueKey, tab: string, page: number) =>
+    [...adminKeys.qualityIssuesAll(scopeKey), filters, tab, page] as const,
   /** ADM-03: programme follow-up actions in the grant scope. */
   programmeActions: (scopeKey: ScopeKey) =>
     [...adminKeys.scope(scopeKey), "programmeActions"] as const,

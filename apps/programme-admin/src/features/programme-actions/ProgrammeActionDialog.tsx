@@ -20,6 +20,7 @@ import {
   PROGRAMME_ACTION_TITLE_MIN,
   programmeActionDueWindow,
   type ProgrammeAction,
+  type ProgrammeActionCategory,
   type ProgrammeActionSourceContext,
 } from "@laif/contracts";
 import { formatDate, useLanguage } from "@laif/i18n";
@@ -50,6 +51,8 @@ export type ProgrammeActionDialogProps = {
   sourceContext: ProgrammeActionSourceContext;
   onClose: () => void;
   onAssigned?: (action: ProgrammeAction) => void;
+  /** Prefilled values (ADM-06 "Send to facility": data completeness check + issue title). */
+  defaults?: { category?: ProgrammeActionCategory; title?: string };
   /** Test seam (default `crypto.randomUUID`). */
   createKey?: () => string;
 };
@@ -150,6 +153,7 @@ export function ProgrammeActionDialog({
   sourceContext,
   onClose,
   onAssigned,
+  defaults,
   createKey,
 }: ProgrammeActionDialogProps) {
   const t = useTx();
@@ -165,7 +169,12 @@ export function ProgrammeActionDialog({
   const schema = useMemo(() => formSchema(() => clock.now()), [clock]);
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { category: "", title: "", note: "", dueDate: addDays(dueWindow.from, 14) },
+    defaultValues: {
+      category: defaults?.category ?? "",
+      title: defaults?.title ?? "",
+      note: "",
+      dueDate: addDays(dueWindow.from, 14),
+    },
     shouldFocusError: true,
   });
   const { register, handleSubmit, formState, setError, setFocus } = form;

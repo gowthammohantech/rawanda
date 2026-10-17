@@ -87,7 +87,8 @@ describe("ADM-02 calculators on adminMetricsFixture", () => {
       overdueFollowUps: 0,
       pendingReviewAges: { "0-2": 0, "3-7": 0, "8+": 1 },
       pendingReviewsAged8Plus: 1,
-      openQualityIssues: 0,
+      // ADM-06: detected issues not yet triaged — here the fixture's one dismissed flag.
+      openQualityIssues: 1,
     });
   });
 
