@@ -1,7 +1,8 @@
 /**
  * Recent screenings of one patient (HWM-04 task 3), read-only: value + units (`ReadingDisplay`,
  * amendments applied via `effectiveReadings`), measured date (Africa/Kigali) and status pill.
- * Corrections happen on the screening itself (HWM-06), never here.
+ * Corrections happen on the screening itself (HWM-06), never here: a row opens the screening
+ * detail (`/screenings/[screeningId]`).
  */
 import { effectiveReadings, type Screening } from "@laif/domain";
 import { domainKey, formatDate, formatMeasurement, useLanguage } from "@laif/i18n";
@@ -13,13 +14,16 @@ import {
   ReadingDisplay,
   spacing,
   StatusChip,
+  touchTarget,
   useTx,
 } from "@laif/ui-native";
-import { StyleSheet, View } from "react-native";
+import { useRouter } from "expo-router";
+import { Pressable, StyleSheet, View } from "react-native";
 
 export function ScreeningHistoryList({ screenings }: { screenings: readonly Screening[] }) {
   const t = useTx();
   const { language } = useLanguage();
+  const router = useRouter();
   if (screenings.length === 0) {
     return (
       <View testID="screenings-empty">
@@ -45,11 +49,18 @@ export function ScreeningHistoryList({ screenings }: { screenings: readonly Scre
             : null,
         ].filter((part) => part !== null);
         return (
-          <View
+          <Pressable
             key={screening.id}
-            style={styles.row}
+            style={[touchTarget, styles.row]}
             testID={`screening-${screening.id}`}
-            accessible
+            accessibilityRole="button"
+            accessibilityHint={t("worker:patients.context.openScreeningHint")}
+            onPress={() =>
+              router.push({
+                pathname: "/screenings/[screeningId]",
+                params: { screeningId: screening.id },
+              })
+            }
             accessibilityLabel={t("worker:patients.context.screeningLabel", {
               date,
               readings:
@@ -76,7 +87,7 @@ export function ScreeningHistoryList({ screenings }: { screenings: readonly Scre
                 context={r.glucoseContext}
               />
             ) : null}
-          </View>
+          </Pressable>
         );
       })}
     </View>

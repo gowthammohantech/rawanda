@@ -1,0 +1,119 @@
+{
+  "title": "Check before saving",
+  "loading": "Loading the summary",
+  "openFailed": "The summary could not be opened",
+  "readOnly": "Read-only summary. Use Edit to change a value.",
+  "label": {
+    "bloodPressure": "BLOOD PRESSURE",
+    "glucose": "GLUCOSE",
+    "context": "CONTEXT",
+    "measuredAt": "MEASURED AT",
+    "observations": "OBSERVATIONS",
+    "source": "SOURCE"
+  },
+  "notMeasured": "Not measured",
+  "none": "None",
+  "measuredAtValue": "{{time}} (Kigali time)",
+  "edit": "Edit",
+  "editHint": "Returns to the screening form",
+  "submit": "Save screening",
+  "submitHint": "Saves on this device first, then sends when a connection is available",
+  "submitFailed": "The screening could not be saved on this device. Your entries are still in the draft — try again.",
+  "invalid": {
+    "title": "Some entries need attention",
+    "body": "This draft no longer passes the checks. Go back to the form to fix it before saving.",
+    "back": "Back to the form"
+  },
+  "mayNeedReview": "May need clinician review (demo rule)",
+  "disclaimer": "Illustrative demo rule — not clinically validated. A clinician decides.",
+  "savedOnDevice": "Saved on this device",
+  "willSync": "Will sync when a connection is available",
+  "flag": {
+    "title": "Demo rule check",
+    "notTriggered": "No demo rule triggered. A clinician may still review.",
+    "needsPerson": "Needs a person to review: the demo rule could not check these readings.",
+    "why": "WHY",
+    "forInformation": "FOR INFORMATION",
+    "inputs": "INPUTS USED",
+    "compared": "COMPARED WITH THE DEMO RULE",
+    "comparedValue": "{{value}} — demo threshold {{threshold}}",
+    "ruleset": "Ruleset {{version}}",
+    "preview": "Preview on this device. The server confirms after sync.",
+    "confirmed": "Confirmed by the simulated server"
+  },
+  "success": {
+    "title": {
+      "pending": "Saved on this device",
+      "syncing": "Saved on this device — sending",
+      "synced": "Synced"
+    },
+    "syncedAt": "Received by the simulated server at {{time}}",
+    "sending": "Sending to the simulated server…",
+    "backToToday": "Back to today",
+    "view": "View screening"
+  },
+  "detail": {
+    "title": "Screening",
+    "loading": "Loading the screening",
+    "openFailed": "The screening could not be opened",
+    "notFound": "This screening is not on this device",
+    "immutable": "Submitted screenings are not edited. A correction is added with a reason and the original is kept.",
+    "correct": "Correct a value",
+    "amended": "Amended",
+    "amendedNote": "Values shown include corrections.",
+    "submitted": "Submitted",
+    "awaitingServer": "Waiting for the server to confirm the review status",
+    "sentToQueue": "Sent to clinician queue (simulated)",
+    "noReviewRequested": "Recorded. The demo rule did not request clinician review.",
+    "needsDecision": "Needs decision",
+    "needsDecisionBody": "The server has a newer version of this screening. Choose what to keep in the Sync center.",
+    "openSync": "Open Sync center",
+    "notAccepted": "Not accepted",
+    "notAcceptedBody": "The simulated server did not accept this screening ({{code}}). It stays on this device.",
+    "willRetry": "Will retry"
+  },
+  "timeline": {
+    "title": "SYNC",
+    "label": "Sync history of this screening",
+    "savedOnDevice": "Saved on this device",
+    "sent_one": "Sent · {{count}} attempt",
+    "sent_other": "Sent · {{count}} attempts",
+    "waiting": "Waiting to send",
+    "synced": "Synced",
+    "needsDecision": "Needs your decision",
+    "willRetry": "Not sent — will retry",
+    "notAccepted": "Not accepted",
+    "blocked": "Kept on device — device access paused",
+    "fromServer": "Received from the server",
+    "amendment": "Correction: {{field}}"
+  },
+  "amendments": {
+    "title": "CORRECTIONS",
+    "none": "No corrections",
+    "change": "{{before}} → {{after}}",
+    "reason": "Reason: {{reason}}",
+    "by": "{{name}} · {{time}}",
+    "empty": "—",
+    "label": "{{field}} changed from {{before}} to {{after}}. Reason: {{reason}}. By {{name}}, {{time}}."
+  },
+  "amend": {
+    "title": "Correct a value",
+    "field": "Value to correct",
+    "current": "Current value: {{value}}",
+    "newValue": "New value",
+    "reason": "Reason for the correction",
+    "reasonRequired": "Give a reason for the correction",
+    "presets": "Common reasons",
+    "preset": {
+      "typing": "Typing error",
+      "unit": "Wrong unit selected",
+      "time": "Wrong time entered"
+    },
+    "keepsOriginal": "The original value is kept. The correction is added with your name, the time and the reason.",
+    "save": "Save correction",
+    "saved": "Correction saved on this device",
+    "failed": "The correction could not be saved",
+    "conflict": "This screening changed on the server. Open the Sync center to decide.",
+    "chooseField": "Choose the value to correct"
+  }
+}

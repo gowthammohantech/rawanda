@@ -75,6 +75,39 @@ function sourceOf(ctx: TxContext): Screening["source"] {
   return ctx.engine.appId === "worker" ? "worker_mobile" : "clinical_web";
 }
 
+export type CreateScreeningOptions = {
+  /** Simulated remote: keep the device's entity id. */
+  presetId?: string;
+  /**
+   * Worker (HWM-06): the signed-in author's draft being submitted. In the same transaction the
+   * draft row is deleted and the screening is created with the draft's id (natural idempotency).
+   * Never part of the synced payload.
+   */
+  fromDraftId?: string;
+};
+
+/** The actor's own draft of `patientId` (submit-from-draft); anything else is refused. */
+async function loadOwnDraft(
+  ctx: TxContext,
+  draftId: string,
+  patientId: string,
+  actorId: string,
+): Promise<Screening> {
+  const draft = await ctx.find<Screening>("screening", draftId);
+  if (!draft) {
+    throw new RepositoryError("NOT_FOUND", {
+      details: { entityType: "screening", entityId: draftId },
+    });
+  }
+  if (draft.status !== "draft") {
+    throw new RepositoryError("CONFLICT", { details: { entityId: draftId, exists: true } });
+  }
+  if (draft.workerId !== actorId || draft.patientId !== patientId) {
+    throw new RepositoryError("FORBIDDEN", { reason: "SCOPE" });
+  }
+  return draft;
+}
+
 export function createScreeningService(engine: Engine) {
   async function loadPatientFor(ctx: TxContext, patientId: string): Promise<Patient> {
     const patient = await ctx.find<Patient>("patient", patientId);
@@ -114,6 +147,20 @@ export function createScreeningService(engine: Engine) {
           filter.page,
           filter.pageSize,
         );
+      });
+    },
+
+    /**
+     * HWM-06: the active ruleset stored with the dataset, for the on-device flag PREVIEW before
+     * submit (the submit itself re-evaluates inside its transaction). Needs `screening.create`.
+     */
+    getActiveRuleset(): Promise<DemoRuleset> {
+      return engine.read(async (ctx) => {
+        ctx.authorize("screening.create", undefined, {
+          entityType: "screening",
+          entityId: "ruleset",
+        });
+        return activeRuleset(ctx);
       });
     },
 
@@ -250,7 +297,7 @@ export function createScreeningService(engine: Engine) {
     createScreening(
       i: ScreeningCall,
       key: string,
-      options: { presetId?: string } = {},
+      options: CreateScreeningOptions = {},
     ): Promise<WriteResult<Screening>> {
       return engine.mutate({
         op: "createScreening",
@@ -275,7 +322,13 @@ export function createScreeningService(engine: Engine) {
             },
             { entityType: "screening", entityId: options.presetId ?? "new" },
           );
-          const id = asId<ScreeningId>(options.presetId ?? ctx.ids());
+          // HWM-06: submitting a device-local draft converts it in the SAME transaction — the
+          // draft row is removed and the submitted screening keeps the draft's id.
+          const draft = options.fromDraftId
+            ? await loadOwnDraft(ctx, options.fromDraftId, patient.id, actor.personaId)
+            : null;
+          if (draft) await ctx.tx.delete("screenings", draft.id);
+          const id = asId<ScreeningId>(draft?.id ?? options.presetId ?? ctx.ids());
           if (await ctx.find<Screening>("screening", id)) {
             throw new RepositoryError("CONFLICT", { details: { entityId: id, exists: true } });
           }
@@ -307,7 +360,7 @@ export function createScreeningService(engine: Engine) {
             ...ctx.created(),
           };
           await ctx.save("screening", screening);
-          ctx.useCorrelation(null);
+          ctx.useCorrelation(draft ? await ctx.correlationOf(draft.id) : null);
           const event = await ctx.audit({
             action: "screening.submitted",
             entityType: "screening",
@@ -319,6 +372,7 @@ export function createScreeningService(engine: Engine) {
               evaluable: flag.evaluable,
               reasonCodes: flag.reasonCodes,
               rulesetVersion: ruleset.version,
+              ...(draft ? { fromDraft: true } : {}),
             },
           });
           if (flag.requiresReview) {

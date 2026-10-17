@@ -75,6 +75,7 @@ import type { ScenarioId, SeedDataset } from "@laif/mock-data";
 import type { z } from "zod";
 
 import type { MetricsRecordsResult } from "./services/metrics.ts";
+import type { CreateScreeningOptions } from "./services/screenings.ts";
 import type {
   ProgrammeActionCall,
   ProgrammeActionFilterInput,
@@ -259,11 +260,20 @@ export interface CareRepository {
   findPatientMatches(i: RegisterPatientCall): Promise<PatientMatch[]>;
   listScreenings(f?: ScreeningFilterInput): Promise<Page<Screening>>;
   getScreening(id: string): Promise<Screening | null>;
+  /** HWM-06: active stored ruleset (on-device flag preview before submit); `screening.create`. */
+  getActiveRuleset(): Promise<DemoRuleset>;
   /** Device-local: never enqueued for sync. */
   saveScreeningDraft(i: ScreeningDraftCall, key: string): Promise<WriteResult<Screening>>;
   discardScreeningDraft(id: string, key: string): Promise<WriteResult<Screening>>;
-  /** Submit + evaluate (stored ruleset) + create a pending Review if flagged. */
-  createScreening(i: ScreeningCall, key: string): Promise<WriteResult<Screening>>;
+  /**
+   * Submit + evaluate (stored ruleset) + create a pending Review if flagged. `fromDraftId`
+   * (worker, HWM-06) converts the author's draft atomically: same id, draft row removed.
+   */
+  createScreening(
+    i: ScreeningCall,
+    key: string,
+    options?: CreateScreeningOptions,
+  ): Promise<WriteResult<Screening>>;
   amendScreening(i: ScreeningAmendmentCall, key: string): Promise<WriteResult<Screening>>;
   listReviews(f?: ReviewFilterInput): Promise<Page<Review>>;
   getReview(id: string): Promise<ReviewDetail | null>;

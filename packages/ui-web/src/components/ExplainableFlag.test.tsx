@@ -34,7 +34,9 @@ describe("ExplainableFlag", () => {
       expect(item.textContent).not.toMatch(/^[A-Z_]+$/);
     }
     expect(screen.getByText("Ruleset demo-ruleset-2026.10-v1")).toBeTruthy();
-    expect(screen.getByText("152 mmHg — demo threshold 145 mmHg")).toBeTruthy();
+    expect(
+      screen.getByText("152 mmHg — demo threshold 145 mmHg (demo placeholder value)"),
+    ).toBeTruthy();
     expect(screen.getByText("152/96 mmHg")).toBeTruthy();
     expect(screen.getByText("DEMO_RULE_NOT_CLINICALLY_VALIDATED")).toBeTruthy();
     await expectNoAxeViolations(container);

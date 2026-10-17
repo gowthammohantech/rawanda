@@ -1,0 +1,130 @@
+# HWM-06 device gate (not part of `pnpm verify`): `pnpm --filter @laif/worker-mobile test:maestro`
+# with the app open in Expo Go / a dev build, starting signed out, all simulation toggles off.
+# Offline → Screen → patient → BP 160/96 → Review (demo flag card + disclaimer) → Save (tapped
+# twice) → "Saved on this device" → kill + relaunch → Today shows 1 waiting → Online → one sync
+# pass → screening detail "Synced" + REVIEW REQUIRED → Correct a value: no reason blocked →
+# reason → Amended.
+appId: host.exp.Exponent
+---
+- launchApp
+- tapOn:
+    id: "persona-card-persona-chw-alpha1-a"
+- tapOn:
+    id: "persona-continue"
+- tapOn:
+    id: "scope-continue"
+- assertVisible:
+    id: "today-screen"
+# Go offline (simulated).
+- tapOn:
+    id: "avatar-button"
+- tapOn:
+    id: "open-network-simulation"
+- tapOn: "Work offline (simulated)"
+- assertVisible: "Offline (simulated)"
+- back
+- back
+# New screening.
+- tapOn:
+    id: "tab-screen"
+- tapOn:
+    id: "choose-patient"
+- tapOn:
+    id: "patient-search-input"
+- inputText: "DEMO"
+- tapOn:
+    id: "patient-row-.*"
+    index: 0
+- runFlow:
+    when:
+      visible:
+        id: "resume-prompt"
+    commands:
+      - tapOn:
+          id: "start-new-draft"
+- assertVisible:
+    id: "screening-form-screen"
+- tapOn:
+    id: "field-systolic"
+- inputText: "160"
+- tapOn:
+    id: "field-diastolic"
+- inputText: "96"
+- hideKeyboard
+- tapOn:
+    id: "screening-review"
+# Review: summary + illustrative demo flag + disclaimer.
+- assertVisible: "Check before saving"
+- assertVisible: "160/96 mmHg"
+- assertVisible: "May need clinician review (demo rule)"
+- scrollUntilVisible:
+    element:
+      id: "flag-disclaimer"
+- assertVisible: "Illustrative demo rule — not clinically validated. A clinician decides."
+# Double tap Save: one screening, one op.
+- tapOn:
+    id: "review-submit"
+- tapOn:
+    id: "review-submit"
+    optional: true
+- assertVisible: "Saved on this device"
+- assertVisible: "Will sync when a connection is available"
+# Kill and relaunch: still pending.
+- killApp
+- launchApp
+- assertVisible:
+    id: "today-screen"
+- assertVisible: ".*1 waiting to sync.*"
+# Online + one sync pass.
+- tapOn:
+    id: "avatar-button"
+- tapOn:
+    id: "open-network-simulation"
+- tapOn: "Work offline (simulated)"
+- assertVisible: "Online"
+- tapOn:
+    id: "netsim-run-pass"
+- back
+- back
+# Open the screening from the patient's history.
+- tapOn:
+    id: "tab-patients"
+- tapOn:
+    id: "patient-search-input"
+- inputText: "DEMO"
+- tapOn:
+    id: "patient-row-.*"
+    index: 0
+- scrollUntilVisible:
+    element:
+      id: "screening-history"
+- tapOn:
+    id: "screening-.*"
+    index: 0
+- assertVisible:
+    id: "screening-detail-screen"
+- assertVisible: "Synced"
+- assertVisible:
+    id: "status-review-required"
+# Correct a value: blocked without a reason, saved with one.
+- tapOn:
+    id: "detail-correct-header"
+- tapOn: "Systolic"
+- tapOn:
+    id: "amend-value"
+- eraseText
+- inputText: "150"
+- hideKeyboard
+- tapOn:
+    id: "amend-save"
+- assertVisible: "Give a reason for the correction"
+- tapOn:
+    id: "amend-preset-0"
+- tapOn:
+    id: "amend-reason"
+- inputText: " on the cuff"
+- hideKeyboard
+- tapOn:
+    id: "amend-save"
+- assertVisible:
+    id: "status-amended"

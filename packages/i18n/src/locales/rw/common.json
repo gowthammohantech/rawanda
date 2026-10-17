@@ -194,7 +194,7 @@
     "notEvaluable": "Ntibyasuzumwa — bikeneye umuntu",
     "reasons": "Impamvu",
     "observations": "Ibipimo byagereranyijwe n'itegeko ry'igerageza",
-    "observationValue": "{{value}} — urugero rw'igerageza {{threshold}}",
+    "observationValue": "{{value}} — urugero rw'igerageza {{threshold}} (agaciro k'agateganyo k'igerageza)",
     "ruleset": "Amategeko {{version}}",
     "inputs": "Amakuru yakoreshejwe",
     "noReasons": "Nta tegeko ry'igerageza ryakozweho.",
