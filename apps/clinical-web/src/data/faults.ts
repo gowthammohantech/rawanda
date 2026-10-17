@@ -10,7 +10,8 @@
  * | serverError      | `serverErrorRate: 1` (500 before the call runs)                |
  * | offline          | `offline: true`                                                |
  * | conflict         | `conflictOnce` on the WF-01 / WF-02 / WF-03 scenario records + |
- * |                  | the AMENDED / MISSING_UNIT screenings (CLN-04 amendment)       |
+ * |                  | the AMENDED / MISSING_UNIT screenings (CLN-04 amendment) +     |
+ * |                  | OVERDUE_REFERRAL (CLN-08 referral transition / edit)           |
  */
 import { SEED_ANCHORS } from "@laif/mock-data";
 import { DEFAULT_FAULT_CONFIG, type FaultConfig, type FaultConfigPatch } from "@laif/repositories";
@@ -34,6 +35,8 @@ export const CONFLICT_TARGETS = [
   // CLN-04: the next amendment of these screenings reports a version conflict.
   { entityType: "screening", entityId: SEED_ANCHORS.AMENDED_SCREENING.screeningId },
   { entityType: "screening", entityId: SEED_ANCHORS.MISSING_UNIT_SCREENING.screeningId },
+  // CLN-08: the next status change / edit of the overdue referral reports a version conflict.
+  { entityType: "referral", entityId: SEED_ANCHORS.OVERDUE_REFERRAL.referralId },
 ] as const;
 
 export function faultSwitchOn(config: Readonly<FaultConfig>, key: FaultSwitchKey): boolean {

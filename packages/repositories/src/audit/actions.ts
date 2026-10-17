@@ -97,6 +97,9 @@ export const AUDIT_ACTIONS = {
   "referral.scheduled": seedChange,
   "referral.completed": seedChange,
   "referral.cancelled": seedChange,
+  // CLN-08: destination / due-date edit of an open referral (status changes stay
+  // `referral.transitioned`, whose changeSummary carries from → to + evidence / cancel reason).
+  "clinical.referral.updated": change,
 
   // ── Follow-ups ───────────────────────────────────────────────────────────
   "followup.created": change,

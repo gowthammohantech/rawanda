@@ -566,6 +566,11 @@
         "detected": "Data-quality issue detected (system)",
         "triaged": "Data-quality issue triaged"
       }
+    },
+    "clinical": {
+      "referral": {
+        "updated": "Referral destination or due date changed"
+      }
     }
   }
 }

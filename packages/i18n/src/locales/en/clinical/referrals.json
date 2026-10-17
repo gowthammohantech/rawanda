@@ -1,0 +1,186 @@
+{
+  "title": "Referrals",
+  "subtitle": "Every referral from {{facility}}: track acceptance, scheduling and evidenced completion.",
+  "loading": "Loading referrals…",
+  "overdueDerived": "Overdue — due {{date}} (derived)",
+  "overdueHint": "Derived from the due date a person set. Overdue is never a stored status.",
+  "kpi": {
+    "label": "Referral summary",
+    "open": "Open",
+    "overdue": "Overdue (derived)",
+    "overdueHint": "Open referrals past their due date",
+    "completedMonth": "Completed this month",
+    "medianDays": "Median days to completion (demo)",
+    "medianHint": "From request to evidenced completion — demo figure",
+    "days": "{{count}} days"
+  },
+  "tabs": {
+    "label": "Referral status",
+    "open": "Open",
+    "overdue": "Overdue",
+    "completed": "Completed",
+    "cancelled": "Cancelled",
+    "all": "All"
+  },
+  "filters": {
+    "search": "Search referrals",
+    "searchPlaceholder": "Patient name, ID or destination",
+    "destination": "Destination",
+    "anyDestination": "All destinations"
+  },
+  "empty": {
+    "open": "No open referrals in {{facility}}",
+    "overdue": "No overdue referrals in {{facility}}",
+    "completed": "No completed referrals in {{facility}}",
+    "cancelled": "No cancelled referrals in {{facility}}",
+    "all": "No referrals in {{facility}}",
+    "filtered": "No referrals match these filters"
+  },
+  "table": {
+    "caption": "Referrals — {{tab}}",
+    "patient": "Patient",
+    "destination": "Destination",
+    "priority": "Priority",
+    "due": "Due",
+    "status": "Status",
+    "lastUpdate": "Last update",
+    "open": "Open",
+    "openFor": "Open referral for {{name}}"
+  },
+  "stepper": {
+    "label": "Referral progress",
+    "created": "Created",
+    "accepted": "Accepted",
+    "scheduled": "Scheduled",
+    "completed": "Completed",
+    "cancelled": "Cancelled",
+    "byAt": "{{name}} · {{when}}"
+  },
+  "actions": {
+    "accept": "Accept",
+    "schedule": "Schedule",
+    "edit": "Change destination or due date",
+    "complete": "Complete with evidence",
+    "cancel": "Cancel referral",
+    "create": "Create referral"
+  },
+  "drawer": {
+    "title": "Referral",
+    "titleFor": "Referral — {{name}}",
+    "description": "Status, evidence and history of this referral.",
+    "loading": "Loading the referral…",
+    "denied": "This referral is outside the facility you are working in. The attempt has been recorded in the audit log.",
+    "notFound": "This referral could not be found.",
+    "linkedReview": "Linked review",
+    "openReview": "Open review",
+    "reviewSummary": "{{outcome}} — decided by {{name}}",
+    "reviewNoDecision": "No decision recorded on this review.",
+    "referringFacility": "Referring facility",
+    "appointment": "Appointment",
+    "reason": "Reason for referral",
+    "details": "Details",
+    "actions": "Actions",
+    "evidence": "Completion evidence",
+    "recordedBy": "Recorded by",
+    "cancellation": "Cancellation",
+    "cancelledBy": "Cancelled by",
+    "byAt": "{{name}} · {{when}}",
+    "history": "History",
+    "historyEmpty": "No history recorded yet.",
+    "historyUnavailable": "The history could not be loaded. The referral itself is shown above.",
+    "historyTransition": "{{from}} → {{to}}",
+    "historyEvidence": "Evidence: {{type}} ({{reference}})",
+    "historyFields": "Changed: {{fields}}",
+    "historyReason": "Reason: {{reason}}",
+    "field": {
+      "destinationFacilityId": "destination",
+      "dueAt": "due date"
+    },
+    "actor": "By {{name}}",
+    "actorUnknown": "By an unknown user",
+    "terminal": "This referral is closed. No further changes are possible.",
+    "noPermission": "Your role cannot change referrals. You can still read this one.",
+    "noCompletePermission": "Your role cannot complete referrals.",
+    "destinationOnly": "This referral was sent to your facility from another facility. Only the referring facility can change it.",
+    "offline": "You are offline. Changes are disabled; the referral stays readable."
+  },
+  "dialog": {
+    "choose": "Choose…",
+    "reasonHint": "At least {{min}} characters (spaces do not count).",
+    "failed": "Nothing was lost: your entries are kept. Try again — the same request is re-sent, so it cannot be saved twice.",
+    "retry": "Try again"
+  },
+  "update": {
+    "acceptTitle": "Accept referral",
+    "acceptBody": "Record that {{destination}} has accepted this referral.",
+    "note": "Note (optional)",
+    "scheduleTitle": "Schedule appointment",
+    "scheduleBody": "Record the appointment date and time agreed with the destination facility.",
+    "appointmentAt": "Appointment date and time",
+    "appointmentAtHint": "Africa/Kigali time.",
+    "editTitle": "Change destination or due date",
+    "editBody": "The previous values stay in the referral history.",
+    "editSave": "Save change",
+    "currentDestination": "Current destination",
+    "currentDue": "Current due date",
+    "destination": "Destination facility",
+    "destinationOption": "{{name}} (demo)",
+    "dueAt": "Due date",
+    "dueAtHint": "Set by you, Africa/Kigali time. No protocol interval is applied."
+  },
+  "edit": {
+    "changeReason": "Reason for the change"
+  },
+  "complete": {
+    "title": "Complete referral with evidence",
+    "description": "Completion needs the date, the outcome and an approved evidence type with a reference.",
+    "notEvidenceNotice": "A reminder or message being sent is not evidence of completion.",
+    "completedAt": "Completed at",
+    "completedAtHint": "When the patient attended (not later than now). Africa/Kigali time.",
+    "outcomeLabel": "Outcome",
+    "evidenceTypeLabel": "Evidence type",
+    "evidenceTypeHint": "Demo evidence types, pending approval.",
+    "evidenceReference": "Evidence reference",
+    "evidenceReferenceHint": "E.g. the register line or return-slip number.",
+    "note": "Note (optional)",
+    "review": "Review and complete",
+    "confirmTitle": "Complete this referral?",
+    "confirmBody": "The referral will be closed as completed with this evidence.",
+    "confirm": "Confirm completion",
+    "back": "Back"
+  },
+  "cancel": {
+    "title": "Cancel referral",
+    "description": "Cancelling closes the referral. A new referral can then be created for the same review.",
+    "reasonCode": "Cancellation reason",
+    "rationale": "Explain the cancellation",
+    "confirm": "Cancel referral"
+  },
+  "create": {
+    "title": "Create referral",
+    "description": "For a decided review that has no open referral.",
+    "loading": "Loading decided reviews…",
+    "review": "Decided review",
+    "reviewHint": "Only decided reviews without an open referral are listed (dismissed flags are excluded).",
+    "reviewOption": "{{patient}} — {{outcome}} ({{date}})",
+    "noneEligible": "There are no decided reviews without an open referral.",
+    "reason": "Reason for referral"
+  },
+  "conflict": {
+    "title": "This referral changed since you opened it",
+    "body": "Someone else saved a newer version. Nothing was overwritten. Reload the latest version and check it before you try again."
+  },
+  "errors": {
+    "alreadyOpen": "This review already has an open referral. Only one open referral per review is allowed.",
+    "viewOpen": "View the open referral",
+    "invalidTransition": "This change is not possible from the referral's current status."
+  },
+  "toast": {
+    "created": "Referral created",
+    "accepted": "Referral accepted",
+    "scheduled": "Appointment scheduled",
+    "edited": "Referral updated",
+    "completed": "Referral completed with evidence",
+    "cancelled": "Referral cancelled"
+  }
+}

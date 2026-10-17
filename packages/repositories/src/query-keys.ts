@@ -65,6 +65,7 @@ export const MUTATION_INVALIDATIONS = {
   decideReview: ["reviews", "referrals", "followUps", "screenings", "metrics"],
   createReferral: ["referrals", "reviews", "metrics"],
   transitionReferral: ["referrals", "followUps", "careInstructions", "metrics"],
+  editReferral: ["referrals", "metrics"],
   createFollowUp: ["followUps", "tasks"],
   updateFollowUp: ["followUps", "tasks", "careInstructions", "metrics"],
   createTask: ["tasks"],
