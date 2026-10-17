@@ -1095,6 +1095,49 @@ export function createCitizenRepository(input: CitizenRepositoryDeps): CitizenRe
       });
     },
 
+    recordTimelineViewed(patientId) {
+      return engine.write(async (ctx) => {
+        const { patient, link } = await assertPatientAccess(ctx, patientId);
+        await recordOwnView(
+          ctx,
+          patient,
+          link,
+          { type: "patient", id: patient.id },
+          { action: "record_viewed", audit: "citizen.timeline.viewed", dedupe: false },
+        );
+      });
+    },
+
+    recordChangeViewed(patientId, observationId) {
+      return engine.write(async (ctx) => {
+        const { patient, link } = await assertPatientAccess(ctx, patientId);
+        const item = (await observationsOf(ctx, patientId)).find((o) => o.id === observationId);
+        if (!item) {
+          const other = await ctx.find<Screening>("screening", observationId);
+          if (other && other.patientId !== patientId) {
+            ctx.deny(
+              "SCOPE",
+              { entityType: "screening", entityId: observationId },
+              { patientId: other.patientId, facilityId: other.facilityId },
+              { viaPatientId: patientId },
+            );
+          }
+        }
+        if (!item || item.kind !== "released" || item.amendments.length === 0) {
+          throw new RepositoryError("NOT_FOUND", {
+            details: { entityType: "screening", id: observationId },
+          });
+        }
+        await recordOwnView(
+          ctx,
+          patient,
+          link,
+          { type: "screening", id: item.id },
+          { action: "result_viewed", audit: "citizen.change.viewed", dedupe: true },
+        );
+      });
+    },
+
     listTimeline(patientId) {
       return engine.read(async (ctx) => {
         await assertPatientAccess(ctx, patientId);

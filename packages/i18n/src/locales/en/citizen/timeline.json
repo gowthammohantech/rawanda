@@ -1,0 +1,78 @@
+{
+  "title": "Timeline",
+  "eyebrow": "Your care journey",
+  "subtitle": "What has happened in your care, and what is still waiting.",
+  "loading": "Loading your timeline",
+  "error": "We could not load your timeline.",
+  "updatedJustNow": "Updated just now",
+  "listLabel": "Your care timeline",
+  "openHint": "Opens the details.",
+  "changeHint": "Shows what changed.",
+  "filter": {
+    "label": "Show",
+    "all": "All",
+    "waiting": "Waiting",
+    "done": "Done",
+    "changes": "Changes"
+  },
+  "chip": {
+    "done": "DONE",
+    "waiting": "WAITING",
+    "updated": "UPDATED",
+    "cancelled": "CANCELLED",
+    "info": "NOTE"
+  },
+  "item": {
+    "checkRecorded": "Check recorded",
+    "reviewed": "Reviewed by your care team",
+    "awaitingReview": "Waiting for your care team to review a check",
+    "appointmentOn": "Appointment on {{date}}",
+    "stepAgreed": "Next step agreed with your care team",
+    "appointmentAttended": "Appointment attended — confirmed by your care team",
+    "followUpDone": "Follow-up done — confirmed by your care team",
+    "stepCancelled": "Your care team cancelled this step",
+    "readNextStep": "You read your next step",
+    "reminderSent": "Reminder sent (demo)",
+    "recordUpdated": "Your record was updated",
+    "correctionRequested": "You asked for a correction",
+    "correctionResolved": "Your record was corrected",
+    "correctionNoChange": "Your request was checked — no change was needed",
+    "datePassed": "The date has passed. If you have not been yet, contact your health centre."
+  },
+  "provenance": {
+    "reviewed": "Reviewed by {{name}} · {{date}}",
+    "approved": "Agreed by {{name}} · {{date}}",
+    "updated": "Updated by {{name}} · {{date}}",
+    "updatedWithReason": "Updated by {{name}} · {{date}} · Reason: {{reason}}",
+    "careTeam": "your care team"
+  },
+  "change": {
+    "title": "What changed",
+    "description": "Your care team corrected part of this record.",
+    "field": "Part of your record",
+    "before": "Before",
+    "after": "After",
+    "by": "Updated by",
+    "when": "When",
+    "reason": "Reason",
+    "kept": "Your earlier record is kept. Nothing was deleted.",
+    "openResult": "View this check",
+    "close": "Close",
+    "fields": {
+      "systolic": "Blood pressure (top number)",
+      "diastolic": "Blood pressure (bottom number)",
+      "glucoseValue": "Blood glucose",
+      "glucoseUnit": "Blood glucose unit",
+      "glucoseContext": "Fasting before the check",
+      "measuredAt": "Time of the check"
+    },
+    "empty": "Not recorded"
+  },
+  "reason": {
+    "glucose_context_corrected": "reading context was entered wrongly",
+    "unknown": "corrected by your care team"
+  },
+  "empty": "Your care history will appear here after your first check.",
+  "filterEmpty": "Nothing here for this filter.",
+  "showAll": "Show all"
+}

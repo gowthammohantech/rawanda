@@ -17,6 +17,10 @@ export const WALLET_STORAGE_KEY = "laif.citizen.wallet" as const;
 export const WALLET_TABS = ["health", "next-steps", "reminders", "timeline", "more"] as const;
 export type WalletTab = (typeof WALLET_TABS)[number];
 
+/** CTZ-06 Timeline filter (session-only: kept while switching tabs, never persisted). */
+export const TIMELINE_FILTER_VALUES = ["all", "waiting", "done", "changes"] as const;
+export type TimelineFilterValue = (typeof TIMELINE_FILTER_VALUES)[number];
+
 export type WalletContext = {
   accountId: string | null;
   personaId: string | null;
@@ -27,6 +31,9 @@ export type WalletState = WalletContext & {
   lastTab: WalletTab;
   /** Personas whose `session.started` was recorded in this app run (not persisted). */
   startedFor: string | null;
+  /** CTZ-06 Timeline filter chip (in memory for this app run; reset on persona change). */
+  timelineFilter: TimelineFilterValue;
+  setTimelineFilter: (filter: TimelineFilterValue) => void;
   setContext: (context: Omit<WalletContext, "personaId">) => void;
   setLastTab: (tab: WalletTab) => void;
   markStarted: (personaId: string) => void;
@@ -70,6 +77,8 @@ export function createWalletStore(session: AppSession, storage: KeyValueStorage)
   const store = createStore<WalletState>()((set) => ({
     ...initial,
     startedFor: null,
+    timelineFilter: "all",
+    setTimelineFilter: (filter) => set({ timelineFilter: filter }),
     setContext: (context) => set(context),
     setLastTab: (tab) => set({ lastTab: tab }),
     markStarted: (personaId) => set({ startedFor: personaId }),
@@ -79,6 +88,7 @@ export function createWalletStore(session: AppSession, storage: KeyValueStorage)
         activePatientId: null,
         lastTab: "health",
         startedFor: null,
+        timelineFilter: "all",
       }),
   }));
 
@@ -92,6 +102,7 @@ export function createWalletStore(session: AppSession, storage: KeyValueStorage)
       activePatientId: null,
       lastTab: "health",
       startedFor: null,
+      timelineFilter: "all",
     });
   });
 

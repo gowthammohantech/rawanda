@@ -1,0 +1,78 @@
+{
+  "title": "Ibyabaye",
+  "eyebrow": "Urugendo rwawe rw'ubuvuzi",
+  "subtitle": "Ibyabaye mu buvuzi bwawe, n'ibikibitegerejwe.",
+  "loading": "Turimo gutegura ibyabaye",
+  "error": "Ntitwashoboye kubona ibyabaye.",
+  "updatedJustNow": "Byavuguruwe ubu",
+  "listLabel": "Ibyabaye mu buvuzi bwawe",
+  "openHint": "Ifungura ibisobanuro.",
+  "changeHint": "Yerekana icyahindutse.",
+  "filter": {
+    "label": "Erekana",
+    "all": "Byose",
+    "waiting": "Bitegerejwe",
+    "done": "Byarangiye",
+    "changes": "Impinduka"
+  },
+  "chip": {
+    "done": "BYARANGIYE",
+    "waiting": "BITEGEREJWE",
+    "updated": "BYAVUGURUWE",
+    "cancelled": "BYAHAGARITSWE",
+    "info": "ICYITONDERWA"
+  },
+  "item": {
+    "checkRecorded": "Isuzuma ryanditswe",
+    "reviewed": "Byasuzumwe n'itsinda rikwitaho",
+    "awaitingReview": "Turategereje ko itsinda rikwitaho risuzuma isuzuma ryawe",
+    "appointmentOn": "Gahunda ku wa {{date}}",
+    "stepAgreed": "Intambwe ikurikira yemeranyijweho n'itsinda rikwitaho",
+    "appointmentAttended": "Wagiye kuri gahunda — byemejwe n'itsinda rikwitaho",
+    "followUpDone": "Gukurikirana byakozwe — byemejwe n'itsinda rikwitaho",
+    "stepCancelled": "Itsinda rikwitaho ryahagaritse iyi ntambwe",
+    "readNextStep": "Wasomye intambwe ikurikira",
+    "reminderSent": "Kwibutsa byoherejwe (igerageza)",
+    "recordUpdated": "Amakuru yawe yavuguruwe",
+    "correctionRequested": "Wasabye ko amakuru akosorwa",
+    "correctionResolved": "Amakuru yawe yakosowe",
+    "correctionNoChange": "Icyifuzo cyawe cyasuzumwe — nta gihindutse cyari gikenewe",
+    "datePassed": "Itariki yararenze. Niba utarajyayo, vugana n'ikigo nderabuzima cyawe."
+  },
+  "provenance": {
+    "reviewed": "Byasuzumwe na {{name}} · {{date}}",
+    "approved": "Byemejwe na {{name}} · {{date}}",
+    "updated": "Byavuguruwe na {{name}} · {{date}}",
+    "updatedWithReason": "Byavuguruwe na {{name}} · {{date}} · Impamvu: {{reason}}",
+    "careTeam": "itsinda rikwitaho"
+  },
+  "change": {
+    "title": "Icyahindutse",
+    "description": "Itsinda rikwitaho ryakosoye igice cy'aya makuru.",
+    "field": "Igice cy'amakuru yawe",
+    "before": "Mbere",
+    "after": "Nyuma",
+    "by": "Byavuguruwe na",
+    "when": "Igihe",
+    "reason": "Impamvu",
+    "kept": "Amakuru yawe ya mbere arabitswe. Nta cyasibwe.",
+    "openResult": "Reba iri suzuma",
+    "close": "Funga",
+    "fields": {
+      "systolic": "Umuvuduko w'amaraso (umubare wo hejuru)",
+      "diastolic": "Umuvuduko w'amaraso (umubare wo hasi)",
+      "glucoseValue": "Isukari mu maraso",
+      "glucoseUnit": "Igipimo cy'isukari mu maraso",
+      "glucoseContext": "Kutarya mbere y'isuzuma",
+      "measuredAt": "Igihe cy'isuzuma"
+    },
+    "empty": "Ntibyanditswe"
+  },
+  "reason": {
+    "glucose_context_corrected": "uko isuzuma ryakozwe byari byanditswe nabi",
+    "unknown": "byakosowe n'itsinda rikwitaho"
+  },
+  "empty": "Amateka y'ubuvuzi bwawe azagaragara hano nyuma y'isuzuma rya mbere.",
+  "filterEmpty": "Nta kintu kiri hano kuri iki cyiciro.",
+  "showAll": "Erekana byose"
+}
