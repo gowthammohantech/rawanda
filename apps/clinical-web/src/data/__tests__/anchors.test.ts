@@ -4,7 +4,7 @@
  * actor is scoped to the ACTIVE facility (cross-facility → FORBIDDEN + `access.denied`).
  */
 import { FACILITY_IDS, PERSONA_IDS, SEED_ANCHORS } from "@laif/mock-data";
-import type { AuditEvent, FacilityId } from "@laif/domain";
+import { DEMO_CLOCK_DEFAULT_ISO, type AuditEvent, type FacilityId } from "@laif/domain";
 import { describe, expect, it } from "vitest";
 
 import { createTestClinicalRepo } from "../../test/test-repository.ts";
@@ -152,7 +152,13 @@ describe("clinical repository scope and reset", () => {
     const first = await repo.demo.resetDemo();
     const second = await repo.demo.resetDemo();
     expect(second.datasetHash).toBe(first.datasetHash);
-    expect(second.clockIso).toBe(first.clockIso);
+    // The app clock is pinned-then-ticking: both resets re-pin it to the seed baseline, so the
+    // reported "now" is the baseline plus the few ms elapsed since the reset.
+    for (const state of [first, second]) {
+      const drift = Date.parse(state.clockIso) - Date.parse(DEMO_CLOCK_DEFAULT_ISO);
+      expect(drift).toBeGreaterThanOrEqual(0);
+      expect(drift).toBeLessThan(5_000);
+    }
   });
 
   it.each([
