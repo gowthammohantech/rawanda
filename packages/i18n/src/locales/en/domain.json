@@ -536,6 +536,12 @@
       },
       "reminder": {
         "preview_sent": "Test reminder sent to this phone (demo)"
+      },
+      "timeline": {
+        "viewed": "Timeline viewed in the wallet"
+      },
+      "change": {
+        "viewed": "Record change viewed in the wallet"
       }
     },
     "admin": {

@@ -8,6 +8,7 @@ import {
   type IdentityVerification,
   type PatientLink,
 } from "@laif/contracts";
+import { toCitizenObservation, type Screening } from "@laif/domain";
 import { describe, expect, it } from "vitest";
 
 import { SEED_ANCHORS } from "../../anchors.ts";
@@ -167,6 +168,32 @@ describe("buildCitizenOverlay", () => {
     expect(amended?.amendments).toMatchObject([
       { field: "glucoseContext", before: "not_recorded", after: "fasting" },
     ]);
+  });
+
+  it("CTZ-06: the amendment has a reason key + clinician author; the wallet sees before and after", () => {
+    const amended = rows<Screening>("screenings").find(
+      (s) => s.id === CITIZEN_OVERLAY_IDS.amendedScreening,
+    )!;
+    expect(amended.amendments).toHaveLength(1);
+    expect(amended.amendments[0]).toMatchObject({
+      reason: "glucose_context_corrected",
+      amendedBy: PERSONA_IDS.clinAlpha1,
+    });
+    expect(amended.amendments[0]!.amendedAt > amended.measuredAt).toBe(true);
+    const view = toCitizenObservation(amended, null);
+    expect(view).toMatchObject({
+      kind: "released",
+      readings: { glucoseContext: "fasting" },
+      originalReadings: { glucoseContext: "not_recorded" },
+      amendments: [
+        {
+          field: "glucoseContext",
+          before: "not_recorded",
+          after: "fasting",
+          reasonKey: "glucose_context_corrected",
+        },
+      ],
+    });
   });
 
   it("seeds resolved correction requests (amended and no-change)", () => {

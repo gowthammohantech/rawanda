@@ -15,7 +15,7 @@ import { PatientPage } from "../features/patients/PatientPage.tsx";
 import { PatientSearchPage } from "../features/patients/PatientSearchPage.tsx";
 import { ReviewQueuePage } from "../features/queue/ReviewQueuePage.tsx";
 import { ReferralsPage } from "../features/referrals/ReferralsPage.tsx";
-import { DecisionPage } from "../features/reviews/DecisionPage.tsx";
+import { DecisionPage } from "../features/decision/DecisionPage.tsx";
 import { ReviewDetailPage } from "../features/reviews/ReviewDetailPage.tsx";
 import { SettingsPage } from "../features/settings/SettingsPage.tsx";
 import { TasksPage } from "../features/tasks/TasksPage.tsx";

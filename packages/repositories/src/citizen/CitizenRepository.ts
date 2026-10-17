@@ -189,6 +189,18 @@ export interface CitizenRepository {
   acknowledgeReminder(i: AcknowledgeReminderCall, key: string): Promise<WriteResult<Reminder>>;
   /** `citizen.reminder.preview_sent` after an on-device test notification was scheduled. */
   recordReminderPreviewSent(patientId: string): Promise<void>;
+  /**
+   * CTZ-06: the Timeline tab was shown (once per focus) — one `record_viewed` access event +
+   * `citizen.timeline.viewed`. Link + consent required.
+   */
+  recordTimelineViewed(patientId: string): Promise<void>;
+  /**
+   * CTZ-06: a "what changed" sheet of an amended released result was opened — one
+   * `result_viewed` access event (resource = the screening) + `citizen.change.viewed`
+   * (de-duplicated per persona + result per demo minute). A result that is not a released,
+   * amended result of this patient → `NOT_FOUND` (another patient's → `FORBIDDEN` `SCOPE`).
+   */
+  recordChangeViewed(patientId: string, observationId: string): Promise<void>;
   /** Derived progress timeline, newest first (reminders are never `done`). */
   listTimeline(patientId: string): Promise<TimelineItem[]>;
   /** Citizen-visible access history, newest first. */

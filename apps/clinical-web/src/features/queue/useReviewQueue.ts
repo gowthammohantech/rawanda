@@ -20,6 +20,7 @@ import { useRepository } from "../../data/useRepository.ts";
 import { useSession } from "../../session/useSession.ts";
 import { demoNowIso } from "../patients/hooks.ts";
 import { fetchAllPages } from "../patients/model.ts";
+import { rememberQueueSearch } from "./lastSearch.ts";
 import {
   parseQueueParams,
   patchQueueParams,
@@ -134,6 +135,7 @@ export function useQueueUrlState() {
   const written = useRef<string | null>(null);
   useEffect(() => {
     written.current = null;
+    rememberQueueSearch(params.toString());
   }, [params]);
   const update = useCallback(
     (patch: QueueFilterPatch, options: { replace?: boolean; fromSearchBox?: boolean } = {}) => {

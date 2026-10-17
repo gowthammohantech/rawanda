@@ -28,6 +28,11 @@ export type UseIdempotentMutationOptions<TVariables, TData> = {
   onError?: (error: ClinicalError, variables: TVariables) => void;
   /** Test seam (default `crypto.randomUUID()`). */
   newKey?: () => string;
+  /**
+   * The key of the FIRST submit (CLN-07: a decision draft restored from sessionStorage keeps its
+   * form-session key, so a reload mid-submit replays instead of writing twice). Default `newKey()`.
+   */
+  initialKey?: string;
 };
 
 export type IdempotentMutation<TVariables, TData> = {
@@ -51,9 +56,9 @@ const defaultKey = (): string => crypto.randomUUID();
 export function useIdempotentMutation<TVariables, TData>(
   options: UseIdempotentMutationOptions<TVariables, TData>,
 ): IdempotentMutation<TVariables, TData> {
-  const { mutationFn, invalidate, onSuccess, onError, newKey = defaultKey } = options;
+  const { mutationFn, invalidate, onSuccess, onError, newKey = defaultKey, initialKey } = options;
   const queryClient = useQueryClient();
-  const [key, setKey] = useState(newKey);
+  const [key, setKey] = useState(() => initialKey ?? newKey());
   const keyRef = useRef(key);
   const inFlight = useRef(false);
   const lastVariables = useRef<{ value: TVariables } | null>(null);

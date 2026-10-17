@@ -11,6 +11,7 @@ import enClinicalPatients from "../locales/en/clinical/patients.json";
 import enClinicalTimeline from "../locales/en/clinical/timeline.json";
 import enClinicalQueue from "../locales/en/clinical/queue.json";
 import enClinicalReview from "../locales/en/clinical/review.json";
+import enClinicalDecision from "../locales/en/clinical/decision.json";
 import rwClinicalBase from "../locales/rw/clinical.json";
 import rwClinicalCommon from "../locales/rw/clinical/common.json";
 import rwClinicalLogin from "../locales/rw/clinical/login.json";
@@ -20,6 +21,7 @@ import rwClinicalPatients from "../locales/rw/clinical/patients.json";
 import rwClinicalTimeline from "../locales/rw/clinical/timeline.json";
 import rwClinicalQueue from "../locales/rw/clinical/queue.json";
 import rwClinicalReview from "../locales/rw/clinical/review.json";
+import rwClinicalDecision from "../locales/rw/clinical/decision.json";
 
 export const enClinical = {
   ...enClinicalBase,
@@ -31,6 +33,7 @@ export const enClinical = {
   timeline: enClinicalTimeline,
   queue: enClinicalQueue,
   review: enClinicalReview,
+  decision: enClinicalDecision,
 } as const;
 
 export const rwClinical: object = {
@@ -43,4 +46,5 @@ export const rwClinical: object = {
   timeline: rwClinicalTimeline,
   queue: rwClinicalQueue,
   review: rwClinicalReview,
+  decision: rwClinicalDecision,
 };

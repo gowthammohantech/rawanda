@@ -21,6 +21,8 @@ export type ConflictPanelProps = {
   onReload: () => unknown;
   onCancel: () => unknown;
   reloading?: boolean;
+  /** Label of the second action (default "Cancel"; CLN-07: "Discard my draft"). */
+  cancelLabel?: ReactNode;
   className?: string;
 };
 
@@ -32,6 +34,7 @@ export function ConflictPanel({
   onReload,
   onCancel,
   reloading = false,
+  cancelLabel,
   className,
 }: ConflictPanelProps) {
   const t = useTx();
@@ -50,7 +53,7 @@ export function ConflictPanel({
       />
       <div className="mt-2 flex justify-end">
         <Button variant="ghost" size="sm" disabled={reloading} onClick={() => onCancel()}>
-          {t("clinical:review.conflict.cancel")}
+          {cancelLabel ?? t("clinical:review.conflict.cancel")}
         </Button>
       </div>
     </div>

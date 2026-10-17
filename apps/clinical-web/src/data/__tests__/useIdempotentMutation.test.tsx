@@ -58,6 +58,20 @@ describe("useIdempotentMutation", () => {
     await waitFor(() => expect(result.current.idempotencyKey).not.toBe(first));
   });
 
+  it("initialKey (CLN-07 restored draft) is used for the first submit, then rotated", async () => {
+    const mutationFn = vi
+      .fn<(v: number, key: string) => Promise<WriteResult<{ id: string }>>>()
+      .mockResolvedValue(fakeResult(2));
+    const { result } = renderHook(
+      () => useIdempotentMutation({ mutationFn, initialKey: "draft-key", newKey: () => "next" }),
+      { wrapper: createWrapper() },
+    );
+    expect(result.current.idempotencyKey).toBe("draft-key");
+    await act(() => result.current.submit(1));
+    expect(mutationFn.mock.calls[0]?.[1]).toBe("draft-key");
+    await waitFor(() => expect(result.current.idempotencyKey).toBe("next"));
+  });
+
   it("blocks re-entry while pending: a double click sends one call", async () => {
     let resolve: (value: WriteResult<{ id: string }>) => void = () => undefined;
     const mutationFn = vi.fn(

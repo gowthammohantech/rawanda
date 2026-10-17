@@ -536,6 +536,12 @@
       },
       "reminder": {
         "preview_sent": "Kwibutsa kw'igerageza koherejwe kuri iyi telefoni (demo)"
+      },
+      "timeline": {
+        "viewed": "Urutonde rw'ibyabaye rwarebwe mu gasanduku"
+      },
+      "change": {
+        "viewed": "Impinduka ku makuru yarebwe mu gasanduku"
       }
     },
     "admin": {

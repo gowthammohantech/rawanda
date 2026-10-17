@@ -1,9 +1,6 @@
-import { useTx } from "@laif/ui-native";
+import { TasksScreen } from "../../../../src/features/tasks/TasksScreen.tsx";
 
-import { TabPlaceholder } from "../../../../src/components/TabPlaceholder.tsx";
-
-/** Placeholder (built in HWM-07). */
+/** My tasks (HWM-07): `/tasks?filter=due|overdue|completed`. */
 export default function TasksTab() {
-  const t = useTx();
-  return <TabPlaceholder title={t("worker:nav.tasks")} phase="HWM-07" testID="tasks-screen" />;
+  return <TasksScreen />;
 }
