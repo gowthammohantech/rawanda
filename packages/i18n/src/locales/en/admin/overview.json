@@ -155,11 +155,14 @@
     "denominator": {
       "screened": "Screenings recorded in the period",
       "flagged": "Flagged screenings in the period",
-      "referred": "Referred screenings in the period"
+      "referred": "Referred screenings in the period",
+      "patientDays": "Patient-days: distinct (patient, Kigali day) contacts of each worker from screenings and contact attempts, summed over workers",
+      "tasksAssigned": "Follow-up tasks assigned in the period"
     },
     "inclusion": {
       "cohort": "Submitted screenings only (drafts excluded); people who withdrew consent excluded; an amended screening counts once",
-      "deferred": "Not measured in this prototype (deferred)"
+      "deferred": "Not measured in this prototype (deferred)",
+      "proxy": "Synthetic self-reported demo time entries only — a proxy measure, not a measured workload or an individual performance measure"
     },
     "attribution": {
       "period": "Period = Kigali date of the measurement",
@@ -167,7 +170,9 @@
       "snapshot": "Records of the period's screenings, as of now (demo clock)",
       "none": "Not applicable",
       "reviewWeek": "Week = Kigali ISO week (Monday start) of the review decision",
-      "weekEnd": "Counted at each week's end (Sunday 23:59 Kigali); the last point is now (demo clock)"
+      "weekEnd": "Counted at each week's end (Sunday 23:59 Kigali); the last point is now (demo clock)",
+      "taskCreated": "Exception to cohort attribution: a task counts in the period of its assignment date (createdAt), because workload is about when work happened",
+      "timeEntry": "Period = date of the time entry and Kigali date of each contact"
     },
     "p90DaysToReview": {
       "label": "90th percentile days to review",
@@ -194,7 +199,41 @@
       "numerator": "Median days to review per facility, with n"
     },
     "method": {
-      "percentile": "Linear interpolation between closest ranks: rank h = (n − 1) × p / 100; value = x[⌊h⌋] + (h − ⌊h⌋) × (x[⌊h⌋+1] − x[⌊h⌋]). Hidden when n is below the small-cell threshold."
+      "percentile": "Linear interpolation between closest ranks: rank h = (n − 1) × p / 100; value = x[⌊h⌋] + (h − ⌊h⌋) × (x[⌊h⌋+1] − x[⌊h⌋]). Hidden when n is below the small-cell threshold.",
+      "ratioOfSums": "Pooled value = total minutes ÷ total patient-days (a ratio of sums, not the mean of per-worker ratios). Hidden when patient-days are below the small-cell threshold.",
+      "baselineIndex": "Index = current minutes per patient-day ÷ minutes per patient-day in the DEMO BASELINE window (the first 4 seeded weeks — not an approved baseline). Not shown when either side has fewer patient-days than the small-cell threshold."
+    },
+    "activeWorkers": {
+      "label": "Active workers",
+      "numerator": "Workers with at least one time entry, screening, task or contact attempt in the period"
+    },
+    "tasksAssigned": {
+      "label": "Follow-up tasks assigned",
+      "numerator": "Follow-up tasks with an assigned worker, created in the period"
+    },
+    "tasksCompleted": {
+      "label": "Tasks completed",
+      "numerator": "Of those, tasks with status completed and a completion time"
+    },
+    "tasksUnableToReach": {
+      "label": "Unable to reach",
+      "numerator": "Of those, tasks closed as unable to reach or reassigned"
+    },
+    "tasksOverdue": {
+      "label": "Task status",
+      "numerator": "Tasks by status: completed, in progress, unable to reach, and overdue (still open and past the person-set due date)"
+    },
+    "minutesPerPatientDayIndex": {
+      "label": "Minutes per patient-day index",
+      "numerator": "Current minutes per patient-day divided by the value in the demo baseline window"
+    },
+    "minutesByActivity": {
+      "label": "Minutes by activity",
+      "numerator": "Self-reported demo minutes per activity (screening, follow-up, travel, admin)"
+    },
+    "weeklyMinutesPerPatientDay": {
+      "label": "Minutes per patient-day per week",
+      "numerator": "Self-reported demo minutes per Kigali ISO week"
     }
   }
 }

@@ -1,0 +1,80 @@
+{
+  "eyebrow": "WORKER BURDEN",
+  "title": "Worker workload",
+  "subtitle": "Follow-up tasks and self-reported demo staff time, {{from}} – {{to}} · {{scope}}",
+  "error": "Workload figures could not be computed.",
+  "asOf": "As of {{datetime}} (Kigali)",
+  "proxy": "PROXY",
+  "proxyTitle": "Proxy measure from self-reported demo time entries",
+  "unit": {
+    "minutes_one": "{{value}} min",
+    "minutes_other": "{{value}} min"
+  },
+  "kpi": {
+    "label": "Workload key figures",
+    "activeWorkers": "Active workers",
+    "activeWorkersSub": "With a task, screening or time entry",
+    "assigned": "Follow-up tasks assigned",
+    "assignedSub": "By assignment date",
+    "completed": "Completed",
+    "completedSub": "{{pct}} of assigned",
+    "completedNone": "Share hidden or not available",
+    "unableToReach": "Unable to reach",
+    "unableToReachSub": "Including reassigned tasks",
+    "minutesPerPatientDay": "Staff minutes per patient-day",
+    "index": "{{index}} vs demo baseline",
+    "indexNone": "No index (fewer than {{k}} patient-days on one side)",
+    "patientDays": "Patient-days: {{n}}"
+  },
+  "baseline": "DEMO BASELINE — not an approved baseline: {{from}} – {{to}} (the first 4 seeded weeks).",
+  "table": {
+    "title": "Workers",
+    "caption": "Follow-up tasks and staff minutes per patient-day by worker code",
+    "code": "Worker code",
+    "facility": "Facility",
+    "facilityLink": "Show workload for {{facility}}",
+    "assigned": "Assigned",
+    "completed": "Completed",
+    "completion": "Completion",
+    "completionOf": "Completion share of {{code}}",
+    "overdue": "Overdue",
+    "overdueCount": "{{n}} overdue",
+    "unableToReach": "Unable to reach",
+    "minutes": "Minutes / patient-day",
+    "noContacts": "No patient contacts recorded",
+    "unlisted": "Unlisted staff",
+    "empty": "No worker activity in this period."
+  },
+  "noDrilldown": "Worker-level view requires drill-down permission",
+  "noDrilldownBody": "Your role sees facility-level aggregates only. Worker codes are shown to roles with drill-down permission.",
+  "empty": "No follow-up tasks were assigned in this period",
+  "emptyBody": "Try a longer period or another facility.",
+  "status": {
+    "title": "Task status",
+    "completed": "Completed",
+    "inProgress": "In progress",
+    "unableToReach": "Unable to reach",
+    "overdue": "Overdue"
+  },
+  "activity": {
+    "title": "Minutes by activity",
+    "screening": "Screening",
+    "follow_up": "Follow-up",
+    "travel": "Travel",
+    "admin": "Admin"
+  },
+  "trend": {
+    "title": "Staff minutes per patient-day per week",
+    "series": "Minutes per patient-day",
+    "summary": "Pooled staff minutes per patient-day per Kigali week over {{weeks}} weeks, {{first}} in the first week with a shown value and {{last}} in the latest; {{hidden}} weekly values hidden to protect privacy.",
+    "summaryNone": "No weekly value can be shown for these {{weeks}} weeks (no patient contacts, or too few to show).",
+    "tooltip": "{{value}} (patient-days: {{n}})",
+    "week": "Week of",
+    "patientDays": "Patient-days"
+  },
+  "callout": {
+    "title": "Proxy measures"
+  },
+  "disclaimer": "These are proxy measures from self-reported demo time entries. They describe workload, not individual performance.",
+  "disclaimerPending": "An approved workload measurement method is pending."
+}

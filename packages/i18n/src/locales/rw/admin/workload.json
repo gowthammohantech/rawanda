@@ -1,0 +1,80 @@
+{
+  "eyebrow": "UMUTWARO W'AKAZI",
+  "title": "Akazi k'abakozi b'ubuzima",
+  "subtitle": "Imirimo yo gukurikirana n'igihe abakozi biyandikiye mu igerageza, {{from}} – {{to}} · {{scope}}",
+  "error": "Imibare y'akazi ntiyashoboye kubarwa.",
+  "asOf": "Kugeza {{datetime}} (Kigali)",
+  "proxy": "IGERERANYA",
+  "proxyTitle": "Igipimo kigereranya kivuye mu gihe abakozi biyandikiye mu igerageza",
+  "unit": {
+    "minutes_one": "umunota {{value}}",
+    "minutes_other": "iminota {{value}}"
+  },
+  "kpi": {
+    "label": "Imibare y'ingenzi y'akazi",
+    "activeWorkers": "Abakozi bakora",
+    "activeWorkersSub": "Bafite umurimo, ipimwa cyangwa igihe banditse",
+    "assigned": "Imirimo yo gukurikirana yatanzwe",
+    "assignedSub": "Hakurikijwe itariki yatangiweho",
+    "completed": "Yarangiye",
+    "completedSub": "{{pct}} by'iyatanzwe",
+    "completedNone": "Igipimo kirahishwe cyangwa ntikiboneka",
+    "unableToReach": "Ntibyashobotse kubageraho",
+    "unableToReachSub": "Harimo imirimo yahawe abandi",
+    "minutesPerPatientDay": "Iminota y'umukozi ku murwayi ku munsi",
+    "index": "{{index}} ugereranyije n'ifatizo ry'igerageza",
+    "indexNone": "Nta gipimo (iminsi y'abarwayi iri munsi ya {{k}} ku ruhande rumwe)",
+    "patientDays": "Iminsi y'abarwayi: {{n}}"
+  },
+  "baseline": "IFATIZO RY'IGERAGEZA — si ifatizo ryemejwe: {{from}} – {{to}} (ibyumweru 4 bya mbere by'igerageza).",
+  "table": {
+    "title": "Abakozi",
+    "caption": "Imirimo yo gukurikirana n'iminota y'umukozi ku murwayi ku munsi hakurikijwe kode y'umukozi",
+    "code": "Kode y'umukozi",
+    "facility": "Ivuriro",
+    "facilityLink": "Erekana akazi ka {{facility}}",
+    "assigned": "Yatanzwe",
+    "completed": "Yarangiye",
+    "completion": "Irangizwa",
+    "completionOf": "Igice cyarangijwe na {{code}}",
+    "overdue": "Yarenze igihe",
+    "overdueCount": "{{n}} yarenze igihe",
+    "unableToReach": "Ntibyashobotse kubageraho",
+    "minutes": "Iminota / umunsi w'umurwayi",
+    "noContacts": "Nta guhura n'umurwayi kwanditswe",
+    "unlisted": "Umukozi utanditse",
+    "empty": "Nta gikorwa cy'abakozi muri iki gihe."
+  },
+  "noDrilldown": "Kureba umukozi umwe bisaba uruhushya rwo gucukumbura",
+  "noDrilldownBody": "Uruhare rwawe rubona imibare rusange y'amavuriro gusa. Kode z'abakozi zigaragarira abafite uruhushya rwo gucukumbura.",
+  "empty": "Nta murimo wo gukurikirana watanzwe muri iki gihe",
+  "emptyBody": "Gerageza igihe kirekire cyangwa irindi vuriro.",
+  "status": {
+    "title": "Uko imirimo ihagaze",
+    "completed": "Yarangiye",
+    "inProgress": "Iri gukorwa",
+    "unableToReach": "Ntibyashobotse kubageraho",
+    "overdue": "Yarenze igihe"
+  },
+  "activity": {
+    "title": "Iminota hakurikijwe igikorwa",
+    "screening": "Ipimwa",
+    "follow_up": "Ikurikirana",
+    "travel": "Ingendo",
+    "admin": "Ubuyobozi"
+  },
+  "trend": {
+    "title": "Iminota y'umukozi ku murwayi ku munsi buri cyumweru",
+    "series": "Iminota ku munsi w'umurwayi",
+    "summary": "Iminota y'abakozi ku munsi w'umurwayi buri cyumweru cya Kigali mu byumweru {{weeks}}, {{first}} mu cyumweru cya mbere gifite agaciro kagaragara na {{last}} mu cya vuba; indangagaciro {{hidden}} z'ibyumweru zahishwe kubera ibanga.",
+    "summaryNone": "Nta gaciro k'icyumweru gashobora kugaragazwa muri ibi byumweru {{weeks}} (nta guhura n'abarwayi, cyangwa ni bike cyane).",
+    "tooltip": "{{value}} (iminsi y'abarwayi: {{n}})",
+    "week": "Icyumweru cya",
+    "patientDays": "Iminsi y'abarwayi"
+  },
+  "callout": {
+    "title": "Ibipimo bigereranya"
+  },
+  "disclaimer": "Iyi ni imibare igereranya ivuye mu gihe abakozi biyandikiye mu igerageza. Igaragaza ingano y'akazi, si imikorere y'umuntu ku giti cye.",
+  "disclaimerPending": "Uburyo bwemejwe bwo gupima akazi buracyategerejwe."
+}

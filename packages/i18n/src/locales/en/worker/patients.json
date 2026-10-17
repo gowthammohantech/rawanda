@@ -52,7 +52,8 @@
     "matchReviewNote": "Registered and flagged for match review: it may duplicate a patient already on this device. Nothing was merged.",
     "rejectedNote": "The simulated server did not accept this patient. Open the Sync center to see why.",
     "conflictNote": "This patient has a change that needs your decision in the Sync center.",
-    "openSync": "Open Sync center"
+    "openSync": "Open Sync center",
+    "openScreeningHint": "Opens the screening and its sync status"
   },
   "form": {
     "title": "Register patient",

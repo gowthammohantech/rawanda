@@ -38,6 +38,12 @@ export const adminKeys = {
    */
   timeliness: (scopeKey: ScopeKey, filters: FilterKey, nowIso: string, threshold: number) =>
     [...adminKeys.scope(scopeKey), "timeliness", filters, nowIso, threshold] as const,
+  /**
+   * ADM-05: workload view (`nowIso` to the minute: overdue tasks are derived from the demo clock;
+   * the threshold is part of the key, as for every derived view).
+   */
+  workload: (scopeKey: ScopeKey, filters: FilterKey, nowIso: string, threshold: number) =>
+    [...adminKeys.scope(scopeKey), "workload", filters, nowIso, threshold] as const,
   /** ADM-03: programme follow-up actions in the grant scope. */
   programmeActions: (scopeKey: ScopeKey) =>
     [...adminKeys.scope(scopeKey), "programmeActions"] as const,

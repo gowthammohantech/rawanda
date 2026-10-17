@@ -52,7 +52,8 @@
     "matchReviewNote": "Yanditswe kandi asabirwa gusuzumwa: ashobora kuba asanzwe ari kuri iki gikoresho. Nta guhuza kwakozwe.",
     "rejectedNote": "Seriveri y'igerageza ntiyemeye uyu murwayi. Fungura aho guhuza kugira ngo urebe impamvu.",
     "conflictNote": "Uyu murwayi afite impinduka ikeneye icyemezo cyawe aho guhuza.",
-    "openSync": "Fungura aho guhuza"
+    "openSync": "Fungura aho guhuza",
+    "openScreeningHint": "Fungura isuzuma n'uko rihujwe"
   },
   "form": {
     "title": "Andika umurwayi",

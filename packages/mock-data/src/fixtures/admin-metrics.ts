@@ -11,10 +11,29 @@
  * - 3 referred (s1, s2, s3), 2 follow-up completed (s1 referral with evidence, s2 follow-up with
  *   outcome); s3's referral is past its `dueAt` → 1 overdue referral;
  * - excluded: s11 (patient withdrew consent; flagged, reviewed, completed) and s12 (a draft).
+ *
+ * ADM-05 workload (3 workers, 12 self-reported time entries, `taskFollowUps` = the follow-up
+ * above + 8 workload-only tasks, so no ADM-02…04 figure changes). Hand-computed:
+ * - assigned by `createdAt` in the period: HW-014 2 (1 completed, 1 overdue), HW-015 5
+ *   (1 completed, 2 unable to reach incl. reassigned, 1 in progress, 1 overdue; one task created
+ *   2026-09-30T23:00Z = Kigali 1 Oct is IN the period), HW-021 1 (completed) → 8 / 3 / 2 / 2 / 1;
+ *   a task created 2026-09-20 is not assigned in the period (but its attempt counts as contact);
+ * - screenings s1–s8 are recorded by HW-014 (Alpha-1), s9–s10 by HW-021 (Alpha-2);
+ * - patient-days: HW-014 8 (its 8 screenings; two attempts with patient 03 on its screening day
+ *   dedupe), HW-015 3, HW-021 3 → pooled 14;
+ * - minutes in the period: HW-014 240, HW-015 90 (a 29 Sep entry is outside), HW-021 150 → 480;
+ *   minutes per patient-day 30.0 / 30.0 / 50.0, pooled 480 / 14 = 34.3 (mean of ratios = 36.7);
+ * - by activity: screening 180, follow_up 160, travel 80, admin 60;
+ * - weekly (weeks of 28 Sep, 5 Oct, 12 Oct): patient-days 5 / 9 / 0, minutes 195 / 255 / 30 →
+ *   39.0 / 28.3 / null.
  */
+import type { TimeEntry, TimeEntryActivity } from "@laif/contracts";
 import {
   asId,
   DEMO_RULE_DISCLAIMER,
+  type FacilityId,
+  type FollowUpStatus,
+  type PersonaId,
   type FlagResult,
   type FollowUp,
   type Patient,
@@ -187,7 +206,8 @@ function screening(spec: Spec): Screening {
     ...persisted,
     id: asId(`fx-screening-${String(spec.n).padStart(2, "0")}`),
     patientId: asId(pid(spec)),
-    workerId: PERSONA_IDS.chwAlpha1A,
+    // ADM-05: each facility's own CHW records its screenings.
+    workerId: spec.facility === "alpha2" ? PERSONA_IDS.chwAlpha2A : PERSONA_IDS.chwAlpha1A,
     facilityId: FACILITY_IDS[spec.facility],
     districtId: DISTRICT_IDS.alpha,
     measuredAt: spec.measuredAt,
@@ -318,6 +338,9 @@ function followUp(ref: Referral, n: number): FollowUp {
   };
 }
 
+/** Fixture staff directory row (structurally `@laif/analytics` `WorkerRef`). */
+export type FixtureWorker = { id: PersonaId; workerCode: string; facilityIds: FacilityId[] };
+
 export type AdminMetricsFixture = {
   patients: Patient[];
   screenings: Screening[];
@@ -326,8 +349,188 @@ export type AdminMetricsFixture = {
   followUps: FollowUp[];
   facilities: ReturnType<typeof buildFacilities>;
   districts: ReturnType<typeof buildDistricts>;
-  timeEntries: [];
+  timeEntries: TimeEntry[];
+  /** ADM-05: workload tasks by assignment date (`followUps` + workload-only tasks). */
+  taskFollowUps: FollowUp[];
+  /** ADM-05: the three fixture workers (codes only). */
+  workers: FixtureWorker[];
 };
+
+/** ADM-05 fixture workers: HW-014 / HW-015 (Alpha-1), HW-021 (Alpha-2). */
+export const ADMIN_METRICS_FIXTURE_WORKERS: readonly FixtureWorker[] = [
+  { id: PERSONA_IDS.chwAlpha1A, workerCode: "HW-014", facilityIds: [FACILITY_IDS.alpha1] },
+  { id: PERSONA_IDS.chwAlpha1B, workerCode: "HW-015", facilityIds: [FACILITY_IDS.alpha1] },
+  { id: PERSONA_IDS.chwAlpha2A, workerCode: "HW-021", facilityIds: [FACILITY_IDS.alpha2] },
+];
+
+type TaskSpec = {
+  n: number;
+  worker: PersonaId;
+  facility: "alpha1" | "alpha2";
+  patient: string;
+  createdAt: string;
+  dueAt: string;
+  status: FollowUpStatus;
+  completedAt?: string;
+  /** Contact-attempt instants (with the task's patient, by the assigned worker). */
+  attempts?: string[];
+};
+
+const TASKS: TaskSpec[] = [
+  {
+    n: 1,
+    worker: PERSONA_IDS.chwAlpha1A,
+    facility: "alpha1",
+    patient: "fx-patient-03",
+    createdAt: "2026-10-03T08:00:00.000Z",
+    dueAt: "2026-10-10T08:00:00.000Z",
+    status: "contacted",
+    // Same Kigali day as s3 (patient 03, 5 Oct) → no extra patient-day.
+    attempts: ["2026-10-05T09:00:00.000Z", "2026-10-05T12:00:00.000Z"],
+  },
+  {
+    n: 2,
+    worker: PERSONA_IDS.chwAlpha1B,
+    facility: "alpha1",
+    patient: "fx-patient-05",
+    createdAt: "2026-09-20T08:00:00.000Z",
+    dueAt: "2026-10-20T08:00:00.000Z",
+    status: "contacted",
+    attempts: ["2026-10-07T08:00:00.000Z"],
+  },
+  {
+    n: 3,
+    worker: PERSONA_IDS.chwAlpha1B,
+    facility: "alpha1",
+    patient: "fx-patient-06",
+    createdAt: "2026-09-30T23:00:00.000Z",
+    dueAt: "2026-10-09T08:00:00.000Z",
+    status: "completed",
+    completedAt: "2026-10-04T08:00:00.000Z",
+    attempts: ["2026-10-03T08:00:00.000Z"],
+  },
+  {
+    n: 4,
+    worker: PERSONA_IDS.chwAlpha1B,
+    facility: "alpha1",
+    patient: "fx-patient-07",
+    createdAt: "2026-10-03T08:00:00.000Z",
+    dueAt: "2026-10-09T08:00:00.000Z",
+    status: "unable_to_reach",
+    attempts: ["2026-10-04T08:00:00.000Z", "2026-10-04T09:00:00.000Z"],
+  },
+  {
+    n: 5,
+    worker: PERSONA_IDS.chwAlpha1B,
+    facility: "alpha1",
+    patient: "fx-patient-08",
+    createdAt: "2026-10-04T08:00:00.000Z",
+    dueAt: "2026-10-09T08:00:00.000Z",
+    status: "reassigned",
+  },
+  {
+    n: 6,
+    worker: PERSONA_IDS.chwAlpha1B,
+    facility: "alpha1",
+    patient: "fx-patient-04",
+    createdAt: "2026-10-06T08:00:00.000Z",
+    dueAt: "2026-10-20T08:00:00.000Z",
+    status: "assigned",
+  },
+  {
+    n: 7,
+    worker: PERSONA_IDS.chwAlpha1B,
+    facility: "alpha1",
+    patient: "fx-patient-01",
+    createdAt: "2026-10-05T08:00:00.000Z",
+    dueAt: "2026-10-12T08:00:00.000Z",
+    status: "assigned",
+  },
+  {
+    n: 8,
+    worker: PERSONA_IDS.chwAlpha2A,
+    facility: "alpha2",
+    patient: "fx-patient-10",
+    createdAt: "2026-10-08T08:00:00.000Z",
+    dueAt: "2026-10-20T08:00:00.000Z",
+    status: "completed",
+    completedAt: "2026-10-09T09:00:00.000Z",
+    attempts: ["2026-10-09T07:00:00.000Z"],
+  },
+];
+
+function task(spec: TaskSpec): FollowUp {
+  const completedAt = spec.completedAt ?? null;
+  return {
+    ...persisted,
+    createdAt: spec.createdAt,
+    updatedAt: completedAt ?? spec.createdAt,
+    id: asId(`fx-task-${String(spec.n).padStart(2, "0")}`),
+    patientId: asId(spec.patient),
+    referralId: null,
+    reviewId: null,
+    facilityId: FACILITY_IDS[spec.facility],
+    assignedWorkerId: spec.worker,
+    dueAt: spec.dueAt,
+    status: spec.status,
+    attempts: (spec.attempts ?? []).map((at, i) => ({
+      id: asId(`fx-task-${spec.n}-attempt-${i + 1}`),
+      at,
+      method: "home_visit",
+      result: "reached",
+      note: "",
+      durationMinutes: 20,
+      recordedBy: spec.worker,
+    })),
+    completedAt,
+    outcome:
+      completedAt === null
+        ? null
+        : {
+            kind: "attended",
+            occurredAt: completedAt,
+            evidenceType: "worker_accompanied_visit",
+            reasonCode: null,
+            note: "",
+            recordedBy: spec.worker,
+          },
+    purpose: "planned_review",
+    assignmentHistory: [],
+    notes: [],
+    clinicianConfirmation: { status: "not_required" },
+  };
+}
+
+const TIME_ROWS: ReadonlyArray<
+  [PersonaId, "alpha1" | "alpha2", string, TimeEntryActivity, number]
+> = [
+  [PERSONA_IDS.chwAlpha1A, "alpha1", "2026-10-02", "screening", 120],
+  [PERSONA_IDS.chwAlpha1A, "alpha1", "2026-10-05", "follow_up", 60],
+  [PERSONA_IDS.chwAlpha1A, "alpha1", "2026-10-05", "travel", 30],
+  [PERSONA_IDS.chwAlpha1A, "alpha1", "2026-10-08", "admin", 30],
+  [PERSONA_IDS.chwAlpha1B, "alpha1", "2026-10-03", "follow_up", 45],
+  [PERSONA_IDS.chwAlpha1B, "alpha1", "2026-10-04", "travel", 30],
+  [PERSONA_IDS.chwAlpha1B, "alpha1", "2026-10-07", "follow_up", 15],
+  // Outside the period (29 Sep): never counted.
+  [PERSONA_IDS.chwAlpha1B, "alpha1", "2026-09-29", "screening", 100],
+  [PERSONA_IDS.chwAlpha2A, "alpha2", "2026-10-09", "follow_up", 40],
+  [PERSONA_IDS.chwAlpha2A, "alpha2", "2026-10-09", "travel", 20],
+  [PERSONA_IDS.chwAlpha2A, "alpha2", "2026-10-10", "screening", 60],
+  [PERSONA_IDS.chwAlpha2A, "alpha2", "2026-10-12", "admin", 30],
+];
+
+function timeEntries(): TimeEntry[] {
+  return TIME_ROWS.map(([workerId, facility, date, activity, minutes], i) => ({
+    ...persisted,
+    id: `fx-time-${String(i + 1).padStart(2, "0")}`,
+    workerId,
+    facilityId: FACILITY_IDS[facility],
+    date,
+    minutes,
+    activity,
+    source: "self_reported_demo",
+  }));
+}
 
 /** Fresh copy of the fixture (records are plain objects; safe to mutate per test). */
 export function adminMetricsFixture(): AdminMetricsFixture {
@@ -364,6 +567,8 @@ export function adminMetricsFixture(): AdminMetricsFixture {
     followUps,
     facilities: buildFacilities(NOW),
     districts: buildDistricts(NOW),
-    timeEntries: [],
+    timeEntries: timeEntries(),
+    taskFollowUps: [...structuredClone(followUps), ...TASKS.map(task)],
+    workers: ADMIN_METRICS_FIXTURE_WORKERS.map((w) => ({ ...w, facilityIds: [...w.facilityIds] })),
   };
 }

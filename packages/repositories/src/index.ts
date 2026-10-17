@@ -49,7 +49,7 @@ export {
 export { createSimulatedRemote, type SimulatedRemote } from "./sync/simulated-remote.ts";
 export { META_KEYS } from "./services/demo.ts";
 export { DEVICE_ID_META_KEY, DEVICE_SIGN_IN_PERMISSION } from "./services/devices.ts";
-export { activeRuleset } from "./services/screenings.ts";
+export { activeRuleset, type CreateScreeningOptions } from "./services/screenings.ts";
 export { PATIENT_MATCH_MIN_SCORE } from "./services/patients.ts";
 export type { MetricsRecordsResult } from "./services/metrics.ts";
 export type {

@@ -35,6 +35,14 @@ export const METRIC_DEFINITION_IDS = [
   "weeklyOverdueTrend",
   "medianDaysByFacility",
   "workloadMinutes",
+  "activeWorkers",
+  "tasksAssigned",
+  "tasksCompleted",
+  "tasksUnableToReach",
+  "tasksOverdue",
+  "minutesPerPatientDayIndex",
+  "minutesByActivity",
+  "weeklyMinutesPerPatientDay",
   "promptIdReliability",
   "medicineHistoryCompleteness",
   "patientUnderstanding",
@@ -70,6 +78,13 @@ const ATTRIBUTION_SNAPSHOT = `${K}.attribution.snapshot`;
 const ATTRIBUTION_NONE = `${K}.attribution.none`;
 const ATTRIBUTION_REVIEW_WEEK = `${K}.attribution.reviewWeek`;
 const ATTRIBUTION_WEEK_END = `${K}.attribution.weekEnd`;
+/** ADM-05: the documented exception — tasks count in the period of their assignment date. */
+const ATTRIBUTION_TASK_CREATED = `${K}.attribution.taskCreated`;
+const ATTRIBUTION_TIME_ENTRY = `${K}.attribution.timeEntry`;
+const INCLUSION_PROXY = `${K}.inclusion.proxy`;
+/** ADM-05: pooled minutes per patient-day = Σ minutes ÷ Σ patient-days (ratio of sums). */
+const METHOD_RATIO_OF_SUMS = `${K}.method.ratioOfSums`;
+const METHOD_BASELINE_INDEX = `${K}.method.baselineIndex`;
 /**
  * Percentiles (ADM-04): linear interpolation between closest ranks (type 7 / `PERCENTILE.INC`):
  * rank h = (n − 1) · p / 100, value x[⌊h⌋] + (h − ⌊h⌋) · (x[⌊h⌋+1] − x[⌊h⌋]); hidden when
@@ -129,7 +144,45 @@ export const METRIC_DEFINITIONS: readonly MetricDefinition[] = Object.freeze([
   }),
   def("weeklyOverdueTrend", { attribution: ATTRIBUTION_WEEK_END, shownIn: "ADM-04" }),
   def("medianDaysByFacility", { method: METHOD_PERCENTILE, shownIn: "ADM-04" }),
-  def("workloadMinutes", { pilotKpi: "KPI04", shownIn: "ADM-05" }),
+  def("workloadMinutes", {
+    pilotKpi: "KPI04",
+    denominator: `${K}.denominator.patientDays`,
+    inclusion: INCLUSION_PROXY,
+    attribution: ATTRIBUTION_TIME_ENTRY,
+    method: METHOD_RATIO_OF_SUMS,
+    shownIn: "ADM-05",
+  }),
+  def("activeWorkers", {
+    inclusion: INCLUSION_PROXY,
+    attribution: ATTRIBUTION_TIME_ENTRY,
+    shownIn: "ADM-05",
+  }),
+  def("tasksAssigned", { attribution: ATTRIBUTION_TASK_CREATED, shownIn: "ADM-05" }),
+  def("tasksCompleted", {
+    denominator: `${K}.denominator.tasksAssigned`,
+    attribution: ATTRIBUTION_TASK_CREATED,
+    shownIn: "ADM-05",
+  }),
+  def("tasksUnableToReach", { attribution: ATTRIBUTION_TASK_CREATED, shownIn: "ADM-05" }),
+  def("tasksOverdue", { attribution: ATTRIBUTION_TASK_CREATED, shownIn: "ADM-05" }),
+  def("minutesPerPatientDayIndex", {
+    inclusion: INCLUSION_PROXY,
+    attribution: ATTRIBUTION_TIME_ENTRY,
+    method: METHOD_BASELINE_INDEX,
+    shownIn: "ADM-05",
+  }),
+  def("minutesByActivity", {
+    inclusion: INCLUSION_PROXY,
+    attribution: ATTRIBUTION_TIME_ENTRY,
+    shownIn: "ADM-05",
+  }),
+  def("weeklyMinutesPerPatientDay", {
+    denominator: `${K}.denominator.patientDays`,
+    inclusion: INCLUSION_PROXY,
+    attribution: ATTRIBUTION_TIME_ENTRY,
+    method: METHOD_RATIO_OF_SUMS,
+    shownIn: "ADM-05",
+  }),
   def("promptIdReliability", { pilotKpi: "KPI06", shownIn: "ADM-06" }),
   def("medicineHistoryCompleteness", {
     pilotKpi: "KPI03",

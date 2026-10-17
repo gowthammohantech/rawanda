@@ -78,9 +78,5 @@
   "pick": {
     "banner": "Choose the patient to screen",
     "hint": "Opens the screening form for this patient"
-  },
-  "reviewStub": {
-    "title": "Review screening",
-    "backToForm": "Back to the form"
   }
 }
