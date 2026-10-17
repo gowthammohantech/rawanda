@@ -1,0 +1,20 @@
+{
+  "title": "Settings",
+  "language": "Language",
+  "signedInAs": "Signed in as",
+  "demo": "Demo",
+  "about": "About",
+  "profile": "Profile",
+  "role": "Role",
+  "facility": "Facility",
+  "district": "District",
+  "deviceId": "Device ID",
+  "networkSimulation": "Network simulation",
+  "resetDemo": "Reset demo",
+  "comingIn": "Available in {{phase}}",
+  "aboutText": "CareConnect Worker is a demonstration that uses synthetic data only. It is not for clinical use.",
+  "signOut": "Sign out",
+  "signOutTitle": "Sign out of this device?",
+  "signOutKeepsData": "Unsynced items stay on this device.",
+  "signedOut": "Signed out. Unsynced items stay on this device."
+}

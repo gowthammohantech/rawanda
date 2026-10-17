@@ -1,11 +1,11 @@
-# Device gate (FND-11; not part of `pnpm verify`): `pnpm --filter @laif/worker-mobile test:maestro`
-# with the app open in Expo Go / a dev build. HWM-10 extends these flows.
+# Device gate (FND-11, updated for HWM-01 sign-in; not part of `pnpm verify`):
+# `pnpm --filter @laif/worker-mobile test:maestro` with the app open in Expo Go / a dev build.
 appId: host.exp.Exponent
 ---
 - launchApp
 - assertVisible: "DEMONSTRATION — SYNTHETIC PATIENT DATA — NOT FOR CLINICAL USE"
-- tapOn: "Settings"
 - tapOn: "Ikinyarwanda"
 - stopApp
 - launchApp
-- assertVisible: "Igenamiterere"
+- assertVisible: "Hitamo umwirondoro w'igerageza"
+- tapOn: "English"

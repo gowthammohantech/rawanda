@@ -20,4 +20,5 @@ export { SEED_DATASET_HASH } from "./seed/seed.snapshot.ts";
 export * from "./anchors.ts";
 export * from "./scenarios/registry.ts";
 export * from "./slices.ts";
+export * from "./overlays/citizen.ts";
 export * from "./hash.ts";

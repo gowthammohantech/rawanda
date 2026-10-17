@@ -20,6 +20,7 @@ import {
   CONSENT_STATES,
   CONTACT_METHODS,
   CONTACT_RESULTS,
+  CORRECTION_REQUEST_STATUSES,
   DEMO_RULE_DISCLAIMER,
   DEVICE_SESSION_STATUSES,
   DISMISS_REASON_CODES,
@@ -400,6 +401,7 @@ export const CareTaskPayloadSchemas = {
     targetId: NonEmptyTrimmed,
     description: NonEmptyTrimmed,
     suggestedValue: JsonValueSchema,
+    requestStatus: z.enum(CORRECTION_REQUEST_STATUSES).exactOptional(),
   }),
   callback_request: z.object({
     topic: NonEmptyTrimmed,

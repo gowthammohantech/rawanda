@@ -1,0 +1,12 @@
+{
+  "today": "Today",
+  "find": "Find",
+  "screen": "Screen",
+  "tasks": "Tasks",
+  "sync": "Sync",
+  "settings": "Settings",
+  "online": "Online",
+  "networkStatus": "Network status: {{status}}",
+  "openSettings": "Open settings ({{name}})",
+  "openSettingsHint": "Shows language, your sign-in details and sign out"
+}

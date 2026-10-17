@@ -1,10 +1,9 @@
 /**
  * Native providers (FND-10 order): I18nProvider > SafeAreaProvider > ToastProvider, then
- * QueryClientProvider and PersonaProvider. The RepositoryProvider is mounted by `Boot` once the
- * local database is open and seeded.
+ * QueryClientProvider and PersonaProvider. The `CitizenRepoProvider` (`src/data/repo.tsx`) is
+ * mounted by `Boot` once the local database is open and seeded.
  */
 import { I18nProvider } from "@laif/i18n";
-import type { CareRepository } from "@laif/repositories";
 import { ToastProvider } from "@laif/ui-native";
 import { QueryClientProvider } from "@tanstack/react-query";
 import {
@@ -23,18 +22,7 @@ import {
 import type { ShellServices } from "./services.ts";
 import type { AppPersona, AppSession } from "./session.ts";
 
-const RepositoryContext = createContext<CareRepository | null>(null);
 const SessionContext = createContext<AppSession | null>(null);
-
-export function RepositoryProvider({
-  repo,
-  children,
-}: {
-  repo: CareRepository;
-  children?: ReactNode;
-}) {
-  return <RepositoryContext.Provider value={repo}>{children}</RepositoryContext.Provider>;
-}
 
 export function PersonaProvider({
   session,
@@ -44,12 +32,6 @@ export function PersonaProvider({
   children?: ReactNode;
 }) {
   return <SessionContext.Provider value={session}>{children}</SessionContext.Provider>;
-}
-
-export function useRepository(): CareRepository {
-  const repo = useContext(RepositoryContext);
-  if (repo === null) throw new Error("useRepository must be used inside <RepositoryProvider>");
-  return repo;
 }
 
 export function useSession(): AppSession {

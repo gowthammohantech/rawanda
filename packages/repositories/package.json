@@ -6,6 +6,7 @@
   "sideEffects": false,
   "exports": {
     ".": "./src/index.ts",
+    "./citizen": "./src/citizen/index.ts",
     "./contract-suite": "./src/store/contract-suite.ts",
     "./dexie": "./src/store/dexie-adapter.ts",
     "./sqlite": "./src/store/sqlite-adapter.ts",

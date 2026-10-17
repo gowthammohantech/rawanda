@@ -13,6 +13,7 @@
  */
 import enAdmin from "./locales/en/admin.json";
 import enCitizen from "./locales/en/citizen.json";
+import enCitizenErrors from "./locales/en/citizen/errors.json";
 import enClinical from "./locales/en/clinical.json";
 import enClinicalCommon from "./locales/en/clinical/common.json";
 import enClinicalErrors from "./locales/en/clinical/errors.json";
@@ -24,8 +25,12 @@ import enDomain from "./locales/en/domain.json";
 import enShell from "./locales/en/shell.json";
 import enValidation from "./locales/en/validation.json";
 import enWorker from "./locales/en/worker.json";
+import enWorkerAuth from "./locales/en/worker/auth.json";
+import enWorkerNav from "./locales/en/worker/nav.json";
+import enWorkerSettings from "./locales/en/worker/settings.json";
 import rwAdmin from "./locales/rw/admin.json";
 import rwCitizen from "./locales/rw/citizen.json";
+import rwCitizenErrors from "./locales/rw/citizen/errors.json";
 import rwClinical from "./locales/rw/clinical.json";
 import rwClinicalCommon from "./locales/rw/clinical/common.json";
 import rwClinicalErrors from "./locales/rw/clinical/errors.json";
@@ -37,6 +42,9 @@ import rwDomain from "./locales/rw/domain.json";
 import rwShell from "./locales/rw/shell.json";
 import rwValidation from "./locales/rw/validation.json";
 import rwWorker from "./locales/rw/worker.json";
+import rwWorkerAuth from "./locales/rw/worker/auth.json";
+import rwWorkerNav from "./locales/rw/worker/nav.json";
+import rwWorkerSettings from "./locales/rw/worker/settings.json";
 import rwReview from "./locales/rw/_review.json";
 
 export const NAMESPACES = [
@@ -68,9 +76,9 @@ export const enResources = {
     errors: enClinicalErrors,
     settings: enClinicalSettings,
   },
-  worker: enWorker,
+  worker: { ...enWorker, auth: enWorkerAuth, nav: enWorkerNav, settings: enWorkerSettings },
   admin: enAdmin,
-  citizen: enCitizen,
+  citizen: { ...enCitizen, errors: enCitizenErrors },
 } as const satisfies Record<Namespace, object>;
 
 /** Kinyarwanda drafts. Parity with EN is enforced by `pnpm i18n:check`, not by types. */
@@ -87,9 +95,9 @@ export const rwResources: Record<Namespace, object> = {
     errors: rwClinicalErrors,
     settings: rwClinicalSettings,
   },
-  worker: rwWorker,
+  worker: { ...rwWorker, auth: rwWorkerAuth, nav: rwWorkerNav, settings: rwWorkerSettings },
   admin: rwAdmin,
-  citizen: rwCitizen,
+  citizen: { ...rwCitizen, errors: rwCitizenErrors },
 };
 
 export const resources = { en: enResources, rw: rwResources } as const;
