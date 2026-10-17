@@ -10,7 +10,7 @@
 | Depends on | CLN-03 |
 | Trace | PRD CL-02; FRD CL-02, FRD §4 (units/source mandatory, reason for correction, never overwrite), T-03, T-06; spec §2.1 `/clinical/patients/:id`, §5.2 invariant "submitted screenings immutable except through amendment"; PRD §10 edge cases (missing units, repeated screening, corrected measurement) |
 | Size | M |
-| Status | Not started |
+| Status | Done |
 
 ## 2. Goal
 

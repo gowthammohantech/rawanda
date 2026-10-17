@@ -1,6 +1,6 @@
 /**
  * `/clinical/patients/:id` (CLN-03): header + tabs Overview · Screenings · Reviews · Referrals &
- * tasks (the last three are filled by CLN-04+).
+ * tasks (the last three: CLN-04 `tabs/`).
  *
  * - Out-of-scope id → the repository throws `FORBIDDEN` and appends `access.denied`; the page
  *   shows the permission-denied state with NO patient data (only the URL holds the id).
@@ -21,17 +21,9 @@ import { DuplicateWarning } from "./DuplicateWarning.tsx";
 import { usePatient } from "./hooks.ts";
 import { PatientHeader } from "./PatientHeader.tsx";
 import { PatientOverview } from "./PatientOverview.tsx";
-
-function TabPlaceholder() {
-  const t = useTx();
-  return (
-    <EmptyState
-      icon="clock"
-      title={t("clinical:placeholder.comingSoon", { phase: "CLN-04" })}
-      description={t("clinical:placeholder.description")}
-    />
-  );
-}
+import { ReferralsTasksTab } from "./tabs/ReferralsTasksTab.tsx";
+import { ReviewsTab } from "./tabs/ReviewsTab.tsx";
+import { ScreeningsTab } from "./tabs/ScreeningsTab.tsx";
 
 export function PatientPage() {
   const t = useTx();
@@ -123,17 +115,17 @@ export function PatientPage() {
             {
               value: "screenings",
               label: t("clinical:patients.record.tabs.screenings"),
-              content: <TabPlaceholder />,
+              content: <ScreeningsTab patient={patient} />,
             },
             {
               value: "reviews",
               label: t("clinical:patients.record.tabs.reviews"),
-              content: <TabPlaceholder />,
+              content: <ReviewsTab patient={patient} />,
             },
             {
               value: "referralsTasks",
               label: t("clinical:patients.record.tabs.referralsTasks"),
-              content: <TabPlaceholder />,
+              content: <ReferralsTasksTab patient={patient} />,
             },
           ]}
         />
