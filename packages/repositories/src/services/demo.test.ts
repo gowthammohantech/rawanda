@@ -79,7 +79,16 @@ describe("demo service", () => {
       personaId: PERSONA_IDS.chwAlpha2A,
     });
     const patients = await h.store.getAll<Patient>("patients");
-    expect(new Set(patients.map((p) => p.facilityId))).toEqual(new Set(["fac-alpha-2"]));
+    expect(new Set(patients.map((p) => p.facilityId))).toEqual(
+      new Set(["fac-alpha-1", "fac-alpha-2"]),
+    );
+    // From the old slice only parents of unsynced rows (queued ops, drafts) stay — no orphans.
+    const oldSlice = patients.filter((p) => p.facilityId === "fac-alpha-1").map((p) => p.id);
+    expect(oldSlice).toContain(patient.id);
+    const screeningsAfter = await h.store.getAll<Screening>("screenings");
+    for (const id of oldSlice) {
+      expect(screeningsAfter.some((s) => s.patientId === id)).toBe(true);
+    }
     const screenings = await h.store.getAll<Screening>("screenings");
     expect(screenings.map((s) => s.id)).toEqual(
       expect.arrayContaining([queued.data.id, draft.data.id]),

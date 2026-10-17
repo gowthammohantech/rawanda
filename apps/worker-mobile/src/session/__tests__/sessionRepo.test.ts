@@ -141,7 +141,14 @@ describe("sessionRepo (HWM-01)", () => {
       new Set((await store.getAll<{ facilityId: string }>("patients")).map((p) => p.facilityId));
     expect(await facilities()).toEqual(new Set([FACILITY_IDS.alpha1]));
     expect((await sessions.signIn(PERSONA_IDS.chwAlpha2A, FACILITY_IDS.alpha2)).ok).toBe(true);
-    expect(await facilities()).toEqual(new Set([FACILITY_IDS.alpha2]));
+    expect(await facilities()).toContain(FACILITY_IDS.alpha2);
+    // Only parents of unsynced alpha-1 rows (the seed's draft) stay; repository reads are scoped.
+    const screenings = await store.getAll<{ patientId: string }>("screenings");
+    for (const p of await store.getAll<{ id: string; facilityId: string }>("patients")) {
+      if (p.facilityId === FACILITY_IDS.alpha1) {
+        expect(screenings.some((s) => s.patientId === p.id)).toBe(true);
+      }
+    }
     // Restore keeps it (no second refresh).
     expect(await sessions.restore()).toBe("signed_in");
     const refreshed = (await store.getAll<AuditEvent>("auditEvents")).filter(

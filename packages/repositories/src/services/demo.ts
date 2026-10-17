@@ -59,7 +59,9 @@ const SLICE_REFRESH_COLLECTIONS = [
   "careInstructions",
 ] as const;
 
-const SETTLED_OPS = new Set(["acknowledged", "superseded", "rejected"]);
+/** Ops whose entity the remote holds authoritatively. `rejected` is NOT settled here: a
+ * "Not accepted" row exists only on this device and must stay visible (nothing silently lost). */
+const SETTLED_OPS = new Set(["acknowledged", "superseded"]);
 
 const WORKER_ROLES = new Set(["community_health_worker", "field_supervisor"]);
 
@@ -202,23 +204,39 @@ export function createDemoApi(options: {
         for (const name of SEED_COLLECTIONS) dataset[name] = await remoteView.getAll(name);
         const slice = sliceForApp(dataset as unknown as SeedDataset, "worker", personaId);
         const ops = await tx.getAll<SyncOperation>("syncOperations");
+        // Protected = local copy wins (unsettled op, or a local-only draft / not-accepted row).
         const keep = new Set<string>(
           ops.filter((o) => !SETTLED_OPS.has(o.status)).map((o) => o.entityId),
         );
-        const counts: Record<string, number> = {};
+        const local: Record<
+          string,
+          Array<{ id: string; status?: string; patientId?: string }>
+        > = {};
+        for (const name of SLICE_REFRESH_COLLECTIONS) {
+          local[name] = await tx.getAll(name);
+          if (name === "screenings") {
+            for (const row of local[name]) if (row.status === "draft") keep.add(row.id);
+          }
+        }
+        // Retained (not protected): the patient of every protected row, so nothing is orphaned.
+        const retainPatients = new Set<string>();
+        for (const name of SLICE_REFRESH_COLLECTIONS) {
+          for (const row of local[name] ?? []) {
+            if (keep.has(row.id) && row.patientId) retainPatients.add(row.patientId);
+          }
+        }
+        let removed = 0;
         for (const name of SLICE_REFRESH_COLLECTIONS) {
           const wanted = slice[name] as unknown as Array<{ id: string }>;
           const wantedIds = new Set(wanted.map((r) => r.id));
-          let removed = 0;
-          for (const row of await tx.getAll<{ id: string; status?: string }>(name)) {
-            const unsynced = keep.has(row.id) || (name === "screenings" && row.status === "draft");
-            if (unsynced || wantedIds.has(row.id)) continue;
+          for (const row of local[name] ?? []) {
+            if (keep.has(row.id) || wantedIds.has(row.id)) continue;
+            if (name === "patients" && retainPatients.has(row.id)) continue;
             await tx.delete(name, row.id);
             removed += 1;
           }
           const incoming = wanted.filter((r) => !keep.has(r.id));
           if (incoming.length > 0) await tx.bulkPut(name, structuredClone(incoming));
-          counts[name] = incoming.length - removed;
         }
         await tx.setMeta(META_KEYS.slicePersonaId, personaId);
         await ctx.audit({
@@ -229,6 +247,8 @@ export function createDemoApi(options: {
             fromPersonaId: current,
             toPersonaId: personaId,
             keptUnsynced: keep.size,
+            retainedPatients: retainPatients.size,
+            removed,
           },
         });
       });
