@@ -34,7 +34,11 @@ export type CitizenAccountStatus = (typeof CITIZEN_ACCOUNT_STATUSES)[number];
 export const PATIENT_LINK_RELATIONSHIPS = ["self", "legal_representative"] as const;
 export type PatientLinkRelationship = (typeof PATIENT_LINK_RELATIONSHIPS)[number];
 
-export const PATIENT_LINK_STATUSES = ["active", "revoked"] as const;
+/**
+ * `pending` (CTZ-02): the record a not-yet-verified account will see; it becomes `active` only when
+ * the simulated identity verification succeeds. Only `active` links grant access.
+ */
+export const PATIENT_LINK_STATUSES = ["active", "revoked", "pending"] as const;
 export type PatientLinkStatus = (typeof PATIENT_LINK_STATUSES)[number];
 
 export const IDENTITY_VERIFICATION_METHODS = ["demo_code"] as const;

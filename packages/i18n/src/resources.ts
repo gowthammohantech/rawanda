@@ -16,7 +16,12 @@ import enAdminAuth from "./locales/en/admin/auth.json";
 import enAdminErrors from "./locales/en/admin/errors.json";
 import enAdminShell from "./locales/en/admin/shell.json";
 import enCitizen from "./locales/en/citizen.json";
+import enCitizenConsent from "./locales/en/citizen/consent.json";
 import enCitizenErrors from "./locales/en/citizen/errors.json";
+import enCitizenMore from "./locales/en/citizen/more.json";
+import enCitizenNav from "./locales/en/citizen/nav.json";
+import enCitizenOnboarding from "./locales/en/citizen/onboarding.json";
+import enCitizenValidation from "./locales/en/citizen/validation.json";
 import enClinical from "./locales/en/clinical.json";
 import enClinicalCommon from "./locales/en/clinical/common.json";
 import enClinicalErrors from "./locales/en/clinical/errors.json";
@@ -39,7 +44,12 @@ import rwAdminAuth from "./locales/rw/admin/auth.json";
 import rwAdminErrors from "./locales/rw/admin/errors.json";
 import rwAdminShell from "./locales/rw/admin/shell.json";
 import rwCitizen from "./locales/rw/citizen.json";
+import rwCitizenConsent from "./locales/rw/citizen/consent.json";
 import rwCitizenErrors from "./locales/rw/citizen/errors.json";
+import rwCitizenMore from "./locales/rw/citizen/more.json";
+import rwCitizenNav from "./locales/rw/citizen/nav.json";
+import rwCitizenOnboarding from "./locales/rw/citizen/onboarding.json";
+import rwCitizenValidation from "./locales/rw/citizen/validation.json";
 import rwClinical from "./locales/rw/clinical.json";
 import rwClinicalCommon from "./locales/rw/clinical/common.json";
 import rwClinicalErrors from "./locales/rw/clinical/errors.json";
@@ -98,7 +108,15 @@ export const enResources = {
     netsim: enWorkerNetsim,
   },
   admin: { ...enAdmin, shell: enAdminShell, auth: enAdminAuth, errors: enAdminErrors },
-  citizen: { ...enCitizen, errors: enCitizenErrors },
+  citizen: {
+    ...enCitizen,
+    errors: enCitizenErrors,
+    onboarding: enCitizenOnboarding,
+    consent: enCitizenConsent,
+    nav: enCitizenNav,
+    validation: enCitizenValidation,
+    more: enCitizenMore,
+  },
 } as const satisfies Record<Namespace, object>;
 
 /** Kinyarwanda drafts. Parity with EN is enforced by `pnpm i18n:check`, not by types. */
@@ -125,7 +143,15 @@ export const rwResources: Record<Namespace, object> = {
     netsim: rwWorkerNetsim,
   },
   admin: { ...rwAdmin, shell: rwAdminShell, auth: rwAdminAuth, errors: rwAdminErrors },
-  citizen: { ...rwCitizen, errors: rwCitizenErrors },
+  citizen: {
+    ...rwCitizen,
+    errors: rwCitizenErrors,
+    onboarding: rwCitizenOnboarding,
+    consent: rwCitizenConsent,
+    nav: rwCitizenNav,
+    validation: rwCitizenValidation,
+    more: rwCitizenMore,
+  },
 };
 
 export const resources = { en: enResources, rw: rwResources } as const;

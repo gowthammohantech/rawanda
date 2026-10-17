@@ -52,3 +52,13 @@ export const UpdateCitizenSettingsInputSchema = z
     { error: vMsg("required") },
   );
 export type UpdateCitizenSettingsInput = z.output<typeof UpdateCitizenSettingsInputSchema>;
+
+/**
+ * Simulated identity verification attempt (CTZ-02): the labelled 6-digit demo code. Never a
+ * real identity check (ADR-P09). A wrong code is a recorded attempt, not a validation error.
+ */
+export const VerifyIdentityInputSchema = z.object({
+  idempotencyKey: IdempotencyKey,
+  code: z.string().regex(/^\d{6}$/u, { error: vMsg("invalidFormat") }),
+});
+export type VerifyIdentityInput = z.output<typeof VerifyIdentityInputSchema>;

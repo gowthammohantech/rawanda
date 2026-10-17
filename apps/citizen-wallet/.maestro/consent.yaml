@@ -1,0 +1,30 @@
+# CTZ-02 consent flow (device gate; not part of `pnpm verify`):
+# choose CTZ-P1 → withdraw from More → no "My health" content → re-grant → tabs visible again.
+appId: host.exp.Exponent
+---
+- launchApp:
+    clearState: true
+- tapOn: "Continue"
+- tapOn:
+    id: "persona-card-persona-citizen-1"
+- assertVisible: "My health"
+- tapOn: "More"
+- tapOn: "Consent and sharing"
+- tapOn:
+    id: "withdraw"
+- assertVisible: "Stop sharing your information?"
+- tapOn:
+    text: "Stop sharing"
+    index: 1
+- assertVisible: "You stopped sharing. Your care team still has your record; this app no longer shows it."
+- assertNotVisible: "Next steps"
+# Deep link to a health tab is blocked while consent is withdrawn.
+- openLink: "citizen-wallet://health"
+- assertVisible: "Give consent again"
+- tapOn: "Give consent again"
+- tapOn: "I have read this"
+- tapOn:
+    id: "consent-give"
+- assertVisible: "Consent saved"
+- assertVisible: "My health"
+- assertVisible: "Timeline"

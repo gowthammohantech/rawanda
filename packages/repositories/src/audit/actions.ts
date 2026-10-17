@@ -133,6 +133,12 @@ export const AUDIT_ACTIONS = {
   "citizen.next_step.acknowledged": change,
   "citizen.support.callback_requested": change,
   "citizen.settings.changed": change,
+  // CTZ-02: persona choice + simulated identity verification (demo code, never a real check).
+  "citizen.persona.selected": access,
+  "citizen.identity.verification_attempted": security,
+  "citizen.identity.verified": change,
+  "citizen.identity.verification_failed": security,
+  "citizen.identity.verification_unavailable": security,
 
   // ── Sync & devices ───────────────────────────────────────────────────────
   "sync.op_acknowledged": change,

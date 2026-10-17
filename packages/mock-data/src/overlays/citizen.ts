@@ -15,7 +15,8 @@
  * | persona-citizen-2 (CTZ-P2)           | active, self link, consent granted                        |
  * | persona-citizen-withdrawn (CTZ-P3)   | active, self link, consent granted → withdrawn            |
  * | persona-citizen-rep (CTZ-P4)         | active, legal_representative link to one patient only     |
- * | persona-citizen-pending (CTZ-P5)     | pending_verification, no link, demo code `246810`         |
+ * | persona-citizen-pending (CTZ-P5)     | pending_verification, `pending` self link to a new        |
+ * |                                      | overlay patient (no results yet), demo code `246810`      |
  */
 import type {
   CitizenAccessEvent,
@@ -32,6 +33,7 @@ import {
   type CareTaskId,
   type CorrelationId,
   type DemoPersona,
+  type Patient,
   type PatientId,
   type PersonaId,
   type Role,
@@ -53,6 +55,9 @@ export const CITIZEN_DEMO_VERIFICATION_CODE = "246810" as const;
 /** Privacy notice version recorded with the seeded consents. */
 export const CITIZEN_SEED_NOTICE_VERSION = "demo-notice-v0.1" as const;
 
+/** Link number of CTZ-P5's pending link (after the active links 1…n; stable). */
+const PENDING_LINK_NO = 100;
+
 const DAY = 86_400_000;
 const MIN = 60_000;
 
@@ -69,6 +74,7 @@ export const CITIZEN_ID_NAMESPACES = {
   screening: "ctz-screening",
   amendment: "ctz-screening-amendment",
   task: "ctz-care-task",
+  patient: "ctz-patient",
 } as const;
 
 /** Citizen personas in CTZ-P1…P5 order (overlay numbering 1…5). */
@@ -85,6 +91,11 @@ const id = (namespace: string, n: number): string => deterministicUuid(namespace
 /** Stable overlay record IDs referenced by later CTZ phases and tests. */
 export const CITIZEN_OVERLAY_IDS = {
   accountOf: (personaIndex: number) => id(CITIZEN_ID_NAMESPACES.account, personaIndex),
+  /**
+   * CTZ-P5's own record (CTZ-02): newly enrolled, no screenings yet. Citizen slice only; its
+   * `pending` self link becomes `active` when the simulated verification succeeds.
+   */
+  pendingPatient: asId<PatientId>(id(CITIZEN_ID_NAMESPACES.patient, 1)),
   /** CTZ-P1 amended observation (glucose context `not_recorded → fasting`, version 2). */
   amendedScreening: asId<ScreeningId>(id(CITIZEN_ID_NAMESPACES.screening, 1)),
   /** CTZ-P1 correction request resolved by an amendment. */
@@ -134,6 +145,7 @@ export function buildCitizenOverlay(seed: Readonly<SeedDataset>): OverlayRecords
   const verifications: IdentityVerification[] = [];
   const consents: ConsentRecord[] = [];
   const settings: CitizenSettings[] = [];
+  const pendingPatients: Patient[] = [];
   let linkNo = 0;
   let consentNo = 0;
 
@@ -173,7 +185,38 @@ export function buildCitizenOverlay(seed: Readonly<SeedDataset>): OverlayRecords
       textScale: 1,
       highContrast: false,
     });
-    if (verifiedAt === null) return;
+    if (verifiedAt === null) {
+      // CTZ-P5: the enrolment record exists but stays hidden (`pending`) until verification.
+      const anchor = seed.patients.find(
+        (p) => p.id === SEED_ANCHORS.COMPLETED_FOLLOWUP_WITH_INSTRUCTION.patientId,
+      );
+      if (!anchor) return;
+      pendingPatients.push({
+        ...base(createdAt),
+        id: CITIZEN_OVERLAY_IDS.pendingPatient,
+        syntheticIdentifier: "DEMO-C-0005",
+        displayName: persona.displayName,
+        dateOfBirth: "1994-06-12",
+        sexOptional: "female",
+        facilityId: anchor.facilityId,
+        districtId: anchor.districtId,
+        consentState: "not_recorded",
+        identityStatus: "unverified",
+        duplicateCandidateIds: [],
+        preferredLanguage: persona.preferredLanguage,
+      });
+      links.push({
+        ...base(createdAt),
+        id: id(CITIZEN_ID_NAMESPACES.link, PENDING_LINK_NO),
+        accountId,
+        personaId: persona.id,
+        patientId: CITIZEN_OVERLAY_IDS.pendingPatient,
+        relationship: "self",
+        status: "pending",
+        linkedAt: createdAt,
+      });
+      return;
+    }
     const relationship = persona.id === PERSONA_IDS.citizenRep ? "legal_representative" : "self";
     for (const patientId of persona.linkedPatientIds) {
       links.push({
@@ -333,7 +376,9 @@ export function buildCitizenOverlay(seed: Readonly<SeedDataset>): OverlayRecords
   const prng = createPrng(deriveSeed(seed.meta.seed, "citizen-access-history"));
   const accessEvents: CitizenAccessEvent[] = [];
   let accessNo = 0;
-  const linkedPatients = links.map((l) => ({ patientId: l.patientId, link: l }));
+  const linkedPatients = links
+    .filter((l) => l.status === "active")
+    .map((l) => ({ patientId: l.patientId, link: l }));
   for (const { patientId, link } of linkedPatients) {
     const patient = seed.patients.find((p) => p.id === patientId);
     if (!patient) continue;
@@ -433,6 +478,7 @@ export function buildCitizenOverlay(seed: Readonly<SeedDataset>): OverlayRecords
   );
 
   return {
+    patients: pendingPatients,
     screenings,
     careTasks,
     citizenAccounts: accounts,

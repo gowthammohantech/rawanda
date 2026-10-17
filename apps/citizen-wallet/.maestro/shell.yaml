@@ -1,11 +1,15 @@
-# Device gate (FND-11; not part of `pnpm verify`): `pnpm --filter @laif/citizen-wallet test:maestro`
-# with the app open in Expo Go / a dev build. CTZ-09 extends these flows.
+# Device gate (FND-11, updated CTZ-02; not part of `pnpm verify`):
+# `pnpm --filter @laif/citizen-wallet test:maestro` with the app open in Expo Go / a dev build.
+# Fresh install: welcome screen, DemoBanner, EN/RW switch persisted across a restart.
 appId: host.exp.Exponent
 ---
-- launchApp
+- launchApp:
+    clearState: true
 - assertVisible: "DEMONSTRATION — SYNTHETIC PATIENT DATA — NOT FOR CLINICAL USE"
-- tapOn: "Settings"
+- assertVisible: "Your care information, in one place"
 - tapOn: "Ikinyarwanda"
+- assertVisible: "Amakuru yawe yo kwivuza, ahantu hamwe"
 - stopApp
 - launchApp
-- assertVisible: "Igenamiterere"
+- assertVisible: "Amakuru yawe yo kwivuza, ahantu hamwe"
+- tapOn: "English"
