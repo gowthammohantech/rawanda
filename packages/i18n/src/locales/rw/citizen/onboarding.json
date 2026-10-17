@@ -1,0 +1,72 @@
+{
+  "title": "Amakuru yawe yo kwivuza, ahantu hamwe",
+  "synthetic": "Ibiri hano byose ni amakuru y'igerageza. Si amakuru nyayo y'ubuzima bwawe.",
+  "syntheticNotForMedicalUse": "Ibiri hano byose ni amakuru y'igerageza. Si amakuru nyayo y'ubuzima bwawe kandi ntakoreshwa mu kwivuza.",
+  "syntheticTitle": "Igerageza gusa",
+  "subtitle": "Reba ibisubizo n'intambwe zikurikira itsinda rikuvura ryagusangije.",
+  "languageLabel": "Hitamo ururimi",
+  "continue": "Komeza",
+  "whatIsThis": "Iri gerageza ni iki?",
+  "demoToolsLink": "Ibikoresho by'igerageza",
+  "about": {
+    "title": "Ibyerekeye iri gerageza",
+    "eyebrow": "IGERAGEZA",
+    "showsTitle": "Ibyo porogaramu yerekana",
+    "showsBody": "Ibisubizo n'intambwe zikurikira itsinda rikuvura ryasuzumye rikabikugezaho gusa.",
+    "neverTitle": "Ibyo itajya ikora",
+    "neverBody": "Ntijya isuzuma indwara cyangwa itanga inama zo kwivuza, ntijya yerekana amanota y'ubuzima, kandi ntijya ikoreshwa mu bwishingizi cyangwa mu nguzanyo.",
+    "contactTitle": "Uwo wabaza",
+    "contactBody": "Ku bibazo bijyanye no kwivuza kwawe, vugana n'itsinda rikuvura ku kigo nderabuzima. Mu gihe cy'ibyihutirwa, jya ku kigo nderabuzima kikwegereye.",
+    "back": "Subira inyuma"
+  },
+  "persona": {
+    "title": "Hitamo umuntu w'igerageza",
+    "intro": "Buri muntu w'igerageza ni uw'ibihimbano werekana uko ibintu bimeze muri porogaramu.",
+    "disclaimer": "Umuntu w'igerageza — guhindura uruhare si ukwinjira nyakuri",
+    "relationshipSelf": "Njye ubwanjye",
+    "relationshipRepresentative": "Uhagarariye {{name}}",
+    "relationshipNone": "Nta makuru arahuzwa",
+    "stateConsentGiven": "URUHUSHYA RWATANZWE",
+    "stateConsentWithdrawn": "URUHUSHYA RWAKUWEHO",
+    "stateNoConsent": "NTA RUHUSHYA RWATANZWE",
+    "stateNotVerified": "NTIBYEMEJWE",
+    "stateLocked": "BYAFUNZWE",
+    "cardA11y": "{{name}}, {{relationship}}, {{state}}. Umuntu w'igerageza.",
+    "cardHint": "Ifungura porogaramu nk'uyu muntu w'igerageza",
+    "emptyTitle": "Nta bantu b'igerageza babonetse",
+    "emptyBody": "Amakuru y'igerageza ashobora kuba yabuze. Ongera utangire igerageza kugira ngo agaruke.",
+    "loadError": "Abantu b'igerageza ntibashoboye kuboneka.",
+    "startError": "Uyu muntu ntiyashoboye gufungurwa. Nta cyahindutse. Ongera ugerageze."
+  },
+  "verify": {
+    "title": "Emeza ko ari wowe",
+    "intro": "Andika kode y'imibare 6 kugira ngo urangize gutegura porogaramu yawe.",
+    "codeLabel": "Kode yo kwemeza",
+    "digitLabel": "Umubare wa {{n}} muri 6",
+    "submit": "Emeza",
+    "hintEyebrow": "IGERAGEZA GUSA",
+    "hintTitle": "Kode y'igerageza",
+    "hintBody": "Muri iri gerageza kode ni {{code}}. Iri ni igenzura ry'igerageza — ntiryemeza umwirondoro nyakuri w'umuntu.",
+    "wrongCode": "Iyo kode si yo. Usigaje kugerageza inshuro {{count}}.",
+    "attempts": "Inshuro wagerageje: {{used}} muri {{max}}",
+    "unavailableTitle": "Kwemeza ntibishoboka ubu",
+    "unavailable": "Serivisi yo kwemeza ntiboneka ubu. Nta cyahindutse. Uzongere ugerageze nyuma.",
+    "error": "Kode ntiyashoboye kugenzurwa. Nta cyahindutse. Ongera ugerageze.",
+    "back": "Subira ku bantu b'igerageza"
+  },
+  "recover": {
+    "title": "Shaka ubufasha ku kigo nderabuzima",
+    "body": "Kode zitari zo zinjijwe inshuro nyinshi, bityo iyi porogaramu yafunzwe. Itsinda rikuvura rishobora kuyifungura no kwemeza uwo uri imbonankubone ku kigo nderabuzima.",
+    "contactTitle": "Aho wabariza (by'igerageza)",
+    "contactBody": "Ahakirirwa abantu, Ikigo nderabuzima cy'igerageza Alpha — gifungura iminsi y'akazi 07:00–17:00.",
+    "back": "Subira ku ntangiriro"
+  },
+  "header": {
+    "demoPill": "Umuntu w'igerageza",
+    "menu": "Urutonde rwa porogaramu",
+    "menuTitle": "Porogaramu",
+    "switchPersona": "Hindura umuntu",
+    "switchPersonaHint": "Isoza iki gice cy'igerageza igasubira ku rutonde rw'abantu.",
+    "signedInAs": "Umuntu w'igerageza: {{name}}"
+  }
+}

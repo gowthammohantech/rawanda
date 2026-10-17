@@ -20,7 +20,12 @@ import enAdminFilters from "./locales/en/admin/filters.json";
 import enAdminOverview from "./locales/en/admin/overview.json";
 import enAdminPrivacy from "./locales/en/admin/privacy.json";
 import enCitizen from "./locales/en/citizen.json";
+import enCitizenConsent from "./locales/en/citizen/consent.json";
 import enCitizenErrors from "./locales/en/citizen/errors.json";
+import enCitizenMore from "./locales/en/citizen/more.json";
+import enCitizenNav from "./locales/en/citizen/nav.json";
+import enCitizenOnboarding from "./locales/en/citizen/onboarding.json";
+import enCitizenValidation from "./locales/en/citizen/validation.json";
 import enClinical from "./locales/en/clinical.json";
 import enClinicalCommon from "./locales/en/clinical/common.json";
 import enClinicalErrors from "./locales/en/clinical/errors.json";
@@ -34,6 +39,7 @@ import enShell from "./locales/en/shell.json";
 import enValidation from "./locales/en/validation.json";
 import enWorker from "./locales/en/worker.json";
 import enWorkerAuth from "./locales/en/worker/auth.json";
+import enWorkerHome from "./locales/en/worker/home.json";
 import enWorkerNav from "./locales/en/worker/nav.json";
 import enWorkerNetsim from "./locales/en/worker/netsim.json";
 import enWorkerSettings from "./locales/en/worker/settings.json";
@@ -47,7 +53,12 @@ import rwAdminFilters from "./locales/rw/admin/filters.json";
 import rwAdminOverview from "./locales/rw/admin/overview.json";
 import rwAdminPrivacy from "./locales/rw/admin/privacy.json";
 import rwCitizen from "./locales/rw/citizen.json";
+import rwCitizenConsent from "./locales/rw/citizen/consent.json";
 import rwCitizenErrors from "./locales/rw/citizen/errors.json";
+import rwCitizenMore from "./locales/rw/citizen/more.json";
+import rwCitizenNav from "./locales/rw/citizen/nav.json";
+import rwCitizenOnboarding from "./locales/rw/citizen/onboarding.json";
+import rwCitizenValidation from "./locales/rw/citizen/validation.json";
 import rwClinical from "./locales/rw/clinical.json";
 import rwClinicalCommon from "./locales/rw/clinical/common.json";
 import rwClinicalErrors from "./locales/rw/clinical/errors.json";
@@ -61,6 +72,7 @@ import rwShell from "./locales/rw/shell.json";
 import rwValidation from "./locales/rw/validation.json";
 import rwWorker from "./locales/rw/worker.json";
 import rwWorkerAuth from "./locales/rw/worker/auth.json";
+import rwWorkerHome from "./locales/rw/worker/home.json";
 import rwWorkerNav from "./locales/rw/worker/nav.json";
 import rwWorkerNetsim from "./locales/rw/worker/netsim.json";
 import rwWorkerSettings from "./locales/rw/worker/settings.json";
@@ -100,6 +112,7 @@ export const enResources = {
   worker: {
     ...enWorker,
     auth: enWorkerAuth,
+    home: enWorkerHome,
     nav: enWorkerNav,
     settings: enWorkerSettings,
     sync: enWorkerSync,
@@ -115,7 +128,15 @@ export const enResources = {
     charts: enAdminCharts,
     privacy: enAdminPrivacy,
   },
-  citizen: { ...enCitizen, errors: enCitizenErrors },
+  citizen: {
+    ...enCitizen,
+    errors: enCitizenErrors,
+    onboarding: enCitizenOnboarding,
+    consent: enCitizenConsent,
+    nav: enCitizenNav,
+    validation: enCitizenValidation,
+    more: enCitizenMore,
+  },
 } as const satisfies Record<Namespace, object>;
 
 /** Kinyarwanda drafts. Parity with EN is enforced by `pnpm i18n:check`, not by types. */
@@ -136,6 +157,7 @@ export const rwResources: Record<Namespace, object> = {
   worker: {
     ...rwWorker,
     auth: rwWorkerAuth,
+    home: rwWorkerHome,
     nav: rwWorkerNav,
     settings: rwWorkerSettings,
     sync: rwWorkerSync,
@@ -151,7 +173,15 @@ export const rwResources: Record<Namespace, object> = {
     charts: rwAdminCharts,
     privacy: rwAdminPrivacy,
   },
-  citizen: { ...rwCitizen, errors: rwCitizenErrors },
+  citizen: {
+    ...rwCitizen,
+    errors: rwCitizenErrors,
+    onboarding: rwCitizenOnboarding,
+    consent: rwCitizenConsent,
+    nav: rwCitizenNav,
+    validation: rwCitizenValidation,
+    more: rwCitizenMore,
+  },
 };
 
 export const resources = { en: enResources, rw: rwResources } as const;

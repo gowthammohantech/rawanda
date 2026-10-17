@@ -1,0 +1,57 @@
+{
+  "greeting": {
+    "morning": "Good morning, {{name}}",
+    "afternoon": "Good afternoon, {{name}}",
+    "evening": "Good evening, {{name}}"
+  },
+  "dateLabel": "{{weekday}}, {{day}} {{month}}",
+  "startScreening": "Start a new screening",
+  "startScreeningHint": "Record blood pressure and glucose for a patient",
+  "section": {
+    "todaysWork": "Today's work",
+    "nextFollowUps": "Next follow-ups",
+    "drafts": "Drafts"
+  },
+  "overdue": "Overdue",
+  "dueToday": "Due today",
+  "completed": "Completed",
+  "summaryLabel": "Today's work: {{overdue}} overdue, {{dueToday}} due today, {{completed}} completed",
+  "progress": "{{done}} of {{total}} done today",
+  "pending_one": "{{count}} saved on this device",
+  "pending_other": "{{count}} saved on this device",
+  "strip": {
+    "offline": "Working offline (simulated)",
+    "waiting_one": "{{count}} waiting to sync",
+    "waiting_other": "{{count}} waiting to sync",
+    "allSynced": "Everything on this device is synced",
+    "conflicts_one": "{{count}} needs your decision",
+    "conflicts_other": "{{count}} need your decision",
+    "lastSynced": "Last synced {{time}}",
+    "neverSynced": "Not synced yet",
+    "openSync": "Opens the Sync tab"
+  },
+  "pill": {
+    "overdue_one": "Overdue · {{count}} day",
+    "overdue_other": "Overdue · {{count}} days",
+    "dueToday": "Due today · {{time}}",
+    "upcoming": "Upcoming · {{date}}"
+  },
+  "row": {
+    "label": "{{name}}, {{task}}, {{due}}",
+    "hint": "Opens the follow-up",
+    "unknownPatient": "Patient not on this device"
+  },
+  "seeAllTasks": "See all tasks",
+  "empty": "No follow-ups assigned for today",
+  "emptyHint": "Follow-ups appear here when a clinician assigns them to you.",
+  "overdueCaveat": "Overdue = past the demo due date; timing rules not clinically approved",
+  "drafts": {
+    "count_one": "{{count}} unfinished screening",
+    "count_other": "{{count}} unfinished screenings",
+    "none": "No unfinished screenings",
+    "savedAt": "Saved {{time}}",
+    "hint": "Continues this screening"
+  },
+  "loading": "Loading today's work",
+  "error": "Today's work could not be read from this device"
+}

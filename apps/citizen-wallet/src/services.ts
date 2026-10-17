@@ -6,10 +6,13 @@ import { QueryClient } from "@tanstack/react-query";
 import { APP_ID } from "./config.ts";
 import { platform } from "./platform";
 import { createAppSession, type AppSession } from "./session.ts";
+import { createWalletStore, type WalletStore } from "./state/session.ts";
 
 export type ShellServices = {
   i18n: I18nInstance;
   session: AppSession;
+  /** CTZ-02 wallet context (account, active patient, last tab) over `session`. */
+  wallet: WalletStore;
   queryClient: QueryClient;
 };
 
@@ -29,9 +32,12 @@ export async function bootstrapShell(): Promise<ShellServices> {
     storage: platform.languageStorage(),
     isDev: __DEV__,
   });
+  const storage = platform.personaStorage();
+  const session = createAppSession(storage);
   return {
     i18n,
-    session: createAppSession(platform.personaStorage()),
+    session,
+    wallet: createWalletStore(session, storage),
     queryClient: createAppQueryClient(),
   };
 }

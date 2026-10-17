@@ -519,6 +519,15 @@
       },
       "settings": {
         "changed": "Wallet settings changed"
+      },
+      "persona": {
+        "selected": "Demo persona chosen in the wallet"
+      },
+      "identity": {
+        "verification_attempted": "Identity verification attempted (simulated)",
+        "verified": "Identity verified (simulated demo code)",
+        "verification_failed": "Identity verification failed (simulated)",
+        "verification_unavailable": "Verification service unavailable (simulated)"
       }
     }
   }

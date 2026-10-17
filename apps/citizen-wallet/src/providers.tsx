@@ -19,10 +19,25 @@ import {
   type Metrics,
 } from "react-native-safe-area-context";
 
+import { useStore } from "zustand";
+
 import type { ShellServices } from "./services.ts";
 import type { AppPersona, AppSession } from "./session.ts";
+import type { WalletState, WalletStore } from "./state/session.ts";
 
 const SessionContext = createContext<AppSession | null>(null);
+const WalletContext = createContext<WalletStore | null>(null);
+
+export function useWalletStore(): WalletStore {
+  const store = useContext(WalletContext);
+  if (store === null) throw new Error("useWalletStore must be used inside <AppProviders>");
+  return store;
+}
+
+/** Selects from the CTZ-02 wallet session store (re-renders on change). */
+export function useWallet<T>(selector: (state: WalletState) => T): T {
+  return useStore(useWalletStore(), selector);
+}
 
 export function PersonaProvider({
   session,
@@ -65,7 +80,9 @@ export function AppProviders({
       <SafeAreaProvider initialMetrics={safeAreaMetrics}>
         <ToastProvider>
           <QueryClientProvider client={services.queryClient}>
-            <PersonaProvider session={services.session}>{children}</PersonaProvider>
+            <PersonaProvider session={services.session}>
+              <WalletContext.Provider value={services.wallet}>{children}</WalletContext.Provider>
+            </PersonaProvider>
           </QueryClientProvider>
         </ToastProvider>
       </SafeAreaProvider>

@@ -1,0 +1,27 @@
+{
+  "consentRow": "Consent and sharing",
+  "demoToolsRow": "Demo tools",
+  "languageTitle": "Language",
+  "comingSoon": "Privacy, accessibility and support settings arrive in later phases.",
+  "demo": {
+    "title": "Demo tools",
+    "eyebrow": "DEMO ONLY",
+    "intro": "These controls change the made-up demo data on this device only.",
+    "reset": "Reset demo",
+    "resetTitle": "Reset demo data?",
+    "resetBody": "All demo data on this device goes back to the starting point. The wallet then checks your persona's access again.",
+    "clockTitle": "Demo clock",
+    "clockNow": "Demo time: {{time}}",
+    "advanceDay": "Advance +1 day",
+    "advanceWeek": "Advance +7 days",
+    "baseline": "Back to baseline",
+    "faultsTitle": "Simulated faults",
+    "slow": "Slow network",
+    "error500": "Server errors (500)",
+    "unavailable": "Service unavailable",
+    "conflict": "Conflict on next write",
+    "conflictHint": "The next saved change to your record conflicts once.",
+    "moreTools": "Offline and scenarios",
+    "failed": "The demo tool could not run. Try again."
+  }
+}
