@@ -21,6 +21,8 @@ export const ROUTE_PATTERNS = {
 /** Every screen of the app except the demo sign-in. */
 export type ClinicalRouteId = Exclude<keyof typeof ROUTE_PATTERNS, "login">;
 
+export type PatientsRouteParams = { q?: string; facility?: string; page?: number };
+
 const LOGIN = ROUTE_PATTERNS.login;
 const enc = encodeURIComponent;
 
@@ -30,7 +32,16 @@ export const routes = {
   login: (redirect?: string) =>
     redirect === undefined ? LOGIN : `${LOGIN}?redirect=${enc(redirect)}`,
   queue: () => ROUTE_PATTERNS.queue,
-  patients: () => ROUTE_PATTERNS.patients,
+  /** `/clinical/patients`, optionally `?q=&facility=&page=` (CLN-03 URL-driven search). */
+  patients: (params: PatientsRouteParams = {}) => {
+    const search = new URLSearchParams();
+    const q = params.q?.trim();
+    if (q !== undefined && q !== "") search.set("q", q);
+    if (params.facility !== undefined) search.set("facility", params.facility);
+    if (params.page !== undefined && params.page > 1) search.set("page", String(params.page));
+    const query = search.toString();
+    return query === "" ? ROUTE_PATTERNS.patients : `${ROUTE_PATTERNS.patients}?${query}`;
+  },
   patient: (id: string) => `${BASE_PATH}/patients/${enc(id)}`,
   review: (id: string) => `${BASE_PATH}/reviews/${enc(id)}`,
   decision: (id: string) => `${BASE_PATH}/reviews/${enc(id)}/decision`,

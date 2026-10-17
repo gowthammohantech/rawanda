@@ -1,7 +1,7 @@
 /**
  * Settings (HWM-01 task 10): LANGUAGE (EN/RW switcher), SIGNED IN AS (persona, role, facility,
- * district, short device id — demo sign-in only), DEMO (FND demo tools; Network simulation and
- * Reset demo screens arrive in HWM-02 / HWM-10), ABOUT, and Sign out behind a ConfirmSheet
+ * district, short device id — demo sign-in only), DEMO (Network simulation — HWM-02; FND demo
+ * tools; the Reset demo screen arrives in HWM-10), ABOUT, and Sign out behind a ConfirmSheet
  * ("Unsynced items stay on this device"). HWM-10 finalises this screen.
  */
 import { roleLabelKey } from "@laif/auth-demo";
@@ -31,9 +31,11 @@ export type SettingsScreenProps = {
   onBack?: () => void;
   /** Called after sign-out completes (navigate to sign-in). */
   onSignedOut: () => void;
+  /** Opens Settings → Network simulation (HWM-02). */
+  onOpenNetwork: () => void;
 };
 
-export function SettingsScreen({ onBack, onSignedOut }: SettingsScreenProps) {
+export function SettingsScreen({ onBack, onSignedOut, onOpenNetwork }: SettingsScreenProps) {
   const t = useTx();
   const { toast } = useToast();
   const { session, signOut } = useSession();
@@ -94,10 +96,11 @@ export function SettingsScreen({ onBack, onSignedOut }: SettingsScreenProps) {
       )}
       <Section title={t("worker:settings.demo")}>
         <ListRow
+          testID="open-network-simulation"
           icon="wifi-off"
           title={t("worker:settings.networkSimulation")}
-          subtitle={t("worker:settings.comingIn", { phase: "HWM-02" })}
-          disabled
+          subtitle={t("worker:settings.networkSimulationHint")}
+          onPress={onOpenNetwork}
         />
         <ListRow
           icon="refresh"

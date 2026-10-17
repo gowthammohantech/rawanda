@@ -13,7 +13,7 @@ import { expect } from "vitest";
 
 import { App } from "../app/App.tsx";
 import { APP_ID } from "../app/config.ts";
-import { createAppRepository } from "../app/repository.ts";
+import { createAppRepository } from "../data/repository.ts";
 import { appRoutes } from "../app/router.tsx";
 import { createAppQueryClient, type AppServices } from "../app/services.ts";
 import { createAppSession } from "../session/session-store.ts";
@@ -50,7 +50,7 @@ export async function renderApp(options: RenderAppOptions = {}): Promise<Rendere
     i18n,
     session,
     repo: createAppRepository({ session, store, noLatency: true }),
-    queryClient: createAppQueryClient(),
+    queryClient: createAppQueryClient({ retryDelayMs: 0 }),
   };
   const router = createMemoryRouter(appRoutes, { initialEntries: [path] });
   const app = <App services={services} router={router} />;

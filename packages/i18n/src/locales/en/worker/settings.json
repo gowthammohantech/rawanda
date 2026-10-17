@@ -10,6 +10,7 @@
   "district": "District",
   "deviceId": "Device ID",
   "networkSimulation": "Network simulation",
+  "networkSimulationHint": "Go offline, add delay or failures, simulate others' changes",
   "resetDemo": "Reset demo",
   "comingIn": "Available in {{phase}}",
   "aboutText": "CareConnect Worker is a demonstration that uses synthetic data only. It is not for clinical use.",

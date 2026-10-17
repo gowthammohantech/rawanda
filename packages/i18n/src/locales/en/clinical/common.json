@@ -2,8 +2,6 @@
   "activeFacility": "Active facility: {{facility}}",
   "facilityLabel": "Facility",
   "roleChip": "Role: {{role}}",
-  "searchLink": "Search patients",
-  "searchHint": "Opens patient search",
   "notifications": "No notifications in this demo yet.",
   "signOut": "Sign out",
   "signedOut": "Signed out of the demo.",

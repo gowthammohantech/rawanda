@@ -49,6 +49,7 @@ export const AUDIT_ACTIONS = {
   "demo.fault_toggled": demoClient,
   "demo.clock_changed": demo,
   "demo.concurrent_update_simulated": demoClient,
+  "demo.slice_refreshed": demo,
   "demo.simulated_staff_action": demoClient,
   "demo.bundle_exported": demoClient,
   "demo.bundle_imported": demoClient,

@@ -231,6 +231,25 @@ export const PatientSchema = z.object({
   preferredLanguage: z.enum(LANGUAGES),
 }) satisfies z.ZodType<Patient>;
 
+/**
+ * CLN-03: one row of the clinical patient search — the patient's identity columns plus derived
+ * values (age at the demo clock, latest screening, open reviews + referrals + follow-ups).
+ */
+export const PatientSummarySchema = z.object({
+  id: PatientIdSchema,
+  syntheticIdentifier: NonEmptyTrimmed,
+  displayName: NonEmptyTrimmed,
+  /** Whole years at the demo clock; null when neither a date of birth nor an estimate exists. */
+  ageYears: z.number().int().min(0).max(130).nullable(),
+  /** True when `ageYears` comes from `estimatedAgeYears` (no date of birth recorded). */
+  ageEstimated: z.boolean(),
+  sexOptional: z.enum(SEX_VALUES).nullable(),
+  facilityId: FacilityIdSchema,
+  lastScreeningAt: IsoUtcString.nullable(),
+  openItems: z.number().int().min(0),
+});
+export type PatientSummary = z.output<typeof PatientSummarySchema>;
+
 const AmendableValueSchema = z.union([z.number(), z.string(), z.null()]);
 
 export const ScreeningAmendmentSchema = z.object({

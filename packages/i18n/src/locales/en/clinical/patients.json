@@ -1,0 +1,125 @@
+{
+  "search": {
+    "title": "Patients",
+    "subtitle": "Search synthetic patients in your active facility by synthetic ID or name.",
+    "label": "Search patients",
+    "placeholder": "Synthetic ID or name",
+    "submit": "Search",
+    "facilityFilter": "Facility",
+    "facilityHint": "Only your permitted facilities are listed. Choosing another one switches your active facility.",
+    "recentTitle": "Patients in {{facility}}",
+    "resultsTitle": "Search results in {{facility}}",
+    "results": {
+      "caption": "Showing {{from}}–{{to}} of {{total}}",
+      "none": "Showing 0 of 0"
+    },
+    "empty": "No synthetic patients match '{{q}}'",
+    "emptyNoQuery": "No synthetic patients in this facility",
+    "emptyDescription": "Check the spelling, search by synthetic ID, or clear the filters.",
+    "clear": "Clear filters",
+    "lastUpdated": "Last updated {{time}} — showing the results saved before the connection problem.",
+    "loading": "Loading patients…"
+  },
+  "table": {
+    "syntheticId": "Synthetic ID",
+    "name": "Name",
+    "ageSex": "Age / sex",
+    "facility": "Facility",
+    "lastScreening": "Last screening",
+    "openItems": "Open items",
+    "noScreening": "None yet",
+    "age": "{{age}} y",
+    "ageEstimated": "~{{age}} y (estimated)",
+    "ageUnknown": "Age not recorded",
+    "openPatient": "Open patient record {{id}}"
+  },
+  "topbar": {
+    "label": "Search patients",
+    "placeholder": "Search patients…",
+    "shortcut": "Press Control+K or Command+K to focus patient search; Enter searches."
+  },
+  "record": {
+    "loading": "Loading patient record…",
+    "tabs": {
+      "label": "Patient record sections",
+      "overview": "Overview",
+      "screenings": "Screenings",
+      "reviews": "Reviews",
+      "referralsTasks": "Referrals & tasks"
+    },
+    "header": {
+      "synthetic": "Synthetic",
+      "syntheticId": "Synthetic ID",
+      "facility": "Facility",
+      "identity": "Identity: {{status}}"
+    },
+    "demographics": {
+      "title": "Demographics",
+      "dateOfBirth": "Date of birth",
+      "notRecorded": "Not recorded",
+      "age": "Age",
+      "sex": "Sex",
+      "language": "Preferred language",
+      "facility": "Registered facility",
+      "district": "District"
+    },
+    "provenance": {
+      "title": "Identity provenance",
+      "identifierType": "Identifier type",
+      "identifierTypeValue": "Synthetic demo identifier",
+      "identifier": "Identifier",
+      "issuingSource": "Issuing source",
+      "issuingSourceValue": "Facility-scoped demo ID",
+      "registeredAt": "Registered at",
+      "registeredAtValue": "{{facility}}, {{date}}",
+      "registeredBy": "Registered by",
+      "registeredBySeed": "Synthetic demo seed",
+      "registeredByWorker": "Health worker app (demo registration)",
+      "identityStatus": "Identity status",
+      "version": "Record version",
+      "versionValue": "Version {{version}} · updated {{date}}"
+    },
+    "kpi": {
+      "label": "Patient activity",
+      "screenings": "Screenings",
+      "openReviews": "Open reviews",
+      "openReferrals": "Open referrals",
+      "openTasks": "Open tasks"
+    },
+    "latest": {
+      "title": "Latest screening",
+      "none": "No screenings are recorded for this patient.",
+      "measuredAt": "Measured",
+      "bloodPressure": "Blood pressure",
+      "glucose": "Glucose",
+      "notMeasured": "Not measured",
+      "source": "Source",
+      "status": "Status"
+    },
+    "duplicate": {
+      "title": "Possible duplicate record",
+      "body": "Possible duplicate record — verify identity before acting. Records are never merged automatically.",
+      "candidates": "Candidate records in your facility",
+      "outOfScopeCount_one": "{{count}} further candidate outside your facilities",
+      "outOfScopeCount_other": "{{count}} further candidates outside your facilities"
+    },
+    "externalId": {
+      "title": "National identity check",
+      "description": "The demo has no connection to a national identity service. Identity here is the facility-scoped synthetic ID only.",
+      "button": "Check national ID (not connected in demo)",
+      "unavailable": "National identity service is not connected in this demo. No identity was fetched or created."
+    },
+    "consent": {
+      "label": "Consent",
+      "chip": "Consent: {{state}}"
+    },
+    "denied": {
+      "body": "This synthetic patient is outside your active facility or demo role. No patient details are shown. This attempt was recorded in the audit log."
+    },
+    "notFound": {
+      "title": "No synthetic patient with this ID in your facilities",
+      "description": "Check the link, or search for the patient by synthetic ID or name.",
+      "back": "Back to patient search"
+    }
+  }
+}

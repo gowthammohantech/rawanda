@@ -1,3 +1,4 @@
+import type { AuditEvent, Patient, Screening } from "@laif/domain";
 import { PERSONA_IDS } from "@laif/mock-data";
 import { describe, expect, it } from "vitest";
 
@@ -41,5 +42,68 @@ describe("demo service", () => {
     expect((await h.repo.demo.resetDemo()).seedVersion).toBe("seed-v1");
     h.as(PERSONA_IDS.citizen1);
     expect((await h.repo.demo.setFaults({ latencyMs: [0, 10] })).latencyMs).toEqual([0, 10]);
+  });
+
+  it("refreshSlice: the worker slice follows the signed-in persona, unsynced rows stay", async () => {
+    // Seeded while signed out → default persona (CHW Alpha-1 A) slice.
+    const h = await createHarness({ appId: "worker", personaId: null });
+    const facilities = async () =>
+      new Set((await h.store.getAll<Patient>("patients")).map((p) => p.facilityId));
+    expect(await facilities()).toEqual(new Set(["fac-alpha-1"]));
+    h.as(PERSONA_IDS.chwAlpha1A);
+    expect(await h.repo.demo.refreshSlice()).toEqual({
+      refreshed: false,
+      personaId: PERSONA_IDS.chwAlpha1A,
+    });
+
+    // An unsynced alpha-1 screening and draft, then a different persona signs in.
+    const patient = (await h.store.getAll<Patient>("patients"))[0]!;
+    const queued = await h.repo.createScreening(
+      {
+        patientId: patient.id,
+        measuredAt: "2026-10-14T05:10:00.000Z",
+        systolic: 126,
+        diastolic: 80,
+      },
+      h.key(),
+    );
+    const draft = await h.repo.saveScreeningDraft(
+      { patientId: patient.id, systolic: 120 },
+      h.key(),
+    );
+    const opsBefore = await h.store.getAll("syncOperations");
+    const remoteBefore = await h.store.getAll("remote_patients");
+    h.as(PERSONA_IDS.chwAlpha2A);
+    expect(await h.repo.demo.refreshSlice()).toEqual({
+      refreshed: true,
+      personaId: PERSONA_IDS.chwAlpha2A,
+    });
+    const patients = await h.store.getAll<Patient>("patients");
+    expect(new Set(patients.map((p) => p.facilityId))).toEqual(
+      new Set(["fac-alpha-1", "fac-alpha-2"]),
+    );
+    // From the old slice only parents of unsynced rows (queued ops, drafts) stay — no orphans.
+    const oldSlice = patients.filter((p) => p.facilityId === "fac-alpha-1").map((p) => p.id);
+    expect(oldSlice).toContain(patient.id);
+    const screeningsAfter = await h.store.getAll<Screening>("screenings");
+    for (const id of oldSlice) {
+      expect(screeningsAfter.some((s) => s.patientId === id)).toBe(true);
+    }
+    const screenings = await h.store.getAll<Screening>("screenings");
+    expect(screenings.map((s) => s.id)).toEqual(
+      expect.arrayContaining([queued.data.id, draft.data.id]),
+    );
+    expect(await h.store.getAll("syncOperations")).toEqual(opsBefore);
+    expect(await h.store.getAll("remote_patients")).toEqual(remoteBefore);
+    const audit = (await h.store.getAll<AuditEvent>("auditEvents")).filter(
+      (e) => e.action === "demo.slice_refreshed",
+    );
+    expect(audit).toHaveLength(1);
+    expect(await h.repo.demo.refreshSlice()).toMatchObject({ refreshed: false });
+  });
+
+  it("refreshSlice is a no-op outside the worker app", async () => {
+    const h = await createHarness({ personaId: PERSONA_IDS.clinAlpha1 });
+    expect(await h.repo.demo.refreshSlice()).toEqual({ refreshed: false, personaId: null });
   });
 });

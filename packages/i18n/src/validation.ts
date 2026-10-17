@@ -21,6 +21,7 @@ type LooseT = (key: string, options?: Record<string, unknown>) => string;
 const REQUIRED_PARAMS: Partial<Record<ValidationMessageKey, readonly string[]>> = {
   reasonTooShort: ["min"],
   tooShort: ["min"],
+  minLength: ["min"],
   tooLong: ["max"],
   dateTooOld: ["days"],
   unrecognizedKeys: ["keys"],

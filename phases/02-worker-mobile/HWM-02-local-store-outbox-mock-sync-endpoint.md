@@ -12,7 +12,29 @@
 | Depends on | HWM-01; FND-05 (`sliceForApp('worker')`, SCN-07/08/09), FND-07 (repository, sync queue, simulated remote, faults), FND-08 (SQLite adapter, `createTestSqliteExecutor`) |
 | Trace | PRD HW-05, HW-08, §7 · FRD HW-05, HW-08, §4, §5, §6 (Idempotency-Key, If-Match, error codes) · Tech spec §2.2 Offline requirement, §4, §5.2 `SyncOperation`, WF-02 · FRD T-04, T-09 |
 | Size | M |
-| Status | Planned |
+| Status | Done |
+
+## 1a. Implementation notes (as built)
+
+- **Op names → FND op shape (mapping note).** FND-07 `SyncOperation`s have `entityType` + `opType` (`create` / `update` / `command`) and the FND-03 input as `payload`; idempotency key = the mutation's key (not the op id), stable across retries / restarts. The phase's op names are *labels* derived in `apps/worker-mobile/src/data/opLabel.ts` (`syncOpLabel`, i18n `worker:sync.op.*`):
+
+  | Label (phase name) | entityType : opType | payload |
+  |---|---|---|
+  | `patient.register` | `patient:create` | — |
+  | `screening.submit` | `screening:create` | — |
+  | `screening.amend` | `screening:update` | — |
+  | `followup.attempt` | `follow_up:update` | `action: 'record_attempt'` |
+  | `followup.outcome` | `follow_up:update` | `action: 'record_outcome'` |
+  | `followup.update` | `follow_up:update` | other actions |
+  | `correction.request` | `care_task:create` | has `targetType` |
+  | resolution ops (HWM-09) | same as the resolved op | `resolvesOpId` set (`describeSyncOp().resolution`) |
+
+- **Rule check (task 2).** Every listed rule already exists in `@laif/repositories` `sync/sync-queue.ts` / `sync/simulated-remote.ts` with tests in `sync/sync-queue.test.ts`; nothing was added to the sync rules. The acceptance cases are re-proven over the SQLite adapter in `src/data/__tests__/workerSync.integration.test.ts`.
+- **Seed slice follows the signed-in persona (decision).** Boot seeds while signed out → FND default persona slice. On sign-in (and restore) the app calls the new additive `repo.demo.refreshSlice()` (`@laif/repositories` `services/demo.ts`, meta `demo.slicePersonaId`, audit `demo.slice_refreshed`): when the signed-in worker differs from the slice on the device, the patient-scoped collections are re-sliced from the simulated remote; rows with an unsettled sync op (anything not `acknowledged` / `superseded` — `rejected` "Not accepted" rows stay too) and unsynced drafts are kept (local copy wins), plus the parent patient of each kept row (no orphans); idempotent (no-op when the persona matches); audit log, queue, device sessions and meta untouched.
+- **Audit.** `settings.network_sim_changed` = the existing FND `demo.fault_toggled` (written by every `repo.demo.setFaults`).
+- **Network simulation controls.** The kit (and RN core) has no slider: delay and failure rate are preset segmented steps (values clamped by FND `normaliseFaultConfig`). "Timeout" and "dropped acknowledgement" are one FND field (`timeoutRate`, timeout after commit) → one failure type "Lost reply"; one failure type is active at a time. `conflictOnce` is armed per follow-up ("Make the next sync of this follow-up conflict"); "Simulate a clinician update" moves the follow-up's `dueAt` by one day on the remote via `repo.sync.simulateRemoteEdit`.
+- **State.** `src/network/networkStore.ts` (Zustand) is the single UI view of `FaultConfig`, shared by the header `NetworkBadge`, the Network simulation screen and the FND demo-tools sheet. Query keys `['sync', …]` / `['home']` in `src/data/queryKeys.ts`; `invalidateAfterWrite()` is the helper every mutation hook calls.
+- `src/repository.ts` moved to `src/data/repository.ts`.
 
 ## 2. Goal
 

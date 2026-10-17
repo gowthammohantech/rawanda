@@ -27,5 +27,6 @@
   "dateRangeOrder": "The start date must not be after the end date.",
   "unrecognizedKeys": "Unexpected fields: {{keys}}.",
   "noChanges": "Make at least one change.",
-  "invalid": "This value is not valid."
+  "invalid": "This value is not valid.",
+  "minLength": "Enter at least {{min}} characters."
 }

@@ -1,0 +1,35 @@
+{
+  "state": {
+    "pending": "Saved on this device",
+    "syncing": "Syncing",
+    "synced": "Synced",
+    "conflict": "Needs your decision",
+    "rejected": "Not accepted",
+    "blocked": "Blocked — device access paused"
+  },
+  "op": {
+    "patient": {
+      "register": "Patient registration"
+    },
+    "screening": {
+      "submit": "Screening",
+      "amend": "Screening amendment"
+    },
+    "followup": {
+      "attempt": "Contact attempt",
+      "outcome": "Follow-up outcome",
+      "update": "Follow-up update"
+    },
+    "correction": {
+      "request": "Correction request"
+    },
+    "other": "Other change",
+    "resolution": "{{label}} (re-applied after a conflict)"
+  },
+  "badge": {
+    "online": "Online",
+    "offline": "Offline (simulated)",
+    "pending_one": "{{count}} item waiting to sync",
+    "pending_other": "{{count}} items waiting to sync"
+  }
+}
