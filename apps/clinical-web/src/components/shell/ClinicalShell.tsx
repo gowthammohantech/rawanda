@@ -1,7 +1,7 @@
 /**
  * Clinical shell (CLN-01 task 8): `@laif/ui-web` AppShell (SkipLink + DemoBanner always) with the
  * grouped Sidebar (capability-aware items, count-badge slots, Settings / Help footer), the Topbar
- * (search link → Patients, bell, Demo tools, EN/RW LanguageSwitcher, role chip + active facility,
+ * (patient search with ⌘K/Ctrl+K — CLN-03, bell, Demo tools, EN/RW LanguageSwitcher, role chip + active facility,
  * PersonaSwitcher with facility switch and Sign out) and the RoleBanner
  * ("… — demo role switch, not authentication") + the ConnectionBanner (CLN-02) under it.
  */
@@ -20,7 +20,7 @@ import {
 } from "@laif/ui-web";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router";
+import { NavLink, Outlet, useLocation, useNavigate } from "react-router";
 
 import { useDemoTools } from "../../app/demo-tools.tsx";
 import { ConnectionBanner } from "../ConnectionBanner.tsx";
@@ -31,15 +31,14 @@ import { routes } from "../../app/routes.ts";
 import { recordSessionEnded, recordSessionStarted } from "../../session/session-audit.ts";
 import { permittedFacilityIdsFor } from "../../session/session-store.ts";
 import { useSession } from "../../session/useSession.ts";
+import { useSwitchFacility } from "../../session/useSwitchFacility.ts";
 import { NAV_FOOTER, NAV_SECTIONS, type NavItemId } from "./navConfig.ts";
+import { TopbarPatientSearch } from "./TopbarPatientSearch.tsx";
 
 export type ClinicalShellProps = {
   /** Count-badge slots per nav item (CLN-05/08/09); the queue count is wired here already. */
   badgeCounts?: Partial<Record<NavItemId, number>>;
 };
-
-/** Keyboard hint glyph (not translatable); the ⌘K behaviour is out of scope until search lands. */
-const SEARCH_SHORTCUT = "⌘K";
 
 const FOOTER_LINK =
   "target-min flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors";
@@ -60,6 +59,7 @@ function ShellChrome({ badgeCounts = {} }: ClinicalShellProps) {
   const { toast } = useToast();
   const { faults, setFault, reset, loadScenario, scenarios } = useDemoTools();
   const [helpOpen, setHelpOpen] = useState(false);
+  const switchFacility = useSwitchFacility();
 
   const canReadQueue = can("review.read");
   const pending = useQuery({
@@ -123,15 +123,6 @@ function ShellChrome({ badgeCounts = {} }: ClinicalShellProps) {
     await recordSessionStarted(repo, result.state);
   };
 
-  const switchFacility = (facilityId: string) => {
-    if (store.setActiveFacility(facilityId)) {
-      queryClient.clear();
-      toast({
-        title: t("clinical:common.facilitySwitched", { facility: facilityLabel(facilityId, t) }),
-      });
-    }
-  };
-
   const signOut = async () => {
     await recordSessionEnded(repo, state, "sign_out");
     // Commit the login route first (flushSync) so RequireSession never sees the signed-out
@@ -148,7 +139,7 @@ function ShellChrome({ badgeCounts = {} }: ClinicalShellProps) {
       .map((id) => ({
         id: `facility-${id}`,
         label: t("clinical:common.switchFacility", { facility: facilityLabel(id, t) }),
-        onSelect: () => switchFacility(id),
+        onSelect: () => void switchFacility(id),
       })),
     {
       id: "choose-persona",
@@ -202,22 +193,7 @@ function ShellChrome({ badgeCounts = {} }: ClinicalShellProps) {
       <AppShell
         sidebar={<Sidebar sections={sections} LinkComponent={NavLink} footer={footer} />}
         topbar={{
-          searchSlot: (
-            <Link
-              to={routes.patients()}
-              aria-describedby="clinical-search-hint"
-              className="rounded-pill border-border-soft bg-surface/80 text-muted hover:text-ink flex h-10 w-full max-w-md items-center gap-2 border px-3 text-sm"
-            >
-              <Icon name="search" size={16} className="shrink-0" />
-              <span className="min-w-0 flex-1 truncate">{t("clinical:common.searchLink")}</span>
-              <kbd className="border-border-soft text-muted hidden rounded-sm border px-1.5 font-mono text-[11px] sm:inline">
-                {SEARCH_SHORTCUT}
-              </kbd>
-              <span id="clinical-search-hint" className="sr-only">
-                {t("clinical:common.searchHint")}
-              </span>
-            </Link>
-          ),
+          searchSlot: <TopbarPatientSearch />,
           notifications: {
             hasUnread: false,
             onClick: () => toast({ title: t("clinical:common.notifications") }),

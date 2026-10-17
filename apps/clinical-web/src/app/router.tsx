@@ -12,7 +12,7 @@ import { ClinicalShell } from "../components/shell/ClinicalShell.tsx";
 import { AuditPage } from "../features/audit/AuditPage.tsx";
 import { LoginPage } from "../features/login/LoginPage.tsx";
 import { PatientPage } from "../features/patients/PatientPage.tsx";
-import { PatientsPage } from "../features/patients/PatientsPage.tsx";
+import { PatientSearchPage } from "../features/patients/PatientSearchPage.tsx";
 import { QueuePage } from "../features/queue/QueuePage.tsx";
 import { ReferralsPage } from "../features/referrals/ReferralsPage.tsx";
 import { DecisionPage } from "../features/reviews/DecisionPage.tsx";
@@ -50,7 +50,7 @@ export const appRoutes: RouteObject[] = [
         children: [
           { path: BASE_PATH, element: <Navigate to={HOME_PATH} replace /> },
           screen("queue", <QueuePage />),
-          screen("patients", <PatientsPage />),
+          screen("patients", <PatientSearchPage />),
           screen("patient", <PatientPage />),
           screen("review", <ReviewPage />),
           screen("decision", <DecisionPage />),

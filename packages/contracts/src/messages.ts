@@ -48,6 +48,9 @@ export const VALIDATION_KEYS = [
   "noChanges",
   /** Generic fallback for any issue without a more specific key. */
   "invalid",
+  // ── Appended by CLN-03 ──
+  /** Free text (e.g. a search query) shorter than `{min}` characters. */
+  "minLength",
 ] as const;
 
 export type ValidationMessageKey = (typeof VALIDATION_KEYS)[number];

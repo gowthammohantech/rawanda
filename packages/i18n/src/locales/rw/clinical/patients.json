@@ -1,0 +1,125 @@
+{
+  "search": {
+    "title": "Abarwayi",
+    "subtitle": "Shakisha abarwayi b'igerageza mu kigo cy'ubuvuzi ukoreramo ukoresheje nomero y'igerageza cyangwa izina.",
+    "label": "Shakisha abarwayi",
+    "placeholder": "Nomero y'igerageza cyangwa izina",
+    "submit": "Shakisha",
+    "facilityFilter": "Ikigo cy'ubuvuzi",
+    "facilityHint": "Hagaragara gusa ibigo wemerewe. Guhitamo ikindi bihindura ikigo ukoreramo.",
+    "recentTitle": "Abarwayi bo muri {{facility}}",
+    "resultsTitle": "Ibyavuye mu ishakisha muri {{facility}}",
+    "results": {
+      "caption": "Hagaragara {{from}}–{{to}} kuri {{total}}",
+      "none": "Hagaragara 0 kuri 0"
+    },
+    "empty": "Nta murwayi w'igerageza uhuye na '{{q}}'",
+    "emptyNoQuery": "Nta barwayi b'igerageza bari muri iki kigo",
+    "emptyDescription": "Reba uko wanditse, shakisha ukoresheje nomero y'igerageza, cyangwa usibe ibyungururo.",
+    "clear": "Siba ibyungururo",
+    "lastUpdated": "Byavuguruwe bwa nyuma saa {{time}} — hagaragara ibyabitswe mbere y'ikibazo cy'umuyoboro.",
+    "loading": "Abarwayi barimo kuzanwa…"
+  },
+  "table": {
+    "syntheticId": "Nomero y'igerageza",
+    "name": "Izina",
+    "ageSex": "Imyaka / igitsina",
+    "facility": "Ikigo cy'ubuvuzi",
+    "lastScreening": "Isuzuma riheruka",
+    "openItems": "Ibitararangira",
+    "noScreening": "Nta na rimwe",
+    "age": "Imyaka {{age}}",
+    "ageEstimated": "~Imyaka {{age}} (igereranyo)",
+    "ageUnknown": "Imyaka ntiyanditswe",
+    "openPatient": "Fungura dosiye y'umurwayi {{id}}"
+  },
+  "topbar": {
+    "label": "Shakisha abarwayi",
+    "placeholder": "Shakisha abarwayi…",
+    "shortcut": "Kanda Control+K cyangwa Command+K ngo ujye ku ishakisha; Enter irashakisha."
+  },
+  "record": {
+    "loading": "Dosiye y'umurwayi irimo kuzanwa…",
+    "tabs": {
+      "label": "Ibice bya dosiye y'umurwayi",
+      "overview": "Incamake",
+      "screenings": "Amasuzuma",
+      "reviews": "Isesengura",
+      "referralsTasks": "Kohereza n'imirimo"
+    },
+    "header": {
+      "synthetic": "Igerageza",
+      "syntheticId": "Nomero y'igerageza",
+      "facility": "Ikigo cy'ubuvuzi",
+      "identity": "Umwirondoro: {{status}}"
+    },
+    "demographics": {
+      "title": "Amakuru bwite",
+      "dateOfBirth": "Itariki y'amavuko",
+      "notRecorded": "Ntibyanditswe",
+      "age": "Imyaka",
+      "sex": "Igitsina",
+      "language": "Ururimi ahitamo",
+      "facility": "Ikigo yandikishijwemo",
+      "district": "Akarere"
+    },
+    "provenance": {
+      "title": "Inkomoko y'umwirondoro",
+      "identifierType": "Ubwoko bw'ikiranga",
+      "identifierTypeValue": "Ikiranga cy'igerageza",
+      "identifier": "Ikiranga",
+      "issuingSource": "Aho cyatangiwe",
+      "issuingSourceValue": "Nomero y'igerageza y'ikigo",
+      "registeredAt": "Yandikiwe",
+      "registeredAtValue": "{{facility}}, {{date}}",
+      "registeredBy": "Yanditswe na",
+      "registeredBySeed": "Amakuru y'igerageza",
+      "registeredByWorker": "Porogaramu y'umujyanama w'ubuzima (kwandika kw'igerageza)",
+      "identityStatus": "Uko umwirondoro uhagaze",
+      "version": "Inshuro dosiye yavuguruwe",
+      "versionValue": "Verisiyo {{version}} · yavuguruwe {{date}}"
+    },
+    "kpi": {
+      "label": "Ibikorwa by'umurwayi",
+      "screenings": "Amasuzuma",
+      "openReviews": "Isesengura ritararangira",
+      "openReferrals": "Kohereza bitararangira",
+      "openTasks": "Imirimo itararangira"
+    },
+    "latest": {
+      "title": "Isuzuma riheruka",
+      "none": "Nta suzuma ryanditswe kuri uyu murwayi.",
+      "measuredAt": "Igihe ryakorewe",
+      "bloodPressure": "Umuvuduko w'amaraso",
+      "glucose": "Isukari mu maraso",
+      "notMeasured": "Ntibyapimwe",
+      "source": "Inkomoko",
+      "status": "Uko rihagaze"
+    },
+    "duplicate": {
+      "title": "Dosiye ishobora kuba isubiyemo",
+      "body": "Dosiye ishobora kuba isubiyemo — banza wemeze umwirondoro mbere yo gufata icyemezo. Dosiye ntizigera zihuzwa mu buryo bwikora.",
+      "candidates": "Dosiye zishobora guhura nayo mu kigo cyawe",
+      "outOfScopeCount_one": "Indi dosiye {{count}} iri hanze y'ibigo byawe",
+      "outOfScopeCount_other": "Izindi dosiye {{count}} ziri hanze y'ibigo byawe"
+    },
+    "externalId": {
+      "title": "Kugenzura indangamuntu",
+      "description": "Iyi porogaramu y'igerageza ntihujwe na serivisi y'indangamuntu y'igihugu. Umwirondoro hano ni nomero y'igerageza y'ikigo gusa.",
+      "button": "Genzura indangamuntu (ntibihujwe mu igerageza)",
+      "unavailable": "Serivisi y'indangamuntu y'igihugu ntihujwe muri iri gerageza. Nta mwirondoro wazanywe cyangwa wakozwe."
+    },
+    "consent": {
+      "label": "Uruhushya",
+      "chip": "Uruhushya: {{state}}"
+    },
+    "denied": {
+      "body": "Uyu murwayi w'igerageza ari hanze y'ikigo ukoreramo cyangwa y'uruhare rwawe rw'igerageza. Nta makuru y'umurwayi agaragazwa. Iki gikorwa cyanditswe mu gitabo cy'igenzura."
+    },
+    "notFound": {
+      "title": "Nta murwayi w'igerageza ufite iyi nomero mu bigo byawe",
+      "description": "Reba umuyoboro, cyangwa ushakishe umurwayi ukoresheje nomero y'igerageza cyangwa izina.",
+      "back": "Subira ku ishakisha ry'abarwayi"
+    }
+  }
+}

@@ -10,7 +10,7 @@
 | Depends on | CLN-02 |
 | Trace | PRD CL-01; FRD CL-01, FRD §7, T-02, T-07; spec §2.1 `/clinical/patients`, `/clinical/patients/:id`; WF-04; BRD BR-01 |
 | Size | M |
-| Status | Not started |
+| Status | Done |
 
 ## 2. Goal
 

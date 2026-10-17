@@ -14,6 +14,8 @@ export const clinicalKeys = {
   all: (fac: Fac) => ["clinical", fac] as const,
   patients: (fac: Fac, f: Filter = {}) => ["clinical", fac, "patients", f] as const,
   patient: (fac: Fac, id: string) => ["clinical", fac, "patient", id] as const,
+  /** CLN-03 KPI strip + latest screening of one patient. */
+  patientStats: (fac: Fac, id: string) => ["clinical", fac, "patientStats", id] as const,
   screenings: (fac: Fac, patientId: string) => ["clinical", fac, "screenings", patientId] as const,
   reviews: (fac: Fac, f: Filter = {}) => ["clinical", fac, "reviews", f] as const,
   reviewCounts: (fac: Fac, f: Filter = {}) => ["clinical", fac, "reviewCounts", f] as const,
@@ -26,11 +28,12 @@ export const clinicalKeys = {
 
 /** Clinical key prefixes (3rd segment) per FND-07 entity root. */
 const ROOT_SEGMENTS: Partial<Record<QueryEntity, readonly string[]>> = {
+  // `patients` rows (CLN-03) also show last screening + open items, hence the extra segments.
   patients: ["patients", "patient"],
-  screenings: ["screenings"],
-  reviews: ["reviews", "reviewCounts", "review"],
-  referrals: ["referrals", "review", "reviewCounts"],
-  followUps: ["followUps", "review"],
+  screenings: ["screenings", "patientStats", "patients"],
+  reviews: ["reviews", "reviewCounts", "review", "patientStats", "patients"],
+  referrals: ["referrals", "review", "reviewCounts", "patientStats", "patients"],
+  followUps: ["followUps", "review", "patientStats", "patients"],
   workers: ["workers"],
   audit: ["audit"],
 };
