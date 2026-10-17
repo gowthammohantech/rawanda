@@ -62,6 +62,36 @@ export const PatientFilterSchema = z.object({
 });
 export type PatientFilter = z.output<typeof PatientFilterSchema>;
 
+/** CLN-03 patient search: the clinical search page size (fixed). */
+export const PATIENT_SEARCH_PAGE_SIZE = 20;
+/** CLN-03: minimum length of a non-empty patient search query. */
+export const PATIENT_SEARCH_MIN_QUERY = 2;
+export const PATIENT_SEARCH_MAX_QUERY = 60;
+
+/**
+ * CLN-03 clinical patient search (URL `?q=&facility=&page=`). An empty / blank `q` means "no
+ * query" (the recent-in-facility list); a non-empty `q` needs at least 2 characters
+ * (`validation:minLength`). `pageSize` is fixed at 20.
+ */
+export const PatientSearchSchema = z.object({
+  q: z.preprocess(
+    (value) => (typeof value === "string" && value.trim() === "" ? undefined : value),
+    z
+      .string()
+      .trim()
+      .min(PATIENT_SEARCH_MIN_QUERY, {
+        error: vMsg("minLength", { min: PATIENT_SEARCH_MIN_QUERY }),
+      })
+      .max(PATIENT_SEARCH_MAX_QUERY, { error: vMsg("tooLong", { max: PATIENT_SEARCH_MAX_QUERY }) })
+      .optional(),
+  ),
+  facilityId: FacilityIdSchema.optional(),
+  page: z.coerce.number().int().min(1).default(1),
+  pageSize: z.literal(PATIENT_SEARCH_PAGE_SIZE).default(PATIENT_SEARCH_PAGE_SIZE),
+});
+export type PatientSearchInput = z.input<typeof PatientSearchSchema>;
+export type PatientSearch = z.output<typeof PatientSearchSchema>;
+
 export const ScreeningFilterSchema = z
   .object({
     ...pageShape,

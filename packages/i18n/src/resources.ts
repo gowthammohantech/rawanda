@@ -21,6 +21,7 @@ import enClinical from "./locales/en/clinical.json";
 import enClinicalCommon from "./locales/en/clinical/common.json";
 import enClinicalErrors from "./locales/en/clinical/errors.json";
 import enClinicalLogin from "./locales/en/clinical/login.json";
+import enClinicalPatients from "./locales/en/clinical/patients.json";
 import enClinicalSettings from "./locales/en/clinical/settings.json";
 import enCommon from "./locales/en/common.json";
 import enDemo from "./locales/en/demo.json";
@@ -44,6 +45,7 @@ import rwClinical from "./locales/rw/clinical.json";
 import rwClinicalCommon from "./locales/rw/clinical/common.json";
 import rwClinicalErrors from "./locales/rw/clinical/errors.json";
 import rwClinicalLogin from "./locales/rw/clinical/login.json";
+import rwClinicalPatients from "./locales/rw/clinical/patients.json";
 import rwClinicalSettings from "./locales/rw/clinical/settings.json";
 import rwCommon from "./locales/rw/common.json";
 import rwDemo from "./locales/rw/demo.json";
@@ -87,6 +89,7 @@ export const enResources = {
     login: enClinicalLogin,
     errors: enClinicalErrors,
     settings: enClinicalSettings,
+    patients: enClinicalPatients,
   },
   worker: {
     ...enWorker,
@@ -114,6 +117,7 @@ export const rwResources: Record<Namespace, object> = {
     login: rwClinicalLogin,
     errors: rwClinicalErrors,
     settings: rwClinicalSettings,
+    patients: rwClinicalPatients,
   },
   worker: {
     ...rwWorker,

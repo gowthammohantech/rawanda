@@ -27,5 +27,6 @@
   "dateRangeOrder": "Itariki yo gutangira ntigomba kurenga itariki yo kurangiza.",
   "unrecognizedKeys": "Ibice bitari byitezwe: {{keys}}.",
   "noChanges": "Hindura nibura ikintu kimwe.",
-  "invalid": "Aka gaciro ntikemewe."
+  "invalid": "Aka gaciro ntikemewe.",
+  "minLength": "Andika nibura inyuguti {{min}}."
 }

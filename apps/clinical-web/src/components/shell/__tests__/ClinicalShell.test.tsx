@@ -35,9 +35,7 @@ describe("ClinicalShell", () => {
     expect(banner.textContent).toContain("Zorvel Quorandi");
     expect(banner.textContent).toContain("Demo Health Centre Alpha-1");
     expect(banner.textContent).toContain("Demo role switch — not authentication");
-    expect(screen.getByRole("link", { name: /Search patients/ }).getAttribute("href")).toBe(
-      "/clinical/patients",
-    );
+    expect(screen.getByRole("searchbox", { name: "Search patients" })).toBeTruthy();
     expect(screen.getByRole("button", { name: "Notifications" })).toBeTruthy();
     expect(screen.getByRole("link", { name: "Skip to main content" })).toBeTruthy();
   });

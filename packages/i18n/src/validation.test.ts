@@ -23,6 +23,7 @@ const SAMPLE_PARAMS: Partial<Record<ValidationMessageKey, Record<string, string 
   reasonTooShort: { min: 10 },
   numberOutOfRange: { min: 60, max: 260 },
   tooShort: { min: 3 },
+  minLength: { min: 2 },
   tooLong: { max: 500 },
   dateTooOld: { days: 30 },
   unrecognizedKeys: { keys: "foo,bar" },
