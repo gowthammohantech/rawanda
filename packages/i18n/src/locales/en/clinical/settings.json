@@ -1,0 +1,52 @@
+{
+  "subtitle": "Demo controls for presenters. All data is synthetic and stays in this browser.",
+  "everyRole": "Every demo role can use these controls — demo tooling, not a privilege. Each action is recorded in the audit log.",
+  "reset": {
+    "title": "Reset demo",
+    "body": "This restores the synthetic baseline, audit log and demo clock. Changes made during the demo are removed.",
+    "open": "Reset demo…",
+    "confirmTitle": "Reset the demo to its baseline?",
+    "confirm": "Reset demo",
+    "success": "Demo reset to baseline",
+    "failedTitle": "The demo could not be reset",
+    "failedBody": "Nothing was changed. Try again."
+  },
+  "language": {
+    "title": "Language",
+    "body": "Choose the portal language. The choice is saved in this browser and survives a reload and a demo reset.",
+    "legend": "Portal language",
+    "en": "English",
+    "rw": "Ikinyarwanda",
+    "savedNotice": "Language saved"
+  },
+  "faults": {
+    "title": "Fault simulation",
+    "body": "Simulate transport problems to demonstrate error states. Faults are saved with the demo data and cleared by Reset demo.",
+    "latency": "Simulated latency",
+    "latencyValue": "{{ms}} ms",
+    "latencyHint": "Added to every repository call (0–3000 ms).",
+    "timeout": "Timeout after save",
+    "timeoutHint": "Saves complete but the response is lost; retrying with the same request is safe.",
+    "serverError": "Server 500",
+    "serverErrorHint": "Every repository call fails with a server error before it runs.",
+    "offline": "Simulated offline",
+    "offlineHint": "Every repository call fails as if the network were down.",
+    "conflict": "Conflict on next write",
+    "conflictHint": "The next save to a WF-01, WF-02 or WF-03 scenario record reports a version conflict.",
+    "activeBadge": "Simulated faults active",
+    "allOff": "Turn all faults off",
+    "offlineBanner": "Simulated offline — changes cannot be saved"
+  },
+  "scenario": {
+    "title": "Scenario actions",
+    "body": "Stage moments of the demo workflows. Actions by other people are simulated and labelled as such.",
+    "snapshot": "Scenario snapshot",
+    "pendingReviews": "Pending reviews",
+    "wf02Version": "WF-02 follow-up version",
+    "wf02Missing": "The WF-02 follow-up belongs to Demo Health Centre Alpha-1. Switch to that facility to use this action.",
+    "simulateWf02": "Simulate worker updating follow-up (WF-02)",
+    "simulateWf02Hint": "Saves a new version of the WF-02 follow-up as a simulated community health worker, so the next save in the portal shows a version conflict.",
+    "simulatedActor": "Simulated actor",
+    "simulatedDone": "Follow-up updated by a simulated worker (version {{version}})"
+  }
+}
