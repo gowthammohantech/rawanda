@@ -72,7 +72,8 @@
     "computedAt": "{{time}} (Kigali)",
     "rulesets": "Verisiyo z'amategeko",
     "noRulesets": "Nta na kimwe muri iki gihe",
-    "version": "Verisiyo y'ibipimo"
+    "version": "Verisiyo y'ibipimo",
+    "method": "Uburyo"
   },
   "catalogue": {
     "screened": {
@@ -164,7 +165,36 @@
       "period": "Igihe = itariki ya Kigali yo gupima",
       "cohort": "Isuzuma, kohereza n'ikurikirana bibarwa mu gihe cy'ikipimo byakomotseho",
       "snapshot": "Inyandiko z'ibipimo by'icyo gihe, uko zimeze ubu (isaha y'igerageza)",
-      "none": "Ntibireba"
+      "none": "Ntibireba",
+      "reviewWeek": "Icyumweru = icyumweru cya ISO cya Kigali (gitangira ku wa Mbere) cy'icyemezo cy'isuzuma",
+      "weekEnd": "Bibarwa ku mpera ya buri cyumweru (ku Cyumweru 23:59 Kigali); aka nyuma ni ubu (isaha y'igerageza)"
+    },
+    "p90DaysToReview": {
+      "label": "Ijanisha rya 90 ry'iminsi kugeza isuzuma",
+      "numerator": "Ijanisha rya 90 ry'iminsi kuva ipimwa kugeza icyemezo cya mbere cy'isuzuma rya muganga"
+    },
+    "reviewsPending": {
+      "label": "Isuzuma ritegerejwe",
+      "numerator": "Ibipimo byagaragajwe bigitegereje isuzuma cyangwa birimo gusuzumwa (byerekanwa hakurikijwe igihe; nta ntego y'isuzuma yemejwe)"
+    },
+    "medianDaysToReferralCompletion": {
+      "label": "Iminsi yo hagati kugeza kohereza birangiye",
+      "numerator": "Iminsi yo hagati kuva ipimwa kugeza igihe ibimenyetso byo kurangiza koherezwa byanditswe"
+    },
+    "weeklyMedianDaysToReview": {
+      "label": "Iminsi yo hagati kugeza isuzuma buri cyumweru",
+      "numerator": "Iminsi yo hagati kugeza isuzuma kuri buri cyumweru cya Kigali cy'icyemezo, hamwe na n"
+    },
+    "weeklyOverdueTrend": {
+      "label": "Uko ibyarengeje igihe bihinduka",
+      "numerator": "Ibyoherezwa n'ikurikiranwa bitarangiye byari byarengeje itariki yashyizweho na muganga ku mpera ya buri cyumweru (aka nyuma ni ubu)"
+    },
+    "medianDaysByFacility": {
+      "label": "Iminsi yo hagati kugeza isuzuma hakurikijwe ivuriro",
+      "numerator": "Iminsi yo hagati kugeza isuzuma kuri buri vuriro, hamwe na n"
+    },
+    "method": {
+      "percentile": "Kubara hagati y'imyanya yegeranye: umwanya h = (n − 1) × p / 100; agaciro = x[⌊h⌋] + (h − ⌊h⌋) × (x[⌊h⌋+1] − x[⌊h⌋]). Birahishwa iyo n iri munsi y'umubare muto wemewe."
     }
   }
 }

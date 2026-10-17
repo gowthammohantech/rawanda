@@ -1,0 +1,89 @@
+{
+  "eyebrow": "Timeliness",
+  "title": "Timeliness",
+  "subtitle": "{{from}} – {{to}} · {{scope}} · aggregate timings of clinical review and follow-up",
+  "error": "Timeliness could not be computed. No numbers are shown rather than guessed ones.",
+  "asOf": "As of {{datetime}} (Kigali)",
+  "demoClock": "Overdue is derived from the demo clock and never stored.",
+  "noTarget": "No approved review target",
+  "unit": {
+    "days_one": "{{value}} day",
+    "days_other": "{{value}} days"
+  },
+  "kpi": {
+    "label": "Timeliness figures",
+    "median": "Median days to review",
+    "medianSub": "n = {{n}} reviews",
+    "noReviews": "No completed reviews in this period",
+    "p90": "90th percentile",
+    "p90Sub": "Days to review (interpolated)",
+    "pending": "Reviews pending",
+    "pendingSub": "{{n}} waiting 8+ days",
+    "overdueReferrals": "Overdue referrals",
+    "overdueFollowUps": "Overdue follow-ups",
+    "noneOverdue": "None past due date",
+    "overdueLink": "Open the referred-stage drill-down",
+    "completion": "Median days to referral completion",
+    "completionSub": "n = {{n}} completed referrals"
+  },
+  "median": {
+    "title": "Median days to review, per week",
+    "week": "Week of review (starting)",
+    "median": "Median days",
+    "n": "n reviews",
+    "tooltip": "{{value}} (n = {{n}})",
+    "summary": "Median days to review per Kigali week of review over {{weeks}} weeks, {{first}} in the first week with a shown median and {{last}} in the latest; {{hidden}} weekly medians hidden to protect privacy.",
+    "summaryNone": "No weekly median can be shown for these {{weeks}} weeks (no reviews, or too few to show)."
+  },
+  "overdue": {
+    "title": "Past-due referrals and follow-ups, per week",
+    "referrals": "Referrals past due date",
+    "followUps": "Follow-ups past due date",
+    "week": "Week (starting)",
+    "current": "{{week}} (to now)",
+    "summary": "{{referrals}}; {{followUps}}.",
+    "trend": {
+      "referrals": {
+        "rose": "Overdue referrals rose from {{from}} to {{to}} over {{weeks}} weeks",
+        "fell": "Overdue referrals fell from {{from}} to {{to}} over {{weeks}} weeks",
+        "same": "Overdue referrals stayed at {{to}} over {{weeks}} weeks",
+        "hidden": "Overdue referrals over {{weeks}} weeks: some weekly values are hidden to protect privacy"
+      },
+      "followUps": {
+        "rose": "overdue follow-ups rose from {{from}} to {{to}}",
+        "fell": "overdue follow-ups fell from {{from}} to {{to}}",
+        "same": "overdue follow-ups stayed at {{to}}",
+        "hidden": "some weekly overdue follow-up values are hidden to protect privacy"
+      }
+    }
+  },
+  "aging": {
+    "title": "Pending reviews by age",
+    "label": "Pending reviews by days since measurement",
+    "bucket": {
+      "0-2": "0–2 days",
+      "3-7": "3–7 days",
+      "8-14": "8–14 days",
+      "15+": "15 days or more"
+    },
+    "share": "{{bucket}}: {{n}} of {{total}} pending reviews",
+    "none": "No reviews pending in this scope",
+    "total": "Pending reviews"
+  },
+  "facility": {
+    "title": "Median days to review by facility",
+    "facility": "Facility",
+    "median": "Median days",
+    "n": "n reviews",
+    "nLabel": "n = {{n}}",
+    "link": "{{facility}}: narrow Timeliness to this facility",
+    "summary": "Median days to review for {{count}} facilities; {{hidden}} hidden to protect privacy (fewer than {{k}} reviews, or hidden with them)."
+  },
+  "callout": {
+    "title": "What overdue means here",
+    "text": "Overdue means a due date set by a clinician has passed and the step is not completed. Review targets are not yet approved by the clinical protocol owner, so pending reviews are shown by age only."
+  },
+  "empty": {
+    "noOverdue": "Nothing is past its due date"
+  }
+}

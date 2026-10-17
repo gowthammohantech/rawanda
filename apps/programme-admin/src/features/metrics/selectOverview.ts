@@ -19,13 +19,10 @@ import {
   countByScreeningType,
   countDistinctPeopleScreened,
   derivedCell,
-  filterDataset,
   medianDaysToReview,
-  needsAttention,
   OVERVIEW_COUNT_METRICS,
   PENDING_REVIEW_AGE_BUCKETS,
   rateCell,
-  suppressLines,
   suppressValue,
   weeklyScreenedVsFlagged,
   type AggregateCell,
@@ -33,9 +30,17 @@ import {
   type MetricsDataset,
   type OverviewCountMetric,
   type PendingReviewAgeBucket,
-  type SuppressionLine,
 } from "@laif/analytics";
-import type { DistrictId, FacilityId } from "@laif/domain";
+
+import { restrictDataset } from "./restrictDataset.ts";
+import {
+  ATTENTION_MEASURES,
+  attentionLines,
+  attentionMeasures,
+  ROOT_NODE,
+  suppressOverScope,
+  viewNodeOf,
+} from "./scopeSuppression.ts";
 
 export type FacilityRow = {
   facilityId: string;
@@ -98,36 +103,9 @@ export type SelectOverviewOptions = {
   viewDataset?: MetricsDataset;
 };
 
-const ATTENTION_KEYS = [
-  "overdueReferrals",
-  "overdueFollowUps",
-  "openQualityIssues",
-  ...PENDING_REVIEW_AGE_BUCKETS.map((b) => `age:${b}` as const),
-] as const;
-
 const TYPE_KEYS = ["bpOnly", "glucoseOnly", "both", "neither"] as const;
 
-/** The dataset restricted to districts / facilities (same period, type and clock). */
-export function restrictDataset(
-  ds: MetricsDataset,
-  scope: { districtIds?: string[]; facilityIds?: string[] },
-): MetricsDataset {
-  return filterDataset(
-    ds.cohort,
-    {
-      ...(ds.filter.from === null ? {} : { from: ds.filter.from }),
-      ...(ds.filter.to === null ? {} : { to: ds.filter.to }),
-      ...(scope.districtIds === undefined
-        ? {}
-        : { districtIds: scope.districtIds as DistrictId[] }),
-      ...(scope.facilityIds === undefined
-        ? {}
-        : { facilityIds: scope.facilityIds as FacilityId[] }),
-      type: ds.filter.type,
-    },
-    new Date(ds.nowIso),
-  );
-}
+export { restrictDataset };
 
 /** Raw additive measures of one facility (keys: metric ids, `wS:i`, `wF:i`, `t:*`, attention). */
 function facilityMeasures(fds: MetricsDataset, weeks: readonly string[]): Map<string, number> {
@@ -145,11 +123,7 @@ function facilityMeasures(fds: MetricsDataset, weeks: readonly string[]): Map<st
   });
   const types = countByScreeningType(fds);
   for (const t of TYPE_KEYS) out.set(`t:${t}`, types[t]);
-  const attention = needsAttention(fds);
-  out.set("overdueReferrals", attention.overdueReferrals);
-  out.set("overdueFollowUps", attention.overdueFollowUps);
-  out.set("openQualityIssues", attention.openQualityIssues);
-  for (const b of PENDING_REVIEW_AGE_BUCKETS) out.set(`age:${b}`, attention.pendingReviewAges[b]);
+  for (const [m, n] of attentionMeasures(fds)) out.set(m, n);
   return out;
 }
 
@@ -164,73 +138,27 @@ export function selectOverview(
     ...OVERVIEW_COUNT_METRICS,
     ...weeks.flatMap((_, i) => [`wS:${i}`, `wF:${i}`]),
     ...TYPE_KEYS.map((t) => `t:${t}`),
-    ...ATTENTION_KEYS,
+    ...ATTENTION_MEASURES,
   ];
-  const districtIds = ds.cohort.districts.map((d) => d.id as string);
-  const facilitiesOf = (d: string) => ds.cohort.facilities.filter((f) => f.districtId === d);
-
-  const values = new Map<string, number>();
-  const lines: SuppressionLine[] = [];
-  const key = (node: string, measure: string) => `${node}#${measure}`;
-  /** Series / parts of a node sum to its counts (protected together). */
-  const nodeLines = (node: string) => {
-    lines.push({
-      members: weeks.map((_, i) => key(node, `wS:${i}`)),
-      total: key(node, "screened"),
-    });
-    lines.push({ members: weeks.map((_, i) => key(node, `wF:${i}`)), total: key(node, "flagged") });
-    lines.push({
-      members: TYPE_KEYS.map((t) => key(node, `t:${t}`)),
-      total: key(node, "screened"),
-    });
-  };
-
-  const root = "r|all";
-  const rootTotals = new Map(measures.map((m) => [m, 0]));
-  for (const d of districtIds) {
-    const dNode = `d|${d}`;
-    const members = facilitiesOf(d);
-    const dTotals = new Map(measures.map((m) => [m, 0]));
-    for (const f of members) {
-      const fNode = `f|${f.id}`;
-      const raw = facilityMeasures(restrictDataset(ds, { facilityIds: [f.id] }), weeks);
-      for (const m of measures) {
-        const n = raw.get(m) ?? 0;
-        values.set(key(fNode, m), n);
-        dTotals.set(m, (dTotals.get(m) ?? 0) + n);
-      }
-      nodeLines(fNode);
-    }
-    for (const m of measures) {
-      const n = dTotals.get(m) ?? 0;
-      values.set(key(dNode, m), n);
-      rootTotals.set(m, (rootTotals.get(m) ?? 0) + n);
-      lines.push({ members: members.map((f) => key(`f|${f.id}`, m)), total: key(dNode, m) });
-    }
-    nodeLines(dNode);
-  }
-  for (const m of measures) {
-    values.set(key(root, m), rootTotals.get(m) ?? 0);
-    lines.push({ members: districtIds.map((d) => key(`d|${d}`, m)), total: key(root, m) });
-  }
-  nodeLines(root);
-
-  const out = suppressLines(values, lines, threshold);
-  const cellOf = (node: string, measure: string, cellKey: string = measure): AggregateCell => {
-    const n = out.get(key(node, measure));
-    if (n === undefined) return { key: cellKey, value: 0, suppressed: false };
-    return n.reason === undefined
-      ? { key: cellKey, value: n.value, suppressed: n.suppressed }
-      : { key: cellKey, value: n.value, suppressed: n.suppressed, reason: n.reason };
-  };
+  const pass = suppressOverScope(
+    ds,
+    {
+      measures,
+      facilityMeasures: (fds) => facilityMeasures(fds, weeks),
+      nodeLines: (node, key) => [
+        { members: weeks.map((_, i) => key(node, `wS:${i}`)), total: key(node, "screened") },
+        { members: weeks.map((_, i) => key(node, `wF:${i}`)), total: key(node, "flagged") },
+        { members: TYPE_KEYS.map((t) => key(node, `t:${t}`)), total: key(node, "screened") },
+        ...attentionLines(node, key),
+      ],
+    },
+    threshold,
+  );
+  const cellOf = pass.cellOf;
+  const root = ROOT_NODE;
 
   const facilityDistrict = new Map(ds.cohort.facilities.map((f) => [f.id as string, f.districtId]));
-  const viewNode =
-    view.facility !== null
-      ? `f|${view.facility}`
-      : view.district !== null
-        ? `d|${view.district}`
-        : root;
+  const viewNode = viewNodeOf(view);
   const viewFacilities = ds.cohort.facilities.filter(
     (f) =>
       (view.facility === null || f.id === view.facility) &&

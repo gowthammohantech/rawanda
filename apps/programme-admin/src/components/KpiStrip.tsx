@@ -5,6 +5,7 @@
 import type { AggregateCell, MetricDefinitionId } from "@laif/analytics";
 import { cx, LoadingSkeleton } from "@laif/ui-web";
 import type { ReactNode } from "react";
+import { Link } from "react-router";
 
 import { MetricInfo } from "./MetricInfo.tsx";
 import { SuppressedValue } from "./SuppressedValue.tsx";
@@ -21,6 +22,8 @@ export type KpiCell = {
   /** Derived value (median): a suppressed value reads "Hidden", not `<k`. */
   derived?: boolean;
   sub?: ReactNode;
+  /** Optional link under the cell (e.g. the funnel stage drill-down). */
+  link?: { to: string; label: string };
 };
 
 export type KpiStripProps = {
@@ -36,7 +39,10 @@ export function KpiStrip({ label, items, threshold, computedAt, rulesetVersions 
     <section
       aria-label={label}
       data-testid="kpi-strip"
-      className="border-border-soft bg-surface shadow-card grid grid-cols-2 gap-y-4 rounded-lg border px-5 py-4 sm:grid-cols-3 xl:grid-cols-5"
+      className={cx(
+        "border-border-soft bg-surface shadow-card grid grid-cols-2 gap-y-4 rounded-lg border px-5 py-4 sm:grid-cols-3",
+        items.length >= 6 ? "xl:grid-cols-6" : "xl:grid-cols-5",
+      )}
     >
       {items.map((item, index) => (
         <div
@@ -67,6 +73,14 @@ export function KpiStrip({ label, items, threshold, computedAt, rulesetVersions 
           </p>
           {item.sub === undefined ? null : (
             <p className="text-muted m-0 mt-1 text-xs">{item.sub}</p>
+          )}
+          {item.link === undefined ? null : (
+            <Link
+              to={item.link.to}
+              className="text-primary-dark mt-1 inline-block text-xs hover:underline"
+            >
+              {item.link.label}
+            </Link>
           )}
         </div>
       ))}

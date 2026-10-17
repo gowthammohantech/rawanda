@@ -1,6 +1,7 @@
 /**
  * Seed reconciliation (ADM-02): the calculators over the seeded Dexie store (fake-indexeddb)
  * agree with naive independent filters, and facility sums = district = overall.
+ * ADM-04: Timeliness reconciles with the overview "Needs attention" card in every view.
  */
 import {
   countByFacility,
@@ -15,8 +16,10 @@ import { createDexieStoreAdapter } from "@laif/repositories/dexie";
 import { describe, expect, it } from "vitest";
 
 import { DEFAULT_FILTERS, resolvePeriod } from "../filters/filterSchema.ts";
+import { selectTimeliness } from "../timeliness/selectTimeliness.ts";
 import { createTestServices, signIn } from "../../test/app.tsx";
 import { loadMetricsDataset } from "./loadMetricsDataset.ts";
+import { selectOverview } from "./selectOverview.ts";
 
 describe("calculators vs the seeded admin Dexie store", () => {
   it("naive counts, and facility = district = overall", async () => {
@@ -66,6 +69,48 @@ describe("calculators vs the seeded admin Dexie store", () => {
       const sum = (ds: MetricsDataset) =>
         countByFacility(ds, metric).reduce((a, r) => a + r.value, 0);
       expect(sum(alpha) + sum(beta), metric).toBe(sum(overall));
+    }
+  });
+
+  it("ADM-04: timeliness overdue / pending = overview needs attention; n's add up", async () => {
+    const store = createDexieStoreAdapter({ dbName: `laif-admin-reconcile-tl-${Math.random()}` });
+    const services = await createTestServices(store);
+    await signIn(services, PERSONA_IDS.leadProgramme, null);
+    const { persona, grant } = services.session.getState();
+    if (persona === null) throw new Error("not signed in");
+    const period = resolvePeriod(DEFAULT_FILTERS, kigaliDate(services.clock.now()));
+    const ds = (
+      await loadMetricsDataset(services.repo, { persona, grant }, DEFAULT_FILTERS, period)
+    ).dataset;
+    const now = Date.parse(ds.nowIso);
+    // Naive overdue (explicit dueAt only, never stored): incomplete and dueAt < now.
+    const naiveReferrals = ds.cohort.referrals.filter(
+      (r) =>
+        r.status !== "completed" &&
+        r.status !== "cancelled_with_reason" &&
+        Date.parse(r.dueAt) < now,
+    ).length;
+    const naiveFollowUps = ds.cohort.followUps.filter(
+      (f) => f.status !== "completed" && Date.parse(f.dueAt) < now,
+    ).length;
+    const raw = selectTimeliness(ds, { district: null, facility: null }, 1);
+    expect(raw.kpis.overdueReferrals.value).toBe(naiveReferrals);
+    expect(raw.kpis.overdueFollowUps.value).toBe(naiveFollowUps);
+    expect(raw.facilities.reduce((a, f) => a + (f.n.value ?? 0), 0)).toBe(raw.kpis.reviews.value);
+
+    for (const view of [
+      { district: null, facility: null },
+      { district: DISTRICT_IDS.alpha, facility: null },
+      { district: DISTRICT_IDS.beta, facility: null },
+    ]) {
+      const tl = selectTimeliness(ds, view, 5);
+      const ov = selectOverview(ds, 5, { view });
+      expect(tl.kpis.overdueReferrals).toEqual(ov.needsAttention.overdueReferrals);
+      expect(tl.kpis.overdueFollowUps).toEqual(ov.needsAttention.overdueFollowUps);
+      expect(tl.kpis.pendingAged8Plus.value).toBe(ov.needsAttention.pendingReviewAges["8+"].value);
+      const last = tl.overdueTrend.at(-1)!;
+      expect(last.referrals.value).toBe(tl.kpis.overdueReferrals.value);
+      expect(last.followUps.value).toBe(tl.kpis.overdueFollowUps.value);
     }
   });
 });

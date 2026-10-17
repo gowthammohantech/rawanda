@@ -25,9 +25,13 @@ export type HBarListProps = {
   label: string;
   rows: readonly HBarRow[];
   threshold: number;
+  /** Formatter of a shown value (e.g. days); default the locale number. */
+  valueFormat?: (value: number) => string;
+  /** Values are derived (medians): a hidden one reads "Hidden", not `<k`. */
+  derived?: boolean;
 };
 
-export function HBarList({ label, rows, threshold }: HBarListProps) {
+export function HBarList({ label, rows, threshold, valueFormat, derived = false }: HBarListProps) {
   const max = Math.max(1, ...rows.map((r) => (r.value.suppressed ? 0 : (r.value.value ?? 0))));
   return (
     <ul aria-label={label} className="m-0 list-none space-y-3 p-0">
@@ -51,7 +55,13 @@ export function HBarList({ label, rows, threshold }: HBarListProps) {
             <div className="mb-1 flex items-baseline justify-between gap-3">
               {name}
               <span className="text-ink tabular-nums">
-                <SuppressedValue cell={row.value} threshold={threshold} compact />
+                <SuppressedValue
+                  cell={row.value}
+                  threshold={threshold}
+                  {...(valueFormat === undefined ? {} : { format: valueFormat })}
+                  derived={derived}
+                  compact
+                />
                 {row.secondary === undefined ? null : (
                   <span className="text-muted ms-2 text-xs">{row.secondary}</span>
                 )}

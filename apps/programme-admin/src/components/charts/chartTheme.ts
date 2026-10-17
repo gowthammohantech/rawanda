@@ -15,6 +15,11 @@ export type SeriesStyle = {
 export const CHART_SERIES = {
   screened: { color: "var(--color-primary)", marker: "circle" },
   flagged: { color: "var(--color-risk-warning)", dash: "6 4", marker: "square" },
+  /** ADM-04: median days to review (one series). */
+  median: { color: "var(--color-primary)", marker: "circle" },
+  /** ADM-04 overdue trend: referrals solid + circle, follow-ups dashed + square. */
+  overdueReferrals: { color: "var(--color-primary)", marker: "circle" },
+  overdueFollowUps: { color: "var(--color-risk-warning)", dash: "6 4", marker: "square" },
 } as const satisfies Record<string, SeriesStyle>;
 export type ChartSeriesId = keyof typeof CHART_SERIES;
 

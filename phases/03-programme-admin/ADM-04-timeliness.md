@@ -1,6 +1,6 @@
 # ADM-04 — Timeliness: median days to review and overdue trends
 
-Status: Not started
+**Status:** Done
 
 ## 1. Header
 

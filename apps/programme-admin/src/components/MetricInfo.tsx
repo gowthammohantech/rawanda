@@ -91,6 +91,12 @@ export function MetricInfo({ metric, n, threshold, computedAt, rulesetVersions }
               <dt className="text-muted">{t("admin:overview.info.attribution")}</dt>
               <dd>{t(def.attribution as TranslationKey)}</dd>
             </div>
+            {def.method === undefined ? null : (
+              <div>
+                <dt className="text-muted">{t("admin:overview.info.method")}</dt>
+                <dd>{t(def.method as TranslationKey)}</dd>
+              </div>
+            )}
             {n === undefined ? null : (
               <div>
                 <dt className="text-muted">{t("admin:overview.info.n")}</dt>

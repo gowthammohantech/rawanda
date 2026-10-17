@@ -14,6 +14,10 @@ export type LineTrendProps = ChartSize & {
   /** One row per x category: `{ x: label, [series.id]: number | null }`. */
   data: ReadonlyArray<Record<string, string | number | null>>;
   series: readonly LineSeries[];
+  /** Y axis with decimals (e.g. days); default whole numbers (counts). */
+  allowDecimals?: boolean;
+  /** Tooltip text of a point (e.g. "1.5 days (n = 6)"); default the raw value. */
+  formatTooltip?: (value: number, seriesId: string, row: Record<string, unknown>) => string;
 };
 
 type DotProps = { cx?: number; cy?: number; value?: unknown };
@@ -36,7 +40,14 @@ function markerDot(marker: SeriesMarker, color: string) {
   return MarkerDot;
 }
 
-export function LineTrend({ data, series, width, height }: LineTrendProps) {
+export function LineTrend({
+  data,
+  series,
+  width,
+  height,
+  allowDecimals = false,
+  formatTooltip,
+}: LineTrendProps) {
   return (
     <LineChart
       data={[...data]}
@@ -52,13 +63,24 @@ export function LineTrend({ data, series, width, height }: LineTrendProps) {
         axisLine={{ stroke: CHART_AXIS.grid }}
       />
       <YAxis
-        allowDecimals={false}
+        allowDecimals={allowDecimals}
         width={32}
         tick={{ fill: CHART_AXIS.tick, fontSize: CHART_AXIS.fontSize }}
         tickLine={false}
         axisLine={false}
       />
-      <Tooltip />
+      {formatTooltip === undefined ? (
+        <Tooltip />
+      ) : (
+        <Tooltip
+          formatter={(value, _name, item) => {
+            const row = (item as { payload?: Record<string, unknown> }).payload ?? {};
+            const dataKey = (item as { dataKey?: unknown }).dataKey;
+            const id = typeof dataKey === "string" ? dataKey : "";
+            return typeof value === "number" ? formatTooltip(value, id, row) : String(value);
+          }}
+        />
+      )}
       {series.map((s) => (
         <Line
           key={s.id}

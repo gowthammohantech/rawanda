@@ -28,6 +28,12 @@ export const METRIC_DEFINITION_IDS = [
   "overdueFollowUps",
   "pendingReviewAge",
   "openQualityIssues",
+  "p90DaysToReview",
+  "reviewsPending",
+  "medianDaysToReferralCompletion",
+  "weeklyMedianDaysToReview",
+  "weeklyOverdueTrend",
+  "medianDaysByFacility",
   "workloadMinutes",
   "promptIdReliability",
   "medicineHistoryCompleteness",
@@ -46,6 +52,8 @@ export type MetricDefinition = {
   denominator: string | null;
   inclusion: string;
   attribution: string;
+  /** Calculation method (e.g. the percentile interpolation), when not a plain count. */
+  method?: string;
   version: typeof METRIC_VERSION;
   status: MetricStatus;
   pilotKpi?: PilotKpi;
@@ -60,6 +68,14 @@ const ATTRIBUTION_PERIOD = `${K}.attribution.period`;
 const ATTRIBUTION_COHORT = `${K}.attribution.cohort`;
 const ATTRIBUTION_SNAPSHOT = `${K}.attribution.snapshot`;
 const ATTRIBUTION_NONE = `${K}.attribution.none`;
+const ATTRIBUTION_REVIEW_WEEK = `${K}.attribution.reviewWeek`;
+const ATTRIBUTION_WEEK_END = `${K}.attribution.weekEnd`;
+/**
+ * Percentiles (ADM-04): linear interpolation between closest ranks (type 7 / `PERCENTILE.INC`):
+ * rank h = (n − 1) · p / 100, value x[⌊h⌋] + (h − ⌊h⌋) · (x[⌊h⌋+1] − x[⌊h⌋]); hidden when
+ * n < k (a percentile of a tiny group can disclose individual timings).
+ */
+const METHOD_PERCENTILE = `${K}.method.percentile`;
 
 function def(
   id: MetricDefinitionId,
@@ -92,13 +108,27 @@ export const METRIC_DEFINITIONS: readonly MetricDefinition[] = Object.freeze([
   def("actioned", { denominator: DEN_FLAGGED }),
   def("referred", { denominator: DEN_FLAGGED }),
   def("followUpCompleted", { denominator: DEN_REFERRED, pilotKpi: "KPI01" }),
-  def("medianDaysToReview", { pilotKpi: "KPI02" }),
+  def("medianDaysToReview", { pilotKpi: "KPI02", method: METHOD_PERCENTILE }),
   def("weeklyScreenedVsFlagged", { attribution: ATTRIBUTION_PERIOD }),
   def("screeningType", { denominator: DEN_SCREENED, attribution: ATTRIBUTION_PERIOD }),
   def("overdueReferrals", { attribution: ATTRIBUTION_SNAPSHOT }),
   def("overdueFollowUps", { attribution: ATTRIBUTION_SNAPSHOT }),
   def("pendingReviewAge", { attribution: ATTRIBUTION_SNAPSHOT }),
   def("openQualityIssues", { attribution: ATTRIBUTION_SNAPSHOT }),
+  def("p90DaysToReview", { method: METHOD_PERCENTILE, shownIn: "ADM-04" }),
+  def("reviewsPending", { attribution: ATTRIBUTION_SNAPSHOT, shownIn: "ADM-04" }),
+  def("medianDaysToReferralCompletion", {
+    pilotKpi: "KPI02",
+    method: METHOD_PERCENTILE,
+    shownIn: "ADM-04",
+  }),
+  def("weeklyMedianDaysToReview", {
+    method: METHOD_PERCENTILE,
+    attribution: ATTRIBUTION_REVIEW_WEEK,
+    shownIn: "ADM-04",
+  }),
+  def("weeklyOverdueTrend", { attribution: ATTRIBUTION_WEEK_END, shownIn: "ADM-04" }),
+  def("medianDaysByFacility", { method: METHOD_PERCENTILE, shownIn: "ADM-04" }),
   def("workloadMinutes", { pilotKpi: "KPI04", shownIn: "ADM-05" }),
   def("promptIdReliability", { pilotKpi: "KPI06", shownIn: "ADM-06" }),
   def("medicineHistoryCompleteness", {
@@ -136,8 +166,15 @@ export function pilotKpis(): Array<{ kpi: PilotKpi; definition: MetricDefinition
 export function catalogueKeys(): string[] {
   const keys = new Set<string>();
   for (const d of METRIC_DEFINITIONS) {
-    for (const k of [d.labelKey, d.numerator, d.denominator, d.inclusion, d.attribution]) {
-      if (k !== null) keys.add(k);
+    for (const k of [
+      d.labelKey,
+      d.numerator,
+      d.denominator,
+      d.inclusion,
+      d.attribution,
+      d.method,
+    ]) {
+      if (k !== null && k !== undefined) keys.add(k);
     }
   }
   return [...keys].sort();
