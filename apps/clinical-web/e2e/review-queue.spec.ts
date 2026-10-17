@@ -56,6 +56,7 @@ test("clinician: filter → counts reconcile → open review", async ({ page }) 
   await expectRowsMatchBadge(page, "All in scope");
   await page.getByTestId("queue-assignee").selectOption("any");
   await page.getByRole("tab", { name: /^Pending/ }).click();
+  await expectRowsMatchBadge(page, "Pending");
 
   // Expand a row: triggering readings + demo disclaimer, no auto-expand before.
   const first = rows(page).first().getByRole("button", { expanded: false });

@@ -206,7 +206,11 @@ export function ReviewQueuePage() {
           onAssigneeChange={(assignee) => update({ assignee })}
           onSortChange={(sort) => update({ sort })}
         />
-        <section aria-label={t("clinical:queue.listLabel")}>
+        <section aria-labelledby="queue-list-heading">
+          {/* h1 → h2 → row h3 (axe heading-order). */}
+          <h2 id="queue-list-heading" className="sr-only">
+            {t("clinical:queue.listLabel")}
+          </h2>
           <QueueTabs value={filter.tab} counts={counts.data} onChange={(tab) => update({ tab })}>
             {body}
           </QueueTabs>
