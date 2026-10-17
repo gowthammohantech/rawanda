@@ -280,6 +280,10 @@ describe("screenings service", () => {
     const first = await h.repo.createScreening(input, key, { fromDraftId: draft.data.id });
     expect(first.data).toMatchObject({ id: draft.data.id, status: "review_required", version: 1 });
     expect((await h.repo.getActiveRuleset()).version).toBe(first.data.rulesetVersion);
+    // getActiveRuleset is gated by screening.create (an auditor cannot read it this way).
+    h.as(PERSONA_IDS.auditorProgramme);
+    await expect(h.repo.getActiveRuleset()).rejects.toMatchObject({ code: "FORBIDDEN" });
+    h.as(PERSONA_IDS.chwAlpha1A);
     const rows = (await h.store.getAll<Screening>("screenings")).filter(
       (s) => s.id === draft.data.id,
     );
