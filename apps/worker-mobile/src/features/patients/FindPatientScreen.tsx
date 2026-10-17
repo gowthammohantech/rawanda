@@ -6,6 +6,9 @@
  * empty → "No patient matches '{query}' on this device" + Register CTA prefilled with the name;
  * offline → fully functional, note "Search covers patients saved on this device"; read
  * failure → ErrorState with Retry.
+ *
+ * Picker mode (`?mode=pick`, HWM-05 "Choose patient"): a banner, and choosing a patient opens
+ * `/screenings/new?patientId=` instead of the patient context.
  */
 import {
   AppText,
@@ -33,7 +36,7 @@ import { PatientSearchBar } from "./PatientSearchBar.tsx";
 import { RecentPatients } from "./RecentPatients.tsx";
 import { useDemoNow, usePatientSearch, useRecentPatients } from "./usePatients.ts";
 
-export function FindPatientScreen() {
+export function FindPatientScreen({ pick = false }: { pick?: boolean } = {}) {
   const t = useTx();
   const router = useRouter();
   const scope = useRequiredScope();
@@ -44,7 +47,9 @@ export function FindPatientScreen() {
   const recent = useRecentPatients();
 
   const open = (patientId: string) =>
-    router.push({ pathname: "/patients/[patientId]", params: { patientId } });
+    pick
+      ? router.push({ pathname: "/screenings/new", params: { patientId } })
+      : router.push({ pathname: "/patients/[patientId]", params: { patientId } });
   const registerNew = (name?: string) =>
     router.push(
       name === undefined || name === ""
@@ -60,6 +65,11 @@ export function FindPatientScreen() {
       <AppText variant="caption" color="muted" testID="find-scope-note">
         {t("worker:patients.scopeNote", { facility: facilityName(scope.facilityId, t) })}
       </AppText>
+      {pick ? (
+        <InfoCallout icon="plus" tone="primary" testID="find-pick-banner">
+          {t("worker:screening.pick.banner")}
+        </InfoCallout>
+      ) : null}
       {offline ? (
         <InfoCallout icon="wifi-off" testID="find-offline-note">
           {t("worker:patients.offlineNote")}

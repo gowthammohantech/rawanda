@@ -1,0 +1,86 @@
+{
+  "title": "Isuzuma rishya",
+  "loading": "Turimo gufungura umushinga",
+  "opening": "Turimo gufungura ifishi y'isuzuma",
+  "notFound": "Uyu mushinga ntukiri kuri iki gikoresho",
+  "notFoundHint": "Ushobora kuba wasibwe cyangwa woherejwe.",
+  "backToScreen": "Subira ku Isuzuma",
+  "openFailed": "Ifishi y'isuzuma ntiyashoboye gufunguka",
+  "bp": "Umuvuduko w'amaraso",
+  "systolic": "Umubare wo hejuru (systolic)",
+  "diastolic": "Umubare wo hasi (diastolic)",
+  "glucose": "Isukari mu maraso",
+  "glucoseValue": "Igipimo cy'isukari",
+  "glucoseHint": "Si ngombwa. Niwandika igipimo, hitamo igipimo n'uko cyafashwe.",
+  "unit": {
+    "label": "Igipimo cy'isukari",
+    "mmHg": "mmHg",
+    "mmolL": "mmol/L",
+    "mgdL": "mg/dL",
+    "spoken": {
+      "mmHg": "milimetero za merikire",
+      "mmolL": "milimole kuri litiro",
+      "mgdL": "miligarama kuri desilitiro"
+    }
+  },
+  "fieldA11y": "{{label}}, {{unit}}",
+  "context": {
+    "label": "Uko igipimo cyafashwe",
+    "fasting": "Atariye",
+    "notFasting": "Yariye",
+    "notRecorded": "Ntibyanditswe"
+  },
+  "measuredAt": "Igihe cyafatiweho",
+  "observations": "Ibyagaragaye (si ngombwa)",
+  "observationsHint": "Inyandiko ku isura. Ntukandike indwara.",
+  "observationsCounter": "{{count}} / {{max}}",
+  "source": "Inkomoko: byanditswe n'intoki kuri iki gikoresho",
+  "entryRangeNote": "Urugero rw'imibare ni igenzura ry'igerageza ry'amakosa yo kwandika (DEMO_RULE_NOT_CLINICALLY_VALIDATED), si imipaka y'ubuvuzi.",
+  "saving": "Turimo kubika…",
+  "notSavedYet": "Ntirabikwa",
+  "draftSaved": "Umushinga wabitswe kuri iki gikoresho · {{time}}",
+  "saveFailed": "Umushinga ntiwashoboye kubikwa kuri iki gikoresho. Ibyo wanditse biracyagaragara.",
+  "review": "Gusubiramo",
+  "reviewHint": "Igenzura ibyanditswe, hanyuma ikerekana incamake",
+  "errorSummary_one": "Ahantu {{count}} hakeneye gukosorwa",
+  "errorSummary_other": "Ahantu {{count}} hakeneye gukosorwa",
+  "errorLinkHint": "Ijya aho hantu",
+  "options": "Amahitamo y'umushinga",
+  "discard": "Siba umushinga",
+  "discardTitle": "Gusiba uyu mushinga?",
+  "discardDescription": "Ibyanditswe kuri {{name}} birasibwa kuri iki gikoresho.",
+  "discarded": "Umushinga wasibwe",
+  "discardFailed": "Umushinga ntiwashoboye gusibwa",
+  "resume": {
+    "title": "Komeza umushinga wo ku isaha {{time}}?",
+    "description": "Hari isuzuma ritarangiye rya {{name}} kuri iki gikoresho.",
+    "resume": "Komeza",
+    "startNew": "Tangira bundi bushya"
+  },
+  "patient": "{{name}}, {{identifier}}",
+  "tab": {
+    "title": "Isuzuma",
+    "draftsLabel": "IMISHINGA IRI KURI IKI GIKORESHO",
+    "deviceNote": "Imishinga iguma kuri iki gikoresho. Ntiyoherezwa utarayohereza.",
+    "empty": "Nta mushinga. Hitamo umurwayi kugira ngo utangire.",
+    "choosePatient": "Hitamo umurwayi",
+    "choosePatientHint": "Ifungura Shakisha kugira ngo uhitemo umurwayi usuzumwa",
+    "error": "Imishinga ntiyashoboye kuboneka",
+    "loading": "Turimo gushaka imishinga"
+  },
+  "row": {
+    "edited": "Byahinduwe bwa nyuma {{time}}",
+    "completeness": "{{count}} kuri {{total}} byuzuye",
+    "resume": "Komeza",
+    "resumeLabel": "Komeza umushinga wa {{name}}",
+    "unknownPatient": "Umurwayi ntari kuri iki gikoresho"
+  },
+  "pick": {
+    "banner": "Hitamo umurwayi usuzumwa",
+    "hint": "Ifungura ifishi y'isuzuma y'uyu murwayi"
+  },
+  "reviewStub": {
+    "title": "Subiramo isuzuma",
+    "backToForm": "Subira ku ifishi"
+  }
+}

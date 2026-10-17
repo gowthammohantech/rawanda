@@ -1,0 +1,86 @@
+{
+  "title": "New screening",
+  "loading": "Loading the draft",
+  "opening": "Opening the screening form",
+  "notFound": "This draft is no longer on this device",
+  "notFoundHint": "It may have been discarded or submitted.",
+  "backToScreen": "Back to Screen",
+  "openFailed": "The screening form could not be opened",
+  "bp": "Blood pressure",
+  "systolic": "Systolic",
+  "diastolic": "Diastolic",
+  "glucose": "Blood glucose",
+  "glucoseValue": "Glucose value",
+  "glucoseHint": "Optional. If you enter a value, choose the unit and the reading context.",
+  "unit": {
+    "label": "Glucose unit",
+    "mmHg": "mmHg",
+    "mmolL": "mmol/L",
+    "mgdL": "mg/dL",
+    "spoken": {
+      "mmHg": "millimetres of mercury",
+      "mmolL": "millimoles per litre",
+      "mgdL": "milligrams per decilitre"
+    }
+  },
+  "fieldA11y": "{{label}}, {{unit}}",
+  "context": {
+    "label": "Reading context",
+    "fasting": "Fasting",
+    "notFasting": "Not fasting",
+    "notRecorded": "Not recorded"
+  },
+  "measuredAt": "Measured at",
+  "observations": "Observations (optional)",
+  "observationsHint": "Notes about the visit. Do not record a diagnosis.",
+  "observationsCounter": "{{count}} / {{max}}",
+  "source": "Source: entered manually on this device",
+  "entryRangeNote": "Entry ranges are DEMO typing checks (DEMO_RULE_NOT_CLINICALLY_VALIDATED), not clinical thresholds.",
+  "saving": "Saving…",
+  "notSavedYet": "Not saved yet",
+  "draftSaved": "Draft saved on this device · {{time}}",
+  "saveFailed": "The draft could not be saved on this device. Your entries are still on screen.",
+  "review": "Review",
+  "reviewHint": "Checks the entries, then shows the summary",
+  "errorSummary_one": "{{count}} field needs attention",
+  "errorSummary_other": "{{count}} fields need attention",
+  "errorLinkHint": "Moves to the field",
+  "options": "Draft options",
+  "discard": "Discard draft",
+  "discardTitle": "Discard this draft?",
+  "discardDescription": "The values entered for {{name}} are removed from this device.",
+  "discarded": "Draft discarded",
+  "discardFailed": "The draft could not be discarded",
+  "resume": {
+    "title": "Resume draft from {{time}}?",
+    "description": "There is an unfinished screening for {{name}} on this device.",
+    "resume": "Resume",
+    "startNew": "Start new"
+  },
+  "patient": "{{name}}, {{identifier}}",
+  "tab": {
+    "title": "Screen",
+    "draftsLabel": "DRAFTS ON THIS DEVICE",
+    "deviceNote": "Drafts stay on this device. They are not sent until you submit them.",
+    "empty": "No drafts. Choose a patient to start.",
+    "choosePatient": "Choose patient",
+    "choosePatientHint": "Opens Find to pick the patient to screen",
+    "error": "Drafts could not be loaded",
+    "loading": "Loading drafts"
+  },
+  "row": {
+    "edited": "Last edited {{time}}",
+    "completeness": "{{count}} of {{total}} fields",
+    "resume": "Resume",
+    "resumeLabel": "Resume draft for {{name}}",
+    "unknownPatient": "Patient not on this device"
+  },
+  "pick": {
+    "banner": "Choose the patient to screen",
+    "hint": "Opens the screening form for this patient"
+  },
+  "reviewStub": {
+    "title": "Review screening",
+    "backToForm": "Back to the form"
+  }
+}

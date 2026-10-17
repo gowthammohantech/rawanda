@@ -33,5 +33,7 @@
   "namePattern": "Use letters, spaces, hyphens or apostrophes only.",
   "ageRange": "Age must be between {{min}} and {{max}} years.",
   "phonePattern": "Enter a phone number in the format 07X XXX XXXX.",
-  "underPilotAge": "The pilot screens adults — check the date of birth."
+  "underPilotAge": "The pilot screens adults — check the date of birth.",
+  "outOfEntryRange": "Outside the expected entry range ({{min}}–{{max}} {{unit}}). Check for typing errors.",
+  "measuredAtOld": "This reading was taken more than 24 hours ago. Check the date."
 }

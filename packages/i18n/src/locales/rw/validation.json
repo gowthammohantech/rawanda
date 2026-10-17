@@ -33,5 +33,7 @@
   "namePattern": "Koresha inyuguti, umwanya, akarongo cyangwa apositorofe gusa.",
   "ageRange": "Imyaka igomba kuba hagati ya {{min}} na {{max}}.",
   "phonePattern": "Andika nimero ya telefoni nka 07X XXX XXXX.",
-  "underPilotAge": "Igerageza risuzuma abantu bakuru — genzura itariki y'amavuko."
+  "underPilotAge": "Igerageza risuzuma abantu bakuru — genzura itariki y'amavuko.",
+  "outOfEntryRange": "Kiri hanze y'urugero ruteganyijwe ({{min}}–{{max}} {{unit}}). Reba niba nta kosa ryo kwandika.",
+  "measuredAtOld": "Iki gipimo cyafashwe hashize amasaha arenga 24. Reba itariki."
 }
