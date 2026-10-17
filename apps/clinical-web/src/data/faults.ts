@@ -9,7 +9,8 @@
  * | timeout          | `timeoutRate: 1` (after commit → TIMEOUT, same-key retry safe) |
  * | serverError      | `serverErrorRate: 1` (500 before the call runs)                |
  * | offline          | `offline: true`                                                |
- * | conflict         | `conflictOnce` on the WF-01 / WF-02 / WF-03 scenario records   |
+ * | conflict         | `conflictOnce` on the WF-01 / WF-02 / WF-03 scenario records + |
+ * |                  | the AMENDED / MISSING_UNIT screenings (CLN-04 amendment)       |
  */
 import { SEED_ANCHORS } from "@laif/mock-data";
 import { DEFAULT_FAULT_CONFIG, type FaultConfig, type FaultConfigPatch } from "@laif/repositories";
@@ -30,6 +31,9 @@ export const CONFLICT_TARGETS = [
   { entityType: "review", entityId: SEED_ANCHORS.WF01_FLAGGED_REVIEW.reviewId },
   { entityType: "followUp", entityId: SEED_ANCHORS.WF02_FOLLOWUP_CONFLICT.followUpId },
   { entityType: "review", entityId: SEED_ANCHORS.WF03_DISMISSABLE_FLAG.reviewId },
+  // CLN-04: the next amendment of these screenings reports a version conflict.
+  { entityType: "screening", entityId: SEED_ANCHORS.AMENDED_SCREENING.screeningId },
+  { entityType: "screening", entityId: SEED_ANCHORS.MISSING_UNIT_SCREENING.screeningId },
 ] as const;
 
 export function faultSwitchOn(config: Readonly<FaultConfig>, key: FaultSwitchKey): boolean {

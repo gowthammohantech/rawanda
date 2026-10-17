@@ -17,6 +17,7 @@ import { APP_ID } from "../app/config.ts";
 import { routes } from "../app/router.tsx";
 import { createAppServices, type AppServices } from "../app/services.ts";
 import { findAdminPersona } from "../auth/personas.ts";
+import { ChartSizeContext } from "../components/charts/ChartFrame.tsx";
 import { defaultReportingDistrict, startAdminSession } from "../auth/signIn.ts";
 
 export type BootOptions = {
@@ -27,6 +28,8 @@ export type BootOptions = {
   strict?: boolean;
   /** Waits for this test id after render (default: none). */
   waitFor?: string;
+  /** Fixed chart size (jsdom has no layout; `ChartSizeContext`). */
+  chartSize?: { width: number; height: number };
 };
 
 export async function createTestServices(store: StoreAdapter = createMemoryStoreAdapter()) {
@@ -69,7 +72,11 @@ export async function bootApp(options: BootOptions = {}): Promise<BootResult> {
   const router = createMemoryRouter(routes, {
     initialEntries: [options.path ?? "/admin/overview"],
   });
-  const app = <App services={services} router={router} />;
+  const app = (
+    <ChartSizeContext.Provider value={options.chartSize ?? null}>
+      <App services={services} router={router} />
+    </ChartSizeContext.Provider>
+  );
   const view = render(options.strict === true ? <StrictMode>{app}</StrictMode> : app);
   if (options.waitFor !== undefined) {
     await screen.findByTestId(options.waitFor, {}, { timeout: 10_000 });

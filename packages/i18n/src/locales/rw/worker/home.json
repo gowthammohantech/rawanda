@@ -1,0 +1,57 @@
+{
+  "greeting": {
+    "morning": "Mwaramutse, {{name}}",
+    "afternoon": "Mwiriwe, {{name}}",
+    "evening": "Mwiriwe, {{name}}"
+  },
+  "dateLabel": "{{weekday}}, {{day}} {{month}}",
+  "startScreening": "Tangira isuzuma rishya",
+  "startScreeningHint": "Andika umuvuduko w'amaraso n'isukari by'umurwayi",
+  "section": {
+    "todaysWork": "Imirimo y'uyu munsi",
+    "nextFollowUps": "Ibikurikiranwa bitaha",
+    "drafts": "Ibitarangiye"
+  },
+  "overdue": "Byarengeje igihe",
+  "dueToday": "Bigomba uyu munsi",
+  "completed": "Byarangiye",
+  "summaryLabel": "Imirimo y'uyu munsi: {{overdue}} byarengeje igihe, {{dueToday}} bigomba uyu munsi, {{completed}} byarangiye",
+  "progress": "{{done}} kuri {{total}} byakozwe uyu munsi",
+  "pending_one": "{{count}} byabitswe kuri iki gikoresho",
+  "pending_other": "{{count}} byabitswe kuri iki gikoresho",
+  "strip": {
+    "offline": "Ukorera nta murandasi (igerageza)",
+    "waiting_one": "{{count}} gitegereje guhuzwa",
+    "waiting_other": "{{count}} bitegereje guhuzwa",
+    "allSynced": "Ibiri kuri iki gikoresho byose byahujwe",
+    "conflicts_one": "{{count}} gikeneye icyemezo cyawe",
+    "conflicts_other": "{{count}} bikeneye icyemezo cyawe",
+    "lastSynced": "Byahujwe bwa nyuma {{time}}",
+    "neverSynced": "Ntibirahuzwa",
+    "openSync": "Ifungura ahabigenewe guhuza"
+  },
+  "pill": {
+    "overdue_one": "Byarengeje igihe · umunsi {{count}}",
+    "overdue_other": "Byarengeje igihe · iminsi {{count}}",
+    "dueToday": "Bigomba uyu munsi · {{time}}",
+    "upcoming": "Biri imbere · {{date}}"
+  },
+  "row": {
+    "label": "{{name}}, {{task}}, {{due}}",
+    "hint": "Ifungura igikorwa cyo gukurikirana",
+    "unknownPatient": "Umurwayi ntari kuri iki gikoresho"
+  },
+  "seeAllTasks": "Reba imirimo yose",
+  "empty": "Nta bikorwa byo gukurikirana uyu munsi",
+  "emptyHint": "Ibikorwa byo gukurikirana bigaragara hano iyo umuganga abiguhaye.",
+  "overdueCaveat": "Byarengeje = byarenze itariki y'igerageza; amategeko ntaremezwa n'abaganga",
+  "drafts": {
+    "count_one": "Isuzuma {{count}} ritarangiye",
+    "count_other": "Amasuzuma {{count}} atarangiye",
+    "none": "Nta suzuma ritarangiye",
+    "savedAt": "Ryabitswe {{time}}",
+    "hint": "Komeza iri suzuma"
+  },
+  "loading": "Imirimo y'uyu munsi irimo gufungurwa",
+  "error": "Imirimo y'uyu munsi ntiyabashije gusomwa kuri iki gikoresho"
+}

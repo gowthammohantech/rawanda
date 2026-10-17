@@ -17,6 +17,9 @@ export const clinicalKeys = {
   /** CLN-03 KPI strip + latest screening of one patient. */
   patientStats: (fac: Fac, id: string) => ["clinical", fac, "patientStats", id] as const,
   screenings: (fac: Fac, patientId: string) => ["clinical", fac, "screenings", patientId] as const,
+  /** CLN-04 merged follow-up timeline (reviews + referrals + follow-ups) of one patient. */
+  patientTimeline: (fac: Fac, patientId: string) =>
+    ["clinical", fac, "patientTimeline", patientId] as const,
   reviews: (fac: Fac, f: Filter = {}) => ["clinical", fac, "reviews", f] as const,
   reviewCounts: (fac: Fac, f: Filter = {}) => ["clinical", fac, "reviewCounts", f] as const,
   review: (fac: Fac, id: string) => ["clinical", fac, "review", id] as const,
@@ -30,10 +33,12 @@ export const clinicalKeys = {
 const ROOT_SEGMENTS: Partial<Record<QueryEntity, readonly string[]>> = {
   // `patients` rows (CLN-03) also show last screening + open items, hence the extra segments.
   patients: ["patients", "patient"],
-  screenings: ["screenings", "patientStats", "patients"],
-  reviews: ["reviews", "reviewCounts", "review", "patientStats", "patients"],
-  referrals: ["referrals", "review", "reviewCounts", "patientStats", "patients"],
-  followUps: ["followUps", "review", "patientStats", "patients"],
+  // `patientTimeline` (CLN-04) merges reviews, referrals and follow-ups; an amendment also
+  // refreshes it (phase task 6).
+  screenings: ["screenings", "patientStats", "patients", "patientTimeline"],
+  reviews: ["reviews", "reviewCounts", "review", "patientStats", "patients", "patientTimeline"],
+  referrals: ["referrals", "review", "reviewCounts", "patientStats", "patients", "patientTimeline"],
+  followUps: ["followUps", "review", "patientStats", "patients", "patientTimeline"],
   workers: ["workers"],
   audit: ["audit"],
 };

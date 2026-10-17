@@ -32,7 +32,7 @@
     "offline": "Simulated offline",
     "offlineHint": "Every repository call fails as if the network were down.",
     "conflict": "Conflict on next write",
-    "conflictHint": "The next save to a WF-01, WF-02 or WF-03 scenario record reports a version conflict.",
+    "conflictHint": "The next save to a WF-01, WF-02 or WF-03 scenario record, or the next amendment of the amended or missing-unit demo screening, reports a version conflict.",
     "activeBadge": "Simulated faults active",
     "allOff": "Turn all faults off",
     "offlineBanner": "Simulated offline — changes cannot be saved"

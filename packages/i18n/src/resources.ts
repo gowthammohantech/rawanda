@@ -3,72 +3,25 @@
  * Vite / Metro bundle. There is no HTTP backend.
  *
  * Adding an area file (binding convention, FND-04 task 5): create
- * `locales/<lng>/<ns>/<area>.json` for BOTH languages, import it below and merge it under key
- * `<area>` of namespace `<ns>`, e.g.
- *
- *   import enClinicalQueue from "./locales/en/clinical/queue.json";
- *   clinical: { ...enClinical, queue: enClinicalQueue },
+ * `locales/<lng>/<ns>/<area>.json` for BOTH languages, import it in the app module
+ * `resources/<ns>.ts` (clinical, worker, admin, citizen) and add it under key `<area>`.
  *
  * `pnpm i18n:check` fails if a file on disk is not wired in here.
  */
-import enAdmin from "./locales/en/admin.json";
-import enAdminAuth from "./locales/en/admin/auth.json";
-import enAdminErrors from "./locales/en/admin/errors.json";
-import enAdminShell from "./locales/en/admin/shell.json";
-import enCitizen from "./locales/en/citizen.json";
-import enCitizenConsent from "./locales/en/citizen/consent.json";
-import enCitizenErrors from "./locales/en/citizen/errors.json";
-import enCitizenHealth from "./locales/en/citizen/health.json";
-import enCitizenMore from "./locales/en/citizen/more.json";
-import enCitizenNav from "./locales/en/citizen/nav.json";
-import enCitizenOnboarding from "./locales/en/citizen/onboarding.json";
-import enCitizenValidation from "./locales/en/citizen/validation.json";
-import enClinical from "./locales/en/clinical.json";
-import enClinicalCommon from "./locales/en/clinical/common.json";
-import enClinicalErrors from "./locales/en/clinical/errors.json";
-import enClinicalLogin from "./locales/en/clinical/login.json";
-import enClinicalPatients from "./locales/en/clinical/patients.json";
-import enClinicalSettings from "./locales/en/clinical/settings.json";
+import { enAdmin, rwAdmin } from "./resources/admin.ts";
+import { enCitizen, rwCitizen } from "./resources/citizen.ts";
+import { enClinical, rwClinical } from "./resources/clinical.ts";
+import { enWorker, rwWorker } from "./resources/worker.ts";
 import enCommon from "./locales/en/common.json";
 import enDemo from "./locales/en/demo.json";
 import enDomain from "./locales/en/domain.json";
 import enShell from "./locales/en/shell.json";
 import enValidation from "./locales/en/validation.json";
-import enWorker from "./locales/en/worker.json";
-import enWorkerAuth from "./locales/en/worker/auth.json";
-import enWorkerNav from "./locales/en/worker/nav.json";
-import enWorkerNetsim from "./locales/en/worker/netsim.json";
-import enWorkerSettings from "./locales/en/worker/settings.json";
-import enWorkerSync from "./locales/en/worker/sync.json";
-import rwAdmin from "./locales/rw/admin.json";
-import rwAdminAuth from "./locales/rw/admin/auth.json";
-import rwAdminErrors from "./locales/rw/admin/errors.json";
-import rwAdminShell from "./locales/rw/admin/shell.json";
-import rwCitizen from "./locales/rw/citizen.json";
-import rwCitizenConsent from "./locales/rw/citizen/consent.json";
-import rwCitizenErrors from "./locales/rw/citizen/errors.json";
-import rwCitizenHealth from "./locales/rw/citizen/health.json";
-import rwCitizenMore from "./locales/rw/citizen/more.json";
-import rwCitizenNav from "./locales/rw/citizen/nav.json";
-import rwCitizenOnboarding from "./locales/rw/citizen/onboarding.json";
-import rwCitizenValidation from "./locales/rw/citizen/validation.json";
-import rwClinical from "./locales/rw/clinical.json";
-import rwClinicalCommon from "./locales/rw/clinical/common.json";
-import rwClinicalErrors from "./locales/rw/clinical/errors.json";
-import rwClinicalLogin from "./locales/rw/clinical/login.json";
-import rwClinicalPatients from "./locales/rw/clinical/patients.json";
-import rwClinicalSettings from "./locales/rw/clinical/settings.json";
 import rwCommon from "./locales/rw/common.json";
 import rwDemo from "./locales/rw/demo.json";
 import rwDomain from "./locales/rw/domain.json";
 import rwShell from "./locales/rw/shell.json";
 import rwValidation from "./locales/rw/validation.json";
-import rwWorker from "./locales/rw/worker.json";
-import rwWorkerAuth from "./locales/rw/worker/auth.json";
-import rwWorkerNav from "./locales/rw/worker/nav.json";
-import rwWorkerNetsim from "./locales/rw/worker/netsim.json";
-import rwWorkerSettings from "./locales/rw/worker/settings.json";
-import rwWorkerSync from "./locales/rw/worker/sync.json";
 import rwReview from "./locales/rw/_review.json";
 
 export const NAMESPACES = [
@@ -93,33 +46,10 @@ export const enResources = {
   domain: enDomain,
   demo: enDemo,
   shell: enShell,
-  clinical: {
-    ...enClinical,
-    common: enClinicalCommon,
-    login: enClinicalLogin,
-    errors: enClinicalErrors,
-    settings: enClinicalSettings,
-    patients: enClinicalPatients,
-  },
-  worker: {
-    ...enWorker,
-    auth: enWorkerAuth,
-    nav: enWorkerNav,
-    settings: enWorkerSettings,
-    sync: enWorkerSync,
-    netsim: enWorkerNetsim,
-  },
-  admin: { ...enAdmin, shell: enAdminShell, auth: enAdminAuth, errors: enAdminErrors },
-  citizen: {
-    ...enCitizen,
-    errors: enCitizenErrors,
-    onboarding: enCitizenOnboarding,
-    consent: enCitizenConsent,
-    nav: enCitizenNav,
-    validation: enCitizenValidation,
-    more: enCitizenMore,
-    health: enCitizenHealth,
-  },
+  clinical: enClinical,
+  worker: enWorker,
+  admin: enAdmin,
+  citizen: enCitizen,
 } as const satisfies Record<Namespace, object>;
 
 /** Kinyarwanda drafts. Parity with EN is enforced by `pnpm i18n:check`, not by types. */
@@ -129,33 +59,10 @@ export const rwResources: Record<Namespace, object> = {
   domain: rwDomain,
   demo: rwDemo,
   shell: rwShell,
-  clinical: {
-    ...rwClinical,
-    common: rwClinicalCommon,
-    login: rwClinicalLogin,
-    errors: rwClinicalErrors,
-    settings: rwClinicalSettings,
-    patients: rwClinicalPatients,
-  },
-  worker: {
-    ...rwWorker,
-    auth: rwWorkerAuth,
-    nav: rwWorkerNav,
-    settings: rwWorkerSettings,
-    sync: rwWorkerSync,
-    netsim: rwWorkerNetsim,
-  },
-  admin: { ...rwAdmin, shell: rwAdminShell, auth: rwAdminAuth, errors: rwAdminErrors },
-  citizen: {
-    ...rwCitizen,
-    errors: rwCitizenErrors,
-    onboarding: rwCitizenOnboarding,
-    consent: rwCitizenConsent,
-    nav: rwCitizenNav,
-    validation: rwCitizenValidation,
-    more: rwCitizenMore,
-    health: rwCitizenHealth,
-  },
+  clinical: rwClinical,
+  worker: rwWorker,
+  admin: rwAdmin,
+  citizen: rwCitizen,
 };
 
 export const resources = { en: enResources, rw: rwResources } as const;
