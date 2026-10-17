@@ -3,7 +3,7 @@ import type { I18nInstance } from "@laif/i18n";
 import type { CareRepository } from "@laif/repositories";
 import { QueryClient } from "@tanstack/react-query";
 
-import type { AppSession } from "./session.ts";
+import type { AppSession } from "../session/session-store.ts";
 
 export type AppServices = {
   i18n: I18nInstance;

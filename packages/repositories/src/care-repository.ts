@@ -67,6 +67,7 @@ import type {
   Screening,
   SyncOpStatus,
   SyncOperation,
+  DeviceSession,
 } from "@laif/domain";
 import type { ScenarioId, SeedDataset } from "@laif/mock-data";
 import type { z } from "zod";
@@ -216,6 +217,26 @@ export interface DemoApi {
   ): Promise<{ entityType: string; id: string; version: number }>;
 }
 
+export type StartDeviceSessionCall = {
+  personaId: string;
+  facilityId: string;
+  deviceId: string;
+};
+
+/** Device identity + demo device sessions (HWM-01). Demo sign-in — not authentication. */
+export interface DeviceApi {
+  /** Store meta `device_id`, created on first call (platform UUID); cleared only by a reset. */
+  getOrCreateDeviceId(): Promise<string>;
+  getSession(id: string): Promise<DeviceSession | null>;
+  /**
+   * Scope-checked (`checkAccess`, `patient.read` on the facility) — denial audits
+   * `access.denied` and throws `FORBIDDEN` (`ROLE` / `SCOPE`); success audits `session.started`.
+   */
+  startSession(i: StartDeviceSessionCall): Promise<DeviceSession>;
+  /** `active` → `ended` + `session.ended`; touches nothing else. Null when unknown. */
+  endSession(id: string): Promise<DeviceSession | null>;
+}
+
 export interface CareRepository {
   listPatients(f?: PatientFilterInput): Promise<Page<Patient>>;
   getPatient(id: string): Promise<Patient | null>;
@@ -272,6 +293,7 @@ export interface CareRepository {
   listAccessGrants(): Promise<AccessGrant[]>;
   sync: SyncApi;
   demo: DemoApi;
+  device: DeviceApi;
 }
 
 export type RepositoryDeps = {

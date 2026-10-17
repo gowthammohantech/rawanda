@@ -10,7 +10,7 @@
 | Depends on | FND-11 (clinical-web shell, providers, DemoBanner + language switcher, `test:e2e` script), FND-06 (permissions + `createPersonaSession`), FND-09 (`AppShell`, `PermissionDenied`), FND-07 (`recordAuditEvent`) |
 | Trace | PRD §4 journey 1 step 1, PRD §5; FRD CL-08 (access), FRD §7 Permissions; spec §2.1 `/clinical/login`; WF-04 (scope); T-02 |
 | Size | M |
-| Status | Not started |
+| Status | Done |
 
 ## 2. Goal
 

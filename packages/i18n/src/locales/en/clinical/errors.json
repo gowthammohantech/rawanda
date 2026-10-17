@@ -1,0 +1,17 @@
+{
+  "permissionDenied": {
+    "title": "Not available for this demo role",
+    "body": "The {{role}} demo role cannot open this screen. This attempt was recorded in the audit log.",
+    "switchPersona": "Switch persona",
+    "navHint": "Not available for this demo role"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "This address does not match any screen in this demo.",
+    "home": "Go to the review queue"
+  },
+  "routeError": {
+    "title": "This screen could not be shown",
+    "description": "Something went wrong while showing this screen. Try again, or reset the demo from Demo tools."
+  }
+}

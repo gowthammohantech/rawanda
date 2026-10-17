@@ -3,23 +3,18 @@
  * `repo.demo.ensureSeeded()` runs; on failure a Screen (DemoBanner) with ErrorState, "Try again"
  * and "Reset demo" (storage failures show `common:error.storageUnavailable`).
  */
-import {
-  isStorageUnavailableError,
-  RepositoryError,
-  type CareRepository,
-  type StoreAdapter,
-} from "@laif/repositories";
+import { isStorageUnavailableError, RepositoryError, type StoreAdapter } from "@laif/repositories";
 import { BrandSplash, Button, ErrorState, Screen, useTx } from "@laif/ui-native";
 import { useEffect, useState, type ReactNode } from "react";
 
 import { DemoToolsProvider } from "./demo-tools.tsx";
-import { RepositoryProvider, useSession } from "./providers.tsx";
-import { createAppRepository } from "./repository.ts";
+import { CitizenRepoProvider, createAppRepository, type CitizenRepository } from "./data/repo.tsx";
+import { useSession } from "./providers.tsx";
 
 type BootState =
   | { status: "starting" }
-  | { status: "ready"; repo: CareRepository }
-  | { status: "failed"; error: unknown; repo: CareRepository | null };
+  | { status: "ready"; repo: CitizenRepository }
+  | { status: "failed"; error: unknown; repo: CitizenRepository | null };
 
 export type BootProps = {
   openStore: () => Promise<StoreAdapter>;
@@ -37,7 +32,7 @@ export function Boot({ openStore, noLatency, children }: BootProps) {
   useEffect(() => {
     let active = true;
     const start = async () => {
-      let repo: CareRepository | null = null;
+      let repo: CitizenRepository | null = null;
       try {
         const store = await openStore();
         repo = createAppRepository({
@@ -60,9 +55,9 @@ export function Boot({ openStore, noLatency, children }: BootProps) {
   if (state.status === "starting") return <BrandSplash />;
   if (state.status === "ready") {
     return (
-      <RepositoryProvider repo={state.repo}>
+      <CitizenRepoProvider repo={state.repo}>
         <DemoToolsProvider>{children}</DemoToolsProvider>
-      </RepositoryProvider>
+      </CitizenRepoProvider>
     );
   }
 

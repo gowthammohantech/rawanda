@@ -10,7 +10,7 @@
 | Depends on | FND-11 (citizen Expo shell, SQLite `laif-citizen.db`), FND-05 (citizen personas `persona-citizen-1/-2/-withdrawn/-rep/-pending` = CTZ-P1…P5, `SEED_ANCHORS`, `sliceForApp('citizen')`), FND-07 (pipeline, faults, pre-registered citizen collections, extension rule), FND-08 (adapters, `createTestSqliteExecutor`) |
 | Trace | CW-01..CW-08 (data foundation), FRD §4 (validation), §5 (audit fields), §6 (domain objects), Tech spec §5.1, §5.2, §10, WF-01 step 9, WF-03 step 5, WF-04 step 4 |
 | Size | L |
-| Status | Planned |
+| Status | Done |
 
 ## 2. Goal
 

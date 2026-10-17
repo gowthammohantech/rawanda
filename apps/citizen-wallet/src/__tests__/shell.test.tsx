@@ -16,7 +16,7 @@ import { describe, expect, it, vi } from "vitest";
 import TabsLayout from "../../app/(tabs)/_layout.tsx";
 import { AppRoot } from "../AppRoot.tsx";
 import { APP_ID } from "../config.ts";
-import { useRepository } from "../providers.tsx";
+import { useCitizenRepo } from "../data/repo.tsx";
 import { HomeScreen } from "../screens/HomeScreen.tsx";
 import { SettingsScreen } from "../screens/SettingsScreen.tsx";
 import { createAppQueryClient, type ShellServices } from "../services.ts";
@@ -44,9 +44,9 @@ const EN_BANNER = enResources.demo.banner;
 const RW_BANNER = (rwResources.demo as { banner: string }).banner;
 const OFFLINE_TEXT = enResources.common.state.offline;
 
-const captured: { repo: ReturnType<typeof useRepository> | null } = { repo: null };
+const captured: { repo: ReturnType<typeof useCitizenRepo> | null } = { repo: null };
 function CaptureRepo() {
-  const repo = useRepository();
+  const repo = useCitizenRepo();
   useEffect(() => {
     captured.repo = repo;
   }, [repo]);

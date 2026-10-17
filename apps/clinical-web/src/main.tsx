@@ -5,14 +5,13 @@ import { createI18n } from "@laif/i18n";
 import { createWebLanguageStorage } from "@laif/i18n/web";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { createBrowserRouter } from "react-router";
 
 import { App } from "./app/App.tsx";
 import { APP_ID } from "./app/config.ts";
 import { createAppRepository } from "./app/repository.ts";
-import { routes } from "./app/routes.tsx";
+import { createAppRouter } from "./app/router.tsx";
 import { createAppQueryClient } from "./app/services.ts";
-import { createAppSession } from "./app/session.ts";
+import { createAppSession } from "./session/session-store.ts";
 
 installContractsErrorMap();
 
@@ -32,7 +31,7 @@ async function start(): Promise<void> {
   };
   createRoot(document.getElementById("root") as HTMLElement).render(
     <StrictMode>
-      <App services={services} router={createBrowserRouter(routes)} />
+      <App services={services} router={createAppRouter()} />
     </StrictMode>,
   );
 }

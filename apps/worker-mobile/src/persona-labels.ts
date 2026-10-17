@@ -2,7 +2,7 @@
 import { roleLabelKey } from "@laif/auth-demo";
 import type { PersonaOption, TranslationKey, TranslationValues } from "@laif/ui-native";
 
-import type { AppPersona } from "./session.ts";
+import type { AppPersona } from "./session/store.ts";
 
 type Tx = (key: TranslationKey, values?: TranslationValues) => string;
 

@@ -1,0 +1,8 @@
+{
+  "forbidden": "You do not have access to this record.",
+  "consentRequired": "Your health information is hidden because consent is not given. You can give consent again in Settings.",
+  "notFound": "We could not find this item. It may have been removed.",
+  "conflict": "This was changed somewhere else. We reloaded the latest version.",
+  "unavailable": "This service is not available right now. Nothing was changed. Try again later.",
+  "generic": "Something went wrong. Nothing was changed. Try again."
+}

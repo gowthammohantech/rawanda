@@ -1,32 +1,29 @@
-/** Translated role / scope labels of a demo persona (PersonaSwitcher, RoleBanner). */
+/** Translated labels of demo personas and facilities (login cards, PersonaSwitcher, RoleBanner). */
 import { roleLabelKey } from "@laif/auth-demo";
+import type { FacilityId } from "@laif/domain";
 import type { PersonaOption, TranslationKey, TranslationValues } from "@laif/ui-web";
 
-import type { AppPersona } from "./session.ts";
+import { permittedFacilityIdsFor, type AppPersona } from "../session/session-store.ts";
 
 type Tx = (key: TranslationKey, values?: TranslationValues) => string;
 
-export function personaScopeLabel(persona: AppPersona, t: Tx): string | undefined {
-  if (persona.programmeWide) return t("shell:role.programmeWide");
-  if (persona.facilityIds.length > 0) {
-    return persona.facilityIds
-      .map((id) => t(`demo:entity.facility.${id}` as TranslationKey))
-      .join(", ");
-  }
-  if (persona.districtIds.length > 0) {
-    return persona.districtIds
-      .map((id) => t(`demo:entity.district.${id}` as TranslationKey))
-      .join(", ");
-  }
-  return undefined;
+export function facilityLabel(id: FacilityId | string, t: Tx): string {
+  return t(`demo:entity.facility.${id}` as TranslationKey);
+}
+
+/** "Demo Health Centre Alpha-1, Demo Health Centre Alpha-2" (the persona's permitted set). */
+export function personaFacilitiesLabel(persona: AppPersona, t: Tx): string {
+  return permittedFacilityIdsFor(persona)
+    .map((id) => facilityLabel(id, t))
+    .join(", ");
 }
 
 export function personaOption(persona: AppPersona, t: Tx): PersonaOption {
-  const scopeLabel = personaScopeLabel(persona, t);
+  const scopeLabel = personaFacilitiesLabel(persona, t);
   return {
     id: persona.id,
     name: persona.displayName,
     roleLabel: t(roleLabelKey(persona.role)),
-    ...(scopeLabel === undefined ? {} : { scopeLabel }),
+    ...(scopeLabel === "" ? {} : { scopeLabel }),
   };
 }

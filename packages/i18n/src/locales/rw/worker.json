@@ -1,9 +1,5 @@
 {
   "appName": "CareConnect y'Umujyanama w'Ubuzima (Igerageza)",
-  "tabs": {
-    "home": "Ahabanza",
-    "settings": "Igenamiterere"
-  },
   "placeholder": {
     "comingSoon": "Bizubakwa muri {{phase}}",
     "description": "Iyi paji ni iy'agateganyo mu ishingiro rya porogaramu. Izatangwa mu cyiciro gikurikira."

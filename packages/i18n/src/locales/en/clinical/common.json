@@ -1,0 +1,20 @@
+{
+  "activeFacility": "Active facility: {{facility}}",
+  "facilityLabel": "Facility",
+  "roleChip": "Role: {{role}}",
+  "searchLink": "Search patients",
+  "searchHint": "Opens patient search",
+  "notifications": "No notifications in this demo yet.",
+  "signOut": "Sign out",
+  "signedOut": "Signed out of the demo.",
+  "choosePersona": "Choose persona and facility…",
+  "switchFacility": "Switch to {{facility}}",
+  "facilitySwitched": "Active facility: {{facility}}",
+  "help": {
+    "label": "Help",
+    "title": "About this demo",
+    "body": "This portal is a demonstration with synthetic patient data. It is not for clinical use. Rule flags come from illustrative demo rules that are not clinically validated.",
+    "roles": "Demo personas show what each role can do. Switching persona is demo only — it is not authentication.",
+    "tools": "Use Demo tools in the top bar to reset data, load a scenario or simulate network problems."
+  }
+}

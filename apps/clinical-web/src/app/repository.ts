@@ -15,7 +15,7 @@ import { createDexieStoreAdapter } from "@laif/repositories/dexie";
 import { createWebIdGenerator } from "@laif/repositories/ids/web";
 
 import { APP_ID, IS_E2E } from "./config.ts";
-import type { AppSession } from "./session.ts";
+import type { AppSession } from "../session/session-store.ts";
 
 export type CreateAppRepositoryOptions = {
   session: AppSession;

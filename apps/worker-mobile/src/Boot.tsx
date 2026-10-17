@@ -1,6 +1,6 @@
 /**
  * Startup gate (FND-11): BrandSplash while the local database opens and
- * `repo.demo.ensureSeeded()` runs; on failure a Screen (DemoBanner) with ErrorState, "Try again"
+ * `repo.demo.ensureSeeded()` runs, then the HWM-01 SessionProvider (restores the device session); on failure a Screen (DemoBanner) with ErrorState, "Try again"
  * and "Reset demo" (storage failures show `common:error.storageUnavailable`).
  */
 import {
@@ -13,8 +13,9 @@ import { BrandSplash, Button, ErrorState, Screen, useTx } from "@laif/ui-native"
 import { useEffect, useState, type ReactNode } from "react";
 
 import { DemoToolsProvider } from "./demo-tools.tsx";
-import { RepositoryProvider, useSession } from "./providers.tsx";
+import { RepositoryProvider, useSessionStore } from "./providers.tsx";
 import { createAppRepository } from "./repository.ts";
+import { SessionProvider } from "./session/SessionProvider.tsx";
 
 type BootState =
   | { status: "starting" }
@@ -29,7 +30,7 @@ export type BootProps = {
 };
 
 export function Boot({ openStore, noLatency, children }: BootProps) {
-  const session = useSession();
+  const session = useSessionStore();
   const t = useTx();
   const [state, setState] = useState<BootState>({ status: "starting" });
   const [attempt, setAttempt] = useState(0);
@@ -61,7 +62,9 @@ export function Boot({ openStore, noLatency, children }: BootProps) {
   if (state.status === "ready") {
     return (
       <RepositoryProvider repo={state.repo}>
-        <DemoToolsProvider>{children}</DemoToolsProvider>
+        <DemoToolsProvider>
+          <SessionProvider>{children}</SessionProvider>
+        </DemoToolsProvider>
       </RepositoryProvider>
     );
   }
