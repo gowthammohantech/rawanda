@@ -1,0 +1,41 @@
+# CTZ-05 reminder opt-out (device gate; not part of `pnpm verify`):
+# Marie (CTZ-P1) → Reminders → toggle off → confirm → "Reminders are off", no SCHEDULED chip →
+# Demo tools +7 days → Reminders → still off, no new DELIVERED (DEMO) row (the seed has one).
+appId: host.exp.Exponent
+---
+- launchApp:
+    clearState: true
+- tapOn: "Continue"
+- tapOn:
+    id: "persona-card-persona-citizen-1"
+- assertVisible: "My health"
+- tapOn: "Reminders"
+- assertVisible: "We'll remind you the day before."
+- assertVisible: "SCHEDULED"
+- tapOn:
+    id: "reminder-toggle"
+- assertVisible: "Stop reminders?"
+- assertVisible: "You will not get reminders for your appointments. Your appointments stay the same."
+- tapOn:
+    text: "Stop reminders"
+    index: 1
+- assertVisible: "Reminders turned off"
+- assertVisible: "Reminders are off"
+- assertNotVisible: "SCHEDULED"
+# Seeded history: exactly one delivered reminder before moving the clock.
+- assertVisible:
+    text: "DELIVERED \\(DEMO\\)"
+    index: 0
+- assertNotVisible:
+    text: "DELIVERED \\(DEMO\\)"
+    index: 1
+- tapOn: "More"
+- tapOn: "Demo tools"
+- tapOn: "Advance +7 days"
+- back
+- tapOn: "Reminders"
+- assertVisible: "Reminders are off"
+- assertNotVisible: "SCHEDULED"
+- assertNotVisible:
+    text: "DELIVERED \\(DEMO\\)"
+    index: 1

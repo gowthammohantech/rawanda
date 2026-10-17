@@ -30,6 +30,17 @@ export const AcknowledgeInstructionInputSchema = z.object({
 });
 export type AcknowledgeInstructionInput = z.output<typeof AcknowledgeInstructionInputSchema>;
 
+/**
+ * CTZ-05 "Got it" on a delivered (simulated) reminder → `acknowledged` (idempotent per reminder).
+ * Acknowledging a reminder never changes the related next step.
+ */
+export const AcknowledgeReminderInputSchema = z.object({
+  idempotencyKey: IdempotencyKey,
+  patientId: PatientIdSchema,
+  reminderId: NonEmptyTrimmed,
+});
+export type AcknowledgeReminderInput = z.output<typeof AcknowledgeReminderInputSchema>;
+
 /** Reminder opt-in / timing (`expectedVersion` of the current preference is required). */
 export const UpdateNotificationPrefsInputSchema = z.object({
   idempotencyKey: IdempotencyKey,

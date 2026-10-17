@@ -30,6 +30,7 @@ import { StyleSheet, View } from "react-native";
 import { useCitizenRepo } from "../data/repo.tsx";
 import { useDemoTools } from "../demo-tools.tsx";
 import { useWallet } from "../providers.tsx";
+import { emitDemoClockChanged } from "../state/events.ts";
 
 const DAY_MS = 86_400_000;
 
@@ -101,6 +102,8 @@ export function DemoToolsScreen() {
   const moveClock = async (run: () => Promise<string>) => {
     try {
       setClockIso(await run());
+      // CTZ-05: simulated reminder delivery follows the demo clock.
+      emitDemoClockChanged();
       await queryClient.invalidateQueries();
     } catch {
       failed();

@@ -7,10 +7,15 @@ import { sqliteDbFileName } from "@laif/repositories";
 import { openExpoSqliteExecutor } from "@laif/repositories/expo-sqlite";
 import { createNativeIdGenerator } from "@laif/repositories/ids/native";
 import { createSqliteStoreAdapter } from "@laif/repositories/sqlite";
+import * as Notifications from "expo-notifications";
 import Storage from "expo-sqlite/kv-store";
 
 import { APP_ID } from "./config.ts";
+import { ExpoLocalNotificationAdapter } from "./features/reminders/notificationAdapter.ts";
 import type { AppPlatform } from "./platform.types.ts";
+
+/** Device: `expo-notifications` local scheduling, used only for the explicit preview (CTZ-05). */
+let notifications: ExpoLocalNotificationAdapter | null = null;
 
 export const platform: AppPlatform = {
   openStore: async () =>
@@ -24,4 +29,5 @@ export const platform: AppPlatform = {
       Storage.removeItemSync(key);
     },
   }),
+  notifications: () => (notifications ??= new ExpoLocalNotificationAdapter(Notifications)),
 };

@@ -10,6 +10,7 @@ import { createDexieStoreAdapter } from "@laif/repositories/dexie";
 import { createWebIdGenerator } from "@laif/repositories/ids/web";
 
 import { APP_ID } from "./config.ts";
+import { SimulatedNotificationAdapter } from "./features/reminders/notificationAdapter.ts";
 import type { AppPlatform } from "./platform.types.ts";
 
 function browserStorage(): KeyValueStorage {
@@ -24,9 +25,13 @@ function browserStorage(): KeyValueStorage {
   }
 }
 
+/** No OS notifications on the Expo web target (preview hidden): simulation only. */
+const notifications = new SimulatedNotificationAdapter();
+
 export const platform: AppPlatform = {
   openStore: () => Promise.resolve(createDexieStoreAdapter({ dbName: dexieDbName(APP_ID) })),
   createIds: () => createWebIdGenerator(),
   languageStorage: () => createWebLanguageStorage(APP_ID),
   personaStorage: browserStorage,
+  notifications: () => notifications,
 };

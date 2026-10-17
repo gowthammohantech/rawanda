@@ -10,7 +10,7 @@
 | Depends on | CTZ-04 |
 | Trace | CW-04; Tech spec §2.4 "Reminders", §5.1 `Reminder`, §8 "Citizen — Reminder opt-out: changes local preference and stops simulated scheduling", §5.2 invariant "no UI may claim a referral is complete merely because a reminder was sent"; FRD Scenario 1 ("acknowledge reminder"); PRD §10 "sensitive notifications"; T-01, T-04, T-05, T-09 |
 | Size | L |
-| Status | Planned |
+| Status | Done |
 
 ## 2. Goal
 
