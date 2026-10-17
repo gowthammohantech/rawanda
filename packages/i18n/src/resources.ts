@@ -37,6 +37,7 @@ import enWorker from "./locales/en/worker.json";
 import enWorkerAuth from "./locales/en/worker/auth.json";
 import enWorkerHome from "./locales/en/worker/home.json";
 import enWorkerNav from "./locales/en/worker/nav.json";
+import enWorkerPatients from "./locales/en/worker/patients.json";
 import enWorkerNetsim from "./locales/en/worker/netsim.json";
 import enWorkerSettings from "./locales/en/worker/settings.json";
 import enWorkerSync from "./locales/en/worker/sync.json";
@@ -66,6 +67,7 @@ import rwWorker from "./locales/rw/worker.json";
 import rwWorkerAuth from "./locales/rw/worker/auth.json";
 import rwWorkerHome from "./locales/rw/worker/home.json";
 import rwWorkerNav from "./locales/rw/worker/nav.json";
+import rwWorkerPatients from "./locales/rw/worker/patients.json";
 import rwWorkerNetsim from "./locales/rw/worker/netsim.json";
 import rwWorkerSettings from "./locales/rw/worker/settings.json";
 import rwWorkerSync from "./locales/rw/worker/sync.json";
@@ -109,6 +111,7 @@ export const enResources = {
     settings: enWorkerSettings,
     sync: enWorkerSync,
     netsim: enWorkerNetsim,
+    patients: enWorkerPatients,
   },
   admin: { ...enAdmin, shell: enAdminShell, auth: enAdminAuth, errors: enAdminErrors },
   citizen: {
@@ -145,6 +148,7 @@ export const rwResources: Record<Namespace, object> = {
     settings: rwWorkerSettings,
     sync: rwWorkerSync,
     netsim: rwWorkerNetsim,
+    patients: rwWorkerPatients,
   },
   admin: { ...rwAdmin, shell: rwAdminShell, auth: rwAdminAuth, errors: rwAdminErrors },
   citizen: {

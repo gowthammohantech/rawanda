@@ -27,6 +27,7 @@ const SAMPLE_PARAMS: Partial<Record<ValidationMessageKey, Record<string, string 
   tooLong: { max: 500 },
   dateTooOld: { days: 30 },
   unrecognizedKeys: { keys: "foo,bar" },
+  ageRange: { min: 0, max: 120 },
 };
 
 beforeEach(() => clearMissingKeyReport());
@@ -56,6 +57,15 @@ describe("translateValidationMessage", () => {
       }
     },
   );
+
+  it("HWM-04 ageRange needs {min,max}: rendered with both, generic without", () => {
+    expect(translateValidationMessage(en.t, vMsg("ageRange", { min: 0, max: 120 }))).toBe(
+      "Age must be between 0 and 120 years.",
+    );
+    expect(translateValidationMessage(en.t, vMsg("ageRange"))).toBe(
+      translateValidationMessage(en.t, vMsg("invalid")),
+    );
+  });
 
   it("renders numberOutOfRange for {min,max}, {min} only, {max} only and no params", () => {
     expect(translateValidationMessage(en.t, vMsg("numberOutOfRange", { min: 60, max: 260 }))).toBe(

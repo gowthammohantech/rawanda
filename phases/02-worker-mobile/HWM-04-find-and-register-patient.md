@@ -12,7 +12,7 @@
 | Depends on | HWM-02 (HWM-03 for navigation polish only) |
 | Trace | PRD HW-02, §7 (LocalIdentifier) · FRD HW-02, §4, §7 · BRD BR-01 · Tech spec §2.2 "Find patient" · FRD T-01, T-02, T-03, T-07 |
 | Size | M |
-| Status | Planned |
+| Status | Done |
 
 ## 2. Goal
 

@@ -56,6 +56,24 @@ describe("RegisterPatientInputSchema", () => {
       }),
     ).toEqual({});
   });
+
+  it("HWM-04: optional village label and synthetic phone (07XXXXXXXX)", () => {
+    const ok = { ...input, estimatedAgeYears: 40 };
+    expect(
+      errorKeys(RegisterPatientInputSchema, {
+        ...ok,
+        villageLabel: "Demo Cell A",
+        syntheticPhone: "0780000001",
+      }),
+    ).toEqual({});
+    expect(
+      errorKeys(RegisterPatientInputSchema, {
+        ...ok,
+        villageLabel: "x".repeat(61),
+        syntheticPhone: "078 000 0001",
+      }),
+    ).toEqual({ villageLabel: "tooLong", syntheticPhone: "phonePattern" });
+  });
 });
 
 describe("care task inputs", () => {

@@ -226,6 +226,10 @@ assertSame<SameMembers<ScreeningAmendmentInput["field"], AmendableScreeningField
 
 export const PERSON_NAME_MAX = 80;
 export const ESTIMATED_AGE_MAX_YEARS = 120;
+/** HWM-04: optional free-text village / cell label (fictional in the demo). */
+export const VILLAGE_LABEL_MAX = 60;
+/** HWM-04: synthetic phone, stored as 10 digits `07XXXXXXXX` (shown `07X XXX XXXX`). */
+export const SYNTHETIC_PHONE_PATTERN = /^07\d{8}$/u;
 
 /** HWM-04 registration: either `dateOfBirth` or `estimatedAgeYears` is required. */
 export const RegisterPatientInputSchema = z
@@ -245,6 +249,14 @@ export const RegisterPatientInputSchema = z
     sex: z.enum(SEX_VALUES),
     facilityId: FacilityIdSchema,
     localIdentifier: boundedText(1, 40).optional(),
+    /** ext (HWM-04): optional village / cell label, free text. */
+    villageLabel: boundedText(1, VILLAGE_LABEL_MAX).optional(),
+    /** ext (HWM-04): optional synthetic phone (`07XXXXXXXX`). */
+    syntheticPhone: z
+      .string()
+      .trim()
+      .regex(SYNTHETIC_PHONE_PATTERN, { error: vMsg("phonePattern") })
+      .optional(),
     matchDecision: z.literal("register_anyway_flagged").optional(),
   })
   .superRefine((v, ctx) => {

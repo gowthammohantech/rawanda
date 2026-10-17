@@ -152,6 +152,31 @@ describe("ToastProvider", () => {
     vi.useRealTimers();
   });
 
+  it("a resolver title re-translates a visible toast when the language changes", async () => {
+    function KeyedTrigger() {
+      const { toast } = useToast();
+      return (
+        <AppText onPress={() => toast({ title: (t) => t("common:actions.save"), duration: 0 })}>
+          Fire
+        </AppText>
+      );
+    }
+    const view = renderNative(
+      <ToastProvider>
+        <KeyedTrigger />
+      </ToastProvider>,
+    );
+    fireEvent.click(screen.getByText("Fire"));
+    const english = screen.getByRole("alert").textContent ?? "";
+    await act(async () => {
+      await view.i18n.setLanguage("rw");
+    });
+    const kinyarwanda = screen.getByRole("alert").textContent ?? "";
+    expect(english).toContain("Save");
+    expect(kinyarwanda).toContain("Bika");
+    expect(kinyarwanda).not.toBe(english);
+  });
+
   it("useToast outside the provider throws", () => {
     vi.spyOn(console, "error").mockImplementation(() => undefined);
     expect(() => renderNative(<ToastTrigger />)).toThrow(/ToastProvider/);
