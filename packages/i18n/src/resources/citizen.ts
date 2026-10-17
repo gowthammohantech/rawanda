@@ -10,6 +10,8 @@ import enCitizenNav from "../locales/en/citizen/nav.json";
 import enCitizenValidation from "../locales/en/citizen/validation.json";
 import enCitizenMore from "../locales/en/citizen/more.json";
 import enCitizenHealth from "../locales/en/citizen/health.json";
+import enCitizenNextSteps from "../locales/en/citizen/nextSteps.json";
+import enCitizenNextStep from "../locales/en/citizen/nextStep.json";
 import rwCitizenBase from "../locales/rw/citizen.json";
 import rwCitizenErrors from "../locales/rw/citizen/errors.json";
 import rwCitizenOnboarding from "../locales/rw/citizen/onboarding.json";
@@ -18,6 +20,8 @@ import rwCitizenNav from "../locales/rw/citizen/nav.json";
 import rwCitizenValidation from "../locales/rw/citizen/validation.json";
 import rwCitizenMore from "../locales/rw/citizen/more.json";
 import rwCitizenHealth from "../locales/rw/citizen/health.json";
+import rwCitizenNextSteps from "../locales/rw/citizen/nextSteps.json";
+import rwCitizenNextStep from "../locales/rw/citizen/nextStep.json";
 
 export const enCitizen = {
   ...enCitizenBase,
@@ -28,6 +32,8 @@ export const enCitizen = {
   validation: enCitizenValidation,
   more: enCitizenMore,
   health: enCitizenHealth,
+  nextSteps: enCitizenNextSteps,
+  nextStep: enCitizenNextStep,
 } as const;
 
 export const rwCitizen: object = {
@@ -39,4 +45,6 @@ export const rwCitizen: object = {
   validation: rwCitizenValidation,
   more: rwCitizenMore,
   health: rwCitizenHealth,
+  nextSteps: rwCitizenNextSteps,
+  nextStep: rwCitizenNextStep,
 };

@@ -267,7 +267,8 @@
     "persona": "Uruhare rw'igerageza",
     "ruleset": "Amategeko y'igerageza",
     "sync_operation": "Igikorwa cyo guhuza",
-    "device_session": "Igikoresho cyinjiwemo"
+    "device_session": "Igikoresho cyinjiwemo",
+    "programme_action": "Igikorwa cya porogaramu"
   },
   "pathwayStage": {
     "DRAFT_SCREENING": "Ipimwa ritararangira",
@@ -513,7 +514,9 @@
         "list_viewed": "Urutonde rw'ibisubizo rwarebwe mu gasanduku"
       },
       "next_step": {
-        "acknowledged": "Intambwe ikurikira yasomwe"
+        "acknowledged": "Intambwe ikurikira yasomwe",
+        "list_viewed": "Urutonde rw'intambwe zikurikira rwarebwe mu gasanduku",
+        "viewed": "Intambwe ikurikira yarebwe mu gasanduku"
       },
       "support": {
         "callback_requested": "Hasabwe guhamagarwa"
@@ -529,6 +532,15 @@
         "verified": "Umwirondoro wemejwe (kode y'igerageza)",
         "verification_failed": "Kugenzura umwirondoro byanze (by'igerageza)",
         "verification_unavailable": "Serivisi yo kugenzura ntiboneka (by'igerageza)"
+      }
+    },
+    "admin": {
+      "drilldown": {
+        "viewed": "Isesengura rirambuye ry'imibare rusange ryarebwe"
+      },
+      "programme_action": {
+        "created": "Igikorwa cya porogaramu cyahawe ushinzwe",
+        "status_changed": "Imiterere y'igikorwa cya porogaramu yahindutse"
       }
     }
   }

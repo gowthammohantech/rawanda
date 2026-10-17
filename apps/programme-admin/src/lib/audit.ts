@@ -1,7 +1,8 @@
 /**
- * `emitAdminAudit()` — thin helper over `repository.recordAuditEvent` (FND-07). Only the
- * canonical cross-cutting names are used from the admin app here: `session.started`,
- * `session.ended`, `access.denied` (export / reset events come from the repository itself).
+ * `emitAdminAudit()` — thin helper over `repository.recordAuditEvent` (FND-07). The admin app
+ * records `session.started`, `session.ended`, `access.denied`, `conflict.resolved` and (ADM-03)
+ * `admin.drilldown.viewed`; change events (programme actions, exports, reset) come from the
+ * repository itself.
  * Every event carries the admin session's `correlationId`, `grantId` and `grantVersion`.
  */
 import type { ClientAuditInput } from "@laif/contracts";
@@ -10,13 +11,22 @@ import type { CareRepository } from "@laif/repositories";
 
 import type { AdminSession } from "../auth/sessionStore.ts";
 
-export const ADMIN_AUDIT_ACTIONS = ["session.started", "session.ended", "access.denied"] as const;
+export const ADMIN_AUDIT_ACTIONS = [
+  "session.started",
+  "session.ended",
+  "access.denied",
+  // ADM-03: aggregate drill-down view; the user's choice after a programme-action conflict.
+  "admin.drilldown.viewed",
+  "conflict.resolved",
+] as const;
 export type AdminAuditAction = (typeof ADMIN_AUDIT_ACTIONS)[number];
 
 export type AdminAuditInput = {
   action: AdminAuditAction;
   entityType?: EntityType;
   entityId?: string;
+  facilityId?: string;
+  districtId?: string;
   outcome?: "success" | "denied";
   changeSummary?: { [key: string]: JsonValue };
 };
@@ -38,6 +48,8 @@ export function emitAdminAudit(
   };
   if (input.entityType !== undefined) event.entityType = input.entityType;
   if (input.entityId !== undefined) event.entityId = input.entityId;
+  if (input.facilityId !== undefined) event.facilityId = input.facilityId;
+  if (input.districtId !== undefined) event.districtId = input.districtId;
   return repo.recordAuditEvent(event);
 }
 

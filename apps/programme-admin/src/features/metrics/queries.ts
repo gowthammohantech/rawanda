@@ -23,11 +23,11 @@ export function useSuppressionThreshold(): number {
   return DEMO_SMALL_CELL_THRESHOLD;
 }
 
-function filterKeyOf(api: Pick<AdminFiltersApi, "filters" | "period">): FilterKey {
+export function filterKeyOf(api: Pick<AdminFiltersApi, "filters" | "period">): FilterKey {
   return { ...api.filters, periodFrom: api.period.from, periodTo: api.period.to };
 }
 
-function useAccess(): { access: ScopeAccess | null; scopeKey: string } {
+export function useAccess(): { access: ScopeAccess | null; scopeKey: string } {
   const persona = useAdminSession((s) => s.persona);
   const grant = useAdminSession((s) => s.grant);
   return {
@@ -36,7 +36,7 @@ function useAccess(): { access: ScopeAccess | null; scopeKey: string } {
   };
 }
 
-function datasetOptions(
+export function datasetOptions(
   repo: ReturnType<typeof useRepository>,
   access: ScopeAccess | null,
   scopeKey: string,
@@ -59,16 +59,33 @@ export function useMetricsDataset(api: Pick<AdminFiltersApi, "filters" | "period
 
 export type OverviewResult = OverviewMetrics & { asOf: string; lastWriteAt: string | null };
 
+/**
+ * Scope-wide suppression (ADM-03, as the funnel): the overview of a district / facility is picked
+ * from ONE suppression pass over the dataset of the actor's FULL grant scope (`selectOverview`),
+ * so differencing two views reveals nothing hidden. The view's own dataset (loaded through the
+ * same `assertScope`-guarded loader, shared cache) supplies the non-additive footnotes.
+ */
 async function computeOverview(
   client: QueryClient,
-  options: ReturnType<typeof datasetOptions>,
+  repo: ReturnType<typeof useRepository>,
+  access: ScopeAccess | null,
+  scopeKey: string,
+  api: Pick<AdminFiltersApi, "filters" | "period">,
   threshold: number,
 ): Promise<OverviewResult> {
-  const loaded = await client.fetchQuery(options);
+  const view = await client.fetchQuery(datasetOptions(repo, access, scopeKey, api));
+  const scopeApi = {
+    filters: { ...api.filters, district: null, facility: null },
+    period: api.period,
+  };
+  const scope = await client.fetchQuery(datasetOptions(repo, access, scopeKey, scopeApi));
   return {
-    ...selectOverview(loaded.dataset, threshold),
-    asOf: loaded.asOf,
-    lastWriteAt: loaded.lastWriteAt,
+    ...selectOverview(scope.dataset, threshold, {
+      view: { district: api.filters.district, facility: api.filters.facility },
+      viewDataset: view.dataset,
+    }),
+    asOf: scope.asOf,
+    lastWriteAt: scope.lastWriteAt,
   };
 }
 
@@ -77,10 +94,9 @@ export function useOverviewMetrics(api: Pick<AdminFiltersApi, "filters" | "perio
   const client = useQueryClient();
   const threshold = useSuppressionThreshold();
   const { access, scopeKey } = useAccess();
-  const options = datasetOptions(repo, access, scopeKey, api);
   return useQuery({
     queryKey: adminKeys.overview(scopeKey, filterKeyOf(api), threshold),
-    queryFn: () => computeOverview(client, options, threshold),
+    queryFn: () => computeOverview(client, repo, access, scopeKey, api, threshold),
     enabled: access !== null,
     // A retry re-reads the dataset (a failed dataset read is not cached).
     retry: false,

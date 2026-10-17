@@ -25,6 +25,8 @@ export const AcknowledgeInstructionInputSchema = z.object({
   idempotencyKey: IdempotencyKey,
   patientId: PatientIdSchema,
   instructionId: NonEmptyTrimmed,
+  /** CTZ-04: version of the instruction the citizen read; a newer version → `CONFLICT`. */
+  expectedVersion: Version.optional(),
 });
 export type AcknowledgeInstructionInput = z.output<typeof AcknowledgeInstructionInputSchema>;
 

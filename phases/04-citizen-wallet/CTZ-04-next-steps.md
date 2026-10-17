@@ -10,7 +10,7 @@
 | Depends on | CTZ-03 |
 | Trace | CW-03, CW-08 (contact path); WF-01 step 9; Tech spec §2.4 "Next steps", §8 "Citizen — Next-step display: only clinician-approved information appears"; FRD Scenario 1 ("read next step"); T-01, T-02, T-04, T-05, T-09 |
 | Size | M |
-| Status | Planned |
+| Status | Done |
 
 ## 2. Goal
 

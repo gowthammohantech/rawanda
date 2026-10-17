@@ -2,7 +2,7 @@
  * My health list (CTZ-03): greeting header, representative banner, the value-less pending
  * placeholder(s) pinned on top, released results newest first (order from the domain selector),
  * skeleton / empty / error + Retry states and pull-to-refresh. Logs `citizen.result.list_viewed`
- * once per focus.
+ * once per focus. CTZ-04: the nearest upcoming approved next step sits above the results.
  */
 import type { ReleasedObservation } from "@laif/domain";
 import {
@@ -22,6 +22,7 @@ import { RefreshControl, ScrollView, StyleSheet, View } from "react-native";
 
 import { WalletHeader } from "../../components/WalletHeader.tsx";
 import { usePersona } from "../../providers.tsx";
+import { HomeNextStep } from "../next-steps/HomeNextStep.tsx";
 import { firstNameOf } from "./copy.ts";
 import { PendingReviewCard } from "./PendingReviewCard.tsx";
 import { RepresentativeBanner } from "./RepresentativeBanner.tsx";
@@ -123,6 +124,7 @@ export function HealthListScreen() {
           <AppText color="muted">{t("citizen:health.subtitle")}</AppText>
         </View>
         <RepresentativeBanner patient={patient} />
+        <HomeNextStep patientId={patientId} />
         {body}
       </ScrollView>
     </Screen>

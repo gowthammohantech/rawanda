@@ -35,10 +35,13 @@ export function SuppressedValue({
   const t = useTx();
   const { language } = useLanguage();
   if (cell.suppressed) {
+    // A complementary cell is NOT small (it is hidden so a small one cannot be worked out from a
+    // total): `<k` would be false, so it reads "Hidden" like a derived value (ADM-03).
+    const complementary = cell.reason === "COMPLEMENTARY";
     return (
       <span className={cx("inline-flex items-center gap-1.5", className)} data-suppressed="true">
         <span aria-hidden="true">
-          {derived
+          {derived || complementary
             ? t("admin:privacy.suppressed.hidden")
             : t("admin:privacy.suppressed.short", { k: threshold })}
         </span>
@@ -53,7 +56,9 @@ export function SuppressedValue({
         <span className="sr-only">
           {derived
             ? t("admin:privacy.suppressed.derivedSr", { k: threshold })
-            : t("admin:privacy.suppressed.sr", { k: threshold })}
+            : complementary
+              ? t("admin:privacy.suppressed.complementarySr")
+              : t("admin:privacy.suppressed.sr", { k: threshold })}
         </span>
       </span>
     );
@@ -81,7 +86,13 @@ export function useCellText(
     options.short === true ? "admin:privacy.suppressed.short" : "admin:privacy.suppressed.sr";
   return (cell, threshold) =>
     cell.suppressed
-      ? t(suppressedKey, { k: threshold })
+      ? cell.reason === "COMPLEMENTARY"
+        ? t(
+            options.short === true
+              ? "admin:privacy.suppressed.hidden"
+              : "admin:privacy.suppressed.complementarySr",
+          )
+        : t(suppressedKey, { k: threshold })
       : cell.value === null
         ? t("admin:privacy.noValue")
         : formatNumber(cell.value, language);

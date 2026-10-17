@@ -93,6 +93,8 @@ import {
 } from "@laif/domain";
 import { z } from "zod";
 
+import { ProgrammeActionSchema } from "./programmeAction.ts";
+
 import {
   IsoDate,
   IsoUtcString,
@@ -603,4 +605,5 @@ export const ENTITY_SCHEMAS = {
   ruleset: DemoRulesetSchema,
   sync_operation: SyncOperationSchema,
   device_session: DeviceSessionSchema,
+  programme_action: ProgrammeActionSchema,
 } as const satisfies Record<(typeof ENTITY_TYPES)[number], z.ZodType>;

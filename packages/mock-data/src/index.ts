@@ -9,6 +9,7 @@ export * from "./ids.ts";
 export * from "./names.ts";
 export * from "./reference/districts.ts";
 export * from "./reference/facilities.ts";
+export * from "./reference/facility-contacts.ts";
 export * from "./reference/personas.ts";
 export * from "./config/demo-ruleset.ts";
 export * from "./config/plausibility.ts";

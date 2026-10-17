@@ -1,0 +1,76 @@
+{
+  "eyebrow": "Care pathway",
+  "title": "Pathway funnel",
+  "subtitle": "{{from}} – {{to}} · {{scope}} · aggregate counts of screenings",
+  "error": "The funnel could not be computed. No numbers are shown rather than guessed ones.",
+  "stage": {
+    "recorded": "Recorded",
+    "flagged": "Flagged for review",
+    "reviewed": "Clinically reviewed",
+    "referred": "Referred / follow-up planned",
+    "completed": "Follow-up completed (evidenced)"
+  },
+  "branch": {
+    "dismissed": "Dismissed with reason",
+    "pill": "CLOSED WITH REASON",
+    "ofReviewed": "{{pct}}% of reviewed"
+  },
+  "bars": {
+    "title": "Care pathway",
+    "label": "Care pathway stages",
+    "linkLabel": "{{stage}}: open the aggregate drill-down",
+    "ofPrevious": "{{pct}}% of previous stage",
+    "ofActioned": "{{pct}}% of reviews with action recorded",
+    "ofRecorded": "{{pct}}% of recorded",
+    "base": "Base: all recorded screenings",
+    "pctHidden": "% hidden to protect privacy",
+    "largestDrop": "LARGEST DROP · {{pct}}% of previous"
+  },
+  "empty": {
+    "title": "No screenings in this period",
+    "description": "Widen the date range or choose another district.",
+    "stage": "No screenings reached this stage in the selected period",
+    "stageHint": "Try a longer date range or another scope."
+  },
+  "howTo": {
+    "title": "How to read this",
+    "completion": "A follow-up only counts as completed when the care is evidenced and time-stamped (a completed referral with evidence, or a follow-up with a recorded outcome).",
+    "dismissed": "Flags dismissed by a clinician with a reason are counted separately and never as completed care.",
+    "privacy": "Counts below the small-cell threshold are hidden, and so is one more value where a total would reveal them."
+  },
+  "evidence": {
+    "title": "Evidence",
+    "conversion": "{{to}} of {{from}}",
+    "actioned": "reviews with action recorded",
+    "dismissed": "Dismissed of reviewed"
+  },
+  "table": {
+    "title": "Breakdown by district and facility",
+    "note": "Aggregated counts only — no patient-level rows. Hidden cells show <5.",
+    "caption": "{{stage}} by district and facility",
+    "area": "District / facility",
+    "n": "n",
+    "ofPrevious": "% of previous stage",
+    "ofActioned": "% of reviews with action",
+    "completion": "Completion %",
+    "actions": "Actions",
+    "actionsFor": "Actions for {{facility}}",
+    "expand": "Show facilities of {{district}}",
+    "collapse": "Hide facilities of {{district}}",
+    "total": "Total (selected scope)",
+    "pctHiddenSr": "Percentage hidden to protect privacy"
+  },
+  "trend": {
+    "title": "{{stage}} per week, by facility",
+    "summary": "{{stage}} per Kigali week for {{facilities}} facilities over {{weeks}} weeks; {{hidden}} weekly values hidden to protect privacy."
+  },
+  "kpi": {
+    "label": "Stage figures",
+    "n": "At this stage",
+    "ofPrevious": "% of previous stage",
+    "ofActioned": "% of reviews with action",
+    "ofRecorded": "% of recorded",
+    "change": "Vs previous period",
+    "changeSub": "{{previous}} in {{from}} – {{to}}"
+  }
+}

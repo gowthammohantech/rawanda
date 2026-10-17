@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { REAL_NAME_DENYLIST } from "./names.ts";
 import { FACILITIES_REFERENCE } from "./reference/facilities.ts";
+import { FACILITY_CONTACTS } from "./reference/facility-contacts.ts";
 import { DISTRICTS_REFERENCE } from "./reference/districts.ts";
 import { SCENARIO_IDS, applyScenario } from "./scenarios/registry.ts";
 import { createSeed } from "./seed/generate.ts";
@@ -59,6 +60,18 @@ describe("privacy: synthetic data only", () => {
   it("labels every facility and district as Demo (Alpha / Beta)", () => {
     for (const ref of [...FACILITIES_REFERENCE, ...DISTRICTS_REFERENCE]) {
       expect(ref.name).toMatch(/^Demo .*(Alpha|Beta)/);
+    }
+  });
+
+  it("CTZ-04: facility contact cards are synthetic, unallocated numbers for every facility", () => {
+    expect(FACILITY_CONTACTS.map((c) => c.facilityId).sort()).toEqual(
+      FACILITIES_REFERENCE.map((f) => f.id).sort(),
+    );
+    for (const contact of FACILITY_CONTACTS) {
+      expect(contact.phone).toMatch(/^\+250700000\d{3}$/u);
+      expect(contact.phoneDisplay.replace(/\s/gu, "")).toBe(contact.phone);
+      expect(contact.address).toMatch(/Demo .*\(synthetic\)$/u);
+      expect(contact.synthetic).toBe(true);
     }
   });
 

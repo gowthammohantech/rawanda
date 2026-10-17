@@ -29,6 +29,7 @@
   "noChanges": "Make at least one change.",
   "invalid": "This value is not valid.",
   "minLength": "Enter at least {{min}} characters.",
+  "dateOutOfRange": "Choose a date from {{from}} to {{to}}.",
   "namePattern": "Use letters, spaces, hyphens or apostrophes only.",
   "ageRange": "Age must be between {{min}} and {{max}} years.",
   "phonePattern": "Enter a phone number in the format 07X XXX XXXX.",

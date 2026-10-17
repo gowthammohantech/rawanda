@@ -299,7 +299,49 @@ describe("selectApprovedInstructions", () => {
       progress: "completed",
       reviewId: "rev-2",
       acknowledgement: { id: "ack-1" },
+      completion: {
+        completedAt: "2026-09-10T08:00:00.000Z",
+        evidenceType: "facility_visit_confirmed",
+      },
     });
+    expect(items[0]?.completion).toBeNull();
+  });
+
+  it("CTZ-04: completion comes from referral evidence; cancelled / planned steps have none", () => {
+    const completedReferral = makeReferral({
+      id: asId<never>("ref-1"),
+      status: "completed",
+      completionEvidence: {
+        type: "facility_attendance_record",
+        reference: "DEMO-1",
+        outcome: "attended",
+        note: "",
+        recordedBy: asId<never>("persona-clin-1"),
+        recordedAt: "2026-10-01T09:00:00.000Z",
+      } as never,
+    });
+    const [done] = selectApprovedInstructions({
+      patientId: "pat-1",
+      instructions: [appointment],
+      referrals: [completedReferral],
+      followUps: [],
+      now: NOW,
+    });
+    expect(done).toMatchObject({
+      progress: "completed",
+      completion: {
+        completedAt: "2026-10-01T09:00:00.000Z",
+        evidenceType: "facility_attendance_record",
+      },
+    });
+    const [cancelled] = selectApprovedInstructions({
+      patientId: "pat-1",
+      instructions: [appointment],
+      referrals: [makeReferral({ id: asId<never>("ref-1"), status: "cancelled_with_reason" })],
+      followUps: [],
+      now: NOW,
+    });
+    expect(cancelled).toMatchObject({ progress: "cancelled", completion: null });
   });
 
   it("flags a passed appointment as datePassed (never 'overdue')", () => {

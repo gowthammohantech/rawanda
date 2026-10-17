@@ -1,0 +1,95 @@
+{
+  "title": "Intambwe zikurikira",
+  "eyebrow": "Gahunda yawe yo kwitabwaho",
+  "subtitle": "Hagaragara gusa intambwe itsinda rikwitaho ryakwemereye.",
+  "loading": "Turimo gushaka intambwe zawe zikurikira",
+  "error": "Ntitwashoboye kubona intambwe zawe zikurikira. Nta cyahindutse. Ongera ugerageze.",
+  "listLabel": "Intambwe zawe zikurikira",
+  "refreshHint": "Kurura hasi urebe niba hari intambwe zavuguruwe",
+  "kicker": "Intambwe yawe ikurikira",
+  "sectionCount": "{{title}} ({{count}})",
+  "section": {
+    "upcoming": "Iziri imbere",
+    "done": "Byakozwe",
+    "cancelled": "Byahagaritswe"
+  },
+  "chip": {
+    "approved": "Byemejwe n'itsinda rikwitaho"
+  },
+  "type": {
+    "appointment": "Gahunda yo kubonana",
+    "referral": "Kohereza ahandi",
+    "followUp": "Gukurikirana"
+  },
+  "heading": {
+    "appointment": "Gahunda yo kubonana kuri {{facility}}",
+    "referral": "Koherezwa kuri {{facility}}",
+    "followUp": "Gukurikiranwa n'itsinda rikwitaho"
+  },
+  "approvedBy": "Byemejwe na {{name}} · {{date}}",
+  "approvedByTeam": "Byemejwe n'itsinda rikwitaho · {{date}}",
+  "appointmentRow": "{{date}} · {{time}} · {{place}}",
+  "noDate": "Itsinda rikwitaho rizakubwira itariki.",
+  "open": "Reba ibisobanuro",
+  "openHint": "Ifungura iyi ntambwe",
+  "card": {
+    "a11y": "{{type}}. {{title}}. {{when}}"
+  },
+  "acknowledge": "Nabisomye",
+  "acknowledgeHint": "Bimenyesha itsinda rikwitaho ko wasomye iyi ntambwe. Ntibihindura intambwe.",
+  "acknowledging": "Turabika",
+  "acknowledgedOn": "Byasomwe ku wa {{date}}",
+  "acknowledgedAnnounce": "Byabitswe. Wagaragaje ko wasomye iyi ntambwe.",
+  "ackError": "Ntitwashoboye kubika ibi. Nta cyahindutse. Ongera ugerageze.",
+  "retry": "Ongera ugerageze",
+  "conflict": {
+    "title": "Iyi ntambwe yavuguruwe",
+    "body": "Itsinda rikwitaho ryavuguruye iyi ntambwe. Soma verisiyo iheruka.",
+    "reload": "Erekana verisiyo iheruka"
+  },
+  "datePassed": "Itariki y'iyi ntambwe yarenze. Itsinda rikwitaho rizakuvugisha, cyangwa ushobora kuribaza.",
+  "cancelledByTeam": "Itsinda rikwitaho ryahagaritse iyi ntambwe",
+  "confirmedByTeam": "Byemejwe n'itsinda rikwitaho",
+  "completedOn": "Byakozwe ku wa {{date}}",
+  "toChangeContact": "Kugira ngo uhindure ibi, vugana n'itsinda rikwitaho.",
+  "noAdvice": "Agasanduku kerekana gusa ibyo itsinda rikwitaho ryemeje. Ntigatanga inama z'ubuvuzi.",
+  "supportLink": "Vugana n'ubufasha",
+  "supportHint": "Ifungura Ibindi, aho uburyo bw'ubufasha buri",
+  "empty": {
+    "title": "Nta ntambwe zikurikira urasangizwa",
+    "body": "Itsinda rikwitaho ntirirasangiza intambwe zikurikira. Niba wabwiwe kugaruka, rivugishe."
+  },
+  "contact": {
+    "title": "Vugana n'itsinda rikwitaho",
+    "phone": "Telefoni",
+    "hours": "Amasaha yo gukora",
+    "address": "Aderesi",
+    "hoursValue": "{{days}}, {{opens}}–{{closes}}",
+    "days": {
+      "mon_fri": "Kuwa mbere kugeza kuwa gatanu",
+      "mon_sat": "Kuwa mbere kugeza kuwa gatandatu",
+      "every_day": "Buri munsi"
+    },
+    "call": "Hamagara",
+    "callHint": "Yerekana nimero ya telefoni y'igerageza. Ntihamagara.",
+    "demoNumber": "Nimero y'igerageza — ntihamagara",
+    "sheetTitle": "Nimero ya telefoni y'igerageza",
+    "sheetBody": "{{phone}} ni nimero y'igerageza. Ntihuza n'umurongo nyawo wa telefoni, bityo agasanduku ntikayihamagara.",
+    "close": "Funga",
+    "unavailable": "Amakuru yo kuvugana n'aha hantu ntaboneka muri iri gerageza."
+  },
+  "detail": {
+    "title": "Intambwe ikurikira",
+    "back": "Subira inyuma",
+    "when": "Ryari",
+    "where": "Hehe",
+    "instructions": "Icyo gukora",
+    "bring": "Icyo kuzana",
+    "deniedTitle": "Intambwe ntiboneka",
+    "denied": "Iyi ntambwe ntiri mu makuru ushobora kureba."
+  },
+  "home": {
+    "open": "Reba intambwe ikurikira",
+    "openHint": "Ifungura Intambwe zikurikira"
+  }
+}

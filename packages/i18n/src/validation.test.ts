@@ -28,6 +28,7 @@ const SAMPLE_PARAMS: Partial<Record<ValidationMessageKey, Record<string, string 
   dateTooOld: { days: 30 },
   unrecognizedKeys: { keys: "foo,bar" },
   ageRange: { min: 0, max: 120 },
+  dateOutOfRange: { from: "14 Oct 2026", to: "12 Apr 2027" },
   outOfEntryRange: { min: 1, max: 35, unit: "mmol/L" },
 };
 

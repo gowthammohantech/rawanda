@@ -1,0 +1,13 @@
+{
+  "appointment": {
+    "message": "Itsinda rikwitaho ryaguteguriye gahunda yo kubonana kuri {{facility}}.",
+    "bring": "Zana agatabo kawe k'ubuzima n'imiti yose ufata."
+  },
+  "referral": {
+    "message": "Itsinda rikwitaho ryakohereje kuri {{facility}} kugira ngo usuzumwe ikindi gihe.",
+    "bring": "Zana urupapuro rwo koherezwa n'agatabo kawe k'ubuzima."
+  },
+  "follow_up": {
+    "message": "Umujyanama w'ubuzima wo kuri {{facility}} azakuvugisha kugira ngo akurikirane igipimo cyawe."
+  }
+}

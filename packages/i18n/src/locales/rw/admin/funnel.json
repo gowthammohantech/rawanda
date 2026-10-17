@@ -1,0 +1,76 @@
+{
+  "eyebrow": "Inzira y'ubuvuzi",
+  "title": "Inzira y'ikurikirana",
+  "subtitle": "{{from}} – {{to}} · {{scope}} · imibare rusange y'isuzuma",
+  "error": "Imibare y'inzira ntiyabashije kubarwa. Nta mibare igaragazwa aho kugaragaza iyo gukeka.",
+  "stage": {
+    "recorded": "Byanditswe",
+    "flagged": "Byagaragajwe ngo bisuzumwe",
+    "reviewed": "Byasuzumwe na muganga",
+    "referred": "Yoherejwe / ikurikirana ryateganyijwe",
+    "completed": "Ikurikirana ryarangiye (rifite gihamya)"
+  },
+  "branch": {
+    "dismissed": "Byahagaritswe hatanzwe impamvu",
+    "pill": "BYAFUNZWE HATANZWE IMPAMVU",
+    "ofReviewed": "{{pct}}% by'ibyasuzumwe"
+  },
+  "bars": {
+    "title": "Inzira y'ubuvuzi",
+    "label": "Ibyiciro by'inzira y'ubuvuzi",
+    "linkLabel": "{{stage}}: fungura isesengura rirambuye ry'imibare rusange",
+    "ofPrevious": "{{pct}}% by'icyiciro kibanziriza",
+    "ofActioned": "{{pct}}% by'isuzuma ryafatiwe icyemezo",
+    "ofRecorded": "{{pct}}% by'ibyanditswe",
+    "base": "Ishingiro: isuzuma ryose ryanditswe",
+    "pctHidden": "% byahishwe kubera ibanga",
+    "largestDrop": "IGABANUKA RIRUTA AYANDI · {{pct}}% by'icyiciro kibanziriza"
+  },
+  "empty": {
+    "title": "Nta suzuma muri iki gihe",
+    "description": "Ongera igihe cyangwa uhitemo akarere kandi.",
+    "stage": "Nta suzuma ryageze kuri iki cyiciro mu gihe wahisemo",
+    "stageHint": "Gerageza igihe kirekire cyangwa urundi rwego."
+  },
+  "howTo": {
+    "title": "Uko wabisoma",
+    "completion": "Ikurikirana ribarwa ko ryarangiye gusa iyo ubuvuzi bufite gihamya n'igihe byakorewe (kohereza kwarangiye gufite gihamya, cyangwa ikurikirana ryanditsweho umusaruro).",
+    "dismissed": "Ibimenyetso muganga yahagaritse atanze impamvu bibarwa ukwabyo kandi ntibibarwa nk'ubuvuzi bwarangiye.",
+    "privacy": "Imibare iri munsi y'urugero rw'ibanga irahishwa, ndetse n'undi mubare umwe aho igiteranyo cyayigaragaza."
+  },
+  "evidence": {
+    "title": "Ibimenyetso",
+    "conversion": "{{to}} muri {{from}}",
+    "actioned": "isuzuma ryafatiwe icyemezo",
+    "dismissed": "Ibyahagaritswe mu byasuzumwe"
+  },
+  "table": {
+    "title": "Isesengura ku karere n'ikigo",
+    "note": "Imibare rusange gusa — nta murongo w'umurwayi. Imibare yahishwe igaragara nka <5.",
+    "caption": "{{stage}} ku karere n'ikigo",
+    "area": "Akarere / ikigo",
+    "n": "n",
+    "ofPrevious": "% by'icyiciro kibanziriza",
+    "ofActioned": "% by'isuzuma ryafatiwe icyemezo",
+    "completion": "% byarangiye",
+    "actions": "Ibikorwa",
+    "actionsFor": "Ibikorwa bya {{facility}}",
+    "expand": "Erekana ibigo bya {{district}}",
+    "collapse": "Hisha ibigo bya {{district}}",
+    "total": "Igiteranyo (urwego wahisemo)",
+    "pctHiddenSr": "Ijanisha ryahishwe kubera ibanga"
+  },
+  "trend": {
+    "title": "{{stage}} buri cyumweru, ku kigo",
+    "summary": "{{stage}} buri cyumweru (Kigali) ku bigo {{facilities}} mu byumweru {{weeks}}; imibare {{hidden}} y'icyumweru yahishwe kubera ibanga."
+  },
+  "kpi": {
+    "label": "Imibare y'icyiciro",
+    "n": "Kuri iki cyiciro",
+    "ofPrevious": "% by'icyiciro kibanziriza",
+    "ofActioned": "% by'isuzuma ryafatiwe icyemezo",
+    "ofRecorded": "% by'ibyanditswe",
+    "change": "Ugereranyije n'igihe cyabanje",
+    "changeSub": "{{previous}} muri {{from}} – {{to}}"
+  }
+}

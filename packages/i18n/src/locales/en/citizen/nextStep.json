@@ -1,0 +1,13 @@
+{
+  "appointment": {
+    "message": "Your care team booked an appointment for you at {{facility}}.",
+    "bring": "Bring your health booklet and any medicines you take."
+  },
+  "referral": {
+    "message": "Your care team referred you to {{facility}} for another check.",
+    "bring": "Bring your referral slip and your health booklet."
+  },
+  "follow_up": {
+    "message": "A community health worker from {{facility}} will contact you to follow up on your check."
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "title": "Urutonde rwo gusuzuma",
+  "subtitle": "Ibipimo byagaragajwe n'amategeko y'igerageza kugira ngo bisuzumwe n'umuganga muri {{facility}}. Ibi bimenyetso ntibyemejwe mu buvuzi.",
+  "loading": "Urutonde rwo gusuzuma rurimo gufunguka…",
+  "listLabel": "Isuzuma",
+  "lastUpdated": "Byavuguruwe bwa nyuma saa {{time}} — hagaragazwa ibyafunguwe bwa nyuma",
+  "kpi": {
+    "label": "Incamake y'urutonde rwo gusuzuma",
+    "awaiting": "Bitegereje isuzuma",
+    "awaitingHint": "Bitegereje cyangwa birimo gusuzumwa",
+    "urgent": "Byihutirwa (porotokole y'igerageza)",
+    "urgentHint": "Byihutirwa hakurikijwe porotokole y'igerageza — ntibyemejwe mu buvuzi",
+    "overdue": "Byarengeje igihe (bibarwa)",
+    "overdueHint": "Byarengeje itariki y'isuzuma y'igerageza",
+    "assignedToMe": "Byahawe njye",
+    "assignedToMeHint": "Isuzuma rifunguye ryahawe wowe",
+    "reviewedThisWeek": "Byasuzumwe muri iki cyumweru",
+    "reviewedThisWeekHint": "Kuva ku wa mbere, isaha ya Kigali",
+    "stale": "Ntibigezweho — byavuguruwe bwa nyuma saa {{time}}"
+  },
+  "tabs": {
+    "label": "Ibice by'urutonde rwo gusuzuma",
+    "pending": "Bitegereje",
+    "urgent": "Byihutirwa",
+    "overdue": "Byarengeje igihe",
+    "assigned": "Byahawe njye",
+    "all": "Byose biri mu bubasha bwanjye",
+    "countLoading": "—"
+  },
+  "filters": {
+    "label": "Muyunguruzi z'urutonde",
+    "search": "Shakisha mu rutonde",
+    "searchPlaceholder": "Izina ry'umurwayi cyangwa nimero y'igerageza",
+    "facility": "Ikigo",
+    "facilityOutOfScope": "Iki kigo ntikiri mu bubasha bwawe",
+    "assignee": {
+      "label": "Ushinzwe",
+      "any": "Uwo ari we wese",
+      "me": "Njye",
+      "unassigned": "Nta we wahawe"
+    },
+    "sort": {
+      "label": "Gutondeka",
+      "flaggedAt_asc": "Ibya kera mbere",
+      "flaggedAt_desc": "Ibishya mbere",
+      "dueAt_asc": "Itariki y'igerageza (iya hafi mbere)",
+      "patient_asc": "Izina ry'umurwayi (A–Z)"
+    }
+  },
+  "row": {
+    "status": {
+      "needsReview": "Bikeneye isuzuma",
+      "urgentDemo": "Byihutirwa · igerageza",
+      "overdue": "Byarengeje igihe",
+      "inReviewBy": "Birimo gusuzumwa · {{name}}",
+      "inReviewByYou": "Birimo gusuzumwa · wowe"
+    },
+    "flagged": "Byagaragajwe {{time}}",
+    "moreReasons_one": "+impamvu {{count}} yindi",
+    "moreReasons_other": "+impamvu {{count}} zindi",
+    "manualEscalation": "Byoherejwe n'umuntu ngo bisuzumwe",
+    "triggeringReadings": "Ibipimo byabiteye",
+    "noTriggeringReadings": "Nta gipimo kirenze urugero rw'igerageza — byoherejwe ku muntu kuko amakuru atuzuye",
+    "comparedTo": "urugero rw'igerageza {{value}}",
+    "whyReview": "Impamvu bikeneye isuzuma",
+    "rulesetVersion": "Verisiyo y'amategeko",
+    "noRuleset": "Nta verisiyo y'amategeko yanditswe",
+    "source": "Inkomoko",
+    "sourceUnknown": "Ntibiboneka",
+    "measuredAt": "Byapimwe (isaha ya Kigali)",
+    "dueAt": "Itariki y'isuzuma y'igerageza",
+    "noDueDate": "Nta tariki yashyizweho",
+    "assignedTo": "Byahawe",
+    "unassigned": "Nta we wahawe",
+    "openReview": "Fungura isuzuma",
+    "openPatient": "Fungura umurwayi",
+    "openReviewHint": "Enter cyangwa Space bifungura umurongo; akambi k'iburyo gafungura isuzuma.",
+    "patientUnavailable": "Umurwayi ntaboneka",
+    "glucoseUnitMissing": "igipimo kibura"
+  },
+  "empty": {
+    "pending": "Nta bipimo bitegereje isuzuma muri {{facility}}",
+    "urgent": "Nta suzuma ryihutirwa (porotokole y'igerageza) muri {{facility}}",
+    "overdue": "Nta suzuma ryarengeje itariki y'igerageza muri {{facility}}",
+    "assigned": "Nta suzuma rifunguye ryahawe wowe muri {{facility}}",
+    "all": "Nta suzuma riri muri {{facility}}",
+    "filtered": "Nta suzuma rihuye n'izi muyunguruzi muri {{facility}}",
+    "description": "Ibimenyetso bishya bigaragara hano ubwabyo.",
+    "showAll": "Erekana byose biri mu bubasha"
+  },
+  "footer": {
+    "showing_one": "Hagaragara {{shown}} kuri {{count}} isuzuma",
+    "showing_other": "Hagaragara {{shown}} kuri {{count}} y'isuzuma"
+  }
+}
