@@ -551,6 +551,11 @@
         "created": "Igikorwa cya porogaramu cyahawe ushinzwe",
         "status_changed": "Imiterere y'igikorwa cya porogaramu yahindutse"
       }
+    },
+    "clinical": {
+      "referral": {
+        "updated": "Aho yoherejwe cyangwa itariki ntarengwa byahinduwe"
+      }
     }
   }
 }

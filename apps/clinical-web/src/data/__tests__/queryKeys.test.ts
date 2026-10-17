@@ -32,4 +32,20 @@ describe("clinicalKeys", () => {
     );
     expect(clinicalInvalidations("f", "recordAuditEvent")).toEqual([["clinical", "f", "audit"]]);
   });
+
+  it("CLN-08: referral writes refresh the list, counts, drawer, eligibility and timeline", () => {
+    for (const mutation of ["transitionReferral", "editReferral", "createReferral"] as const) {
+      const keys = clinicalInvalidations("f", mutation).map((key) => key[2]);
+      expect(keys).toEqual(
+        expect.arrayContaining([
+          "referrals",
+          "referralCounts",
+          "referral",
+          "referralEligible",
+          "patientTimeline",
+          "audit",
+        ]),
+      );
+    }
+  });
 });

@@ -10,7 +10,7 @@
 | Depends on | CLN-07 |
 | Trace | PRD CL-06; FRD CL-06, FRD §4 (completion needs timestamp, outcome, approved evidence type), §5; T-01, T-03, T-04, T-05; spec §2.1 `/clinical/referrals`, §5.2 Referral machine + invariants, §8 "Create referral"; WF-01 steps 6–7; BRD BR-05; PRD §10 "canceled referral" |
 | Size | L |
-| Status | Not started |
+| Status | Done |
 
 ## 2. Goal
 

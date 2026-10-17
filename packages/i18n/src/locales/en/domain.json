@@ -551,6 +551,11 @@
         "created": "Programme action assigned",
         "status_changed": "Programme action status changed"
       }
+    },
+    "clinical": {
+      "referral": {
+        "updated": "Referral destination or due date changed"
+      }
     }
   }
 }

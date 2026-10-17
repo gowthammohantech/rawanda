@@ -164,6 +164,8 @@ export const ReferralFilterSchema = z.object({
   assignedWorkerId: PersonaIdSchema.optional(),
   /** Derived `overdue` (never a stored status). */
   overdueOnly: z.boolean().optional(),
+  /** CLN-08: free text over patient display name / synthetic identifier and destination. */
+  q: z.string().trim().max(REVIEW_QUEUE_MAX_QUERY).optional(),
 });
 export type ReferralFilter = z.output<typeof ReferralFilterSchema>;
 

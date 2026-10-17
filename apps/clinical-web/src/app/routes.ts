@@ -25,6 +25,7 @@ export const PATIENT_TABS = ["overview", "screenings", "reviews", "referralsTask
 export type PatientTab = (typeof PATIENT_TABS)[number];
 
 export type PatientsRouteParams = { q?: string; facility?: string; page?: number };
+export type ReferralsRouteParams = { tab?: string; facility?: string; q?: string; id?: string };
 
 const LOGIN = ROUTE_PATTERNS.login;
 const enc = encodeURIComponent;
@@ -50,7 +51,17 @@ export const routes = {
     `${BASE_PATH}/patients/${enc(id)}${tab === undefined ? "" : `?tab=${tab}`}`,
   review: (id: string) => `${BASE_PATH}/reviews/${enc(id)}`,
   decision: (id: string) => `${BASE_PATH}/reviews/${enc(id)}/decision`,
-  referrals: () => ROUTE_PATTERNS.referrals,
+  /** `/clinical/referrals`, optionally `?tab=&facility=&q=&id=` (CLN-08: `id` opens the drawer). */
+  referrals: (params: ReferralsRouteParams = {}) => {
+    const search = new URLSearchParams();
+    if (params.tab !== undefined && params.tab !== "open") search.set("tab", params.tab);
+    if (params.facility !== undefined) search.set("facility", params.facility);
+    const q = params.q?.trim();
+    if (q !== undefined && q !== "") search.set("q", q);
+    if (params.id !== undefined) search.set("id", params.id);
+    const query = search.toString();
+    return query === "" ? ROUTE_PATTERNS.referrals : `${ROUTE_PATTERNS.referrals}?${query}`;
+  },
   tasks: () => ROUTE_PATTERNS.tasks,
   audit: () => ROUTE_PATTERNS.audit,
   settings: () => ROUTE_PATTERNS.settings,

@@ -79,7 +79,9 @@ export function createSimulatedRemote(
       case "referral:create":
         return call["createReferral"]!(payload, key);
       case "referral:update":
-        return call["transitionReferral"]!(payload, key);
+        return "changeReason" in payload
+          ? call["editReferral"]!(payload, key)
+          : call["transitionReferral"]!(payload, key);
       case "follow_up:create":
         return call["createFollowUp"]!(payload, key);
       case "follow_up:update":
