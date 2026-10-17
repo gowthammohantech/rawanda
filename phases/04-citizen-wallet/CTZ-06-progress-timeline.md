@@ -10,7 +10,7 @@
 | Depends on | CTZ-05 |
 | Trace | CW-05; FRD Scenario 1 ("attend review → see updated status"), Scenario 2 ("change is audited" — citizen-visible outcome); PRD §2 "distinguish pending work from verified completed care", "trust data provenance"; Tech spec §2.4 "Timeline", §5.2 invariants; T-06 (citizen view of correction), T-09 |
 | Size | M |
-| Status | Planned |
+| Status | Done |
 
 ## 2. Goal
 

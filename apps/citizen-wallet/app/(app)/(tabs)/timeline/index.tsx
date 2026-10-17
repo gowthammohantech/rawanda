@@ -1,7 +1,5 @@
-import { PlaceholderTabScreen } from "../../../../src/screens/wallet/PlaceholderTabScreen.tsx";
+import { TimelineScreen } from "../../../../src/features/timeline/TimelineScreen.tsx";
 
 export default function Route() {
-  return (
-    <PlaceholderTabScreen titleKey="citizen:nav.timeline" phase="CTZ-06" testID="timeline-screen" />
-  );
+  return <TimelineScreen />;
 }
