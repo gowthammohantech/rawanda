@@ -15,6 +15,11 @@ export type SuppressedValueProps = {
   emptyText?: string;
   /** Hide the pill (dense tables keep only `<k`). */
   compact?: boolean;
+  /**
+   * A derived value (e.g. a median) hidden with its basis: shows "Hidden" instead of `<k`, which
+   * would read as a bound on the value itself.
+   */
+  derived?: boolean;
   className?: string;
 };
 
@@ -24,6 +29,7 @@ export function SuppressedValue({
   format,
   emptyText,
   compact = false,
+  derived = false,
   className,
 }: SuppressedValueProps) {
   const t = useTx();
@@ -31,7 +37,11 @@ export function SuppressedValue({
   if (cell.suppressed) {
     return (
       <span className={cx("inline-flex items-center gap-1.5", className)} data-suppressed="true">
-        <span aria-hidden="true">{t("admin:privacy.suppressed.short", { k: threshold })}</span>
+        <span aria-hidden="true">
+          {derived
+            ? t("admin:privacy.suppressed.hidden")
+            : t("admin:privacy.suppressed.short", { k: threshold })}
+        </span>
         {compact ? null : (
           <span
             aria-hidden="true"
@@ -40,7 +50,11 @@ export function SuppressedValue({
             {t("admin:privacy.suppressed.pill")}
           </span>
         )}
-        <span className="sr-only">{t("admin:privacy.suppressed.sr", { k: threshold })}</span>
+        <span className="sr-only">
+          {derived
+            ? t("admin:privacy.suppressed.derivedSr", { k: threshold })
+            : t("admin:privacy.suppressed.sr", { k: threshold })}
+        </span>
       </span>
     );
   }
@@ -54,13 +68,20 @@ export function SuppressedValue({
   );
 }
 
-/** Plain-text form (aria summaries, figcaptions): "12" or "fewer than 5 (hidden)". */
-export function useCellText(): (cell: AggregateCell, threshold: number) => string {
+/**
+ * Plain-text form: "12" or "Fewer than 5, hidden to protect privacy" (aria summaries,
+ * figcaptions); `short` gives the visible `<5` for inline sub-labels.
+ */
+export function useCellText(
+  options: { short?: boolean } = {},
+): (cell: AggregateCell, threshold: number) => string {
   const t = useTx();
   const { language } = useLanguage();
+  const suppressedKey =
+    options.short === true ? "admin:privacy.suppressed.short" : "admin:privacy.suppressed.sr";
   return (cell, threshold) =>
     cell.suppressed
-      ? t("admin:privacy.suppressed.sr", { k: threshold })
+      ? t(suppressedKey, { k: threshold })
       : cell.value === null
         ? t("admin:privacy.noValue")
         : formatNumber(cell.value, language);

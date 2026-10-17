@@ -16,6 +16,8 @@ export type KpiCell = {
   /** Basis count for the info popover (defaults to `value`). */
   n?: AggregateCell;
   format?: (value: number) => string;
+  /** Derived value (median): a suppressed value reads "Hidden", not `<k`. */
+  derived?: boolean;
   sub?: ReactNode;
 };
 
@@ -58,6 +60,7 @@ export function KpiStrip({ label, items, threshold, computedAt, rulesetVersions 
               cell={item.value}
               threshold={threshold}
               {...(item.format === undefined ? {} : { format: item.format })}
+              derived={item.derived ?? false}
             />
           </p>
           {item.sub === undefined ? null : (

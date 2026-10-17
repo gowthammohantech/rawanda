@@ -2,7 +2,9 @@
   "suppressed": {
     "short": "<{{k}}",
     "pill": "BYAHISHWE",
-    "sr": "Biri munsi ya {{k}}, byahishwe kubera ibanga"
+    "sr": "Biri munsi ya {{k}}, byahishwe kubera ibanga",
+    "hidden": "Byahishwe",
+    "derivedSr": "Byahishwe kubera ibanga (bishingiye ku bitarenze {{k}})"
   },
   "noValue": "—"
 }

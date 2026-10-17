@@ -150,7 +150,7 @@ function OverviewSkeleton() {
 function useKpis(data: OverviewResult): KpiCell[] {
   const t = useTx();
   const { language } = useLanguage();
-  const cellText = useCellText();
+  const cellText = useCellText({ short: true });
   const k = data.threshold;
   const pct = (cell: AggregateCell, key: TranslationKey) => {
     const value = pctOf(cell);
@@ -187,6 +187,7 @@ function useKpis(data: OverviewResult): KpiCell[] {
       id: "medianDaysToReview",
       label: t("admin:overview.kpi.median"),
       value: data.medianDaysToReview,
+      derived: true,
       n: data.totals.reviewed,
       format: (v) =>
         t("admin:overview.kpi.days", {

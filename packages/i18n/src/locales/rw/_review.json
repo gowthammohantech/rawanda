@@ -1224,5 +1224,7 @@
   "worker:netsim.runFailed": "draft",
   "worker:netsim.runConflicts": "draft",
   "worker:netsim.updated": "draft",
-  "worker:settings.networkSimulationHint": "draft"
+  "worker:settings.networkSimulationHint": "draft",
+  "admin:privacy.suppressed.hidden": "draft",
+  "admin:privacy.suppressed.derivedSr": "draft"
 }

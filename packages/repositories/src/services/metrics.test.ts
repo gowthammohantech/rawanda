@@ -105,6 +105,29 @@ describe("ADM-02 metric source reads", () => {
       records.patients.every((p) => p.displayName === "" && p.syntheticIdentifier === ""),
     ).toBe(true);
     expect(records.timeEntries.every((e) => e.facilityId !== FACILITY_IDS.beta1)).toBe(true);
+    // No free text (notes, reasons, evidence references) leaves an aggregate read.
+    expect(records.screenings.every((s) => s.notes === "")).toBe(true);
+    expect(records.reviews.every((r) => (r.decision?.note ?? "") === "")).toBe(true);
+    expect(records.reviews.every((r) => [null, "[redacted]"].includes(r.decisionReason))).toBe(
+      true,
+    );
+    expect(
+      records.referrals.every(
+        (r) =>
+          r.referralReason === undefined &&
+          [undefined, "[redacted]"].includes(r.completionEvidence?.reference) &&
+          (r.completionEvidence?.note ?? "") === "",
+      ),
+    ).toBe(true);
+    expect(
+      records.followUps.every(
+        (f) =>
+          f.attempts.every((a) => a.note === "") &&
+          (f.outcome?.note ?? "") === "" &&
+          f.notes.every((n) => n.text === "[redacted]") &&
+          f.clinicianConfirmation.reason === undefined,
+      ),
+    ).toBe(true);
     await expect(
       h.repo.getMetricsRecords({ districtIds: [DISTRICT_IDS.beta] }),
     ).rejects.toMatchObject({ code: "FORBIDDEN" });

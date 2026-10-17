@@ -86,6 +86,64 @@ async function timeEntriesIn(
     .sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : a.id < b.id ? -1 : 1));
 }
 
+/** Placeholder for required non-empty free text removed from aggregate reads. */
+export const REDACTED_TEXT = "[redacted]";
+
+/**
+ * Free text (notes, reasons, evidence references) can carry patient detail and is never read by
+ * the metric calculators, so aggregate reads blank it: admin roles hold `metrics.read`, not the
+ * clinical read permissions that would expose it.
+ */
+function redactFreeText<
+  T extends {
+    screenings: Screening[];
+    reviews: Review[];
+    referrals: Referral[];
+    followUps: FollowUp[];
+  },
+>(data: T): T {
+  return {
+    ...data,
+    screenings: data.screenings.map((s) => ({
+      ...s,
+      notes: "",
+      amendments: s.amendments.map((a) => ({ ...a, reason: REDACTED_TEXT })),
+    })),
+    reviews: data.reviews.map((r) => ({
+      ...r,
+      decisionReason: r.decisionReason === null ? null : REDACTED_TEXT,
+      decision: r.decision === null ? null : { ...r.decision, note: "" },
+    })),
+    referrals: data.referrals.map((r) => {
+      const rest: Referral = { ...r };
+      delete rest.referralReason;
+      return {
+        ...rest,
+        completionEvidence:
+          r.completionEvidence === null
+            ? null
+            : { ...r.completionEvidence, reference: REDACTED_TEXT, note: "" },
+        cancelled: r.cancelled === null ? null : { ...r.cancelled, reason: REDACTED_TEXT },
+      };
+    }),
+    followUps: data.followUps.map((f) => ({
+      ...f,
+      attempts: f.attempts.map((a) => ({ ...a, note: "" })),
+      outcome: f.outcome === null ? null : { ...f.outcome, note: "" },
+      notes: f.notes.map((n) => ({ ...n, text: REDACTED_TEXT })),
+      assignmentHistory: f.assignmentHistory.map((h) => ({
+        ...h,
+        reason: h.reason === null ? null : REDACTED_TEXT,
+      })),
+      clinicianConfirmation: (() => {
+        const rest = { ...f.clinicianConfirmation };
+        delete rest.reason;
+        return rest;
+      })(),
+    })),
+  };
+}
+
 export function createMetricsService(engine: Engine) {
   return {
     /**
@@ -111,7 +169,7 @@ export function createMetricsService(engine: Engine) {
         const facilityIds = new Set<string>(data.facilities.map((x) => x.id));
         return {
           records: {
-            ...data,
+            ...redactFreeText(data),
             patients: data.patients.map((p) => ({
               ...p,
               displayName: "",
