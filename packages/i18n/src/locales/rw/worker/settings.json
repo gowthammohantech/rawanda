@@ -10,6 +10,7 @@
   "district": "Akarere",
   "deviceId": "Nimero y'igikoresho",
   "networkSimulation": "Kwigana murandasi",
+  "networkSimulationHint": "Kora nta murandasi, ongeramo gutinda cyangwa amakosa, wigane impinduka z'abandi",
   "resetDemo": "Subiza igerageza uko ryari",
   "comingIn": "Bizaboneka muri {{phase}}",
   "aboutText": "CareConnect y'Umujyanama ni igerageza rikoresha amakuru y'igerageza gusa. Ntirikoreshwa mu buvuzi.",

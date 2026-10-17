@@ -408,6 +408,7 @@
       "fault_toggled": "Amakosa yiganwa yahinduwe",
       "clock_changed": "Isaha y'igerageza yahinduwe",
       "concurrent_update_simulated": "Ihindurwa ry'undi muntu ryiganwe",
+      "slice_refreshed": "Amakuru y'igikoresho yavuguruwe ku mukozi winjiye",
       "simulated_staff_action": "Igikorwa cy'umukozi cyiganwe",
       "bundle_exported": "Ipaki y'igerageza yasohowe",
       "bundle_imported": "Ipaki y'igerageza yinjijwe"

@@ -1,17 +1,23 @@
-/** Header network badge. Static "Online" until HWM-02 wires the simulated network store. */
+/**
+ * Header network badge (HWM-02): "Online" / "Offline (simulated)" from the network-mode store
+ * (FND-07 `FaultConfig.offline`). Icon + text, never colour only.
+ */
 import { StatusChip, useTx } from "@laif/ui-native";
 import { View } from "react-native";
 
+import { useNetwork } from "../network/NetworkProvider.tsx";
+
 export function NetworkBadge() {
   const t = useTx();
-  const status = t("worker:nav.online");
+  const { offline } = useNetwork();
+  const status = offline ? t("worker:sync.badge.offline") : t("worker:sync.badge.online");
   return (
     <View
       testID="network-badge"
       accessible
       accessibilityLabel={t("worker:nav.networkStatus", { status })}
     >
-      <StatusChip tone="positive" icon="dot">
+      <StatusChip tone={offline ? "warning" : "positive"} icon={offline ? "wifi-off" : "dot"}>
         {status}
       </StatusChip>
     </View>

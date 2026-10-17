@@ -201,6 +201,12 @@ export interface DemoApi {
   /** Seeds on first run only (meta `seedVersion` absent or different). */
   ensureSeeded(): Promise<{ seeded: boolean }>;
   resetDemo(): Promise<DemoState>;
+  /**
+   * Worker (HWM-02): re-slices the device's patient-scoped data from the simulated remote when
+   * the signed-in worker persona differs from the slice on the device (unsynced rows kept).
+   * No-op elsewhere / when unchanged.
+   */
+  refreshSlice(): Promise<{ refreshed: boolean; personaId: PersonaId | null }>;
   loadScenario(id: string): Promise<DemoState>;
   getDemoState(): Promise<DemoState>;
   setFaults(cfg: FaultConfigPatch): Promise<FaultConfig>;

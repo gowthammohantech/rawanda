@@ -31,7 +31,9 @@ import enValidation from "./locales/en/validation.json";
 import enWorker from "./locales/en/worker.json";
 import enWorkerAuth from "./locales/en/worker/auth.json";
 import enWorkerNav from "./locales/en/worker/nav.json";
+import enWorkerNetsim from "./locales/en/worker/netsim.json";
 import enWorkerSettings from "./locales/en/worker/settings.json";
+import enWorkerSync from "./locales/en/worker/sync.json";
 import rwAdmin from "./locales/rw/admin.json";
 import rwAdminAuth from "./locales/rw/admin/auth.json";
 import rwAdminErrors from "./locales/rw/admin/errors.json";
@@ -52,7 +54,9 @@ import rwValidation from "./locales/rw/validation.json";
 import rwWorker from "./locales/rw/worker.json";
 import rwWorkerAuth from "./locales/rw/worker/auth.json";
 import rwWorkerNav from "./locales/rw/worker/nav.json";
+import rwWorkerNetsim from "./locales/rw/worker/netsim.json";
 import rwWorkerSettings from "./locales/rw/worker/settings.json";
+import rwWorkerSync from "./locales/rw/worker/sync.json";
 import rwReview from "./locales/rw/_review.json";
 
 export const NAMESPACES = [
@@ -85,7 +89,14 @@ export const enResources = {
     settings: enClinicalSettings,
     patients: enClinicalPatients,
   },
-  worker: { ...enWorker, auth: enWorkerAuth, nav: enWorkerNav, settings: enWorkerSettings },
+  worker: {
+    ...enWorker,
+    auth: enWorkerAuth,
+    nav: enWorkerNav,
+    settings: enWorkerSettings,
+    sync: enWorkerSync,
+    netsim: enWorkerNetsim,
+  },
   admin: { ...enAdmin, shell: enAdminShell, auth: enAdminAuth, errors: enAdminErrors },
   citizen: { ...enCitizen, errors: enCitizenErrors },
 } as const satisfies Record<Namespace, object>;
@@ -105,7 +116,14 @@ export const rwResources: Record<Namespace, object> = {
     settings: rwClinicalSettings,
     patients: rwClinicalPatients,
   },
-  worker: { ...rwWorker, auth: rwWorkerAuth, nav: rwWorkerNav, settings: rwWorkerSettings },
+  worker: {
+    ...rwWorker,
+    auth: rwWorkerAuth,
+    nav: rwWorkerNav,
+    settings: rwWorkerSettings,
+    sync: rwWorkerSync,
+    netsim: rwWorkerNetsim,
+  },
   admin: { ...rwAdmin, shell: rwAdminShell, auth: rwAdminAuth, errors: rwAdminErrors },
   citizen: { ...rwCitizen, errors: rwCitizenErrors },
 };

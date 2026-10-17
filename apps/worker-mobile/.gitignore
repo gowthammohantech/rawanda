@@ -4,3 +4,5 @@
 
 expo-env.d.ts
 # @end expo-cli
+# HWM-02 verification output (`expo export --output-dir .expo-export-check`)
+.expo-export-check/

@@ -1,5 +1,7 @@
 /**
- * Repository bootstrap (FND-11 task 6): the platform store (`laif-worker.db` on device, Dexie on
+ * Worker data layer entry (HWM-02): THE repository of the app — FND-07 `CareRepository` with the
+ * sync queue and simulated remote (`remote_*` in the same `laif-worker.db`). No app-local store,
+ * schema, outbox or second database. Bootstrap (FND-11 task 6): the platform store (`laif-worker.db` on device, Dexie on
  * the Expo web target) + the pinned, ticking demo clock + platform UUIDs + the device session
  * store as actor (null while signed out). `appId: 'worker'` enables the FND-07 sync queue against the in-app simulated remote;
  * only sync sends go through the simulated transport faults.
@@ -7,9 +9,9 @@
 import { createDemoClock, DEMO_CLOCK_DEFAULT_ISO } from "@laif/domain";
 import { createCareRepository, type CareRepository, type StoreAdapter } from "@laif/repositories";
 
-import { APP_ID, IS_E2E } from "./config.ts";
-import { platform } from "./platform";
-import type { SessionStore } from "./session/store.ts";
+import { APP_ID, IS_E2E } from "../config.ts";
+import { platform } from "../platform";
+import type { SessionStore } from "../session/store.ts";
 
 export type CreateAppRepositoryOptions = {
   session: SessionStore;
