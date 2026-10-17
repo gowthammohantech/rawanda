@@ -10,7 +10,7 @@
 | Depends on | CLN-04 |
 | Trace | PRD CL-03, PRD §4 journey 1; FRD CL-03, FRD §5 (`OVERDUE` derived, do not falsely label); spec §2.1 `/clinical/queue`, §8 "Filter review queue — counts and rows match repository"; BRD BR-04, BO-02 |
 | Size | M |
-| Status | Not started |
+| Status | Done |
 
 ## 2. Goal
 

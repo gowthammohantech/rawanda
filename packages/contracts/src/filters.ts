@@ -14,6 +14,8 @@ import {
   REFERRAL_STATUSES,
   REVIEW_ORIGINS,
   REVIEW_PRIORITIES,
+  REVIEW_QUEUE_SORTS,
+  REVIEW_QUEUE_TABS,
   REVIEW_STATUSES,
   ROLES,
   SCREENING_STATUSES,
@@ -105,6 +107,9 @@ export const ScreeningFilterSchema = z
   .superRefine(refineRange);
 export type ScreeningFilter = z.output<typeof ScreeningFilterSchema>;
 
+/** CLN-05: maximum length of the in-queue search. */
+export const REVIEW_QUEUE_MAX_QUERY = 60;
+
 export const ReviewFilterSchema = z.object({
   ...pageShape,
   statuses: z.array(z.enum(REVIEW_STATUSES)).optional(),
@@ -115,8 +120,39 @@ export const ReviewFilterSchema = z.object({
   facilityIds,
   /** Derived: review due date passed while not decided (demo fixture SLA only). */
   overdueOnly: z.boolean().optional(),
+  /** CLN-05: one queue tab (the shared `@laif/domain` predicate); ignored by `countReviews`. */
+  tab: z.enum(REVIEW_QUEUE_TABS).optional(),
+  /** CLN-05: case-insensitive match on the patient's display name / synthetic identifier. */
+  q: z.string().trim().max(REVIEW_QUEUE_MAX_QUERY).optional(),
+  /** CLN-05 queue order (default `flaggedAt_asc` = oldest flag first); `listReviews` only. */
+  sort: z.enum(REVIEW_QUEUE_SORTS).optional(),
+  /** CLN-05 KPI "reviewed this week": only reviews decided at or after this instant. */
+  decidedSince: IsoUtcString.optional(),
 });
 export type ReviewFilter = z.output<typeof ReviewFilterSchema>;
+
+/** Assignee filter of the review queue (`me` = the signed-in persona). */
+export const REVIEW_QUEUE_ASSIGNEES = ["any", "me", "unassigned"] as const;
+export type ReviewQueueAssignee = (typeof REVIEW_QUEUE_ASSIGNEES)[number];
+
+/**
+ * CLN-05 review-queue URL state (`?tab=&facility=&assignee=&q=&sort=&page=`). The app maps it onto
+ * `ReviewFilterSchema` (`facilityId` → `facilityIds`, `assignee` → `assignedClinicianId`) so the
+ * list and `countReviews` use the same facility / assignee / search filter. `facilityId` must be
+ * one of the persona's permitted facilities (checked by the app; the repository re-checks scope).
+ */
+export const ReviewQueueFilterSchema = z.object({
+  tab: z.enum(REVIEW_QUEUE_TABS).default("pending"),
+  facilityId: FacilityIdSchema.optional(),
+  assignee: z.enum(REVIEW_QUEUE_ASSIGNEES).default("any"),
+  q: z.string().trim().max(REVIEW_QUEUE_MAX_QUERY).optional(),
+  sort: z.enum(REVIEW_QUEUE_SORTS).default("flaggedAt_asc"),
+  page: z.coerce.number().int().min(1).default(1),
+});
+export type ReviewQueueFilterInput = z.input<typeof ReviewQueueFilterSchema>;
+export type ReviewQueueFilter = z.output<typeof ReviewQueueFilterSchema>;
+/** CLN-05: rows per queue page. */
+export const REVIEW_QUEUE_PAGE_SIZE = 25;
 
 export const ReferralFilterSchema = z.object({
   ...pageShape,
