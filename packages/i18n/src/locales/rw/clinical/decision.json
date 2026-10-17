@@ -1,0 +1,155 @@
+{
+  "title": "Andika icyemezo",
+  "loading": "Isuzuma riri gufungurwa…",
+  "intro": "Hitamo igisubizo kimwe. Icyemezo cyawe cyandikwa n'izina ryawe, inshingano, ikigo n'igihe, kandi ntigishobora guhindurwa nyuma yo kubikwa.",
+  "legend": "Igisubizo",
+  "outcomes": {
+    "no_further_action": {
+      "label": "Andika isuzuma — nta kindi gikorwa",
+      "description": "Andika inyandiko y'isuzuma ryawe. Nta koherezwa cyangwa umurimo bikorwa."
+    },
+    "refer": {
+      "label": "Ohereza",
+      "description": "Kora iyoherezwa ku kigo uhisemo, ufite impamvu n'itariki ntarengwa."
+    },
+    "request_repeat_screening": {
+      "label": "Saba kongera gupima",
+      "description": "Kora umurimo wo kongera gupima uhabwa umujyanama w'ubuzima w'iki kigo."
+    },
+    "plan_follow_up": {
+      "label": "Teganya isuzuma rikurikira",
+      "description": "Kora umurimo w'isuzuma riteganyijwe ufite itariki ntarengwa ushyizeho."
+    },
+    "dismiss": {
+      "label": "Kuraho ikimenyetso ufite impamvu",
+      "description": "Funga ikimenyetso ufite impamvu. Nta kindi gikorwa."
+    }
+  },
+  "fields": {
+    "groupTitle": "Ibisobanuro bya: {{outcome}}",
+    "destination": "Ikigo cyoherezwamo",
+    "destinationOption": "{{name}} (igerageza)",
+    "destinationPlaceholder": "Hitamo ikigo",
+    "referralReason": "Impamvu yo kohereza",
+    "dueAt": "Itariki n'isaha ntarengwa",
+    "dueAtHint": "Bishyirwaho nawe — nta gihe cyerekanwa. Isaha ya Africa/Kigali.",
+    "priority": "Ibyihutirwa",
+    "priorityPlaceholder": "Hitamo ibyihutirwa",
+    "assignedWorker": "Umujyanama w'ubuzima",
+    "assignedWorkerOptional": "Umujyanama w'ubuzima (si ngombwa)",
+    "workerPlaceholder": "Hitamo umujyanama w'ubuzima",
+    "workerNone": "Ntarahabwa umuntu",
+    "workersLoading": "Abajyanama b'ubuzima b'iki kigo bari gufungurwa…",
+    "workersEmpty": "Nta mujyanama w'ubuzima wemewe uri muri iki kigo.",
+    "workersHint": "Hagaragara gusa abajyanama b'ubuzima bemewe b'ikigo gikora ubu.",
+    "instructions": "Amabwiriza ahabwa umujyanama w'ubuzima",
+    "clinicalNote": "Inyandiko y'isuzuma",
+    "reasonHint": "Nibura inyuguti {{min}}.",
+    "dismissReasonCode": {
+      "label": "Impamvu yo gukuraho",
+      "placeholder": "Hitamo impamvu",
+      "measurement_error_suspected": "Hakekwa ikosa mu gupima",
+      "repeat_reading_acceptable": "Igipimo cyongeye gufatwa kiremewe",
+      "known_managed_condition": "Ikibazo kizwi kandi gikurikiranwa",
+      "duplicate_flag": "Ikimenyetso cyisubiyemo",
+      "other": "Ibindi"
+    },
+    "dismissRationale": "Ibisobanuro byo gukuraho"
+  },
+  "actions": {
+    "save": "Bika icyemezo",
+    "saveHint": "Ctrl/⌘ + Enter ifungura kwemeza.",
+    "selectOutcomeFirst": "Banza uhitemo igisubizo",
+    "cancel": "Subira ku isuzuma",
+    "retry": "Ongera wohereze icyifuzo kimwe"
+  },
+  "errorSummary": {
+    "title": "Reba ibi bice mbere yo kubika ({{count}})",
+    "kind": "Igisubizo"
+  },
+  "confirm": {
+    "title": "Emeza icyemezo",
+    "description": "Reba incamake. Icyemezo kibikwa rimwe kandi ntigishobora guhindurwa nyuma.",
+    "summary": {
+      "outcome": "Igisubizo",
+      "creates": "Hazakorwa",
+      "createsReferral": "Iyoherezwa (imiterere: Ryakozwe) kuri {{destination}}",
+      "createsRepeat": "Umurimo wo kongera gupima uhabwa {{worker}}",
+      "createsPlanned": "Umurimo w'isuzuma riteganyijwe",
+      "createsPlannedFor": "Umurimo w'isuzuma riteganyijwe uhabwa {{worker}}",
+      "createsNothing": "Nta kindi — nta koherezwa cyangwa umurimo",
+      "priority": "Ibyihutirwa",
+      "dueAt": "Itariki ntarengwa (isaha ya Kigali)",
+      "note": "Inyandiko",
+      "dismissReason": "Impamvu yo gukuraho",
+      "reviewStatus": "Imiterere y'isuzuma nyuma yo kubika"
+    },
+    "attribution": "Byanditswe na {{name}}, {{role}}, {{facility}} saa {{time}} (Kigali)",
+    "confirm": "Emeza kandi ubike",
+    "cancel": "Subira uhindure"
+  },
+  "success": {
+    "title": "Icyemezo cyanditswe",
+    "toast": "Icyemezo cyanditswe",
+    "toastBody": "Urutonde rw'isuzuma rwavuguruwe.",
+    "replayed": "Iki cyemezo cyari cyarabitswe — nticyoherejwe kabiri.",
+    "alreadyTitle": "Iri suzuma rifite icyemezo",
+    "alreadyBody": "Ibyemezo ntibihindurwa. Icyemezo cyanditswe kigaragazwa gusomwa gusa.",
+    "outcome": "Igisubizo",
+    "status": "Imiterere y'isuzuma",
+    "decidedBy": "Byanditswe na",
+    "decidedAt": "Igihe byanditswe (isaha ya Kigali)",
+    "note": "Inyandiko",
+    "reasonCode": "Impamvu yo gukuraho",
+    "referral": "Iyoherezwa",
+    "referralLine": "{{destination}} · ntarengwa {{due}}",
+    "task": "Umurimo",
+    "taskLine": "{{purpose}} · ntarengwa {{due}}",
+    "nothingCreated": "Nta koherezwa cyangwa umurimo byakozwe.",
+    "viewReferral": "Reba iyoherezwa",
+    "viewTask": "Reba umurimo",
+    "backToQueue": "Subira ku rutonde",
+    "nextCase": "Ikibazo gikurikira gitegereje",
+    "noNextCase": "Nta kindi kibazo gitegereje muri uru rutonde.",
+    "openReview": "Fungura isuzuma"
+  },
+  "draft": {
+    "restorePrompt": "Ugarure umushinga w'icyemezo utabitswe?",
+    "restoreBody": "Umushinga w'icyemezo cy'iri suzuma wabitswe kuri iyi mashakisha ariko ntiwoherejwe.",
+    "restore": "Garura umushinga",
+    "discard": "Siba umushinga",
+    "discarded": "Umushinga wasibwe",
+    "offlineSaved": "Byabitswe nk'umushinga kuri iyi mashakisha",
+    "offlineBody": "Interineti yigana yavuyeho — icyemezo ntigishobora kubikwa ubu. Umushinga wawe urabitswe."
+  },
+  "guard": {
+    "notStarted": "Banza utangire isuzuma mbere yo kwandika icyemezo",
+    "notStartedBody": "Icyemezo cyandikwa gusa ku isuzuma watangiye.",
+    "otherReviewer": "Iri suzuma riri gusuzumwa na {{name}}",
+    "otherReviewerBody": "Umuganga uri gusuzuma ikibazo ni we wenyine wandika icyemezo."
+  },
+  "conflict": {
+    "title": "Iri suzuma ryahindutse kuva warifungura",
+    "description": "Nta cyabitswe cyangwa ngo gisimburwe. Ongera ufungure verisiyo iheruka, cyangwa usibe umushinga wawe.",
+    "referralOpen": "Hari iyoherezwa rifunguye risanzweho kuri iri suzuma. Nta cyabitswe.",
+    "discard": "Siba umushinga wanjye",
+    "fields": {
+      "status": "Imiterere",
+      "decision": "Icyemezo",
+      "decidedBy": "Cyafashwe na",
+      "version": "Verisiyo"
+    }
+  },
+  "errors": {
+    "alreadyDecided": "Icyemezo cy'iri suzuma cyari cyaranditswe (urugero mu yindi tabu). Nta cyasimbuwe.",
+    "notSaved": "Ntibirabikwa",
+    "notSavedBody": "Ibyo wanditse birabitswe. Kongera kugerageza byohereza icyifuzo kimwe, bityo icyemezo ntigishobora kubikwa kabiri.",
+    "workerNotAuthorised": "Uyu mujyanama w'ubuzima ntiyemerewe muri iki kigo."
+  },
+  "evidence": {
+    "title": "Incamake y'ibimenyetso",
+    "subtitle": "Gusoma gusa, bivuye ku ifoto y'igihe cy'ikimenyetso",
+    "openDetail": "Fungura ibimenyetso byose",
+    "unavailable": "Ifoto y'ibimenyetso ntiboneka."
+  }
+}

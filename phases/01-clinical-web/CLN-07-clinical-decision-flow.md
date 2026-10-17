@@ -10,7 +10,7 @@
 | Depends on | CLN-06 |
 | Trace | PRD CL-05, PRD §4 journeys 1–2; FRD CL-05, FRD §3 Scenarios 1–2, FRD §4 (reason when dismissing), §5, T-01, T-03, T-04, T-05, T-09; spec §2.1 `/clinical/reviews/:id/decision`, §5.2 Review machine + invariants, §8 "Review with reason"; WF-01 steps 5–6, WF-03; BRD BR-04 |
 | Size | L |
-| Status | Not started |
+| Status | Done |
 
 ## 2. Goal
 

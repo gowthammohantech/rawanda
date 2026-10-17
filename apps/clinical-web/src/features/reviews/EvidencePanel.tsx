@@ -58,7 +58,7 @@ export function EvidenceStatusPill({ status }: { status: EvidenceStatus }) {
   );
 }
 
-function EvidenceValue({ item }: { item: EvidenceItem }) {
+export function EvidenceValue({ item }: { item: EvidenceItem }) {
   const t = useTx();
   const { language } = useLanguage();
   if (item.value === null) {
