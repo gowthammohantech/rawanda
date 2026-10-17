@@ -155,11 +155,14 @@
     "denominator": {
       "screened": "Ibipimo byafashwe muri icyo gihe",
       "flagged": "Ibipimo byagaragajwe muri icyo gihe",
-      "referred": "Ibipimo byoherejwe muri icyo gihe"
+      "referred": "Ibipimo byoherejwe muri icyo gihe",
+      "patientDays": "Iminsi y'abarwayi: guhura gutandukanye (umurwayi, umunsi wa Kigali) kwa buri mukozi kuvuye mu ipimwa no kugerageza guhamagara, byateranyijwe ku bakozi bose",
+      "tasksAssigned": "Imirimo yo gukurikirana yatanzwe muri icyo gihe"
     },
     "inclusion": {
       "cohort": "Ibipimo byoherejwe gusa (imishinga ntibarwa); abikuyeho uburenganzira ntibabarwa; ikipimo cyakosowe kibarwa rimwe",
-      "deferred": "Ntibipimwa muri iyi prototype (byasubitswe)"
+      "deferred": "Ntibipimwa muri iyi prototype (byasubitswe)",
+      "proxy": "Igihe abakozi biyandikiye mu igerageza gusa — igipimo kigereranya, si igipimo nyacyo cy'akazi cyangwa cy'imikorere y'umuntu"
     },
     "attribution": {
       "period": "Igihe = itariki ya Kigali yo gupima",
@@ -167,7 +170,9 @@
       "snapshot": "Inyandiko z'ibipimo by'icyo gihe, uko zimeze ubu (isaha y'igerageza)",
       "none": "Ntibireba",
       "reviewWeek": "Icyumweru = icyumweru cya ISO cya Kigali (gitangira ku wa Mbere) cy'icyemezo cy'isuzuma",
-      "weekEnd": "Bibarwa ku mpera ya buri cyumweru (ku Cyumweru 23:59 Kigali); aka nyuma ni ubu (isaha y'igerageza)"
+      "weekEnd": "Bibarwa ku mpera ya buri cyumweru (ku Cyumweru 23:59 Kigali); aka nyuma ni ubu (isaha y'igerageza)",
+      "taskCreated": "Bitandukanye n'uburyo busanzwe: umurimo ubarwa mu gihe cy'itariki watangiweho (createdAt), kuko akazi kareba igihe kakoreweho",
+      "timeEntry": "Igihe = itariki y'igihe cyanditswe n'itariki ya Kigali ya buri guhura"
     },
     "p90DaysToReview": {
       "label": "Ijanisha rya 90 ry'iminsi kugeza isuzuma",
@@ -194,7 +199,41 @@
       "numerator": "Iminsi yo hagati kugeza isuzuma kuri buri vuriro, hamwe na n"
     },
     "method": {
-      "percentile": "Kubara hagati y'imyanya yegeranye: umwanya h = (n − 1) × p / 100; agaciro = x[⌊h⌋] + (h − ⌊h⌋) × (x[⌊h⌋+1] − x[⌊h⌋]). Birahishwa iyo n iri munsi y'umubare muto wemewe."
+      "percentile": "Kubara hagati y'imyanya yegeranye: umwanya h = (n − 1) × p / 100; agaciro = x[⌊h⌋] + (h − ⌊h⌋) × (x[⌊h⌋+1] − x[⌊h⌋]). Birahishwa iyo n iri munsi y'umubare muto wemewe.",
+      "ratioOfSums": "Agaciro rusange = iminota yose ÷ iminsi y'abarwayi yose (igabanya ry'ibiteranyo, si impuzandengo y'abakozi). Birahishwa iyo iminsi y'abarwayi iri munsi y'umubare muto wemewe.",
+      "baselineIndex": "Igipimo = iminota y'ubu ku munsi w'umurwayi ÷ iminota ku munsi w'umurwayi mu gihe cy'IFATIZO RY'IGERAGEZA (ibyumweru 4 bya mbere — si ifatizo ryemejwe). Ntikigaragazwa iyo uruhande rumwe rufite iminsi y'abarwayi iri munsi y'umubare muto wemewe."
+    },
+    "activeWorkers": {
+      "label": "Abakozi bakora",
+      "numerator": "Abakozi bafite nibura igihe banditse, ipimwa, umurimo cyangwa kugerageza guhamagara muri icyo gihe"
+    },
+    "tasksAssigned": {
+      "label": "Imirimo yo gukurikirana yatanzwe",
+      "numerator": "Imirimo yo gukurikirana ifite umukozi, yatanzwe muri icyo gihe"
+    },
+    "tasksCompleted": {
+      "label": "Imirimo yarangiye",
+      "numerator": "Muri yo, imirimo yarangiye ifite igihe yarangiriyeho"
+    },
+    "tasksUnableToReach": {
+      "label": "Ntibyashobotse kubageraho",
+      "numerator": "Muri yo, imirimo yafunzwe kubera kutabageraho cyangwa yahawe abandi"
+    },
+    "tasksOverdue": {
+      "label": "Uko imirimo ihagaze",
+      "numerator": "Imirimo hakurikijwe uko ihagaze: yarangiye, iri gukorwa, ntibyashobotse kubageraho, n'iyarenze igihe (itarafungwa kandi yarenze itariki yashyizweho)"
+    },
+    "minutesPerPatientDayIndex": {
+      "label": "Igipimo cy'iminota ku munsi w'umurwayi",
+      "numerator": "Iminota y'ubu ku munsi w'umurwayi igabanyijwe n'agaciro ko mu gihe cy'ifatizo ry'igerageza"
+    },
+    "minutesByActivity": {
+      "label": "Iminota hakurikijwe igikorwa",
+      "numerator": "Iminota abakozi biyandikiye mu igerageza kuri buri gikorwa (ipimwa, ikurikirana, ingendo, ubuyobozi)"
+    },
+    "weeklyMinutesPerPatientDay": {
+      "label": "Iminota ku munsi w'umurwayi buri cyumweru",
+      "numerator": "Iminota abakozi biyandikiye mu igerageza buri cyumweru cya ISO cya Kigali"
     }
   }
 }

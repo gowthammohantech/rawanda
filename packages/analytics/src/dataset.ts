@@ -12,21 +12,46 @@
  * - patients with `consentState = 'withdrawn'` are excluded with all their records, and the
  *   number of excluded screenings is reported (`excludedConsentWithdrawn`, overview footnote);
  * - `type = 'bp'` keeps screenings with a systolic value, `'glucose'` those with a glucose value
- *   (a screening with both counts in each).
+ *   (a screening with both counts in each);
+ * - workload (ADM-05) is the documented EXCEPTION to cohort attribution: follow-up tasks are
+ *   attributed to the period of their `createdAt` (when the work was assigned), so
+ *   `cohort.taskFollowUps` holds every in-scope, consented follow-up created in the period or with
+ *   a contact attempt in it, whatever screening it came from.
  *
  * Pure: time only from the `now` argument.
  */
 import type { TimeEntry } from "@laif/contracts";
-import type { Screening } from "@laif/domain";
+import type { FacilityId, FollowUp, PersonaId, Screening } from "@laif/domain";
 
-import { addDays, applyMetricsFilter, isDayInRange, isoWeekStartOfDay } from "./filters.ts";
+import {
+  addDays,
+  applyMetricsFilter,
+  isDayInRange,
+  isoWeekStartOfDay,
+  kigaliDate,
+} from "./filters.ts";
 import type { AnalyticsInput, MetricsFilter } from "./types.ts";
 
 export const SCREENING_TYPE_FILTERS = ["all", "bp", "glucose"] as const;
 export type ScreeningTypeFilter = (typeof SCREENING_TYPE_FILTERS)[number];
 
+/**
+ * Staff directory entry (ADM-05): pseudonymous code and facilities only — never a name. `id`
+ * joins the records and never reaches a page.
+ */
+export type WorkerRef = { id: PersonaId; workerCode: string; facilityIds: FacilityId[] };
+
 /** What the dataset loader reads (scoped repository rows). */
-export type MetricsRecords = AnalyticsInput & { timeEntries: TimeEntry[] };
+export type MetricsRecords = AnalyticsInput & {
+  timeEntries: TimeEntry[];
+  /**
+   * ADM-05: follow-up tasks by assignment date (`createdAt`) — NOT cohort-attributed. Optional:
+   * when absent, `followUps` is used as the source.
+   */
+  taskFollowUps?: FollowUp[];
+  /** ADM-05: workers of the in-scope facilities (codes only). */
+  workers?: WorkerRef[];
+};
 
 export type DatasetFilter = MetricsFilter & { type?: ScreeningTypeFilter };
 
@@ -95,6 +120,18 @@ export function filterDataset(
   const timeEntries = records.timeEntries.filter(
     (e) => facilityIds.has(e.facilityId) && isDayInRange(e.date, metricsFilter),
   );
+  // Workload exception (ADM-05): tasks by assignment date, plus tasks with an in-period attempt
+  // (patient-days); scope + consent only, never the screening cohort.
+  const taskFollowUps = (records.taskFollowUps ?? records.followUps).filter(
+    (f) =>
+      facilityIds.has(f.facilityId) &&
+      !withdrawn.has(f.patientId) &&
+      (isDayInRange(kigaliDate(f.createdAt), metricsFilter) ||
+        f.attempts.some((a) => isDayInRange(kigaliDate(a.at), metricsFilter))),
+  );
+  const workers = (records.workers ?? [])
+    .map((w) => ({ ...w, facilityIds: w.facilityIds.filter((id) => facilityIds.has(id)) }))
+    .filter((w) => w.facilityIds.length > 0);
 
   return {
     cohort: {
@@ -106,6 +143,8 @@ export function filterDataset(
       facilities: scoped.facilities,
       districts: scoped.districts,
       timeEntries,
+      taskFollowUps,
+      workers,
     },
     filter: {
       from: filter.from ?? null,

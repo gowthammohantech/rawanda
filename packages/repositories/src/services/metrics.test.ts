@@ -89,6 +89,34 @@ describe("aggregate metrics + exports", () => {
   });
 });
 
+describe("ADM-05 workload source rows", () => {
+  it("getMetricsRecords: tasks by createdAt (not cohort), staff directory with codes only", async () => {
+    const h = await createHarness({ appId: "admin", personaId: PERSONA_IDS.fmgrAlpha1 });
+    const { records } = await h.repo.getMetricsRecords({ from: "2026-07-17", to: "2026-10-14" });
+    const tasks = records.taskFollowUps ?? [];
+    expect(tasks.length).toBeGreaterThan(0);
+    expect(tasks.every((f) => f.facilityId === FACILITY_IDS.alpha1)).toBe(true);
+    const day = (iso: string) => new Date(Date.parse(iso) + 7_200_000).toISOString().slice(0, 10);
+    expect(
+      tasks.every(
+        (f) =>
+          (day(f.createdAt) >= "2026-07-17" && day(f.createdAt) <= "2026-10-14") ||
+          f.attempts.some((a) => day(a.at) >= "2026-07-17" && day(a.at) <= "2026-10-14"),
+      ),
+    ).toBe(true);
+    // Free text is redacted like every aggregate read.
+    expect(tasks.every((f) => f.attempts.every((a) => a.note === ""))).toBe(true);
+    const workers = records.workers ?? [];
+    expect(workers.map((w) => w.workerCode)).toEqual(expect.arrayContaining(["HW-014", "HW-015"]));
+    expect(workers.map((w) => w.workerCode)).not.toContain("HW-031");
+    expect(workers.every((w) => w.facilityIds.every((id) => id === FACILITY_IDS.alpha1))).toBe(
+      true,
+    );
+    for (const w of workers)
+      expect(Object.keys(w).sort()).toEqual(["facilityIds", "id", "workerCode"]);
+  });
+});
+
 describe("ADM-02 metric source reads", () => {
   it("getMetricsRecords: scoped rows, no patient identifiers, demo-clock asOf", async () => {
     const h = await createHarness({ appId: "admin", personaId: PERSONA_IDS.analystAlpha });

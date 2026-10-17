@@ -1,6 +1,6 @@
 # ADM-05 — Worker workload and staff-time proxies
 
-Status: Not started
+**Status:** Done
 
 ## 1. Header
 

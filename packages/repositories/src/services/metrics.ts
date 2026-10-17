@@ -6,9 +6,11 @@
 import {
   applyMetricsFilter,
   isDayInRange,
+  kigaliDate,
   getProgrammeMetrics,
   type MetricsRecords,
   type ProgrammeMetrics,
+  type WorkerRef,
 } from "@laif/analytics";
 import {
   MetricsFilterSchema,
@@ -17,6 +19,7 @@ import {
   type TimeEntry,
 } from "@laif/contracts";
 import type {
+  DemoPersona,
   District,
   DistrictId,
   Facility,
@@ -84,6 +87,42 @@ async function timeEntriesIn(
     .map((row) => TimeEntrySchema.parse(row))
     .filter((e) => facilityIds.has(e.facilityId) && isDayInRange(e.date, filter))
     .sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : a.id < b.id ? -1 : 1));
+}
+
+/**
+ * ADM-05 workload source: in-scope follow-ups created in the period OR with a contact attempt in
+ * it, whatever screening they came from (the workload attribution exception).
+ */
+function taskFollowUpsIn(
+  followUps: readonly FollowUp[],
+  filter: MetricsFilter,
+  facilityIds: ReadonlySet<string>,
+): FollowUp[] {
+  return followUps.filter(
+    (f) =>
+      facilityIds.has(f.facilityId) &&
+      (isDayInRange(kigaliDate(f.createdAt), filter) ||
+        f.attempts.some((a) => isDayInRange(kigaliDate(a.at), filter))),
+  );
+}
+
+/**
+ * ADM-05 staff directory of the in-scope facilities: pseudonymous `workerCode` + facilities only
+ * (no names). Every staff persona with a code, so any assignee / recorder resolves to a code.
+ */
+function workerDirectory(
+  personas: readonly DemoPersona[],
+  facilityIds: ReadonlySet<string>,
+): WorkerRef[] {
+  const out: WorkerRef[] = [];
+  for (const p of personas) {
+    if (p.workerCode === null) continue;
+    const inScope = p.facilityIds.filter((id) => facilityIds.has(id));
+    if (inScope.length > 0) out.push({ id: p.id, workerCode: p.workerCode, facilityIds: inScope });
+  }
+  return out.sort((a, b) =>
+    a.workerCode < b.workerCode ? -1 : a.workerCode > b.workerCode ? 1 : 0,
+  );
 }
 
 /** Placeholder for required non-empty free text removed from aggregate reads. */
@@ -154,22 +193,31 @@ export function createMetricsService(engine: Engine) {
     getMetricsRecords(f?: MetricsFilterInput): Promise<MetricsRecordsResult> {
       return engine.read(async (ctx) => {
         const filter = scopedMetricsFilter(ctx, f);
+        const allFollowUps = await ctx.all<FollowUp>("follow_up");
         const data = applyMetricsFilter(
           {
             patients: await ctx.all<Patient>("patient"),
             screenings: await ctx.all<Screening>("screening"),
             reviews: await ctx.all<Review>("review"),
             referrals: await ctx.all<Referral>("referral"),
-            followUps: await ctx.all<FollowUp>("follow_up"),
+            followUps: allFollowUps,
             facilities: await ctx.all<Facility>("facility"),
             districts: await ctx.all<District>("district"),
           },
           filter,
         );
         const facilityIds = new Set<string>(data.facilities.map((x) => x.id));
+        const tasks = redactFreeText({
+          screenings: [],
+          reviews: [],
+          referrals: [],
+          followUps: taskFollowUpsIn(allFollowUps, filter, facilityIds),
+        }).followUps;
         return {
           records: {
             ...redactFreeText(data),
+            taskFollowUps: tasks,
+            workers: workerDirectory(await ctx.tx.getAll<DemoPersona>("personas"), facilityIds),
             patients: data.patients.map((p) => {
               // HWM-04 optional contact/location detail never leaves an aggregate read.
               const rest: Patient = { ...p };
