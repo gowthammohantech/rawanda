@@ -1,9 +1,6 @@
-import { useTx } from "@laif/ui-native";
+import { ScreenTab } from "../../../src/features/screening/ScreenTab.tsx";
 
-import { TabPlaceholder } from "../../../src/components/TabPlaceholder.tsx";
-
-/** Placeholder (built in HWM-05). */
-export default function ScreenTab() {
-  const t = useTx();
-  return <TabPlaceholder title={t("worker:nav.screen")} phase="HWM-05" testID="screen-screen" />;
+/** Screen tab (HWM-05): drafts on this device + "Choose patient". */
+export default function ScreenTabRoute() {
+  return <ScreenTab />;
 }

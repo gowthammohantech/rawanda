@@ -10,6 +10,7 @@ import enWorkerSettings from "../locales/en/worker/settings.json";
 import enWorkerSync from "../locales/en/worker/sync.json";
 import enWorkerNetsim from "../locales/en/worker/netsim.json";
 import enWorkerPatients from "../locales/en/worker/patients.json";
+import enWorkerScreening from "../locales/en/worker/screening.json";
 import rwWorkerBase from "../locales/rw/worker.json";
 import rwWorkerAuth from "../locales/rw/worker/auth.json";
 import rwWorkerHome from "../locales/rw/worker/home.json";
@@ -18,6 +19,7 @@ import rwWorkerSettings from "../locales/rw/worker/settings.json";
 import rwWorkerSync from "../locales/rw/worker/sync.json";
 import rwWorkerNetsim from "../locales/rw/worker/netsim.json";
 import rwWorkerPatients from "../locales/rw/worker/patients.json";
+import rwWorkerScreening from "../locales/rw/worker/screening.json";
 
 export const enWorker = {
   ...enWorkerBase,
@@ -28,6 +30,7 @@ export const enWorker = {
   sync: enWorkerSync,
   netsim: enWorkerNetsim,
   patients: enWorkerPatients,
+  screening: enWorkerScreening,
 } as const;
 
 export const rwWorker: object = {
@@ -39,4 +42,5 @@ export const rwWorker: object = {
   sync: rwWorkerSync,
   netsim: rwWorkerNetsim,
   patients: rwWorkerPatients,
+  screening: rwWorkerScreening,
 };

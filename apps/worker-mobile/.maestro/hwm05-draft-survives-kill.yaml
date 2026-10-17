@@ -1,0 +1,79 @@
+# HWM-05 device gate (not part of `pnpm verify`): `pnpm --filter @laif/worker-mobile test:maestro`
+# with the app open in Expo Go / a dev build, starting signed out, all simulation toggles off.
+# Screen tab → Choose patient → form → glucose 7.8 only → Review → unit + context errors →
+# RW → pick unit + context → kill the app 1 s after typing → relaunch → Resume → values intact.
+appId: host.exp.Exponent
+---
+- launchApp
+- tapOn:
+    id: "persona-card-persona-chw-alpha1-a"
+- tapOn:
+    id: "persona-continue"
+- tapOn:
+    id: "scope-continue"
+- assertVisible:
+    id: "today-screen"
+- tapOn:
+    id: "tab-screen"
+- assertVisible: "DRAFTS ON THIS DEVICE"
+- tapOn:
+    id: "choose-patient"
+- assertVisible:
+    id: "find-pick-banner"
+- tapOn:
+    id: "patient-search-input"
+- inputText: "DEMO"
+- tapOn:
+    id: "patient-row-.*"
+    index: 0
+# A patient may already have a draft: start a new one.
+- runFlow:
+    when:
+      visible:
+        id: "resume-prompt"
+    commands:
+      - tapOn:
+          id: "start-new-draft"
+- assertVisible:
+    id: "screening-form-screen"
+- tapOn:
+    id: "field-systolic"
+- inputText: "134"
+- tapOn:
+    id: "field-diastolic"
+- inputText: "86"
+- tapOn:
+    id: "field-glucoseValue"
+- inputText: "7.8"
+- hideKeyboard
+- tapOn:
+    id: "screening-review"
+- assertVisible: "Select a unit."
+- assertVisible: ".*Not recorded.*"
+# Switch to Kinyarwanda: the errors re-translate, values stay.
+- tapOn: "Ikinyarwanda"
+- assertVisible: "Hitamo igipimo (unit)."
+- tapOn: "English"
+- tapOn: "mmol/L"
+- tapOn: "Not fasting"
+- assertVisible: "Draft saved on this device.*"
+# Kill ~1 s after typing, relaunch: the draft is listed with its values.
+- tapOn:
+    id: "field-notes"
+- inputText: "Maestro kill check"
+- waitForAnimationToEnd:
+    timeout: 1000
+- killApp
+- launchApp
+- tapOn:
+    id: "tab-screen"
+- assertVisible: "DRAFTS ON THIS DEVICE"
+- tapOn:
+    id: "resume-.*"
+    index: 0
+- assertVisible:
+    id: "screening-form-screen"
+- assertVisible: "134"
+- assertVisible: "86"
+- assertVisible: "7.8"
+- assertVisible: "Maestro kill check"

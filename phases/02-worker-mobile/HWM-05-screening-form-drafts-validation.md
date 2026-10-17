@@ -12,7 +12,7 @@
 | Depends on | HWM-04 |
 | Trace | PRD HW-03, HW-04, HW-05 · FRD HW-03, HW-04, HW-05, §4 (units/source mandatory) · BRD BR-02 · Tech spec §2.2 "New screening", §5.1 Screening · Implementation notes (translated validation) · FRD T-03 · PRD §10 "app termination during capture" |
 | Size | L |
-| Status | Planned |
+| Status | Done |
 
 ## 2. Goal
 
