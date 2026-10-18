@@ -3,7 +3,7 @@
 # Offline → Tasks → Overdue task → Record contact attempt (home visit, not reached) → Record
 # outcome → Attended → skip evidence → error → Facility register checked → confirm sheet →
 # Confirm (tapped twice) → "Saved on this device" → kill + relaunch → task still completed and
-# pending → Online → one sync pass → "Synced".
+# pending → Online → automatic sync / Sync now → "Synced".
 appId: host.exp.Exponent
 ---
 - launchApp
@@ -89,10 +89,14 @@ appId: host.exp.Exponent
     id: "open-network-simulation"
 - tapOn: "Work offline (simulated)"
 - assertVisible: "Online"
+# HWM-09: back online syncs by itself (debounced `online` trigger); Sync now from the Sync tab.
+- back
+- back
 - tapOn:
-    id: "netsim-run-pass"
-- back
-- back
+    id: "tab-sync"
+- tapOn:
+    id: "sync-now"
+    optional: true
 - tapOn:
     id: "tab-tasks"
 - tapOn:

@@ -26,6 +26,7 @@ import { useDemoTools } from "../../app/demo-tools.tsx";
 import { UNFILTERED_SCOPE } from "../../features/queue/model.ts";
 import { reviewCountsQuery } from "../../features/queue/useReviewQueue.ts";
 import { referralCountsQuery, UNFILTERED_REFERRAL_SCOPE } from "../../features/referrals/hooks.ts";
+import { followUpCountsQueryKey } from "../../features/tasks/hooks.ts";
 import { ConnectionBanner } from "../ConnectionBanner.tsx";
 import { facilityLabel, personaOption } from "../../app/persona-labels.ts";
 import { useRepository } from "../../data/useRepository.ts";
@@ -86,13 +87,22 @@ function ShellChrome({ badgeCounts = {} }: ClinicalShellProps) {
     select: (c) => c["overdue"] ?? 0,
   });
 
+  // CLN-09 task 7: care-team tasks badge = overdue + awaiting clinician confirmation.
+  const taskBadge = useQuery({
+    queryKey: followUpCountsQueryKey(state?.activeFacilityId ?? "none"),
+    queryFn: () => repo.countFollowUps(),
+    enabled: can("task.assign") && state !== null,
+    select: (c) => (c["overdue"] ?? 0) + (c["pendingConfirmation"] ?? 0),
+  });
+
   const counts: Partial<Record<NavItemId, number>> = useMemo(
     () => ({
       ...(pending.data === undefined ? {} : { queue: pending.data }),
       ...(overdueReferrals.data === undefined ? {} : { referrals: overdueReferrals.data }),
+      ...(taskBadge.data === undefined ? {} : { tasks: taskBadge.data }),
       ...badgeCounts,
     }),
-    [pending.data, overdueReferrals.data, badgeCounts],
+    [pending.data, overdueReferrals.data, taskBadge.data, badgeCounts],
   );
 
   const sections = useMemo<readonly SidebarSection[]>(

@@ -307,4 +307,16 @@ describe("follow-ups service", () => {
     const unassigned = await h.repo.listFollowUps({ assignedWorkerId: null });
     expect(unassigned.items.every((f) => f.assignedWorkerId === null)).toBe(true);
   });
+
+  it("CLN-09 getFollowUp: in scope → row; out of scope → FORBIDDEN + access.denied; unknown → null", async () => {
+    const h = await createHarness({ personaId: PERSONA_IDS.clinAlpha1 });
+    expect((await h.repo.getFollowUp(FU))?.id).toBe(FU);
+    expect(await h.repo.getFollowUp("fu-nope")).toBeNull();
+    const other = h.seed.followUps.find((f) => f.facilityId === FACILITY_IDS.beta1)!;
+    await expect(h.repo.getFollowUp(other.id)).rejects.toMatchObject({ code: "FORBIDDEN" });
+    const denied = (await h.store.getAll<AuditEvent>("auditEvents")).filter(
+      (e) => e.action === "access.denied" && e.entityId === other.id,
+    );
+    expect(denied).toHaveLength(1);
+  });
 });

@@ -1,7 +1,8 @@
 /**
  * Network simulation (HWM-02): labelled SIMULATION, every control maps onto the FND-07
  * `FaultConfig` (persisted, survives a relaunch), the header badge follows the offline switch,
- * remote edits / conflictOnce, and "Run one sync pass" reports a failure without losing data.
+ * remote edits / conflictOnce; going back online syncs automatically (HWM-09 — the "Run one sync
+ * pass" dev button moved to the Sync center).
  */
 import type { FollowUp, SyncOperation } from "@laif/domain";
 import { FACILITY_IDS, PERSONA_IDS } from "@laif/mock-data";
@@ -94,9 +95,12 @@ describe("NetworkSimulationScreen (HWM-02)", () => {
     );
   });
 
-  it("100% failures + Run one sync pass → failure toast, the op is kept for retry", async () => {
+  it("HWM-09: no dev sync button; offline → online syncs by itself while in the foreground", async () => {
     const view = await renderScreen();
     const repo = view.repo();
+    expect(screen.queryByTestId("netsim-run-pass")).toBeNull();
+    fireEvent.click(screen.getByRole("switch", { name: "Work offline (simulated)" }));
+    await waitFor(async () => expect((await repo.demo.getFaults()).offline).toBe(true));
     const patient = (await repo.listPatients({ pageSize: 1 })).items[0]!;
     await repo.createScreening(
       {
@@ -107,17 +111,18 @@ describe("NetworkSimulationScreen (HWM-02)", () => {
       },
       "00000000-0000-4000-8000-0000000000aa",
     );
-    fireEvent.click(radio("netsim-failure-rate", "100%"));
-    await waitFor(async () => expect((await repo.demo.getFaults()).serverErrorRate).toBe(1));
+    expect((await repo.sync.list()).map((o: SyncOperation) => o.status)).toEqual(["queued"]);
 
-    fireEvent.click(screen.getByTestId("netsim-run-pass"));
-    expect(
-      await screen.findByText(
-        "Sync pass failed: 1 could not be sent and will be retried. Nothing was lost.",
-      ),
-    ).toBeTruthy();
-    const ops = await repo.sync.list();
-    expect(ops.map((o: SyncOperation) => o.status)).toEqual(["retryable_failure"]);
+    fireEvent.click(screen.getByRole("switch", { name: "Work offline (simulated)" }));
+    await waitFor(
+      async () =>
+        expect((await repo.sync.list()).map((o: SyncOperation) => o.status)).toEqual([
+          "acknowledged",
+        ]),
+      { timeout: 5000 },
+    );
+    const runs = await view.store.getAll<{ trigger: string }>("syncRuns");
+    expect(runs.map((r) => r.trigger)).toEqual(["online"]);
   });
 
   it("clinician update and next-sync conflict act on the chosen follow-up", async () => {

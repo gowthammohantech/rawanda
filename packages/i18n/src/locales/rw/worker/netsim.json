@@ -37,11 +37,5 @@
   "needsDecision": "Bikeneye icyemezo cyawe",
   "lastSynced": "Igihe byahujwe bwa nyuma",
   "never": "Ntibirabaho",
-  "runPass": "Kora ihuza rimwe",
-  "runOffline": "Nta murandasi (kwigana): nta cyoherejwe. Impinduka zigumaho kuri iki gikoresho.",
-  "runNothing": "Nta cyo kohereza.",
-  "runDone": "Ihuza: {{acknowledged}} kuri {{attempted}} byemejwe.",
-  "runFailed": "Ihuza ryanze: {{failed}} ntibyoherejwe kandi bizongera kugeragezwa. Nta cyatakaye.",
-  "runConflicts": "Ihuza: {{count}} bikeneye icyemezo cyawe.",
   "updated": "Kwigana kwavuguruwe"
 }

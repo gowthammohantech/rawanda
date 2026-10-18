@@ -31,6 +31,14 @@ export const clinicalKeys = {
   /** CLN-08 create dialog: decided reviews without an open referral. */
   referralEligible: (fac: Fac, f: Filter = {}) => ["clinical", fac, "referralEligible", f] as const,
   followUps: (fac: Fac, f: Filter = {}) => ["clinical", fac, "followUps", f] as const,
+  /** CLN-09 sidebar badge (`countFollowUps`: overdue + awaiting confirmation). */
+  followUpCounts: (fac: Fac, f: Filter = {}) => ["clinical", fac, "followUpCounts", f] as const,
+  /** CLN-09 task drawer: one follow-up (`getFollowUp`). */
+  followUp: (fac: Fac, id: string) => ["clinical", fac, "followUp", id] as const,
+  /** CLN-09 create-task dialog: decided reviews without an open task of that type. */
+  followUpEligible: (fac: Fac, f: Filter = {}) => ["clinical", fac, "followUpEligible", f] as const,
+  /** CLN-09 care tasks (correction requests routed to clinicians, CTZ-07). */
+  tasks: (fac: Fac, f: Filter = {}) => ["clinical", fac, "tasks", f] as const,
   workers: (fac: Fac) => ["clinical", fac, "workers"] as const,
   audit: (fac: Fac, f: Filter = {}) => ["clinical", fac, "audit", f] as const,
 } as const;
@@ -62,7 +70,17 @@ const ROOT_SEGMENTS: Partial<Record<QueryEntity, readonly string[]>> = {
     "patients",
     "patientTimeline",
   ],
-  followUps: ["followUps", "review", "patientStats", "patients", "patientTimeline"],
+  followUps: [
+    "followUps",
+    "followUpCounts",
+    "followUp",
+    "followUpEligible",
+    "review",
+    "patientStats",
+    "patients",
+    "patientTimeline",
+  ],
+  tasks: ["tasks"],
   workers: ["workers"],
   audit: ["audit"],
 };

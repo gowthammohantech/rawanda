@@ -185,6 +185,30 @@ export const CORRECTION_REQUEST_STATUSES = [
 ] as const;
 export type CorrectionRequestStatus = (typeof CORRECTION_REQUEST_STATUSES)[number];
 
+/**
+ * CLN-09 / CTZ-07: the staff outcome vocabulary of a resolved correction request (stored as
+ * `CorrectionRequestPayload.resolutionKey` — a key, never free text to the citizen). Demo
+ * placeholders pending clinical sign-off. Each key implies the citizen-visible request status.
+ */
+export const CORRECTION_RESOLUTION_KEYS = [
+  "glucose_context_corrected",
+  "reading_value_corrected",
+  "personal_details_corrected",
+  "reading_time_confirmed",
+  "record_checked_no_change",
+] as const;
+export type CorrectionResolutionKey = (typeof CORRECTION_RESOLUTION_KEYS)[number];
+
+export const CORRECTION_RESOLUTION_STATUS: Readonly<
+  Record<CorrectionResolutionKey, Extract<CorrectionRequestStatus, `resolved_${string}`>>
+> = {
+  glucose_context_corrected: "resolved_amended",
+  reading_value_corrected: "resolved_amended",
+  personal_details_corrected: "resolved_amended",
+  reading_time_confirmed: "resolved_no_change",
+  record_checked_no_change: "resolved_no_change",
+};
+
 // ── Sync ─────────────────────────────────────────────────────────────────────
 /** The single sync design shared with HWM-02/09/10 (see machines/sync-operation.ts). */
 export const SYNC_OP_STATUSES = [

@@ -1,0 +1,273 @@
+{
+  "title": "Care-team tasks",
+  "subtitle": "Follow-up tasks for {{facility}}: assign authorised health workers, track contact and confirm evidenced completion.",
+  "loading": "Loading care-team tasks…",
+  "overdueDerived": "Overdue — due {{date}} (derived)",
+  "overdueHint": "Derived from the due date a person set. Not a clinical timing rule.",
+  "reassignReason": "Reason for reassigning",
+  "kpi": {
+    "label": "Care-team task summary",
+    "open": "Open",
+    "overdue": "Overdue",
+    "overdueHint": "Derived from due dates (demo timing)",
+    "unassigned": "Unassigned",
+    "awaitingConfirmation": "Awaiting confirmation"
+  },
+  "tabs": {
+    "label": "Task views",
+    "dueSoon": "Due soon",
+    "overdue": "Overdue",
+    "unassigned": "Unassigned",
+    "unableToReach": "Unable to reach",
+    "awaitingConfirmation": "Awaiting confirmation",
+    "completed": "Completed"
+  },
+  "empty": {
+    "dueSoon": "No upcoming tasks at {{facility}}",
+    "overdue": "No overdue tasks at {{facility}}",
+    "unassigned": "Every open task at {{facility}} has a health worker",
+    "unableToReach": "No tasks marked unable to reach",
+    "awaitingConfirmation": "No tasks awaiting confirmation",
+    "completed": "No completed tasks yet"
+  },
+  "table": {
+    "caption": "Care-team tasks — {{tab}}",
+    "patient": "Patient",
+    "type": "Type",
+    "assignedTo": "Assigned to",
+    "due": "Due",
+    "status": "Status",
+    "attempts": "Attempts",
+    "unassigned": "Unassigned",
+    "open": "Open",
+    "openFor": "Open task for {{name}}"
+  },
+  "type": {
+    "repeatTest": "Repeat test",
+    "plannedReview": "Planned review",
+    "referralFollowUp": "Referral follow-up"
+  },
+  "actions": {
+    "create": "Create task",
+    "assign": "Assign",
+    "reassign": "Reassign",
+    "setDueDate": "Change due date",
+    "updateStatus": "Record status",
+    "complete": "Record completion",
+    "confirm": "Review completion",
+    "note": "Add note"
+  },
+  "announce": {
+    "saved": "Task saved.",
+    "movedTo": "Task saved. It now appears in: {{tabs}}."
+  },
+  "workload": {
+    "title": "Health worker workload",
+    "body": "Open and overdue tasks per authorised health worker, to share work fairly.",
+    "counts": "{{open}} open · {{overdue}} overdue",
+    "empty": "No authorised health workers at this facility."
+  },
+  "dialog": {
+    "choose": "Choose…",
+    "failed": "Your entries are kept. Try again — the same request is sent, so nothing is saved twice.",
+    "retry": "Try again",
+    "reasonHint": "At least {{min}} characters (not counting spaces)."
+  },
+  "errors": {
+    "invalidTransition": "This step is no longer possible for this task. Close and reopen it to see its current status.",
+    "workerNotAuthorised": "This health worker is not authorised for this facility. Choose a worker from the list."
+  },
+  "assign": {
+    "title": "Assign task",
+    "body": "Choose an authorised health worker of this facility.",
+    "reassignTitle": "Reassign task",
+    "reassignBody": "Currently assigned to {{name}}. The previous assignee stays in the task history.",
+    "confirm": "Assign",
+    "reassignConfirm": "Reassign",
+    "worker": "Health worker",
+    "workerHint": "Only authorised health workers of this facility are listed, with their current load.",
+    "workerOption": "{{name}} — {{open}} open, {{overdue}} overdue",
+    "dueAt": "Due date and time",
+    "dueHint": "Shown in Kigali time. Must be later than now.",
+    "change": "Assign to {{name}}"
+  },
+  "due": {
+    "title": "Change due date",
+    "body": "Current due date: {{current}}.",
+    "reason": "Reason for the change",
+    "confirm": "Change due date",
+    "change": "New due date {{when}}"
+  },
+  "statusDialog": {
+    "title": "Record status",
+    "body": "Record the latest contact with the patient.",
+    "status": "Status",
+    "hint": {
+      "contacted": "The patient was reached.",
+      "unable_to_reach": "The patient could not be reached. The task can then be reassigned."
+    },
+    "at": "When",
+    "method": "Contact method",
+    "reasonCode": "Why the patient could not be reached",
+    "note": "Note (optional)",
+    "confirm": "Save status",
+    "change": "Set status to {{status}}"
+  },
+  "complete": {
+    "title": "Record completion",
+    "body": "Completion needs a time, an outcome and an evidence type.",
+    "notEvidence": "A reminder or message being sent is not evidence that the follow-up happened.",
+    "completedAt": "Completed at",
+    "outcomeLabel": "Outcome",
+    "evidenceTypeLabel": "Evidence type",
+    "note": "Note (optional)",
+    "confirm": "Record completion",
+    "change": "Record the task as completed",
+    "outcome": {
+      "attended": "Attended",
+      "repeat_screening_done": "Repeat screening done",
+      "declined": "Patient declined"
+    },
+    "evidenceType": {
+      "facility_attendance_record": "Facility attendance record",
+      "clinician_confirmation": "Clinician confirmation",
+      "return_slip_reference": "Return slip reference",
+      "facility_register_checked": "Facility register checked",
+      "appointment_card_seen": "Appointment card seen",
+      "worker_accompanied_visit": "Health worker accompanied the visit",
+      "patient_verbal_confirmation": "Patient confirmed verbally"
+    }
+  },
+  "confirm": {
+    "title": "Review reported completion",
+    "body": "A health worker reported this task as completed. Confirm it, or return it to the worker with a reason.",
+    "outcome": "Reported outcome",
+    "recordedBy": "Reported by",
+    "evidenceType": "Evidence type",
+    "noEvidence": "No evidence type recorded",
+    "workerNote": "Worker note",
+    "attempts": "Contact attempts",
+    "noAttempts": "No contact attempts recorded.",
+    "attempt": "{{when}} · {{method}} · {{result}} · {{name}}",
+    "confirm": "Confirm completion",
+    "change": "Confirm the reported completion"
+  },
+  "returnToWorker": {
+    "open": "Return to worker…",
+    "title": "Return task to the worker",
+    "body": "The task goes back to the worker as contacted. Explain what is missing.",
+    "reason": "Reason for returning",
+    "confirm": "Return to worker",
+    "change": "Return the task to the worker"
+  },
+  "note": {
+    "title": "Add note",
+    "body": "Notes are added to the task history and cannot be edited later.",
+    "label": "Note",
+    "hint": "{{min}}–{{max}} characters.",
+    "confirm": "Add note",
+    "change": "Add a note"
+  },
+  "create": {
+    "title": "Create task",
+    "body": "Create a follow-up task for a decided review. Only one open task of each type per review.",
+    "review": "Decided review",
+    "reviewOption": "{{name}} — {{decision}}",
+    "none": "No decided reviews need a new task.",
+    "type": "Task type",
+    "worker": "Health worker (optional)",
+    "noWorker": "Assign later",
+    "confirm": "Create task"
+  },
+  "drawer": {
+    "title": "Task",
+    "titleFor": "Task for {{name}}",
+    "description": "Follow-up task details, history and actions.",
+    "loading": "Loading the task…",
+    "denied": "This task belongs to another facility and cannot be opened here. The attempt was recorded.",
+    "notFound": "Task not found",
+    "version": "Version {{version}}",
+    "newerVersion": "Someone saved a newer version of this task (version {{version}}). You are still viewing the version you opened.",
+    "showLatest": "Show the latest version",
+    "wf02Hint": "Demo: to see a version conflict, open Settings in another tab and choose “Simulate worker updating follow-up”, then come back and save a change here.",
+    "actions": "Actions",
+    "offline": "You are offline (simulated). Changes are disabled; the task stays readable.",
+    "noPermission": "Your role can add notes but cannot assign or complete tasks.",
+    "details": "Details",
+    "confirmation": "Clinician confirmation",
+    "byAt": "{{name}} · {{when}}",
+    "linkedReview": "Linked review",
+    "openReview": "Open review",
+    "linkedReferral": "Linked referral",
+    "openReferral": "Open referral",
+    "returnReason": "Reason returned",
+    "timeline": "Assignments and contact attempts",
+    "notes": "Notes",
+    "notesEmpty": "No notes yet."
+  },
+  "conflict": {
+    "title": "This task changed while you were working",
+    "body": "Someone else saved this task after you opened it. Nothing has been overwritten. Choose what to do.",
+    "versions": "Your copy: version {{yours}} · Latest: version {{latest}}",
+    "field": "Field",
+    "yours": "Your change",
+    "latest": "Latest (by {{name}} at {{time}})",
+    "latestBy": "Latest (by {{name}})",
+    "someone": "another user",
+    "lastNote": "Latest note",
+    "confirmation": "Confirmation",
+    "keepLatest": "Keep latest",
+    "reapply": "Re-apply my change on latest",
+    "cancel": "Cancel",
+    "reapplyBlocked": "Your change no longer fits the latest version. Keep the latest version and start again.",
+    "previewTitle": "Re-apply your change on the latest version?",
+    "previewBody": "Your change will be saved on version {{version}}. Check the result:",
+    "afterSave": "After saving",
+    "saveOnLatest": "Save on latest version",
+    "back": "Back"
+  },
+  "corrections": {
+    "title": "Record correction requests",
+    "body": "Requests from patients to check an item in their record. Resolving a request never changes the record itself.",
+    "empty": "No open correction requests",
+    "target": "About",
+    "description": "What the patient said",
+    "suggested": "Suggested correction",
+    "requested": "Requested by",
+    "start": "Start review",
+    "resolve": "Resolve",
+    "resolveTitle": "Resolve correction request",
+    "resolveBody": "Choose the outcome. The patient sees approved wording for it, never free text.",
+    "outcome": "Outcome",
+    "outcomeHint": "Make any actual correction to the record separately (with a reason).",
+    "resolveConfirm": "Resolve request",
+    "citizenSees": "The patient will see: {{status}}",
+    "conflict": "This request was changed by someone else. Refresh the page and try again.",
+    "resolution": {
+      "glucose_context_corrected": "Fasting status corrected",
+      "reading_value_corrected": "Reading value corrected",
+      "personal_details_corrected": "Personal details corrected",
+      "reading_time_confirmed": "Reading time checked — correct",
+      "record_checked_no_change": "Record checked — no change needed"
+    },
+    "status": {
+      "resolved_amended": "record corrected",
+      "resolved_no_change": "checked, no change needed"
+    }
+  },
+  "toast": {
+    "assigned": "Task assigned to {{name}}",
+    "reassigned": "Task reassigned to {{name}}",
+    "dueChanged": "Due date changed",
+    "statusRecorded": "Status recorded",
+    "completed": "Completion recorded",
+    "confirmed": "Completion confirmed",
+    "returned": "Task returned to the worker",
+    "noteAdded": "Note added",
+    "created": "Task created",
+    "keptLatest": "Kept the latest version — your change was not saved",
+    "reapplied": "Your change was saved on the latest version",
+    "correctionStarted": "Correction request in review",
+    "correctionResolved": "Correction request resolved"
+  }
+}
