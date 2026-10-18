@@ -20,6 +20,10 @@ export const ADMIN_AUDIT_ACTIONS = [
   "conflict.resolved",
   // ADM-07: the user submitted an export (`export.generated` / `.denied` come from the repository).
   "export.requested",
+  // ADM-08: governance audit-log view (once per session + filter key) and access simulator runs
+  // (grant changes / conflicts / denials come from the repository).
+  "admin.audit.viewed",
+  "admin.access_simulation.run",
 ] as const;
 export type AdminAuditAction = (typeof ADMIN_AUDIT_ACTIONS)[number];
 

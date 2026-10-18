@@ -20,6 +20,7 @@ import {
   type Permission,
 } from "./permissions.ts";
 import {
+  isGrantExpired,
   isResourceInScope,
   scopeForPersona,
   type AccessGrantLike,
@@ -100,9 +101,18 @@ export function can(
 export type ActorForPersonaOptions = {
   grant?: AccessGrantLike | null;
   deviceSession?: Pick<DeviceSession, "id" | "status"> | null;
+  /**
+   * Demo-clock instant (ADM-08). With it, an expired grant (`validTo` ≤ now) yields an empty
+   * facility scope, so every scoped check fails closed.
+   */
+  now?: Date | string;
 };
 
-/** Builds the `ActorContext` of a persona (scope from its AccessGrant when given). */
+/**
+ * Builds the `ActorContext` of a persona (scope from its AccessGrant when given). The grant's
+ * `role`, when present, wins over the persona's own role (ADM-08 role configuration), so a
+ * role change applies on the next check — the same rule `evaluateAccess` uses.
+ */
 export function actorForPersona(
   persona: Pick<
     DemoPersona,
@@ -110,10 +120,14 @@ export function actorForPersona(
   >,
   options: ActorForPersonaOptions = {},
 ): ActorContext {
+  const role = options.grant?.role ?? persona.role;
+  const expired = options.now !== undefined && isGrantExpired(options.grant, options.now);
   const actor: ActorContext = {
     personaId: persona.id,
-    role: persona.role,
-    scope: scopeForPersona(persona, options.grant),
+    role,
+    scope: expired
+      ? { kind: "facility", facilityIds: [] }
+      : scopeForPersona({ ...persona, role }, options.grant),
   };
   if (options.deviceSession) {
     actor.deviceSessionId = options.deviceSession.id;

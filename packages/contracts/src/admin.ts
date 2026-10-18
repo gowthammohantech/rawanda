@@ -6,32 +6,14 @@
  *
  * DEMO ROLE SWITCH — NOT AUTHENTICATION. Grants model reporting scope for the prototype only.
  */
-import { ROLES } from "@laif/domain";
 import { z } from "zod";
 
-import {
-  DistrictIdSchema,
-  FacilityIdSchema,
-  PersonaIdSchema,
-  persistedEntityShape,
-} from "./entities.ts";
-import { IsoDate, IsoUtcString, NonEmptyTrimmed } from "./primitives.ts";
+import { FacilityIdSchema, PersonaIdSchema, persistedEntityShape } from "./entities.ts";
+import { IsoDate, NonEmptyTrimmed } from "./primitives.ts";
 
-/** `facilityIds` value meaning "every facility of the granted districts". */
-export const ALL_IN_DISTRICTS = "ALL_IN_DISTRICTS" as const;
-
-export const AccessGrantSchema = z.object({
-  ...persistedEntityShape,
-  id: NonEmptyTrimmed,
-  personaId: PersonaIdSchema,
-  role: z.enum(ROLES),
-  districtIds: z.array(DistrictIdSchema),
-  facilityIds: z.union([z.literal(ALL_IN_DISTRICTS), z.array(FacilityIdSchema)]),
-  validFrom: IsoUtcString,
-  validTo: IsoUtcString.exactOptional(),
-  updatedBy: PersonaIdSchema,
-});
-export type AccessGrant = z.output<typeof AccessGrantSchema>;
+// ADM-08: the grant schema lives in `governance.ts` (primitives only, no import cycle with
+// `entities.ts`, which now registers it as entity type `access_grant`).
+export { ALL_IN_DISTRICTS, AccessGrantSchema, type AccessGrant } from "./governance.ts";
 
 /** Activities of the self-reported demo time log (ADM-05 workload proxy). */
 export const TIME_ENTRY_ACTIVITIES = ["screening", "follow_up", "travel", "admin"] as const;

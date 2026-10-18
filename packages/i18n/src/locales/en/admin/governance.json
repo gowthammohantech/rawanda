@@ -1,0 +1,227 @@
+{
+  "eyebrow": "Govern",
+  "title": "Governance",
+  "subtitle": "Demo ruleset history, audit log, access reports and simulation, and access grant configuration.",
+  "tabsLabel": "Governance sections",
+  "tamperNote": "Demo audit logs show expected behaviour but do not prove tamper resistance.",
+  "demoRule": "Illustrative demo placeholder — requires clinical approval",
+  "offline": {
+    "title": "You are offline (demo)",
+    "body": "Governance data cannot be refreshed and changes cannot be saved until the connection returns."
+  },
+  "tab": {
+    "rulesets": "Rulesets",
+    "audit": "Audit log",
+    "access": "Access & exports",
+    "roles": "Roles & access"
+  },
+  "rulesets": {
+    "title": "Demo ruleset history",
+    "subtitle": "Every version of the demo flagging rules, with how many in-scope screenings were evaluated under it. Rules are read-only here: changes are clinical-governance decisions.",
+    "error": "The ruleset history could not be loaded.",
+    "empty": "No ruleset versions are stored.",
+    "effective": "Effective {{from}} – {{to}}",
+    "ongoing": "now",
+    "status": {
+      "active": "Active",
+      "retired": "Retired"
+    },
+    "evaluated": "In-scope screenings evaluated",
+    "flaggedShare": "Share flagged for review",
+    "change": "Change summary",
+    "changedBy": "Recorded by",
+    "reasonCodes": "Reason codes this version can give",
+    "thresholdsHidden": "Threshold values are not shown: they are illustrative placeholders, never approved clinical values.",
+    "changeSummary": {
+      "initial_placeholders": "First set of illustrative demo placeholders (blood pressure and glucose).",
+      "placeholders_revised": "Placeholders revised; incomplete glucose context now routed to a human reviewer.",
+      "unknown": "No change summary recorded."
+    },
+    "changedByValue": {
+      "demo_configuration": "Demo configuration (not a clinical approval)"
+    }
+  },
+  "audit": {
+    "title": "Audit log",
+    "subtitle": "Read-only. Newest first, 25 per page. Patient-linked events show opaque ids only; clinical free text stays with the record.",
+    "caption": "Audit events",
+    "error": "The audit log could not be loaded.",
+    "empty": "No events match these filters",
+    "emptyHint": "Change or clear the filters to see more events.",
+    "system": "System",
+    "programmeLevel": "Programme level",
+    "justificationWithheld": "Withheld (patient-linked)",
+    "showChain": "Show only the events of correlation {{id}}",
+    "chainFilter": "Showing the chain of correlation id {{id}}.",
+    "col": {
+      "time": "Time (Kigali)",
+      "action": "Action",
+      "actor": "Actor",
+      "resource": "Resource",
+      "location": "Facility / district",
+      "change": "Change",
+      "justification": "Justification",
+      "correlation": "Correlation"
+    },
+    "filter": {
+      "label": "Filter the audit log",
+      "action": "Action",
+      "role": "Actor role",
+      "entity": "Resource type",
+      "from": "From (Kigali date)",
+      "to": "To (Kigali date)",
+      "correlation": "Correlation id",
+      "any": "Any",
+      "apply": "Apply filters",
+      "clear": "Clear filters",
+      "ignored": "The invalid filter was ignored.",
+      "error": {
+        "action": "Choose an action from the list.",
+        "role": "Choose a role from the list.",
+        "entity": "Choose a resource type from the list.",
+        "date": "Enter a date as YYYY-MM-DD.",
+        "dateOrder": "The start date must be on or before the end date.",
+        "correlation": "A correlation id has letters, digits, dots, colons, dashes or underscores only.",
+        "page": "The page number is not valid."
+      }
+    },
+    "actionGroup": {
+      "session": "Sessions (all)",
+      "export": "Exports (all)",
+      "admin_access_grant": "Access grant changes (all)",
+      "admin_programme_action": "Programme actions (all)",
+      "admin_quality_issue": "Data-quality issues (all)",
+      "conflict": "Version conflicts (all)",
+      "screening": "Screenings (all)",
+      "review": "Reviews (all)",
+      "referral": "Referrals (all)",
+      "followup": "Follow-ups (all)",
+      "demo": "Demo tools (all)"
+    }
+  },
+  "access": {
+    "title": "Access report",
+    "error": "The access report could not be loaded.",
+    "window": "Last {{days}} days ({{from}} – {{to}}), events you may read.",
+    "countsLabel": "Access events by action",
+    "count": {
+      "sessions": "Sessions started",
+      "denied": "Access denied",
+      "drilldowns": "Drill-downs viewed",
+      "exports": "Exports generated",
+      "exportsDenied": "Exports denied",
+      "grantChanges": "Grant changes"
+    },
+    "deniedByDistrict": "Denied access by requested district",
+    "noDenials": "No denied access in this period",
+    "unknownDistrict": "No district requested"
+  },
+  "sim": {
+    "title": "Access simulation",
+    "subtitle": "Can a demo persona see a resource? Uses the same decision function as the real route and repository checks.",
+    "persona": "Demo persona",
+    "resourceType": "Resource type",
+    "resource": "Resource",
+    "run": "Check access",
+    "allowed": "ALLOWED",
+    "denied": "DENIED",
+    "rule": "Rule: {{persona}} acts as {{role}}; required capability {{permission}}; scope from the persona's access grant.",
+    "type": {
+      "district": "District aggregates",
+      "facility": "Facility aggregates",
+      "page": "Page",
+      "export": "Aggregate export",
+      "drilldown": "Aggregate drill-down"
+    },
+    "page": {
+      "overview": "Overview",
+      "funnel": "Pathway funnel",
+      "funnelStage": "Funnel drill-down",
+      "timeliness": "Timeliness",
+      "workload": "Worker workload",
+      "quality": "Safety & quality",
+      "reports": "Reports",
+      "governance": "Governance",
+      "settings": "Settings"
+    },
+    "reason": {
+      "OK": "Allowed: the role holds the capability and the resource is inside the grant.",
+      "MISSING_CAPABILITY": "Denied: this persona's role does not hold the required capability",
+      "GRANT_EXPIRED": "Denied: this persona's access grant has expired or was revoked",
+      "OUT_OF_SCOPE_DISTRICT": "Denied: district is outside this persona's scope",
+      "OUT_OF_SCOPE_FACILITY": "Denied: facility is outside this persona's scope"
+    },
+    "tryItLabel": "Demo role switch",
+    "tryItHint": "Switches the demo session to the chosen persona and opens the District Beta overview, so you see the real 403 page and its audit event.",
+    "tryIt": "Try as {{persona}}: open District Beta overview",
+    "tryItSelf": "This is your current persona: District Beta may be inside your own scope.",
+    "returnBannerLabel": "Simulated demo session",
+    "returnBanner": "Demo role switch: you are trying the app as {{persona}} (started by {{original}}).",
+    "returnTo": "Return to {{persona}}"
+  },
+  "grant": {
+    "allFacilities": "All facilities in selected districts",
+    "openEnded": "No end date",
+    "field": {
+      "role": "Role",
+      "districtIds": "Districts",
+      "facilityIds": "Facilities",
+      "validTo": "Valid until",
+      "version": "Version"
+    },
+    "versionShort": "v{{version}}",
+    "versionChange": "v{{from}} → v{{to}}"
+  },
+  "roles": {
+    "title": "Access grants",
+    "subtitle": "Reporting scope and role of each demo admin persona. Grants are never deleted; every change is versioned and audited.",
+    "error": "The access grants could not be loaded.",
+    "empty": "No access grants are stored.",
+    "readOnly": "Read only: only the programme lead (roles.configure) can change access grants.",
+    "edit": "Edit",
+    "editFor": "Edit the access grant of {{persona}}",
+    "revoked": "Revoked",
+    "updatedBy": "Last changed by",
+    "history": "Version history",
+    "historyEmpty": "No changes recorded (or not visible in your scope).",
+    "historyError": "The version history could not be loaded.",
+    "historyEntry": "v{{from}} → v{{to}} by {{actor}}, {{time}}",
+    "justification": "Justification",
+    "toast": {
+      "saved": "Access grant saved",
+      "revoked": "Access grant revoked"
+    },
+    "conflict": {
+      "title": "This grant was changed by someone else",
+      "description": "Compare your version with the latest one, then keep the latest or re-apply your change on top of it."
+    },
+    "demo": {
+      "simulateStale": "DEMO: simulate stale version",
+      "staleArmed": "The next save of this grant will meet a newer version (demo)."
+    },
+    "dialog": {
+      "title": "Edit access grant — {{persona}}",
+      "description": "Changes apply on that persona's next navigation.",
+      "banner": "Demo role configuration — not real identity or access management",
+      "facilitiesHint": "Only facilities of the selected districts can be chosen.",
+      "selectedFacilities": "Selected facilities only",
+      "pickDistrictFirst": "Select a district first.",
+      "validToHint": "Optional. Today or later (Kigali date).",
+      "justificationHint": "{{count}} / {{max}} characters (at least 10).",
+      "save": "Save grant",
+      "retry": "Retry save",
+      "revoke": "Revoke now",
+      "notSaved": "Not saved — retry. Your input is kept.",
+      "forbidden": "You are not allowed to change access grants.",
+      "failed": "The grant could not be saved."
+    }
+  },
+  "validation": {
+    "role": "Choose one of the four demo admin roles",
+    "scopeRequired": "Select at least one district",
+    "facilitiesRequired": "Select at least one facility inside the selected districts",
+    "validTo": "Choose today or a later date",
+    "justification": "Give a justification of 10 to 300 characters",
+    "lastAdmin": "At least one active administrator must remain"
+  }
+}

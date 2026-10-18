@@ -177,6 +177,17 @@ export const AUDIT_ACTIONS = {
   // `data_quality_issue`). Triage audits carry the note LENGTH, never the note text.
   "admin.quality_issue.detected": change,
   "admin.quality_issue.triaged": change,
+  // ── Programme admin (ADM-08) ────────────────────────────────────────────
+  // Governance audit-log view (an access audit of the audit log, once per session + filter key)
+  // and access-simulator runs are recorded by the admin UI. Grant edits / revocations are change
+  // events of `updateAccessGrant` (before/after, justification, version n → n+1). Phase prose
+  // `admin.access_grant.conflict` / `.denied` map to the canonical `conflict.detected` /
+  // `access.denied` (entityType `access_grant`; `LAST_ADMIN` is the denial reason of the lockout
+  // rule), as for ADM-06.
+  "admin.audit.viewed": accessClient,
+  "admin.access_simulation.run": accessClient,
+  "admin.access_grant.changed": change,
+  "admin.access_grant.revoked": change,
 
   // ── Sync & devices ───────────────────────────────────────────────────────
   "sync.op_acknowledged": change,

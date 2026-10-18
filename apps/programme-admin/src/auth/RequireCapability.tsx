@@ -6,7 +6,7 @@
 import type { ReactNode } from "react";
 import { useLocation } from "react-router";
 
-import { useAdminSession, useSessionStore } from "../app/providers.tsx";
+import { useAdminSession, useServices } from "../app/providers.tsx";
 import { ForbiddenPage } from "../routes/errors/ForbiddenPage.tsx";
 import { canOpenRoute, type AdminRouteId } from "./capabilities.ts";
 import { resolveScopeFromSearch } from "./scope.ts";
@@ -16,10 +16,15 @@ export type RequireCapabilityProps = { route: AdminRouteId; children?: ReactNode
 
 export function RequireCapability({ route, children }: RequireCapabilityProps) {
   const location = useLocation();
-  const store = useSessionStore();
+  const { clock } = useServices();
   // Re-render when the persona or its grant changes.
-  useAdminSession((s) => s.grant);
-  const decision = canOpenRoute(store.actor(), route);
+  const persona = useAdminSession((s) => s.persona);
+  const grant = useAdminSession((s) => s.grant);
+  const decision = canOpenRoute(
+    persona === null ? null : { persona, grant },
+    route,
+    clock.nowIso(),
+  );
   const request = resolveScopeFromSearch(location.search);
 
   useDeniedAudit(

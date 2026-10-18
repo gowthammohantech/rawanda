@@ -13,6 +13,7 @@
 import {
   actorForPersona,
   createMemoryStorage,
+  isGrantExpired,
   createPersonaSession,
   type ActorContext,
   type KeyValueStorage,
@@ -39,6 +40,11 @@ export type AdminSession = {
   correlationId: CorrelationId;
   /** Chosen reporting scope: one district, or null = all districts in the grant. */
   reportingDistrictId: DistrictId | null;
+  /**
+   * ADM-08 access simulator "Try it": the persona that started the simulated session, offered
+   * by the "Return to …" banner (absent / null for a normal sign-in).
+   */
+  returnToPersonaId?: PersonaId | null;
 };
 
 export type AdminSessionState = {
@@ -55,6 +61,7 @@ export type SignInInput = {
   reportingDistrictId: DistrictId | null;
   startedAt: string;
   correlationId: CorrelationId;
+  returnToPersonaId?: PersonaId | null;
 };
 
 export type RevalidateResult = "unchanged" | "updated" | "revoked";
@@ -67,8 +74,12 @@ export type AdminSessionStore = {
   getState(): AdminSessionState;
   signIn(input: SignInInput): AdminSession;
   signOut(): void;
-  /** Checks the session against the current grants (every navigation). */
-  revalidate(grants: readonly AccessGrant[]): RevalidateResult;
+  /**
+   * Checks the session against the current grants (every navigation): a newer version applies
+   * at once; a removed grant — or one whose `validTo` has passed (`nowIso`, ADM-08 revoke) —
+   * ends the session.
+   */
+  revalidate(grants: readonly AccessGrant[], nowIso?: string): RevalidateResult;
   /** FND-06 actor of the signed-in persona, scope from its grant (null when signed out). */
   actor(): ActorContext | null;
 };
@@ -161,17 +172,22 @@ export function createAdminSessionStore(
         startedAt: input.startedAt,
         correlationId: input.correlationId,
         reportingDistrictId: input.reportingDistrictId,
+        ...(input.returnToPersonaId ? { returnToPersonaId: input.returnToPersonaId } : {}),
       };
       persist(session, grant);
       store.setState({ session, persona, grant, grantChanges: 0 }, true);
       return session;
     },
     signOut,
-    revalidate(grants) {
+    revalidate(grants, nowIso) {
       const { session, grant: current } = store.getState();
       if (session === null) return "unchanged";
       const grant = grants.find((g) => g.id === session.grantId);
-      if (!grant || grant.personaId !== session.personaId) {
+      if (
+        !grant ||
+        grant.personaId !== session.personaId ||
+        (nowIso !== undefined && isGrantExpired(grant, nowIso))
+      ) {
         signOut();
         return "revoked";
       }

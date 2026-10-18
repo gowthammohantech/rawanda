@@ -367,6 +367,8 @@ export const ENTITY_TYPES = [
   "data_quality_issue",
   // ext (ADM-07): aggregate export record, generated or denied (collection `exportAudits`).
   "export_audit",
+  // ext (ADM-08): admin reporting-scope grant, versioned, never deleted (collection `accessGrants`).
+  "access_grant",
 ] as const;
 export type EntityType = (typeof ENTITY_TYPES)[number];
 

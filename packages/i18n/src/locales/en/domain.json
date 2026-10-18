@@ -270,7 +270,8 @@
     "device_session": "Device session",
     "programme_action": "Programme action",
     "data_quality_issue": "Data-quality issue",
-    "export_audit": "Export record"
+    "export_audit": "Export record",
+    "access_grant": "Access grant"
   },
   "pathwayStage": {
     "DRAFT_SCREENING": "Draft screening",
@@ -570,6 +571,16 @@
       "quality_issue": {
         "detected": "Data-quality issue detected (system)",
         "triaged": "Data-quality issue triaged"
+      },
+      "audit": {
+        "viewed": "Governance audit log viewed"
+      },
+      "access_simulation": {
+        "run": "Access simulation run"
+      },
+      "access_grant": {
+        "changed": "Access grant changed",
+        "revoked": "Access grant revoked"
       }
     },
     "clinical": {
