@@ -270,7 +270,8 @@
     "device_session": "Device session",
     "programme_action": "Programme action",
     "data_quality_issue": "Data-quality issue",
-    "export_audit": "Export record"
+    "export_audit": "Export record",
+    "access_grant": "Access grant"
   },
   "pathwayStage": {
     "DRAFT_SCREENING": "Draft screening",
@@ -573,6 +574,16 @@
       "quality_issue": {
         "detected": "Data-quality issue detected (system)",
         "triaged": "Data-quality issue triaged"
+      },
+      "audit": {
+        "viewed": "Governance audit log viewed"
+      },
+      "access_simulation": {
+        "run": "Access simulation run"
+      },
+      "access_grant": {
+        "changed": "Access grant changed",
+        "revoked": "Access grant revoked"
       }
     },
     "clinical": {
@@ -583,7 +594,11 @@
     "worker": {
       "sync": {
         "manual_requested": "Manual sync requested",
-        "duplicate_tap_coalesced": "Repeated \"Sync now\" tap joined the running sync"
+        "duplicate_tap_coalesced": "Repeated \"Sync now\" tap joined the running sync",
+        "clock_drift_detected": "Device clock differs from the server"
+      },
+      "settings": {
+        "language_changed": "App language changed"
       }
     }
   }

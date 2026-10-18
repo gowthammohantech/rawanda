@@ -1,9 +1,9 @@
-import type { ReactNode } from "react";
+import type { ReactNode, Ref } from "react";
 import { StyleSheet, View } from "react-native";
 
 import { useTx } from "../i18n.ts";
 import { colors, spacing } from "../tokens.ts";
-import { AppText } from "./AppText.tsx";
+import { AppText, type AppTextRef } from "./AppText.tsx";
 import { IconButton } from "./IconButton.tsx";
 import { LanguageSwitcher } from "./LanguageSwitcher.tsx";
 
@@ -17,6 +17,8 @@ export type AppHeaderProps = {
   right?: ReactNode;
   /** The EN/RW switcher is shown by default (phases README "always visible"). */
   showLanguageSwitcher?: boolean;
+  /** Ref of the title text (apps move screen-reader focus to it on navigation, CTZ-09). */
+  titleRef?: Ref<AppTextRef>;
 };
 
 /** Screen header: back, title/subtitle, right actions incl. `LanguageSwitcher`. */
@@ -26,6 +28,7 @@ export function AppHeader({
   onBack,
   right,
   showLanguageSwitcher = true,
+  titleRef,
 }: AppHeaderProps) {
   const t = useTx();
   return (
@@ -39,7 +42,12 @@ export function AppHeader({
         />
       )}
       <View style={styles.titles}>
-        <AppText variant="title" accessibilityRole="header" numberOfLines={2}>
+        <AppText
+          variant="title"
+          accessibilityRole="header"
+          numberOfLines={2}
+          {...(titleRef === undefined ? {} : { ref: titleRef })}
+        >
           {title}
         </AppText>
         {subtitle === undefined ? null : (

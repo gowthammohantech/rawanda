@@ -270,7 +270,8 @@
     "device_session": "Igikoresho cyinjiwemo",
     "programme_action": "Igikorwa cya porogaramu",
     "data_quality_issue": "Ikibazo cy'ubuziranenge bw'amakuru",
-    "export_audit": "Inyandiko y'iyohereza"
+    "export_audit": "Inyandiko y'iyohereza",
+    "access_grant": "Uburenganzira bwo kugera ku makuru"
   },
   "pathwayStage": {
     "DRAFT_SCREENING": "Ipimwa ritararangira",
@@ -573,6 +574,16 @@
       "quality_issue": {
         "detected": "Ikibazo cy'ubuziranenge bw'amakuru cyagaragaye (sisitemu)",
         "triaged": "Ikibazo cy'ubuziranenge bw'amakuru cyasuzumwe"
+      },
+      "audit": {
+        "viewed": "Igitabo cy'igenzura cyarebwe"
+      },
+      "access_simulation": {
+        "run": "Igerageza ry'uburenganzira ryakozwe"
+      },
+      "access_grant": {
+        "changed": "Uburenganzira bwahinduwe",
+        "revoked": "Uburenganzira bwakuweho"
       }
     },
     "clinical": {
@@ -583,7 +594,11 @@
     "worker": {
       "sync": {
         "manual_requested": "Gusaba guhuza n'intoki",
-        "duplicate_tap_coalesced": "Gukanda \"Huza ubu\" byongeye byahujwe n'ihuza riri gukorwa"
+        "duplicate_tap_coalesced": "Gukanda \"Huza ubu\" byongeye byahujwe n'ihuza riri gukorwa",
+        "clock_drift_detected": "Isaha y'igikoresho itandukanye n'iya seriveri"
+      },
+      "settings": {
+        "language_changed": "Ururimi rwa porogaramu rwahinduwe"
       }
     }
   }

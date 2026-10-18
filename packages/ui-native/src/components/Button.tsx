@@ -8,7 +8,7 @@ import {
   type ViewStyle,
 } from "react-native";
 
-import { a11yState, touchTarget } from "../a11y.ts";
+import { a11yState, touchTarget, useReduceMotion } from "../a11y.ts";
 import { Icon } from "../icons/Icon.tsx";
 import type { IconName } from "../icons/icon-data.ts";
 import { usePalette, type Palette } from "../theme.tsx";
@@ -104,6 +104,8 @@ export function Button({
   const lock = useRef(false);
   const [pending, setPending] = useState(false);
   const busy = loading || pending;
+  // HWM-10: "Reduce motion" on → no spinner while busy (state stays announced as busy).
+  const reduceMotion = useReduceMotion();
   const inactive = disabled || busy;
   const palette = variantColors(colors)[variant];
 
@@ -151,7 +153,7 @@ export function Button({
         style,
       ]}
     >
-      {busy ? (
+      {busy && !reduceMotion ? (
         <ActivityIndicator size="small" color={palette.fg} />
       ) : iconPosition === "start" ? (
         iconNode

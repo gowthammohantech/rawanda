@@ -1,0 +1,8 @@
+# Toggles "Offline (simulated)" in Settings → CONNECTION and returns to the previous screen.
+appId: host.exp.Exponent
+---
+- tapOn:
+    id: "avatar-button"
+- tapOn:
+    id: "settings-offline"
+- back

@@ -18,6 +18,7 @@ import type { ProgrammeMetrics } from "@laif/analytics";
 import type { ActorContext } from "@laif/auth-demo";
 import type {
   AccessGrant,
+  RulesetHistoryEntry,
   DataQualityIssue,
   ExportAudit,
   ProgrammeAction,
@@ -90,6 +91,7 @@ import type {
   UpsertDetectedIssuesResult,
 } from "./services/quality-issues.ts";
 import type { ExportAuditFilterInput } from "./services/audit.ts";
+import type { AccessGrantUpdateCall } from "./services/access-grants.ts";
 import type { StoreAdapter } from "./store/store-adapter.ts";
 import type { FaultConfig, FaultConfigPatch, FaultInjector } from "./transport/faults.ts";
 
@@ -268,8 +270,36 @@ export type StartDeviceSessionCall = {
   deviceId: string;
 };
 
+/**
+ * One row of the worker device's Activity log (HWM-10): the audit metadata only — never the
+ * `before` / `after` snapshots, the change summary or free-text justification.
+ */
+export type DeviceActivityEntry = Pick<
+  AuditEvent,
+  | "id"
+  | "action"
+  | "category"
+  | "outcome"
+  | "actorId"
+  | "actorRole"
+  | "entityType"
+  | "entityId"
+  | "correlationId"
+  | "occurredAt"
+> & {
+  /** `device` = this device's audit log; `server` = mirrored from the simulated sync server. */
+  source: "device" | "server";
+};
+
 /** Device identity + demo device sessions (HWM-01). Demo sign-in — not authentication. */
 export interface DeviceApi {
+  /**
+   * HWM-10 Activity log, newest first: every event this device wrote since the current seed
+   * baseline (seed history excluded — after a reset only `demo.reset` remains) plus the
+   * simulated server's events about this device's sync ops (same correlation id) or by the
+   * signed-in persona. Requires a signed-in, non-revoked device session.
+   */
+  listActivity(): Promise<DeviceActivityEntry[]>;
   /** Store meta `device_id`, created on first call (platform UUID); cleared only by a reset. */
   getOrCreateDeviceId(): Promise<string>;
   getSession(id: string): Promise<DeviceSession | null>;
@@ -366,6 +396,15 @@ export interface CareRepository {
    * patient data. ADM-08 adds the grant edits.
    */
   listAccessGrants(): Promise<AccessGrant[]>;
+  /**
+   * ADM-08: edit / revoke a grant — `roles.configure`, idempotent on `key`, `expectedVersion`
+   * in the input (stale → `CONFLICT` with `latest`), lockout rule `LAST_ADMIN`, scope ⊆ known
+   * districts / facilities. Audited `admin.access_grant.changed` / `.revoked` (before / after,
+   * justification, version n → n+1). Grants are never deleted.
+   */
+  updateAccessGrant(i: AccessGrantUpdateCall, key: string): Promise<WriteResult<AccessGrant>>;
+  /** ADM-08: the demo ruleset history (newest first; no thresholds) — `metrics.read`. */
+  listRulesets(): Promise<RulesetHistoryEntry[]>;
   /**
    * ADM-03: non-clinical programme follow-up actions for a facility manager. Create needs
    * `programme_action.write` in the facility's scope and is idempotent on `key`; update carries

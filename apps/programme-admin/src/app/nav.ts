@@ -4,10 +4,9 @@
  * bottom: Settings. Each item names its route id, so the shell can lock items the persona's
  * role lacks (FND-06 permissions via `auth/capabilities.ts`). Labels are i18n keys.
  */
-import type { ActorContext } from "@laif/auth-demo";
 import type { IconName, SidebarSection, TranslationKey } from "@laif/ui-web";
 
-import { canOpenRoute, type AdminRouteId } from "../auth/capabilities.ts";
+import { canOpenRoute, type AccessSubject, type AdminRouteId } from "../auth/capabilities.ts";
 import { filterSearchOf } from "../features/filters/filterSchema.ts";
 import { BASE_PATH, LOGIN_PATH } from "./config.ts";
 
@@ -82,7 +81,7 @@ export const NAV_SECTIONS: readonly NavSection[] = [
  * items the role cannot open are disabled with a lock icon and `lockedReason`.
  */
 export function sidebarSections(
-  actor: ActorContext | null,
+  subject: AccessSubject | null,
   scopeSearch: string,
   lockedReason: string,
 ): SidebarSection[] {
@@ -90,7 +89,7 @@ export function sidebarSections(
     id: section.id,
     ...(section.labelKey === undefined ? {} : { labelKey: section.labelKey }),
     items: section.items.map((item) => {
-      const allowed = canOpenRoute(actor, item.route).allowed;
+      const allowed = canOpenRoute(subject, item.route).allowed;
       return {
         to: `${item.to}${scopeSearch}`,
         labelKey: item.labelKey,

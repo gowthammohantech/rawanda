@@ -9,7 +9,7 @@
  * This is the single ruleset version used everywhere: phase text saying `demo-0.4` means
  * `demo-ruleset-2026.10-v1`; the retired `demo-0.3` is `demo-ruleset-2026.07-v0` (admin overlay only).
  */
-import { DEMO_RULE_DISCLAIMER, type DemoRuleset } from "@laif/domain";
+import { DEMO_RULE_DISCLAIMER, type DemoRuleset, type ReasonCode } from "@laif/domain";
 
 import { DEMO_PLAUSIBILITY_LIMITS } from "./plausibility.ts";
 
@@ -52,4 +52,39 @@ export const DEMO_RULESET_V0: DemoRuleset = {
   },
   plausibility: DEMO_PLAUSIBILITY_LIMITS,
   synthetic: true,
+};
+
+/**
+ * Ruleset history metadata (ADM-08 `listRulesets`): who recorded each version, a change-summary
+ * code (UI copy `admin:governance.rulesets.change.<code>`) and the reason codes the version can
+ * emit. `demo_configuration` = the demo's own configuration file — never a clinical approval.
+ * Not part of the seed dataset (keeps `SEED_DATASET_HASH` stable).
+ */
+export const DEMO_RULESET_HISTORY: Readonly<
+  Record<
+    string,
+    { changedBy: string; changeSummaryKey: string; reasonCodes: readonly ReasonCode[] }
+  >
+> = {
+  [DEMO_RULESET_VERSION]: {
+    changedBy: "demo_configuration",
+    changeSummaryKey: "placeholders_revised",
+    reasonCodes: [
+      "DEMO_BP_SYSTOLIC_AT_OR_ABOVE_THRESHOLD",
+      "DEMO_BP_DIASTOLIC_AT_OR_ABOVE_THRESHOLD",
+      "DEMO_GLUCOSE_AT_OR_ABOVE_THRESHOLD",
+      "GLUCOSE_UNIT_MISSING",
+      "GLUCOSE_CONTEXT_NOT_RECORDED",
+    ],
+  },
+  [DEMO_RULESET_RETIRED_VERSION]: {
+    changedBy: "demo_configuration",
+    changeSummaryKey: "initial_placeholders",
+    reasonCodes: [
+      "DEMO_BP_SYSTOLIC_AT_OR_ABOVE_THRESHOLD",
+      "DEMO_BP_DIASTOLIC_AT_OR_ABOVE_THRESHOLD",
+      "DEMO_GLUCOSE_AT_OR_ABOVE_THRESHOLD",
+      "GLUCOSE_UNIT_MISSING",
+    ],
+  },
 };

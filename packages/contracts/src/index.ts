@@ -16,4 +16,5 @@ export * from "./admin.ts";
 export * from "./programmeAction.ts";
 export * from "./dataQualityIssue.ts";
 export * from "./exportAudit.ts";
+export * from "./governance.ts";
 export * from "./citizen/index.ts";

@@ -5,7 +5,16 @@
  * (lock icon) AND the route itself checks it (`RequireCapability`) — hidden menus are not the
  * control (PRD §5).
  */
-import { checkAccess, type ActorContext, type Permission } from "@laif/auth-demo";
+import {
+  checkAccess,
+  evaluateAccess,
+  ROLE_PERMISSIONS,
+  type AccessReasonCode,
+  type ActorContext,
+  type Permission,
+  type ScopePersona,
+} from "@laif/auth-demo";
+import type { AccessGrant } from "@laif/contracts";
 
 export const ADMIN_ROUTE_IDS = [
   "overview",
@@ -50,16 +59,36 @@ export const ADMIN_CAPABILITIES = [
   "settings.privacy",
 ] as const satisfies readonly Permission[];
 
-export type CapabilityDecision = { allowed: true } | { allowed: false; permission: Permission };
+export type CapabilityDecision =
+  { allowed: true } | { allowed: false; permission: Permission; reasonCode: AccessReasonCode };
 
-/** Role check only (scope is ScopeGuard's job): allowed when any listed permission is held. */
-export function canOpenRoute(actor: ActorContext | null, route: AdminRouteId): CapabilityDecision {
+/** The persona + grant a decision is made for (the admin session, or a simulated persona). */
+export type AccessSubject = { persona: ScopePersona; grant: AccessGrant | null };
+
+/**
+ * Role check only (scope is ScopeGuard's job): allowed when any listed permission is held.
+ * ADM-08: decided by `evaluateAccess` (resource type `page`) — the same function the access
+ * simulator runs, so the simulator cannot drift from enforcement.
+ */
+export function canOpenRoute(
+  subject: AccessSubject | null,
+  route: AdminRouteId,
+  now?: Date | string,
+): CapabilityDecision {
   const permissions = ROUTE_CAPABILITIES[route];
   const first = permissions[0] ?? "metrics.read";
-  if (actor === null) return { allowed: false, permission: first };
-  return permissions.some((permission) => checkAccess(actor, permission).allowed)
+  if (subject === null) {
+    return { allowed: false, permission: first, reasonCode: "MISSING_CAPABILITY" };
+  }
+  const result = evaluateAccess(
+    subject.grant,
+    ROLE_PERMISSIONS,
+    { type: "page", id: route, permissions },
+    { persona: subject.persona, ...(now === undefined ? {} : { now }) },
+  );
+  return result.allowed
     ? { allowed: true }
-    : { allowed: false, permission: first };
+    : { allowed: false, permission: first, reasonCode: result.reasonCode };
 }
 
 /** Capabilities of the admin table that the actor's role holds. */

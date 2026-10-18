@@ -19,6 +19,7 @@ import enCitizenCorrection from "../locales/en/citizen/correction.json";
 import enCitizenAccessibility from "../locales/en/citizen/accessibility.json";
 import enCitizenSupport from "../locales/en/citizen/support.json";
 import enCitizenHelp from "../locales/en/citizen/help.json";
+import enCitizenA11y from "../locales/en/citizen/a11y.json";
 import rwCitizenBase from "../locales/rw/citizen.json";
 import rwCitizenErrors from "../locales/rw/citizen/errors.json";
 import rwCitizenOnboarding from "../locales/rw/citizen/onboarding.json";
@@ -36,6 +37,7 @@ import rwCitizenCorrection from "../locales/rw/citizen/correction.json";
 import rwCitizenAccessibility from "../locales/rw/citizen/accessibility.json";
 import rwCitizenSupport from "../locales/rw/citizen/support.json";
 import rwCitizenHelp from "../locales/rw/citizen/help.json";
+import rwCitizenA11y from "../locales/rw/citizen/a11y.json";
 
 export const enCitizen = {
   ...enCitizenBase,
@@ -55,6 +57,7 @@ export const enCitizen = {
   accessibility: enCitizenAccessibility,
   support: enCitizenSupport,
   help: enCitizenHelp,
+  a11y: enCitizenA11y,
 } as const;
 
 export const rwCitizen: object = {
@@ -75,4 +78,5 @@ export const rwCitizen: object = {
   accessibility: rwCitizenAccessibility,
   support: rwCitizenSupport,
   help: rwCitizenHelp,
+  a11y: rwCitizenA11y,
 };

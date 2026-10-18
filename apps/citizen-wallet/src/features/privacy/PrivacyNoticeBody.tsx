@@ -13,10 +13,10 @@ import {
   Icon,
   MicroLabel,
   Section,
-  colors,
   spacing,
   useTx,
   type TranslationKey,
+  usePalette,
 } from "@laif/ui-native";
 import { StyleSheet, View } from "react-native";
 
@@ -52,6 +52,7 @@ export type PrivacyNoticeBodyProps = {
 };
 
 export function PrivacyNoticeBody({ onOpenConsent, onAskCorrection }: PrivacyNoticeBodyProps) {
+  const palette = usePalette();
   const t = useTx();
   return (
     <View style={styles.root} testID="privacy-notice-body">
@@ -70,7 +71,7 @@ export function PrivacyNoticeBody({ onOpenConsent, onAskCorrection }: PrivacyNot
         <AppText>{t("citizen:privacy.notice.rightsIntro")}</AppText>
         {NOTICE_RIGHTS.map((right) => (
           <View key={right} style={styles.right} testID={`notice-right-${right}`}>
-            <Icon name="lock" size={16} color={colors.muted} />
+            <Icon name="lock" size={16} color={palette.muted} />
             <View style={styles.rightText}>
               <AppText weight="semibold">
                 {t(`citizen:privacy.notice.rights.${right}` as TranslationKey)}

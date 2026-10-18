@@ -382,6 +382,16 @@ const fixtures: Record<(typeof ENTITY_TYPES)[number], Record<string, unknown>> =
     status: "generated",
     deniedReason: null,
   },
+  access_grant: {
+    ...base,
+    id: "grant-persona-analyst-alpha",
+    personaId: "persona-analyst-alpha",
+    role: "district_analyst",
+    districtIds: ["dist-alpha"],
+    facilityIds: "ALL_IN_DISTRICTS",
+    validFrom: NOW_ISO,
+    updatedBy: "persona-lead-programme",
+  },
 };
 
 const entries = Object.entries(ENTITY_SCHEMAS) as [

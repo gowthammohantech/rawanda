@@ -1,0 +1,8 @@
+{
+  "statusPill": "Uko bihagaze: {{status}}",
+  "errorCount_one": "Umwanya {{count}} ukeneye kwitabwaho",
+  "errorCount_other": "Imyanya {{count}} ikeneye kwitabwaho",
+  "clockWarning": "Iburira: {{message}}",
+  "activityFilter": "Gushungura ubwoko bw'ibikorwa",
+  "resetField": "Kwemeza gusubiza, andika RESET"
+}

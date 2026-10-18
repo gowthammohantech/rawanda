@@ -14,11 +14,11 @@ import {
   KeyValueList,
   MicroLabel,
   Sheet,
-  colors,
   radii,
   spacing,
   useTx,
   type TranslationKey,
+  type Palette,
 } from "@laif/ui-native";
 import { useEffect, useRef } from "react";
 import { StyleSheet, View } from "react-native";
@@ -26,6 +26,7 @@ import { StyleSheet, View } from "react-native";
 import { GLUCOSE_CONTEXT_KEYS, reviewerOf } from "../health/copy.ts";
 import type { TimelineChange } from "./buildCitizenTimeline.ts";
 import { ProvenanceLine, reasonKeyOf } from "./ProvenanceLine.tsx";
+import { useThemedStyles } from "../../theme/useThemedStyles.ts";
 
 type Tx = ReturnType<typeof useTx>;
 type Language = Parameters<typeof formatNumber>[1];
@@ -76,6 +77,7 @@ export function ChangeDetailSheet({
   onOpened,
   onOpenResult,
 }: ChangeDetailSheetProps) {
+  const styles = useThemedStyles(makeStyles);
   const t = useTx();
   const { language } = useLanguage();
 
@@ -189,16 +191,17 @@ export function ChangeDetailSheet({
   );
 }
 
-const styles = StyleSheet.create({
-  field: { gap: spacing.xxs },
-  compare: { flexDirection: "row", gap: spacing.sm },
-  box: {
-    flex: 1,
-    gap: spacing.xs,
-    padding: spacing.md,
-    borderRadius: radii.md,
-    borderWidth: 1,
-  },
-  before: { borderColor: colors.border, backgroundColor: colors.background },
-  after: { borderColor: colors.info, backgroundColor: colors.infoSoft },
-});
+const makeStyles = (c: Palette) =>
+  StyleSheet.create({
+    field: { gap: spacing.xxs },
+    compare: { flexDirection: "row", gap: spacing.sm },
+    box: {
+      flex: 1,
+      gap: spacing.xs,
+      padding: spacing.md,
+      borderRadius: radii.md,
+      borderWidth: 1,
+    },
+    before: { borderColor: c.border, backgroundColor: c.background },
+    after: { borderColor: c.info, backgroundColor: c.infoSoft },
+  });

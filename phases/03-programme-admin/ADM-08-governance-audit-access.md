@@ -1,6 +1,6 @@
 # ADM-08 — Governance: ruleset history, audit explorer, access simulation and role configuration
 
-Status: Not started
+**Status:** Done
 
 ## 1. Header
 

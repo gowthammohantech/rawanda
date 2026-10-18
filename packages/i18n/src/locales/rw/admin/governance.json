@@ -1,0 +1,227 @@
+{
+  "eyebrow": "Kuyobora",
+  "title": "Imiyoborere",
+  "subtitle": "Amateka y'amategeko y'igerageza, igitabo cy'igenzura, raporo z'uburenganzira n'igerageza ryabwo, n'itunganywa ry'uburenganzira.",
+  "tabsLabel": "Ibice by'imiyoborere",
+  "tamperNote": "Igitabo cy'igenzura cy'igerageza cyerekana uko bikwiye gukora ariko ntikigaragaza ko kidashobora guhindurwa.",
+  "demoRule": "Urugero rw'igerageza — rusaba kwemezwa n'abaganga",
+  "offline": {
+    "title": "Nta murandasi (igerageza)",
+    "body": "Amakuru y'imiyoborere ntashobora kuvugururwa kandi impinduka ntizibikwa kugeza murandasi igarutse."
+  },
+  "tab": {
+    "rulesets": "Amategeko y'isuzuma",
+    "audit": "Igitabo cy'igenzura",
+    "access": "Uburenganzira n'iyohereza",
+    "roles": "Inshingano n'uburenganzira"
+  },
+  "rulesets": {
+    "title": "Amateka y'amategeko y'igerageza",
+    "subtitle": "Buri verisiyo y'amategeko yo kugaragaza ibisuzumwa, n'umubare w'isuzuma ryakozwe muri ako karere. Hano ntibihindurwa: impinduka zifatwa n'ubuyobozi bw'ubuvuzi.",
+    "error": "Amateka y'amategeko ntiyabonetse.",
+    "empty": "Nta verisiyo y'amategeko ibitswe.",
+    "effective": "Akoreshwa {{from}} – {{to}}",
+    "ongoing": "ubu",
+    "status": {
+      "active": "Irakora",
+      "retired": "Yavanywe ku murimo"
+    },
+    "evaluated": "Isuzuma ryakozwe mu bubasha bwawe",
+    "flaggedShare": "Igipimo cyoherejwe gusuzumwa",
+    "change": "Incamake y'impinduka",
+    "changedBy": "Byanditswe na",
+    "reasonCodes": "Kode z'impamvu iyi verisiyo ishobora gutanga",
+    "thresholdsHidden": "Imibare y'imbibi ntigaragazwa: ni ingero gusa, ntabwo ari indangagaciro zemejwe n'abaganga.",
+    "changeSummary": {
+      "initial_placeholders": "Ingero za mbere z'igerageza (umuvuduko w'amaraso n'isukari).",
+      "placeholders_revised": "Ingero zavuguruwe; isukari idafite amakuru yuzuye yoherezwa ku muntu uyisuzuma.",
+      "unknown": "Nta ncamake y'impinduka yanditswe."
+    },
+    "changedByValue": {
+      "demo_configuration": "Igenamiterere ry'igerageza (si icyemezo cy'abaganga)"
+    }
+  },
+  "audit": {
+    "title": "Igitabo cy'igenzura",
+    "subtitle": "Gusoma gusa. Ibishya mbere, 25 kuri paji. Ibijyanye n'umurwayi byerekana nimero zihishe gusa; inyandiko z'ubuvuzi ziguma ku nyandiko.",
+    "caption": "Ibyabaye byanditswe",
+    "error": "Igitabo cy'igenzura ntikibonetse.",
+    "empty": "Nta byabaye bihuye n'ibi byungurura",
+    "emptyHint": "Hindura cyangwa ukureho ibyungurura kugira ngo ubone ibindi.",
+    "system": "Sisitemu",
+    "programmeLevel": "Ku rwego rwa porogaramu",
+    "justificationWithheld": "Byahishwe (bijyanye n'umurwayi)",
+    "showChain": "Erekana ibyabaye bya correlation {{id}} gusa",
+    "chainFilter": "Herekanwa urukurikirane rwa correlation id {{id}}.",
+    "col": {
+      "time": "Igihe (Kigali)",
+      "action": "Igikorwa",
+      "actor": "Uwagikoze",
+      "resource": "Ikintu",
+      "location": "Ikigo / akarere",
+      "change": "Impinduka",
+      "justification": "Impamvu",
+      "correlation": "Correlation"
+    },
+    "filter": {
+      "label": "Kuyungurura igitabo cy'igenzura",
+      "action": "Igikorwa",
+      "role": "Inshingano y'uwakoze",
+      "entity": "Ubwoko bw'ikintu",
+      "from": "Kuva (itariki ya Kigali)",
+      "to": "Kugeza (itariki ya Kigali)",
+      "correlation": "Correlation id",
+      "any": "Byose",
+      "apply": "Shyiraho ibyungurura",
+      "clear": "Kuraho ibyungurura",
+      "ignored": "Icyungurura kitemewe cyirengagijwe.",
+      "error": {
+        "action": "Hitamo igikorwa kiri ku rutonde.",
+        "role": "Hitamo inshingano iri ku rutonde.",
+        "entity": "Hitamo ubwoko bw'ikintu buri ku rutonde.",
+        "date": "Andika itariki nka YYYY-MM-DD.",
+        "dateOrder": "Itariki itangira igomba kuba mbere cyangwa ingana n'iya nyuma.",
+        "correlation": "Correlation id igizwe n'inyuguti, imibare, utudomo, utubago, uturongo cyangwa utuvuguto gusa.",
+        "page": "Nimero ya paji ntiyemewe."
+      }
+    },
+    "actionGroup": {
+      "session": "Amasomo (yose)",
+      "export": "Iyohereza (ryose)",
+      "admin_access_grant": "Impinduka z'uburenganzira (zose)",
+      "admin_programme_action": "Ibikorwa bya porogaramu (byose)",
+      "admin_quality_issue": "Ibibazo by'ubuziranenge bw'amakuru (byose)",
+      "conflict": "Amakimbirane ya verisiyo (yose)",
+      "screening": "Isuzuma (ryose)",
+      "review": "Isuzumwa n'abaganga (ryose)",
+      "referral": "Kohereza ahandi (kose)",
+      "followup": "Ikurikirana (ryose)",
+      "demo": "Ibikoresho by'igerageza (byose)"
+    }
+  },
+  "access": {
+    "title": "Raporo y'uburenganzira",
+    "error": "Raporo y'uburenganzira ntibonetse.",
+    "window": "Iminsi {{days}} ishize ({{from}} – {{to}}), ibyo wemerewe gusoma.",
+    "countsLabel": "Ibyabaye byo kugera ku makuru ku gikorwa",
+    "count": {
+      "sessions": "Amasomo yatangiye",
+      "denied": "Kwinjira kwanzwe",
+      "drilldowns": "Isesengura rirambuye ryarebwe",
+      "exports": "Iyohereza ryakozwe",
+      "exportsDenied": "Iyohereza ryanzwe",
+      "grantChanges": "Impinduka z'uburenganzira"
+    },
+    "deniedByDistrict": "Kwinjira kwanzwe ku karere kasabwe",
+    "noDenials": "Nta kwinjira kwanzwe muri iki gihe",
+    "unknownDistrict": "Nta karere kasabwe"
+  },
+  "sim": {
+    "title": "Igerageza ry'uburenganzira",
+    "subtitle": "Ese umukoresha w'igerageza ashobora kubona iki kintu? Bikoresha uburyo bumwe bwo gufata icyemezo n'ubugenzura nyakuri.",
+    "persona": "Umukoresha w'igerageza",
+    "resourceType": "Ubwoko bw'ikintu",
+    "resource": "Ikintu",
+    "run": "Genzura uburenganzira",
+    "allowed": "BYEMEWE",
+    "denied": "BYANZWE",
+    "rule": "Itegeko: {{persona}} akora nka {{role}}; ubushobozi busabwa {{permission}}; ububasha buva ku burenganzira bwe.",
+    "type": {
+      "district": "Imibare y'akarere",
+      "facility": "Imibare y'ikigo",
+      "page": "Paji",
+      "export": "Kohereza imibare rusange",
+      "drilldown": "Isesengura rirambuye"
+    },
+    "page": {
+      "overview": "Incamake",
+      "funnel": "Inzira y'ubuvuzi",
+      "funnelStage": "Isesengura ry'inzira",
+      "timeliness": "Igihe",
+      "workload": "Akazi k'abakozi",
+      "quality": "Umutekano n'ubuziranenge",
+      "reports": "Raporo",
+      "governance": "Imiyoborere",
+      "settings": "Igenamiterere"
+    },
+    "reason": {
+      "OK": "Byemewe: inshingano ifite ubushobozi kandi ikintu kiri mu burenganzira.",
+      "MISSING_CAPABILITY": "Byanzwe: inshingano y'uyu mukoresha ntifite ubushobozi busabwa",
+      "GRANT_EXPIRED": "Byanzwe: uburenganzira bw'uyu mukoresha bwarangiye cyangwa bwakuweho",
+      "OUT_OF_SCOPE_DISTRICT": "Byanzwe: akarere kari hanze y'ububasha bw'uyu mukoresha",
+      "OUT_OF_SCOPE_FACILITY": "Byanzwe: ikigo kiri hanze y'ububasha bw'uyu mukoresha"
+    },
+    "tryItLabel": "Guhindura inshingano y'igerageza",
+    "tryItHint": "Ihindura isomo ry'igerageza ikajya ku mukoresha wahisemo, igafungura incamake ya District Beta, ukabona paji ya 403 nyakuri n'icyanditswe cyayo.",
+    "tryIt": "Gerageza nka {{persona}}: fungura incamake ya District Beta",
+    "tryItSelf": "Uyu ni wowe: District Beta ishobora kuba mu bubasha bwawe.",
+    "returnBannerLabel": "Isomo ry'igerageza",
+    "returnBanner": "Guhindura inshingano y'igerageza: urimo kugerageza porogaramu nka {{persona}} (byatangijwe na {{original}}).",
+    "returnTo": "Subira kuri {{persona}}"
+  },
+  "grant": {
+    "allFacilities": "Ibigo byose by'uturere twatoranyijwe",
+    "openEnded": "Nta tariki y'iherezo",
+    "field": {
+      "role": "Inshingano",
+      "districtIds": "Uturere",
+      "facilityIds": "Ibigo",
+      "validTo": "Bigeza",
+      "version": "Verisiyo"
+    },
+    "versionShort": "v{{version}}",
+    "versionChange": "v{{from}} → v{{to}}"
+  },
+  "roles": {
+    "title": "Uburenganzira bwo kugera ku makuru",
+    "subtitle": "Ububasha bwa raporo n'inshingano bya buri mukoresha w'igerageza. Uburenganzira ntibusibwa; buri mpinduka ifite verisiyo kandi iranditswe.",
+    "error": "Uburenganzira ntibwabonetse.",
+    "empty": "Nta burenganzira bubitswe.",
+    "readOnly": "Gusoma gusa: umuyobozi wa porogaramu (roles.configure) wenyine ni we ushobora guhindura uburenganzira.",
+    "edit": "Hindura",
+    "editFor": "Hindura uburenganzira bwa {{persona}}",
+    "revoked": "Bwakuweho",
+    "updatedBy": "Byahinduwe bwa nyuma na",
+    "history": "Amateka ya verisiyo",
+    "historyEmpty": "Nta mpinduka zanditswe (cyangwa ntizigaragara mu bubasha bwawe).",
+    "historyError": "Amateka ya verisiyo ntiyabonetse.",
+    "historyEntry": "v{{from}} → v{{to}} na {{actor}}, {{time}}",
+    "justification": "Impamvu",
+    "toast": {
+      "saved": "Uburenganzira bwabitswe",
+      "revoked": "Uburenganzira bwakuweho"
+    },
+    "conflict": {
+      "title": "Ubu burenganzira bwahinduwe n'undi muntu",
+      "description": "Gereranya verisiyo yawe n'iya nyuma, hanyuma ugumane iya nyuma cyangwa usubize impinduka yawe hejuru yayo."
+    },
+    "demo": {
+      "simulateStale": "IGERAGEZA: igereranya verisiyo ishaje",
+      "staleArmed": "Kubika ubutaha ubu burenganzira bizahura na verisiyo nshya (igerageza)."
+    },
+    "dialog": {
+      "title": "Hindura uburenganzira — {{persona}}",
+      "description": "Impinduka zikurikizwa igihe uwo mukoresha agiye ahandi.",
+      "banner": "Igenamiterere ry'inshingano ry'igerageza — si imicungire nyakuri y'uburenganzira",
+      "facilitiesHint": "Ibigo by'uturere twatoranyijwe gusa ni byo bishobora gutoranywa.",
+      "selectedFacilities": "Ibigo byatoranyijwe gusa",
+      "pickDistrictFirst": "Banza uhitemo akarere.",
+      "validToHint": "Si ngombwa. Uyu munsi cyangwa nyuma (itariki ya Kigali).",
+      "justificationHint": "Inyuguti {{count}} / {{max}} (nibura 10).",
+      "save": "Bika uburenganzira",
+      "retry": "Ongera ubike",
+      "revoke": "Kuraho ubu",
+      "notSaved": "Ntibyabitswe — ongera ugerageze. Ibyo wanditse biracyahari.",
+      "forbidden": "Ntiwemerewe guhindura uburenganzira.",
+      "failed": "Uburenganzira ntibwabitswe."
+    }
+  },
+  "validation": {
+    "role": "Hitamo imwe mu nshingano enye z'igerageza",
+    "scopeRequired": "Hitamo nibura akarere kamwe",
+    "facilitiesRequired": "Hitamo nibura ikigo kimwe kiri mu turere twatoranyijwe",
+    "validTo": "Hitamo uyu munsi cyangwa itariki ikurikira",
+    "justification": "Tanga impamvu ifite inyuguti 10 kugeza 300",
+    "lastAdmin": "Hagomba gusigara nibura umuyobozi umwe ukora"
+  }
+}

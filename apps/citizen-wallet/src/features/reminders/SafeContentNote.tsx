@@ -3,12 +3,14 @@
  * in the current language — and why it is safe on a shared phone.
  */
 import type { ReminderTiming } from "@laif/domain";
-import { AppText, InfoCallout, colors, radii, spacing, useTx } from "@laif/ui-native";
+import { AppText, InfoCallout, radii, spacing, useTx, type Palette } from "@laif/ui-native";
 import { StyleSheet, View } from "react-native";
 
 import { safeReminderContent } from "./safeContent.ts";
+import { useThemedStyles } from "../../theme/useThemedStyles.ts";
 
 export function SafeContentNote({ timing }: { timing: ReminderTiming }) {
+  const styles = useThemedStyles(makeStyles);
   const t = useTx();
   const content = safeReminderContent(t, timing);
   return (
@@ -29,14 +31,15 @@ export function SafeContentNote({ timing }: { timing: ReminderTiming }) {
   );
 }
 
-const styles = StyleSheet.create({
-  root: { gap: spacing.sm },
-  preview: {
-    gap: spacing.xxs,
-    padding: spacing.md,
-    borderRadius: radii.md,
-    borderWidth: 1,
-    borderColor: colors.borderSoft,
-    backgroundColor: colors.surface,
-  },
-});
+const makeStyles = (c: Palette) =>
+  StyleSheet.create({
+    root: { gap: spacing.sm },
+    preview: {
+      gap: spacing.xxs,
+      padding: spacing.md,
+      borderRadius: radii.md,
+      borderWidth: 1,
+      borderColor: c.borderSoft,
+      backgroundColor: c.surface,
+    },
+  });

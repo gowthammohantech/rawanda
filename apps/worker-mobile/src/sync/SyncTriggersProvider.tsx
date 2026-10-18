@@ -2,8 +2,10 @@
  * Mounts the HWM-09 sync triggers (`triggers.ts`) for the signed-in device session:
  * AppState → `active` (`foreground`), the network store's simulated offline → online
  * (`online`), committed local writes (`useSyncTriggers().afterWrite()`), resolutions and the
- * retry timer. Nothing runs while signed out (no actor: the server would refuse the ops) or
- * while the simulated network is offline. Every run refreshes the worker queries.
+ * retry timer. Nothing runs while signed out (no actor: the server would refuse the ops), while
+ * the device is revoked (HWM-10) or while the simulated network is offline. Every run refreshes
+ * the worker queries and (HWM-10) checks the device clock against the server time of the run
+ * (`demo/clockDrift.ts`; a new drift > 5 min is audited `worker.sync.clock_drift_detected`).
  */
 import { useQueryClient } from "@tanstack/react-query";
 import {
@@ -19,7 +21,7 @@ import { AppState } from "react-native";
 
 import { invalidateAfterWrite } from "../data/queryKeys.ts";
 import { useNetworkStore } from "../network/NetworkProvider.tsx";
-import { useRepository } from "../providers.tsx";
+import { useDeviceClockStore, useRepository } from "../providers.tsx";
 import { useSession } from "../session/useSession.ts";
 import { nextRetryDelayMs } from "./scheduler.ts";
 import { createSyncTriggers, type AutoSyncTrigger, type SyncTriggers } from "./triggers.ts";
@@ -46,6 +48,7 @@ export function SyncTriggersProvider({ children }: { children?: ReactNode }) {
   const repo = useRepository();
   const network = useNetworkStore();
   const queryClient = useQueryClient();
+  const deviceClock = useDeviceClockStore();
   const { status } = useSession();
   // Read by the trigger callbacks (outside render); kept current by the effect below.
   const [gate] = useState(() => createGate(status === "signed_in"));
@@ -61,7 +64,20 @@ export function SyncTriggersProvider({ children }: { children?: ReactNode }) {
         ]);
         return nextRetryDelayMs(ops, Date.parse(demo.clockIso));
       },
-      onSettled: () => void invalidateAfterWrite(queryClient),
+      onSettled: (run) => {
+        void invalidateAfterWrite(queryClient);
+        const drift = run === null ? null : deviceClock.observeRun(run);
+        if (drift !== null && run !== null) {
+          void repo
+            .recordAuditEvent({
+              action: "worker.sync.clock_drift_detected",
+              entityType: "audit_event",
+              entityId: run.id,
+              changeSummary: { driftMinutes: drift.minutes, runId: run.id, thresholdMinutes: 5 },
+            })
+            .catch(() => undefined);
+        }
+      },
     });
     return { ...core, afterWrite: () => core.request("after_write") };
   });

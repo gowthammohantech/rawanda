@@ -14,9 +14,10 @@ import {
   LoadingState,
   Screen,
   announce,
-  colors,
   spacing,
   useTx,
+  usePalette,
+  type Palette,
 } from "@laif/ui-native";
 import { useRouter } from "expo-router";
 import { useEffect, useRef, useState } from "react";
@@ -28,8 +29,11 @@ import { CallbackForm } from "./CallbackForm.tsx";
 import { validateCallback, type CallbackDraft, type CallbackErrors } from "./callbackSchema.ts";
 import { NotAnEmergencyCard } from "./NotAnEmergencyCard.tsx";
 import { useCallbackAccess, useCallbackSend } from "./useSupport.ts";
+import { useThemedStyles } from "../../theme/useThemedStyles.ts";
 
 export function CallbackScreen() {
+  const palette = usePalette();
+  const styles = useThemedStyles(makeStyles);
   const t = useTx();
   const router = useRouter();
   const access = useCallbackAccess();
@@ -68,7 +72,7 @@ export function CallbackScreen() {
     body = (
       <View style={styles.success} testID="callback-success">
         <View style={styles.successIcon}>
-          <Icon name="check" size={32} strokeWidth={2.6} color={colors.onPrimary} />
+          <Icon name="check" size={32} strokeWidth={2.6} color={palette.onPrimary} />
         </View>
         <AppText variant="display" accessibilityRole="header" align="center">
           {t("citizen:support.callback.successTitle")}
@@ -148,16 +152,17 @@ export function CallbackScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  flow: { gap: spacing.lg },
-  success: { gap: spacing.lg, alignItems: "stretch" },
-  successIcon: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    alignSelf: "center",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: colors.positive,
-  },
-});
+const makeStyles = (c: Palette) =>
+  StyleSheet.create({
+    flow: { gap: spacing.lg },
+    success: { gap: spacing.lg, alignItems: "stretch" },
+    successIcon: {
+      width: 64,
+      height: 64,
+      borderRadius: 32,
+      alignSelf: "center",
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: c.positive,
+    },
+  });

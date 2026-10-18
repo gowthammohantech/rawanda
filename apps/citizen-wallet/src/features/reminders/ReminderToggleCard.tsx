@@ -7,14 +7,16 @@ import type { ReminderTiming } from "@laif/domain";
 import {
   Icon,
   Toggle,
-  colors,
   radii,
   shadows,
   spacing,
   useTx,
   type TranslationKey,
+  usePalette,
+  type Palette,
 } from "@laif/ui-native";
 import { StyleSheet, View } from "react-native";
+import { useThemedStyles } from "../../theme/useThemedStyles.ts";
 
 export function reminderSummaryKey(optedIn: boolean, timing: ReminderTiming): TranslationKey {
   if (!optedIn) return "citizen:reminders.toggle.offSummary";
@@ -36,12 +38,14 @@ export function ReminderToggleCard({
   disabled = false,
   onToggle,
 }: ReminderToggleCardProps) {
+  const palette = usePalette();
+  const styles = useThemedStyles(makeStyles);
   const t = useTx();
   const summary = t(reminderSummaryKey(optedIn, timing));
   return (
     <View style={styles.card} testID="reminder-toggle-card">
       <View style={[styles.icon, optedIn ? styles.iconOn : null]}>
-        <Icon name="bell" size={20} color={optedIn ? colors.primaryDark : colors.muted} />
+        <Icon name="bell" size={20} color={optedIn ? palette.primaryDark : palette.muted} />
       </View>
       <View style={styles.body}>
         <Toggle
@@ -57,26 +61,27 @@ export function ReminderToggleCard({
   );
 }
 
-const styles = StyleSheet.create({
-  card: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.md,
-    padding: spacing.md,
-    borderRadius: radii.lg,
-    borderWidth: 1,
-    borderColor: colors.borderSoft,
-    backgroundColor: colors.surface,
-    ...shadows.card,
-  },
-  icon: {
-    width: 40,
-    height: 40,
-    borderRadius: radii.pill,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: colors.background,
-  },
-  iconOn: { backgroundColor: colors.primarySoft },
-  body: { flex: 1 },
-});
+const makeStyles = (c: Palette) =>
+  StyleSheet.create({
+    card: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: spacing.md,
+      padding: spacing.md,
+      borderRadius: radii.lg,
+      borderWidth: 1,
+      borderColor: c.borderSoft,
+      backgroundColor: c.surface,
+      ...shadows.card,
+    },
+    icon: {
+      width: 40,
+      height: 40,
+      borderRadius: radii.pill,
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: c.background,
+    },
+    iconOn: { backgroundColor: c.primarySoft },
+    body: { flex: 1 },
+  });

@@ -1,5 +1,5 @@
-import { Stack } from "expo-router";
+import { TabStack } from "../../../../src/navigation/TabStack.tsx";
 
-export default function TabStack() {
-  return <Stack screenOptions={{ headerShown: false }} />;
+export default function TabStackLayout() {
+  return <TabStack />;
 }

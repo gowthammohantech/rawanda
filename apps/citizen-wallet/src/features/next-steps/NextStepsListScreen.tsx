@@ -13,10 +13,10 @@ import {
   MicroLabel,
   Screen,
   Section,
-  colors,
   spacing,
   useTx,
   type TranslationKey,
+  usePalette,
 } from "@laif/ui-native";
 import { useRouter } from "expo-router";
 import { useState } from "react";
@@ -36,6 +36,7 @@ import {
 import { SupportLink } from "../support/SupportLink.tsx";
 
 export function NextStepsListScreen() {
+  const palette = usePalette();
   const t = useTx();
   const router = useRouter();
   const patient = useActivePatient();
@@ -150,7 +151,7 @@ export function NextStepsListScreen() {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={refresh}
-            tintColor={colors.primary}
+            tintColor={palette.primary}
             accessibilityLabel={t("citizen:nextSteps.refreshHint")}
           />
         }

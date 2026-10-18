@@ -1,0 +1,15 @@
+# Sub-flow (runFlow) from the welcome screen: Demo tools → Reset demo → the app returns to the
+# welcome screen on the fresh seed. Not run on its own.
+appId: host.exp.Exponent
+tags:
+  - subflow
+---
+- tapOn:
+    id: "welcome-demo-tools"
+- tapOn:
+    id: "demo-reset"
+- assertVisible: "Reset demo data?"
+- tapOn:
+    text: "Reset demo"
+    index: 1
+- assertVisible: "Demo data was reset to the baseline."

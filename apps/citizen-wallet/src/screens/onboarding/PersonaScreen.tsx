@@ -23,9 +23,11 @@ import { PersonaCard } from "../../components/PersonaCard.tsx";
 import { useCitizenPersonas } from "../../data/queries.ts";
 import { useDemoTools } from "../../demo-tools.tsx";
 import { useWalletActions } from "../../state/useWalletActions.ts";
+import { useTitleFocus } from "../../a11y/useTitleFocus.ts";
 
 export function PersonaScreen() {
   const t = useTx();
+  const titleRef = useTitleFocus();
   const router = useRouter();
   const personas = useCitizenPersonas();
   const { reset } = useDemoTools();
@@ -88,6 +90,7 @@ export function PersonaScreen() {
       testID="persona-screen"
       header={
         <AppHeader
+          titleRef={titleRef}
           title={t("citizen:onboarding.persona.title")}
           onBack={() => router.replace("/welcome")}
         />

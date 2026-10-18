@@ -10,16 +10,18 @@ import {
   Button,
   Icon,
   StatusChip,
-  colors,
   spacing,
   useTx,
   type Tone,
+  usePalette,
+  type Palette,
 } from "@laif/ui-native";
 import { StyleSheet, View } from "react-native";
 
 import { InlineError } from "../../components/InlineError.tsx";
-import { reminderRowStyles } from "./ScheduledReminderRow.tsx";
+import { makeReminderRowStyles } from "./ScheduledReminderRow.tsx";
 import { useAcknowledgeReminderAction } from "./useReminders.ts";
+import { useThemedStyles } from "../../theme/useThemedStyles.ts";
 
 type Visual = { chipKey: Parameters<ReturnType<typeof useTx>>[0]; tone: Tone };
 
@@ -30,6 +32,9 @@ const VISUALS: Record<Exclude<Reminder["status"], "scheduled">, Visual> = {
 };
 
 export function ReminderHistoryRow({ reminder }: { reminder: Reminder }) {
+  const palette = usePalette();
+  const styles = useThemedStyles(makeStyles);
+  const reminderRowStyles = useThemedStyles(makeReminderRowStyles);
   const t = useTx();
   const { language } = useLanguage();
   const ack = useAcknowledgeReminderAction(reminder);
@@ -61,7 +66,7 @@ export function ReminderHistoryRow({ reminder }: { reminder: Reminder }) {
           <Icon
             name={reminder.status === "acknowledged" ? "check" : "bell"}
             size={16}
-            color={delivered ? colors.primaryDark : colors.muted}
+            color={delivered ? palette.primaryDark : palette.muted}
           />
         </View>
         <View style={reminderRowStyles.text}>
@@ -94,8 +99,9 @@ export function ReminderHistoryRow({ reminder }: { reminder: Reminder }) {
   );
 }
 
-const styles = StyleSheet.create({
-  root: { gap: spacing.xs },
-  iconMuted: { backgroundColor: colors.background },
-  actions: { gap: spacing.xs, alignItems: "flex-start" },
-});
+const makeStyles = (c: Palette) =>
+  StyleSheet.create({
+    root: { gap: spacing.xs },
+    iconMuted: { backgroundColor: c.background },
+    actions: { gap: spacing.xs, alignItems: "flex-start" },
+  });

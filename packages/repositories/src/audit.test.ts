@@ -9,6 +9,7 @@ import {
   auditActionLabelKey,
   CLIENT_AUDIT_ACTIONS,
   isAuditAction,
+  isClientAuditAction,
 } from "./audit/actions.ts";
 import { buildAuditEvent, emitAudit } from "./audit/emit.ts";
 import { createMemoryStoreAdapter } from "./store/memory-adapter.ts";
@@ -124,6 +125,20 @@ describe("audit action registry", () => {
     expect(event.beforeHash).toMatch(/^[0-9a-f]{16}$/u);
     expect(event.afterHash).not.toBe(event.beforeHash);
     expect(event.category).toBe("access");
+  });
+});
+
+describe("worker HWM-10 actions", () => {
+  it("registers the app-prefixed settings / clock-drift actions as client actions", async () => {
+    for (const action of ["worker.settings.language_changed", "worker.sync.clock_drift_detected"]) {
+      expect(isClientAuditAction(action), action).toBe(true);
+    }
+    const h = await createHarness({ appId: "worker", personaId: PERSONA_IDS.chwAlpha1A });
+    const event = await h.repo.recordAuditEvent({
+      action: "worker.settings.language_changed",
+      changeSummary: { from: "en", to: "rw" },
+    });
+    expect(event).toMatchObject({ action: "worker.settings.language_changed", category: "change" });
   });
 });
 

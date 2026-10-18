@@ -1,17 +1,17 @@
-import { useRouter } from "expo-router";
+/**
+ * `/revoked` (HWM-10): outside the `(app)` group, so no tab or patient screen is mounted. Only a
+ * revoked device session stays here; signed in again (restored) → tabs, signed out → sign-in.
+ */
+import { Redirect, useRouter } from "expo-router";
 
-import { RevokedScreen } from "../src/features/auth/RevokedScreen.tsx";
+import { RevokedDeviceScreen } from "../src/features/revocation/RevokedDeviceScreen.tsx";
+import { SIGN_IN_HREF, TABS_HREF } from "../src/session/sessionGuard.ts";
 import { useSession } from "../src/session/useSession.ts";
 
-/** Revoked device (HWM-10 completes it). Leaving signs out locally; unsynced work stays. */
 export default function RevokedRoute() {
   const router = useRouter();
-  const { signOut } = useSession();
-  return (
-    <RevokedScreen
-      onSignIn={() => {
-        void signOut().then(() => router.replace("/sign-in"));
-      }}
-    />
-  );
+  const { status } = useSession();
+  if (status === "signed_out") return <Redirect href={SIGN_IN_HREF} />;
+  if (status === "signed_in") return <Redirect href={TABS_HREF} />;
+  return <RevokedDeviceScreen onRestored={() => router.replace(TABS_HREF)} />;
 }

@@ -117,6 +117,38 @@ export type CitizenPersonaSummary = {
   patients: CitizenLinkedPatient[];
 };
 
+/**
+ * CTZ-09 demo tools — DEMO ONLY, represents an action in the Clinical Portal: the result of
+ * `demo.simulateCareTeamConfirmation` (the linked referral / follow-up was recorded as completed
+ * with `clinician_confirmation` evidence by the simulated clinician).
+ */
+export type SimulatedCareTeamConfirmation = {
+  instructionId: string;
+  sourceType: "referral" | "follow_up";
+  sourceId: string;
+  /** New version of the referral / follow-up. */
+  version: number;
+  simulatedActorId: PersonaId;
+  auditEventId: string;
+};
+
+/** FND-07 demo API + the wallet's seeded scenario step (CTZ-09 task 10). Never faulted. */
+export interface CitizenDemoApi extends DemoApi {
+  /**
+   * DEMO ONLY (labelled "represents an action in the Clinical Portal"): records the LINKED
+   * referral / follow-up of an approved, still-planned next step of the patient as completed
+   * with evidence type `clinician_confirmation`, as the simulated actor `persona-clin-alpha1`,
+   * so the derived step progress becomes `completed` (instruction progress is never written).
+   * One `demo.simulated_staff_action` audit. `instructionId` omitted → the planned step with
+   * the earliest appointment. Link + consent required; no planned step / an id that is not a
+   * planned approved step of the patient → `VALIDATION_ERROR` `INVALID_TRANSITION`.
+   */
+  simulateCareTeamConfirmation(input: {
+    patientId: string;
+    instructionId?: string;
+  }): Promise<SimulatedCareTeamConfirmation>;
+}
+
 /** The signed-in citizen's wallet session. */
 export type CitizenSession = {
   personaId: PersonaId;
@@ -278,8 +310,11 @@ export interface CitizenRepository {
   /** Settings of the signed-in persona (null before the first save). */
   getSettings(): Promise<CitizenSettings | null>;
   updateSettings(i: UpdateCitizenSettingsCall, key: string): Promise<WriteResult<CitizenSettings>>;
-  /** FND-07 demo API (`resetDemo` reseeds the citizen slice incl. overlay); never faulted. */
-  demo: DemoApi;
+  /**
+   * FND-07 demo API (`resetDemo` reseeds the citizen slice incl. overlay) + CTZ-09
+   * `simulateCareTeamConfirmation`; never faulted.
+   */
+  demo: CitizenDemoApi;
 }
 
 /** Same deps as `createCareRepository`; `appId` is always `citizen` and there is no sync. */

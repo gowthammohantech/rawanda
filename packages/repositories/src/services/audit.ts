@@ -60,6 +60,8 @@ export function createAuditService(engine: Engine) {
      * made it) and never sees other actors' unbound events. Filter values outside the scope are
      * ignored (no rows); an `entityId` / `patientId` filter that only matches out-of-scope events
      * appends one `access.denied` (outcome `denied`, de-duplicated per minute).
+     * ADM-08: a scoped governance reader (`audit.read_scoped`) sees its OWN unlocated events
+     * only (never other personas' programme-level governance events).
      */
     listAuditEvents(f?: AuditFilterInput): Promise<Page<AuditEvent>> {
       return engine.read(async (ctx) => {
@@ -91,12 +93,18 @@ export function createAuditService(engine: Engine) {
         const actor = ctx.actor;
         const selfId = actor?.personaId ?? null;
         const facilityScoped = actor?.scope.kind === "facility";
+        // ADM-08: a scoped governance reader (`audit.read_scoped`, district analyst) sees events
+        // located inside its grant, plus its OWN unlocated events (sessions, own governance views)
+        // — never other personas' programme-level governance events.
+        const scopedReader = permission === "audit.read_scoped";
         const visible = (e: AuditEvent): boolean => {
+          const own = selfId !== null && e.actorId === selfId;
+          const located = e.facilityId !== null || e.districtId !== null;
           if (facilityScoped) {
-            const own = selfId !== null && e.actorId === selfId;
             if (own && (e.facilityId === null || e.outcome === "denied")) return true;
-            if (e.facilityId === null && e.districtId === null) return false;
+            if (!located) return false;
           }
+          if (scopedReader && !located) return own;
           return ctx.can(permission, {
             facilityId: e.facilityId,
             districtId: e.districtId,
@@ -351,7 +359,8 @@ export function createAuditService(engine: Engine) {
     /**
      * Export history (ADM-07 task 9), newest first: the actor's own attempts (generated and
      * denied), plus — for governance readers (`audit.read` / `audit.read_scoped`) — every other
-     * export whose districts / facilities all lie inside the actor's scope. `metrics.read`.
+     * export whose districts / facilities all lie inside the actor's scope (a record with empty
+     * district AND facility lists counts as programme-wide, ADM-08). `metrics.read`.
      */
     listExportAudits(f?: ExportAuditFilterInput): Promise<ExportAudit[]> {
       return engine.read(async (ctx) => {
@@ -363,14 +372,23 @@ export function createAuditService(engine: Engine) {
           (checkAccess(actor, "audit.read").allowed ||
             checkAccess(actor, "audit.read_scoped").allowed);
         const ids = filter.ids === undefined ? null : new Set(filter.ids);
+        const allDistricts = (await ctx.tx.getAll<{ id: DistrictId }>("districts")).map(
+          (d) => d.id,
+        );
         const rows = (await ctx.all<unknown>("export_audit")).map((row) =>
           ExportAuditSchema.parse(row),
         );
         return rows
           .filter((r) => {
             const own = actor !== null && r.actorId === actor.personaId;
+            // ADM-08: a record with no district and no facility covered the requester's whole
+            // scope — treat it as programme-wide (every known district), never as "unbound".
+            const programmeWide =
+              r.scope.districtIds.length === 0 && r.scope.facilityIds.length === 0;
+            const districtIds = programmeWide ? allDistricts : r.scope.districtIds;
             const inScope =
-              r.scope.districtIds.every((districtId) => ctx.can("metrics.read", { districtId })) &&
+              districtIds.length > 0 &&
+              districtIds.every((districtId) => ctx.can("metrics.read", { districtId })) &&
               r.scope.facilityIds.every((facilityId) => ctx.can("metrics.read", { facilityId }));
             return (
               (own || (governance && inScope)) &&

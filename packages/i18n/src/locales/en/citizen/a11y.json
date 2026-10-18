@@ -1,0 +1,5 @@
+{
+  "status": "Status: {{status}}",
+  "statusPrefix": "Status",
+  "screenOpened": "{{title}} screen"
+}

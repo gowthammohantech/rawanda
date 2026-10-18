@@ -3,15 +3,17 @@ import { AppHeader, AppText, Button, Card, InfoCallout, Screen, useTx } from "@l
 import { useRouter } from "expo-router";
 
 import { useWalletActions } from "../../state/useWalletActions.ts";
+import { useTitleFocus } from "../../a11y/useTitleFocus.ts";
 
 export function RecoverScreen() {
   const t = useTx();
+  const titleRef = useTitleFocus();
   const router = useRouter();
   const { endSession } = useWalletActions();
   return (
     <Screen
       testID="recover-screen"
-      header={<AppHeader title={t("citizen:onboarding.recover.title")} />}
+      header={<AppHeader titleRef={titleRef} title={t("citizen:onboarding.recover.title")} />}
       footer={
         <Button
           fullWidth

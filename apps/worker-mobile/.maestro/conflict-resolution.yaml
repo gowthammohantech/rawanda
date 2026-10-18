@@ -1,0 +1,6 @@
+# HWM-10 regression (T-05): a clinician update on the server + an offline contact attempt on the
+# same task → "Needs your decision" → Re-apply → synced, conflict + resolution in the history.
+appId: host.exp.Exponent
+---
+- runFlow: subflows/fresh-start.yaml
+- runFlow: hwm09-conflict.yaml

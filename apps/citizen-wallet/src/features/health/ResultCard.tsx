@@ -9,18 +9,20 @@ import {
   AppText,
   Icon,
   StatusChip,
-  colors,
   radii,
   shadows,
   spacing,
   touchTarget,
   useTx,
+  usePalette,
+  type Palette,
 } from "@laif/ui-native";
 import { Pressable, StyleSheet, View } from "react-native";
 
 import { RESULT_CHIPS, resultKindKey, reviewerOf } from "./copy.ts";
 import { ReadingValue, readingA11yLabel, readingsOf } from "./ReadingValue.tsx";
 import { ReviewProvenance } from "./ReviewProvenance.tsx";
+import { useThemedStyles } from "../../theme/useThemedStyles.ts";
 
 export type ResultCardProps = { result: ReleasedObservation; onPress?: () => void };
 
@@ -35,6 +37,8 @@ export function ResultChip({ result }: { result: Pick<ReleasedObservation, "labe
 }
 
 export function ResultCard({ result, onPress }: ResultCardProps) {
+  const palette = usePalette();
+  const styles = useThemedStyles(makeStyles);
   const t = useTx();
   const { language } = useLanguage();
   const kind = t(resultKindKey(result.readings));
@@ -61,7 +65,7 @@ export function ResultCard({ result, onPress }: ResultCardProps) {
     >
       <View style={styles.header}>
         <View style={styles.icon}>
-          <Icon name="activity" size={18} color={colors.primaryDark} />
+          <Icon name="activity" size={18} color={palette.primaryDark} />
         </View>
         <View style={styles.headerText}>
           <AppText weight="semibold">{kind}</AppText>
@@ -69,7 +73,7 @@ export function ResultCard({ result, onPress }: ResultCardProps) {
             {date}
           </AppText>
         </View>
-        <Icon name="chevron" size={18} color={colors.muted} />
+        <Icon name="chevron" size={18} color={palette.muted} />
       </View>
       <ResultChip result={result} />
       <View style={styles.values}>
@@ -82,26 +86,27 @@ export function ResultCard({ result, onPress }: ResultCardProps) {
   );
 }
 
-const styles = StyleSheet.create({
-  card: {
-    borderWidth: 1,
-    borderColor: colors.borderSoft,
-    borderRadius: radii.lg,
-    padding: spacing.lg,
-    gap: spacing.md,
-    backgroundColor: colors.surface,
-    ...shadows.card,
-  },
-  pressed: { backgroundColor: colors.background },
-  header: { flexDirection: "row", alignItems: "center", gap: spacing.md },
-  headerText: { flex: 1, gap: spacing.xxs },
-  icon: {
-    width: 36,
-    height: 36,
-    borderRadius: radii.pill,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: colors.primarySoft,
-  },
-  values: { flexDirection: "row", flexWrap: "wrap", gap: spacing.xl },
-});
+const makeStyles = (c: Palette) =>
+  StyleSheet.create({
+    card: {
+      borderWidth: 1,
+      borderColor: c.borderSoft,
+      borderRadius: radii.lg,
+      padding: spacing.lg,
+      gap: spacing.md,
+      backgroundColor: c.surface,
+      ...shadows.card,
+    },
+    pressed: { backgroundColor: c.background },
+    header: { flexDirection: "row", alignItems: "center", gap: spacing.md },
+    headerText: { flex: 1, gap: spacing.xxs },
+    icon: {
+      width: 36,
+      height: 36,
+      borderRadius: radii.pill,
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: c.primarySoft,
+    },
+    values: { flexDirection: "row", flexWrap: "wrap", gap: spacing.xl },
+  });

@@ -1,11 +1,18 @@
 /**
- * Scope checks of the admin app (ADM-01 tasks 6–7). All decisions go through FND-06
- * `scopeForPersona(persona, grant)` + `isResourceInScope`, so the route guard, the nav and the
- * repository agree. DEMO ROLE SWITCH — NOT AUTHENTICATION.
+ * Scope checks of the admin app (ADM-01 tasks 6–7). All decisions go through `evaluateAccess`
+ * (ADM-08; FND-06 `scopeForPersona(persona, grant)` + `isResourceInScope` underneath), so the
+ * route guard, the nav, `assertScope` and the governance access simulator agree.
+ * DEMO ROLE SWITCH — NOT AUTHENTICATION.
  */
-import { isResourceInScope, scopeForPersona, type Scope, type ScopePersona } from "@laif/auth-demo";
+import {
+  evaluateAccess,
+  ROLE_PERMISSIONS,
+  scopeForPersona,
+  type Scope,
+  type ScopePersona,
+} from "@laif/auth-demo";
 import type { AccessGrant } from "@laif/contracts";
-import type { DistrictId, FacilityId } from "@laif/domain";
+import type { DistrictId } from "@laif/domain";
 import { DISTRICTS_REFERENCE, FACILITIES_REFERENCE } from "@laif/mock-data";
 import { RepositoryError } from "@laif/repositories";
 
@@ -39,6 +46,21 @@ export function grantScope(persona: ScopePersona, grant: AccessGrant | null): Sc
   return scopeForPersona(persona, grant);
 }
 
+/** Pure scope decision (no capability check: `permissions: []`). */
+function inGrant(
+  persona: ScopePersona,
+  grant: AccessGrant | null,
+  resource: { type: "district" | "facility"; id: string },
+  reference: ReferenceData,
+): boolean {
+  return evaluateAccess(
+    grant,
+    ROLE_PERMISSIONS,
+    { ...resource, permissions: [] },
+    { persona, facilityToDistrict: facilityMap(reference) },
+  ).allowed;
+}
+
 /** True when a district-level aggregate of `districtId` lies inside the grant. */
 export function isDistrictInGrant(
   persona: ScopePersona,
@@ -46,11 +68,7 @@ export function isDistrictInGrant(
   districtId: string,
   reference: ReferenceData = SEED_REFERENCE,
 ): boolean {
-  return isResourceInScope(
-    grantScope(persona, grant),
-    { districtId: districtId as DistrictId },
-    facilityMap(reference),
-  );
+  return inGrant(persona, grant, { type: "district", id: districtId }, reference);
 }
 
 /** True when `facilityId` lies inside the grant (an unknown facility never does). */
@@ -61,11 +79,7 @@ export function isFacilityInGrant(
   reference: ReferenceData = SEED_REFERENCE,
 ): boolean {
   if (!reference.facilities.some((f) => f.id === facilityId)) return false;
-  return isResourceInScope(
-    grantScope(persona, grant),
-    { facilityId: facilityId as FacilityId },
-    facilityMap(reference),
-  );
+  return inGrant(persona, grant, { type: "facility", id: facilityId }, reference);
 }
 
 export type ScopeCheck =

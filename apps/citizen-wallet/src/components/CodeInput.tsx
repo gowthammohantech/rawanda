@@ -3,9 +3,10 @@
  * `accessibilityLabel` ("Digit 1 of 6"), auto-advance, backspace to the previous box and paste
  * of the whole code into any box. Value is the digits string (0–6 characters).
  */
-import { colors, controlStyle, minTouchTarget, radii, spacing, useTx } from "@laif/ui-native";
+import { controlStyle, minTouchTarget, radii, spacing, useTx, type Palette } from "@laif/ui-native";
 import { useRef } from "react";
 import { StyleSheet, TextInput, View, type TextInputInstance } from "react-native";
+import { useThemedStyles } from "../theme/useThemedStyles.ts";
 
 export const CODE_LENGTH = 6;
 
@@ -30,6 +31,7 @@ export function CodeInput({
   label,
   testID = "code-input",
 }: CodeInputProps) {
+  const styles = useThemedStyles(makeStyles);
   const t = useTx();
   const refs = useRef<(TextInputInstance | null)[]>([]);
   const digits = Array.from({ length: CODE_LENGTH }, (_, i) => value[i] ?? "");
@@ -95,15 +97,16 @@ export function CodeInput({
   );
 }
 
-const styles = StyleSheet.create({
-  row: { flexDirection: "row", gap: spacing.sm, flexWrap: "wrap" },
-  box: {
-    minWidth: minTouchTarget,
-    minHeight: 52,
-    paddingHorizontal: spacing.xs,
-    textAlign: "center",
-    fontSize: 22,
-    borderRadius: radii.sm,
-    borderColor: colors.border,
-  },
-});
+const makeStyles = (c: Palette) =>
+  StyleSheet.create({
+    row: { flexDirection: "row", gap: spacing.sm, flexWrap: "wrap" },
+    box: {
+      minWidth: minTouchTarget,
+      minHeight: 52,
+      paddingHorizontal: spacing.xs,
+      textAlign: "center",
+      fontSize: 22,
+      borderRadius: radii.sm,
+      borderColor: c.border,
+    },
+  });

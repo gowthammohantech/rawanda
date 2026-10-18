@@ -93,6 +93,9 @@
   "resolution": {
     "glucose_context_corrected": "Your care team added that you had not eaten before this check (fasting).",
     "reading_time_confirmed": "Your care team checked the time of the reading and it was correct.",
+    "reading_value_corrected": "Your care team corrected a reading value in this result. The original value is kept in the record history.",
+    "personal_details_corrected": "Your care team corrected your personal details. The original details are kept in the record history.",
+    "record_checked_no_change": "Your care team checked your record and it was correct, so nothing was changed.",
     "unknown": "Your care team has finished checking your request."
   },
   "target": {

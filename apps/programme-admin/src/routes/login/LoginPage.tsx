@@ -5,7 +5,7 @@
  * districts in my scope, or one district. Submit starts the session (`session.started`) and goes
  * to `next` or the persona's overview. Real authentication / MFA / OIDC are NOT provided.
  */
-import { actorForPersona, permissionLabelKey, roleLabelKey } from "@laif/auth-demo";
+import { actorForPersona, isGrantExpired, permissionLabelKey, roleLabelKey } from "@laif/auth-demo";
 import { asId, type DistrictId } from "@laif/domain";
 import {
   Button,
@@ -59,7 +59,11 @@ export function LoginPage() {
     queryKey: ACCESS_GRANTS_QUERY_KEY,
     queryFn: () => services.repo.listAccessGrants(),
   });
-  const grants = useMemo(() => grantsQuery.data ?? [], [grantsQuery.data]);
+  // ADM-08: a revoked / expired grant no longer signs in (shown as "no grant").
+  const grants = useMemo(
+    () => (grantsQuery.data ?? []).filter((g) => !isGrantExpired(g, services.clock.nowIso())),
+    [grantsQuery.data, services.clock],
+  );
 
   const [personaId, setPersonaId] = useState<string | null>(
     findAdminPersona(params.get("persona"))?.id ?? null,
@@ -86,7 +90,7 @@ export function LoginPage() {
       ),
       description: (
         <span className="mt-1 block space-y-1.5">
-          <span className="text-ink block">{t(roleLabelKey(p.role))}</span>
+          <span className="text-ink block">{t(roleLabelKey(g?.role ?? p.role))}</span>
           <span className="block">
             {g === null ? t("admin:auth.noGrant") : grantScopeSummary(p, g, t)}
           </span>

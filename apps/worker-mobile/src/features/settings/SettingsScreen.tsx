@@ -1,18 +1,17 @@
 /**
- * Settings (HWM-01 task 10): LANGUAGE (EN/RW switcher), SIGNED IN AS (persona, role, facility,
- * district, short device id — demo sign-in only), DEMO (Network simulation — HWM-02; FND demo
- * tools; the Reset demo screen arrives in HWM-10), ABOUT, and Sign out behind a ConfirmSheet
- * ("Unsynced items stay on this device"). HWM-10 finalises this screen.
+ * Settings — the demonstrator's control room (HWM-01 task 10, finalised in HWM-10 task 1).
+ * Sections (mono micro-labels): LANGUAGE (EN/RW + "Saved on this device"), CONNECTION (simulated
+ * offline switch + clock-drift warning + Network simulation), DEMO CONTROLS (Simulate device
+ * revocation, Activity log, Reset demo, FND demo tools), SIGNED IN AS (persona, role, facility,
+ * district, short device id — demo sign-in only), ABOUT (synthetic data, rule set, versions,
+ * "not encrypted in this demo"), and Sign out behind a ConfirmSheet ("Unsynced items stay on
+ * this device"). Fully usable offline.
  */
 import { roleLabelKey } from "@laif/auth-demo";
 import {
   Button,
   ConfirmSheet,
-  DemoToolsSheet,
-  InfoCallout,
   KeyValueList,
-  LanguageSwitcher,
-  ListRow,
   RoleBanner,
   Screen,
   Section,
@@ -22,10 +21,13 @@ import {
 import { useState } from "react";
 
 import { AppHeader } from "../../components/AppHeader.tsx";
-import { useDemoTools } from "../../demo-tools.tsx";
+import { useNetwork } from "../../network/NetworkProvider.tsx";
 import { shortDeviceId } from "../../session/device.ts";
 import { useSession } from "../../session/useSession.ts";
 import { districtName, districtOf, facilityName } from "../auth/labels.ts";
+import { AboutDemoSection } from "./AboutDemoSection.tsx";
+import { LanguageSection } from "./LanguageSection.tsx";
+import { SimulationSection } from "./SimulationSection.tsx";
 
 export type SettingsScreenProps = {
   onBack?: () => void;
@@ -33,14 +35,26 @@ export type SettingsScreenProps = {
   onSignedOut: () => void;
   /** Opens Settings → Network simulation (HWM-02). */
   onOpenNetwork: () => void;
+  /** HWM-10: Settings → Activity log / Reset demo; after a simulated revocation. */
+  onOpenActivity?: () => void;
+  onOpenReset?: () => void;
+  onRevoked?: () => void;
 };
 
-export function SettingsScreen({ onBack, onSignedOut, onOpenNetwork }: SettingsScreenProps) {
+const noop = () => undefined;
+
+export function SettingsScreen({
+  onBack,
+  onSignedOut,
+  onOpenNetwork,
+  onOpenActivity = noop,
+  onOpenReset = noop,
+  onRevoked = noop,
+}: SettingsScreenProps) {
   const t = useTx();
   const { toast } = useToast();
   const { session, signOut } = useSession();
-  const { faults, setFault, reset, loadScenario, scenarios } = useDemoTools();
-  const [toolsOpen, setToolsOpen] = useState(false);
+  const { offline } = useNetwork();
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [signingOut, setSigningOut] = useState(false);
 
@@ -51,7 +65,7 @@ export function SettingsScreen({ onBack, onSignedOut, onOpenNetwork }: SettingsS
   return (
     <Screen
       testID="settings-screen"
-      offline={faults.offline}
+      offline={offline}
       header={
         <AppHeader
           title={t("worker:settings.title")}
@@ -60,9 +74,13 @@ export function SettingsScreen({ onBack, onSignedOut, onOpenNetwork }: SettingsS
         />
       }
     >
-      <Section title={t("worker:settings.language")}>
-        <LanguageSwitcher testID="settings-language-switcher" />
-      </Section>
+      <LanguageSection />
+      <SimulationSection
+        onOpenNetwork={onOpenNetwork}
+        onOpenActivity={onOpenActivity}
+        onOpenReset={onOpenReset}
+        onRevoked={onRevoked}
+      />
       {session === null ? null : (
         <Section title={t("worker:settings.signedInAs")}>
           <RoleBanner
@@ -94,27 +112,7 @@ export function SettingsScreen({ onBack, onSignedOut, onOpenNetwork }: SettingsS
           />
         </Section>
       )}
-      <Section title={t("worker:settings.demo")}>
-        <ListRow
-          testID="open-network-simulation"
-          icon="wifi-off"
-          title={t("worker:settings.networkSimulation")}
-          subtitle={t("worker:settings.networkSimulationHint")}
-          onPress={onOpenNetwork}
-        />
-        <ListRow
-          icon="refresh"
-          title={t("worker:settings.resetDemo")}
-          subtitle={t("worker:settings.comingIn", { phase: "HWM-10" })}
-          disabled
-        />
-        <Button variant="secondary" icon="settings" onPress={() => setToolsOpen(true)}>
-          {t("demo:tools.open")}
-        </Button>
-      </Section>
-      <Section title={t("worker:settings.about")}>
-        <InfoCallout icon="info">{t("worker:settings.aboutText")}</InfoCallout>
-      </Section>
+      <AboutDemoSection />
       <Button
         testID="sign-out"
         variant="danger"
@@ -142,15 +140,6 @@ export function SettingsScreen({ onBack, onSignedOut, onOpenNetwork }: SettingsS
           toast({ title: t("worker:settings.signedOut") });
           onSignedOut();
         }}
-      />
-      <DemoToolsSheet
-        visible={toolsOpen}
-        onClose={() => setToolsOpen(false)}
-        onReset={reset}
-        faults={faults}
-        onFaultChange={setFault}
-        scenarios={scenarios}
-        onLoadScenario={(id) => void loadScenario(id)}
       />
     </Screen>
   );
