@@ -20,7 +20,14 @@
     "conflict": "Kuvuguruzanya ku kubika gukurikira",
     "conflictHint": "Impinduka ikurikira ku makuru yawe izavuguruzanya rimwe.",
     "moreTools": "Nta murandasi n'ibigeragezo",
-    "failed": "Igikoresho cy'igerageza nticyakoze. Ongera ugerageze."
+    "failed": "Igikoresho cy'igerageza nticyakoze. Ongera ugerageze.",
+    "simulateTitle": "Itsinda rikwitaho (igerageza)",
+    "simulateConfirmation": "Gerageza kwemeza kw'itsinda rikwitaho (igerageza)",
+    "simulateNote": "IGERAGEZA — bihagarariye igikorwa gikorerwa mu rubuga rw'abaganga. Byerekana ko intambwe ikurikira yawe ya hafi yitabiriwe, byemejwe n'itsinda rikwitaho.",
+    "simulateHint": "Byerekana ko intambwe ikurikira ya hafi yemejwe n'itsinda rikwitaho (igerageza gusa).",
+    "simulateDone": "Kwemeza kw'itsinda rikwitaho kwageragejwe (igerageza). Urutonde rw'ibyabaye rwavuguruwe.",
+    "simulateNothing": "Nta ntambwe ikurikira iteganyijwe yo kwemeza.",
+    "simulateNeedsPersona": "Banza uhitemo umuntu w'igerageza."
   },
   "sections": {
     "myData": "AMAKURU YANJYE",

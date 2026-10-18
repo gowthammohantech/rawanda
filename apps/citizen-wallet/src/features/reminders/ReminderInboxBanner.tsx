@@ -5,7 +5,16 @@
  * care team" → opens the Reminders tab. Generic text only (no health details); hidden on the
  * Reminders tab itself, where the reminder is listed with "Got it".
  */
-import { AppText, Icon, colors, radii, spacing, touchTarget, useTx } from "@laif/ui-native";
+import {
+  AppText,
+  Icon,
+  radii,
+  spacing,
+  touchTarget,
+  useTx,
+  usePalette,
+  type Palette,
+} from "@laif/ui-native";
 import { useRouter, useSegments } from "expo-router";
 import { Pressable, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -13,8 +22,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useConsent } from "../../data/queries.ts";
 import { useActivePatient } from "../health/useResults.ts";
 import { unacknowledged, useReminderProcessor, useReminders } from "./useReminders.ts";
+import { useThemedStyles } from "../../theme/useThemedStyles.ts";
 
 export function ReminderInboxBanner() {
+  const palette = usePalette();
+  const styles = useThemedStyles(makeStyles);
   const t = useTx();
   const router = useRouter();
   const segments = useSegments() as readonly string[];
@@ -39,36 +51,37 @@ export function ReminderInboxBanner() {
         testID="reminder-inbox-banner"
       >
         <View style={styles.icon}>
-          <Icon name="bell" size={18} color={colors.onPrimary} />
+          <Icon name="bell" size={18} color={palette.onPrimary} />
         </View>
         <AppText weight="semibold" style={styles.text}>
           {label}
         </AppText>
-        <Icon name="chevron" size={18} color={colors.primaryDark} />
+        <Icon name="chevron" size={18} color={palette.primaryDark} />
       </Pressable>
     </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
-  safe: { backgroundColor: colors.primarySoft },
-  banner: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.sm,
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.sm,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.borderSoft,
-  },
-  pressed: { opacity: 0.8 },
-  icon: {
-    width: 28,
-    height: 28,
-    borderRadius: radii.pill,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: colors.primary,
-  },
-  text: { flex: 1 },
-});
+const makeStyles = (c: Palette) =>
+  StyleSheet.create({
+    safe: { backgroundColor: c.primarySoft },
+    banner: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: spacing.sm,
+      paddingHorizontal: spacing.lg,
+      paddingVertical: spacing.sm,
+      borderBottomWidth: 1,
+      borderBottomColor: c.borderSoft,
+    },
+    pressed: { opacity: 0.8 },
+    icon: {
+      width: 28,
+      height: 28,
+      borderRadius: radii.pill,
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: c.primary,
+    },
+    text: { flex: 1 },
+  });

@@ -25,10 +25,11 @@ import {
   Section,
   Stepper,
   announce,
-  colors,
   spacing,
   useTx,
   type TranslationKey,
+  usePalette,
+  type Palette,
 } from "@laif/ui-native";
 import { useRouter } from "expo-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -52,6 +53,7 @@ import {
 import { correctionRef, isOpenRequest, targetLabel } from "./copy.ts";
 import { RecordUnchangedNote } from "./RecordUnchangedNote.tsx";
 import { useCorrectionSend } from "./usePrivacy.ts";
+import { useThemedStyles } from "../../theme/useThemedStyles.ts";
 
 type Step = 0 | 1 | 2;
 type Tx = ReturnType<typeof useTx>;
@@ -68,6 +70,7 @@ export type CorrectionFlowScreenProps = {
 
 /** "You already asked about this on {date}" + link to the open request. */
 function DuplicateNotice({ date, onOpen }: { date: string; onOpen: () => void }) {
+  const styles = useThemedStyles(makeStyles);
   const t = useTx();
   return (
     <View style={styles.notice} accessibilityRole="alert" testID="duplicate-notice">
@@ -88,6 +91,8 @@ export function CorrectionFlowScreen({
   initialTargetType,
   initialTargetId,
 }: CorrectionFlowScreenProps) {
+  const palette = usePalette();
+  const styles = useThemedStyles(makeStyles);
   const t = useTx();
   const { language } = useLanguage();
   const router = useRouter();
@@ -192,7 +197,7 @@ export function CorrectionFlowScreen({
     body = (
       <View style={styles.success} testID="correction-success">
         <View style={styles.successIcon}>
-          <Icon name="check" size={32} strokeWidth={2.6} color={colors.onPrimary} />
+          <Icon name="check" size={32} strokeWidth={2.6} color={palette.onPrimary} />
         </View>
         <AppText variant="display" accessibilityRole="header" testID="correction-success-title">
           {t("citizen:correction.success.title")}
@@ -369,6 +374,7 @@ function ReviewStep({
   onConflict,
   onOpenRequest,
 }: ReviewStepProps) {
+  const styles = useThemedStyles(makeStyles);
   const t = useTx();
   const { language } = useLanguage();
   const sender = useCorrectionSend();
@@ -460,18 +466,19 @@ function ReviewStep({
   );
 }
 
-const styles = StyleSheet.create({
-  flow: { gap: spacing.lg },
-  notice: { gap: spacing.sm },
-  actions: { flexDirection: "row", justifyContent: "space-between", gap: spacing.sm },
-  success: { gap: spacing.lg, alignItems: "stretch" },
-  successIcon: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    alignSelf: "center",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: colors.positive,
-  },
-});
+const makeStyles = (c: Palette) =>
+  StyleSheet.create({
+    flow: { gap: spacing.lg },
+    notice: { gap: spacing.sm },
+    actions: { flexDirection: "row", justifyContent: "space-between", gap: spacing.sm },
+    success: { gap: spacing.lg, alignItems: "stretch" },
+    successIcon: {
+      width: 64,
+      height: 64,
+      borderRadius: 32,
+      alignSelf: "center",
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: c.positive,
+    },
+  });

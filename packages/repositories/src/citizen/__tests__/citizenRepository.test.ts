@@ -1114,3 +1114,84 @@ describe.each(adapters)(
     });
   },
 );
+
+describe("CTZ-09 demo: simulateCareTeamConfirmation", () => {
+  const CI2 = SEED_ANCHORS.CTZ_P1_APPOINTMENT_INSTRUCTION.careInstructionId;
+  const R6 = SEED_ANCHORS.CTZ_P1_APPOINTMENT_INSTRUCTION.referralId;
+
+  it("completes the linked referral with clinician_confirmation evidence as the simulated clinician", async () => {
+    const h = await setup(createMemoryStoreAdapter());
+    const before = (await h.repo.listApprovedInstructions(P1)).find((s) => s.id === CI2)!;
+    expect(before.progress).toBe("planned");
+    const instructionVersion = before.version;
+    const waiting = (await h.repo.listTimeline(P1)).find(
+      (item) => item.kind === "next_step" && item.refId === CI2,
+    );
+    expect(waiting?.state).toBe("waiting");
+
+    const result = await h.repo.demo.simulateCareTeamConfirmation({ patientId: P1 });
+    expect(result).toMatchObject({
+      instructionId: CI2,
+      sourceType: "referral",
+      sourceId: R6,
+      simulatedActorId: PERSONA_IDS.clinAlpha1,
+    });
+
+    const after = (await h.repo.listApprovedInstructions(P1)).find((s) => s.id === CI2)!;
+    expect(after.progress).toBe("completed");
+    expect(after.completion?.evidenceType).toBe("clinician_confirmation");
+    // Progress is derived — the instruction itself is never written.
+    expect(after.version).toBe(instructionVersion);
+    const referral = (
+      await h.store.getAll<{ id: string; status: string; version: number }>("referrals")
+    ).find((r) => r.id === R6)!;
+    expect(referral.status).toBe("completed");
+    expect(referral.version).toBe(result.version);
+
+    const audits = await h.audits("demo.simulated_staff_action");
+    expect(audits).toHaveLength(1);
+    expect(audits[0]).toMatchObject({
+      actorId: PERSONA_IDS.clinAlpha1,
+      entityType: "referral",
+      entityId: R6,
+      patientId: P1,
+    });
+    expect(audits[0]!.changeSummary).toMatchObject({
+      simulated: true,
+      instructionId: CI2,
+      evidenceType: "clinician_confirmation",
+      requestedBy: PERSONA_IDS.citizen1,
+    });
+
+    // Timeline: the step row is now `done`.
+    const stepRow = (await h.repo.listTimeline(P1)).find(
+      (item) => item.kind === "next_step" && item.refId === CI2,
+    );
+    expect(stepRow?.state).toBe("done");
+
+    // Nothing planned is left → INVALID_TRANSITION, nothing written.
+    await expect(h.repo.demo.simulateCareTeamConfirmation({ patientId: P1 })).rejects.toMatchObject(
+      { code: "VALIDATION_ERROR", reason: "INVALID_TRANSITION" },
+    );
+    expect(await h.audits("demo.simulated_staff_action")).toHaveLength(1);
+  });
+
+  it("follow-up sources complete with an attended outcome; scope + consent enforced", async () => {
+    const h = await setup(createMemoryStoreAdapter(), PERSONA_IDS.citizenRep);
+    const result = await h.repo.demo.simulateCareTeamConfirmation({
+      patientId: P4,
+      instructionId: SEED_ANCHORS.CTZ_P4_REPRESENTED_PATIENT.careInstructionId,
+    });
+    expect(result.sourceType).toBe("follow_up");
+    const step = (await h.repo.listApprovedInstructions(P4))[0]!;
+    expect(step.progress).toBe("completed");
+    expect(step.completion?.evidenceType).toBe("clinician_confirmation");
+    // Another patient's step (cross-scope) → FORBIDDEN SCOPE.
+    await forbidden(h.repo.demo.simulateCareTeamConfirmation({ patientId: P1 }), "SCOPE");
+    h.as(PERSONA_IDS.citizenWithdrawn);
+    await forbidden(
+      h.repo.demo.simulateCareTeamConfirmation({ patientId: P3 }),
+      "CONSENT_REQUIRED",
+    );
+  });
+});

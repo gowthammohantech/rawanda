@@ -43,6 +43,11 @@ export function useFocusEffect(effect: () => void | (() => void)) {
   useEffect(() => effect(), [effect]);
 }
 
+/** The rendered screen is the focused one. */
+export function useIsFocused() {
+  return true;
+}
+
 export function Redirect({ href }: { href: string }) {
   return <span data-testid="redirect" data-href={href} />;
 }

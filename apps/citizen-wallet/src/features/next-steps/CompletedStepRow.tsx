@@ -6,10 +6,20 @@
  */
 import type { ApprovedInstruction } from "@laif/domain";
 import { formatDate, useLanguage } from "@laif/i18n";
-import { AppText, Icon, colors, radii, spacing, touchTarget, useTx } from "@laif/ui-native";
+import {
+  AppText,
+  Icon,
+  radii,
+  spacing,
+  touchTarget,
+  useTx,
+  usePalette,
+  type Palette,
+} from "@laif/ui-native";
 import { Pressable, StyleSheet, View } from "react-native";
 
 import { KIND_SPECS, stepTexts } from "./copy.ts";
+import { useThemedStyles } from "../../theme/useThemedStyles.ts";
 
 export function completionLines(
   t: ReturnType<typeof useTx>,
@@ -32,6 +42,8 @@ export function CompletedStepRow({
   step: ApprovedInstruction;
   onOpen: () => void;
 }) {
+  const palette = usePalette();
+  const styles = useThemedStyles(makeStyles);
   const t = useTx();
   const { language } = useLanguage();
   const texts = stepTexts(t, step);
@@ -50,7 +62,7 @@ export function CompletedStepRow({
         <Icon
           name={cancelled ? KIND_SPECS[step.kind].icon : "check"}
           size={16}
-          color={cancelled ? colors.muted : colors.positive}
+          color={cancelled ? palette.muted : palette.positive}
         />
       </View>
       <View style={styles.text}>
@@ -61,31 +73,32 @@ export function CompletedStepRow({
           </AppText>
         ))}
       </View>
-      <Icon name="chevron" size={18} color={colors.muted} />
+      <Icon name="chevron" size={18} color={palette.muted} />
     </Pressable>
   );
 }
 
-const styles = StyleSheet.create({
-  row: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.md,
-    padding: spacing.md,
-    borderWidth: 1,
-    borderColor: colors.borderSoft,
-    borderRadius: radii.md,
-    backgroundColor: colors.surface,
-  },
-  pressed: { backgroundColor: colors.background },
-  icon: {
-    width: 32,
-    height: 32,
-    borderRadius: radii.pill,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: colors.positiveSoft,
-  },
-  iconCancelled: { backgroundColor: colors.background },
-  text: { flex: 1, gap: spacing.xxs },
-});
+const makeStyles = (c: Palette) =>
+  StyleSheet.create({
+    row: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: spacing.md,
+      padding: spacing.md,
+      borderWidth: 1,
+      borderColor: c.borderSoft,
+      borderRadius: radii.md,
+      backgroundColor: c.surface,
+    },
+    pressed: { backgroundColor: c.background },
+    icon: {
+      width: 32,
+      height: 32,
+      borderRadius: radii.pill,
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: c.positiveSoft,
+    },
+    iconCancelled: { backgroundColor: c.background },
+    text: { flex: 1, gap: spacing.xxs },
+  });

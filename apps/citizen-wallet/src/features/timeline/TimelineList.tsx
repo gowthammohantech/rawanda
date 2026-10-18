@@ -3,7 +3,7 @@
  * first), mono rail dates and the vertical rail line, pull-to-refresh, and the screen header
  * (intro, filter chips, "Updated just now") as the list header so everything scrolls together.
  */
-import { AppText, MicroLabel, colors, spacing, useTx } from "@laif/ui-native";
+import { AppText, MicroLabel, spacing, useTx, usePalette } from "@laif/ui-native";
 import type { ReactElement } from "react";
 import { RefreshControl, SectionList, StyleSheet, View } from "react-native";
 
@@ -29,6 +29,7 @@ export function TimelineList({
   onRefresh,
   onPressItem,
 }: TimelineListProps) {
+  const palette = usePalette();
   const t = useTx();
   const sections = groupByMonth(items).map((s) => ({
     key: s.key,
@@ -61,7 +62,7 @@ export function TimelineList({
         />
       )}
       refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={palette.primary} />
       }
     />
   );

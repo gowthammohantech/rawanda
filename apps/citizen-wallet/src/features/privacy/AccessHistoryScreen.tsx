@@ -11,9 +11,9 @@ import {
   ErrorState,
   LoadingState,
   Screen,
-  colors,
   spacing,
   useTx,
+  type Palette,
 } from "@laif/ui-native";
 import { useRouter } from "expo-router";
 import { useMemo, useState } from "react";
@@ -29,8 +29,10 @@ import { AccessEventRow } from "./AccessEventRow.tsx";
 import { AccessHistoryFilter } from "./AccessHistoryFilter.tsx";
 import { accessCounts, matchesAccessFilter, type AccessFilter } from "./copy.ts";
 import { useAccessHistoryViewLog } from "./usePrivacy.ts";
+import { useThemedStyles } from "../../theme/useThemedStyles.ts";
 
 export function AccessHistoryScreen() {
+  const styles = useThemedStyles(makeStyles);
   const t = useTx();
   const router = useRouter();
   const persona = usePersona();
@@ -107,7 +109,8 @@ export function AccessHistoryScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  root: { gap: spacing.lg },
-  divider: { borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.borderSoft },
-});
+const makeStyles = (c: Palette) =>
+  StyleSheet.create({
+    root: { gap: spacing.lg },
+    divider: { borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: c.borderSoft },
+  });

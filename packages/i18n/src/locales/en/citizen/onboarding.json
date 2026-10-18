@@ -17,6 +17,8 @@
     "neverBody": "It never gives a diagnosis or treatment advice, never shows a health score, and is never used for insurance or credit decisions.",
     "contactTitle": "Who to contact",
     "contactBody": "For questions about your care, talk to your care team at your health facility. In an emergency, go to your nearest health facility.",
+    "offlineTitle": "Works without internet",
+    "offlineBody": "All demo data stays on this device. The wallet needs no internet connection and sends nothing over the network.",
     "back": "Back"
   },
   "persona": {

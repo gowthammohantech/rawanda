@@ -32,7 +32,7 @@ describe("citizen-wallet shell", () => {
       readyTestId: "demo-tools-screen",
     });
     expect(screen.getByText(EN_BANNER)).toBeTruthy();
-    expect(screen.getByText("DEMO ONLY")).toBeTruthy();
+    expect(screen.getAllByText("DEMO ONLY").length).toBeGreaterThan(0);
     const seeded = await repo().demo.getDemoState();
     const [patient] = await store.getAll<{ id: string }>("patients");
     await store.delete("patients", patient!.id);

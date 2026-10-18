@@ -1,0 +1,53 @@
+# CTZ-09 FRD Scenario 2 (spot error → correction → staff review → audited change):
+# Marie (CTZ-P1) → result → "Something wrong?" → describe → send → Privacy shows SUBMITTED →
+# the seeded RESOLVED request shows the original + updated values in the Timeline.
+appId: host.exp.Exponent
+---
+- launchApp:
+    clearState: true
+- runFlow: reset-demo.yaml
+- tapOn: "Continue"
+- tapOn:
+    id: "persona-card-persona-citizen-1"
+- assertVisible: "My health"
+- scrollUntilVisible:
+    element:
+      id: "result-card-0e18b111-ba16-5968-8e25-b711ba20cdf6"
+- tapOn:
+    id: "result-card-0e18b111-ba16-5968-8e25-b711ba20cdf6"
+- scrollUntilVisible:
+    element:
+      id: "result-something-wrong"
+- tapOn:
+    id: "result-something-wrong"
+- assertVisible: "Ask for a correction"
+- tapOn:
+    id: "correction-description"
+- inputText: "The time of this check looks wrong to me."
+- hideKeyboard
+- tapOn:
+    id: "correction-understood"
+- tapOn:
+    id: "correction-continue-describe"
+- assertVisible: "Check your request"
+- tapOn:
+    id: "correction-send"
+- assertVisible: "Request sent"
+- assertVisible: "Your record has not been changed. Your care team will review your request."
+- tapOn:
+    id: "correction-done"
+- scrollUntilVisible:
+    element: "SUBMITTED"
+- assertVisible: "SUBMITTED"
+# Seeded resolved-amended request: Timeline shows UPDATED with before / after.
+- tapOn: "Timeline"
+- tapOn: "Changes.*"
+- tapOn: "Status: UPDATED.*"
+- assertVisible:
+    id: "change-detail-sheet"
+- assertVisible:
+    id: "change-before"
+- assertVisible:
+    id: "change-after"
+- assertVisible:
+    id: "change-kept"

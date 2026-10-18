@@ -6,15 +6,17 @@
 import { AppHeader } from "@laif/ui-native";
 import { useRouter, type Href } from "expo-router";
 
+import { useTitleFocus } from "../a11y/useTitleFocus.ts";
 import { usePersona } from "../providers.tsx";
 import { WalletHeader } from "./WalletHeader.tsx";
 
 export function ConsentFreeHeader({ title, fallback }: { title: string; fallback: Href }) {
   const persona = usePersona();
   const router = useRouter();
+  const titleRef = useTitleFocus();
   const back = () => (router.canGoBack() ? router.back() : router.replace(fallback));
   return persona === null ? (
-    <AppHeader title={title} onBack={back} />
+    <AppHeader title={title} onBack={back} titleRef={titleRef} />
   ) : (
     <WalletHeader title={title} onBack={back} />
   );

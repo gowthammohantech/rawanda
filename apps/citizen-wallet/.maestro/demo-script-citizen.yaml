@@ -1,0 +1,30 @@
+# CTZ-09 demo script minute 12–13 (tech spec §14): the citizen sees the approved next step and
+# turns reminders off.
+appId: host.exp.Exponent
+---
+- launchApp:
+    clearState: true
+- runFlow: reset-demo.yaml
+- tapOn: "Continue"
+- tapOn:
+    id: "persona-card-persona-citizen-1"
+- assertVisible: "My health"
+- assertVisible:
+    id: "home-next-step"
+- tapOn: "Next steps"
+- assertVisible:
+    id: "section-upcoming"
+- tapOn:
+    id: "next-step-open-3840d669-bf47-5b52-b832-d069bf3b53c4"
+- assertVisible:
+    id: "approved-by"
+- tapOn: "Reminders"
+- tapOn:
+    id: "reminder-toggle"
+- assertVisible: "Stop reminders?"
+- tapOn:
+    text: "Stop reminders"
+    index: 1
+- assertVisible: "Reminders turned off"
+- assertVisible: "Reminders are off"
+- assertNotVisible: "SCHEDULED"

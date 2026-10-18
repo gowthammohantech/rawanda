@@ -18,14 +18,18 @@ import { StyleSheet, View } from "react-native";
 
 import { SyntheticNotice } from "../../components/SyntheticNotice.tsx";
 import { HREFS } from "../../state/access.ts";
+import { useTitleFocus } from "../../a11y/useTitleFocus.ts";
 
 export function WelcomeScreen() {
   const t = useTx();
+  const titleRef = useTitleFocus();
   const router = useRouter();
   return (
     <Screen
       testID="welcome-screen"
-      header={<AppHeader title={t("citizen:appName")} showLanguageSwitcher={false} />}
+      header={
+        <AppHeader titleRef={titleRef} title={t("citizen:appName")} showLanguageSwitcher={false} />
+      }
       footer={
         <View style={styles.actions}>
           <Button

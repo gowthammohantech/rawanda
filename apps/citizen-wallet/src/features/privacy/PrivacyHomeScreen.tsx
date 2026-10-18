@@ -11,9 +11,9 @@ import {
   LoadingState,
   MicroLabel,
   Screen,
-  colors,
   spacing,
   useTx,
+  type Palette,
 } from "@laif/ui-native";
 import { useRouter } from "expo-router";
 import { StyleSheet, View } from "react-native";
@@ -30,10 +30,12 @@ import { RepresentativeBanner } from "../health/RepresentativeBanner.tsx";
 import { resultErrorKind, useActivePatient } from "../health/useResults.ts";
 import { AccessEventRow } from "./AccessEventRow.tsx";
 import { CorrectionRequestRow } from "./CorrectionRequestRow.tsx";
+import { useThemedStyles } from "../../theme/useThemedStyles.ts";
 
 const LATEST = 3;
 
 export function PrivacyHomeScreen() {
+  const styles = useThemedStyles(makeStyles);
   const t = useTx();
   const router = useRouter();
   const persona = usePersona();
@@ -186,9 +188,10 @@ export function PrivacyHomeScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  root: { gap: spacing.lg },
-  intro: { gap: spacing.xs },
-  requests: { gap: spacing.sm },
-  divider: { borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.borderSoft },
-});
+const makeStyles = (c: Palette) =>
+  StyleSheet.create({
+    root: { gap: spacing.lg },
+    intro: { gap: spacing.xs },
+    requests: { gap: spacing.sm },
+    divider: { borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: c.borderSoft },
+  });

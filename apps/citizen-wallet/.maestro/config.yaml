@@ -1,0 +1,22 @@
+# Maestro workspace config (CTZ-09). `pnpm --filter @laif/citizen-wallet test:maestro`
+# (= `maestro test .maestro`) with the wallet open in Expo Go (appId host.exp.Exponent, set in
+# every flow) or a dev build. Every flow starts from `launchApp: clearState: true` and then
+# "Demo tools → Reset demo" where it moves data, so flows are independent of each other.
+# Device gate only: not part of `pnpm verify` (no emulator in CI); the web export walk
+# (`pnpm --filter @laif/citizen-wallet test:e2e`) automates the same journeys headless.
+flows:
+  - "*.yaml"
+# `reset-demo.yaml` is a sub-flow (runFlow), never run on its own.
+excludeTags:
+  - subflow
+executionOrder:
+  continueOnFailure: false
+  flowsOrder:
+    - shell
+    - consent
+    - reminder-opt-out
+    - correction-request
+    - journey-scenario-1
+    - journey-scenario-2
+    - demo-script-citizen
+    - representative-scope

@@ -9,15 +9,17 @@ import {
   Icon,
   MicroLabel,
   StatusChip,
-  colors,
   minTouchTarget,
   radii,
   spacing,
   useTx,
   type TranslationKey,
   type Tone,
+  usePalette,
+  type Palette,
 } from "@laif/ui-native";
 import { Pressable, StyleSheet, View } from "react-native";
+import { useThemedStyles } from "../theme/useThemedStyles.ts";
 
 type Tx = ReturnType<typeof useTx>;
 
@@ -47,6 +49,8 @@ export type PersonaCardProps = {
 };
 
 export function PersonaCard({ persona, onPress, disabled = false }: PersonaCardProps) {
+  const palette = usePalette();
+  const styles = useThemedStyles(makeStyles);
   const t = useTx();
   const state = personaState(persona, t);
   const relationship = personaRelationship(persona, t);
@@ -74,7 +78,7 @@ export function PersonaCard({ persona, onPress, disabled = false }: PersonaCardP
             {relationship}
           </AppText>
         </View>
-        <Icon name="chevron" color={colors.muted} size={20} />
+        <Icon name="chevron" color={palette.muted} size={20} />
       </View>
       <View style={styles.meta}>
         <StatusChip tone={state.tone}>{state.label}</StatusChip>
@@ -87,19 +91,20 @@ export function PersonaCard({ persona, onPress, disabled = false }: PersonaCardP
   );
 }
 
-const styles = StyleSheet.create({
-  card: {
-    minHeight: minTouchTarget,
-    minWidth: minTouchTarget,
-    gap: spacing.sm,
-    padding: spacing.lg,
-    borderRadius: radii.lg,
-    borderWidth: 1,
-    borderColor: colors.borderSoft,
-    backgroundColor: colors.surface,
-  },
-  pressed: { backgroundColor: colors.primarySoft },
-  top: { flexDirection: "row", alignItems: "center", gap: spacing.md },
-  names: { flex: 1, gap: spacing.xxs },
-  meta: { flexDirection: "row", alignItems: "center", flexWrap: "wrap", gap: spacing.sm },
-});
+const makeStyles = (c: Palette) =>
+  StyleSheet.create({
+    card: {
+      minHeight: minTouchTarget,
+      minWidth: minTouchTarget,
+      gap: spacing.sm,
+      padding: spacing.lg,
+      borderRadius: radii.lg,
+      borderWidth: 1,
+      borderColor: c.borderSoft,
+      backgroundColor: c.surface,
+    },
+    pressed: { backgroundColor: c.primarySoft },
+    top: { flexDirection: "row", alignItems: "center", gap: spacing.md },
+    names: { flex: 1, gap: spacing.xxs },
+    meta: { flexDirection: "row", alignItems: "center", flexWrap: "wrap", gap: spacing.sm },
+  });

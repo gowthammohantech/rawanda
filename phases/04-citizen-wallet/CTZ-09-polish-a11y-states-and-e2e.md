@@ -10,7 +10,7 @@
 | Depends on | CTZ-08 |
 | Trace | CW-01..CW-08 (hardening); FRD §3 Scenarios 1–2, §8 T-01..T-10, §9 definition of done; PRD §9 (happy-path, permission-denied and error-state tests per feature); Tech spec §7, §9, §13, §14 minute 12–13 |
 | Size | M |
-| Status | Planned |
+| Status | Done |
 
 ## 2. Goal
 

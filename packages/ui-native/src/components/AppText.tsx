@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { ComponentRef, ReactNode, Ref } from "react";
 import { StyleSheet, Text, type StyleProp, type TextProps, type TextStyle } from "react-native";
 
 import { resolveColor, scaledType, useDisplayPrefs } from "../theme.tsx";
@@ -8,6 +8,9 @@ import {
   type ColorToken,
   type TypeVariant,
 } from "../tokens.ts";
+
+/** Host instance of the kit text (screen-reader focus target). */
+export type AppTextRef = ComponentRef<typeof Text>;
 
 export type TextWeight = "regular" | "medium" | "semibold" | "bold";
 
@@ -35,6 +38,8 @@ export type AppTextProps = Omit<TextProps, "allowFontScaling" | "style"> & {
   align?: TextStyle["textAlign"];
   style?: StyleProp<TextStyle>;
   children?: ReactNode;
+  /** Host `Text` ref (e.g. to move screen-reader focus to a screen title, CTZ-09). */
+  ref?: Ref<ComponentRef<typeof Text>>;
 };
 
 function familyFor(heading: boolean, mono: boolean, weight: TextWeight): string {

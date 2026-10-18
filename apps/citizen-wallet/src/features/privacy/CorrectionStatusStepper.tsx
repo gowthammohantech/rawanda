@@ -4,10 +4,11 @@
  * accessible element ("Request progress: With care team").
  */
 import type { CorrectionRequestStatus } from "@laif/domain";
-import { AppText, Icon, colors, spacing, useTx } from "@laif/ui-native";
+import { AppText, Icon, spacing, useTx, usePalette, type Palette } from "@laif/ui-native";
 import { StyleSheet, View } from "react-native";
 
 import { stepperIndexOf } from "./copy.ts";
+import { useThemedStyles } from "../../theme/useThemedStyles.ts";
 
 const STEPS = [
   { id: "submitted", key: "citizen:correction.stepper.submitted" },
@@ -16,6 +17,8 @@ const STEPS = [
 ] as const;
 
 export function CorrectionStatusStepper({ status }: { status: CorrectionRequestStatus }) {
+  const palette = usePalette();
+  const styles = useThemedStyles(makeStyles);
   const t = useTx();
   const current = stepperIndexOf(status);
   const resolved = current === STEPS.length - 1;
@@ -43,9 +46,9 @@ export function CorrectionStatusStepper({ status }: { status: CorrectionRequestS
                 ]}
               >
                 {done ? (
-                  <Icon name="check" size={14} strokeWidth={2.6} color={colors.onPrimary} />
+                  <Icon name="check" size={14} strokeWidth={2.6} color={palette.onPrimary} />
                 ) : (
-                  <Icon name="dot" size={14} color={active ? colors.primary : colors.subtle} />
+                  <Icon name="dot" size={14} color={active ? palette.primary : palette.subtle} />
                 )}
               </View>
               {index < STEPS.length - 1 ? (
@@ -67,22 +70,23 @@ export function CorrectionStatusStepper({ status }: { status: CorrectionRequestS
   );
 }
 
-const styles = StyleSheet.create({
-  root: { flexDirection: "row", gap: spacing.xs },
-  step: { flex: 1, gap: spacing.xs },
-  markerRow: { flexDirection: "row", alignItems: "center" },
-  marker: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    borderWidth: 2,
-    borderColor: colors.border,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: colors.surface,
-  },
-  markerDone: { backgroundColor: colors.primary, borderColor: colors.primary },
-  markerActive: { borderColor: colors.primary },
-  line: { flex: 1, height: 2, backgroundColor: colors.border, marginHorizontal: spacing.xs },
-  lineDone: { backgroundColor: colors.primary },
-});
+const makeStyles = (c: Palette) =>
+  StyleSheet.create({
+    root: { flexDirection: "row", gap: spacing.xs },
+    step: { flex: 1, gap: spacing.xs },
+    markerRow: { flexDirection: "row", alignItems: "center" },
+    marker: {
+      width: 24,
+      height: 24,
+      borderRadius: 12,
+      borderWidth: 2,
+      borderColor: c.border,
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: c.surface,
+    },
+    markerDone: { backgroundColor: c.primary, borderColor: c.primary },
+    markerActive: { borderColor: c.primary },
+    line: { flex: 1, height: 2, backgroundColor: c.border, marginHorizontal: spacing.xs },
+    lineDone: { backgroundColor: c.primary },
+  });

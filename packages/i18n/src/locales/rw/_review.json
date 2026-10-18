@@ -3383,5 +3383,20 @@
   "citizen:consent.withdrawnSettings": "draft",
   "citizen:consent.withdrawnSupport": "draft",
   "domain:audit.citizen.support.viewed": "needs clinical/linguistic review",
-  "domain:audit.citizen.help.viewed": "needs clinical/linguistic review"
+  "domain:audit.citizen.help.viewed": "needs clinical/linguistic review",
+  "citizen:correction.resolution.reading_value_corrected": "needs clinical/linguistic review",
+  "citizen:correction.resolution.personal_details_corrected": "needs clinical/linguistic review",
+  "citizen:correction.resolution.record_checked_no_change": "needs clinical/linguistic review",
+  "citizen:a11y.status": "draft",
+  "citizen:a11y.statusPrefix": "draft",
+  "citizen:a11y.screenOpened": "draft",
+  "citizen:more.demo.simulateTitle": "draft",
+  "citizen:more.demo.simulateConfirmation": "draft",
+  "citizen:more.demo.simulateNote": "draft",
+  "citizen:more.demo.simulateHint": "draft",
+  "citizen:more.demo.simulateDone": "draft",
+  "citizen:more.demo.simulateNothing": "draft",
+  "citizen:more.demo.simulateNeedsPersona": "draft",
+  "citizen:onboarding.about.offlineTitle": "draft",
+  "citizen:onboarding.about.offlineBody": "draft"
 }

@@ -11,11 +11,12 @@ import {
   AppText,
   Icon,
   StatusChip,
-  colors,
   spacing,
   touchTarget,
   useTx,
   type TranslationValues,
+  usePalette,
+  type Palette,
 } from "@laif/ui-native";
 import { Pressable, StyleSheet, View } from "react-native";
 
@@ -23,6 +24,7 @@ import type { TimelineItem, TimelineParam } from "./buildCitizenTimeline.ts";
 import { ProvenanceLine, provenanceText } from "./ProvenanceLine.tsx";
 import { railDateLabel } from "./timelineDates.ts";
 import { STATE_SPECS, TimelineStateIcon } from "./TimelineStateIcon.tsx";
+import { useThemedStyles } from "../../theme/useThemedStyles.ts";
 
 type Tx = ReturnType<typeof useTx>;
 type Language = Parameters<typeof formatDate>[1];
@@ -67,12 +69,22 @@ export type TimelineItemRowProps = {
 };
 
 export function TimelineItemRow({ item, railBelow, onPress }: TimelineItemRowProps) {
+  const palette = usePalette();
+  const styles = useThemedStyles(makeStyles);
   const t = useTx();
   const { language } = useLanguage();
   const texts = rowTexts(t, item, language);
   const spec = STATE_SPECS[item.state];
   const isInfo = item.state === "info";
-  const label = [texts.state, texts.title, texts.body, texts.note, texts.provenance, texts.date]
+  // CTZ-09: a state is read as "Status: Done" (citizen:a11y.status); info rows stay "Note".
+  const label = [
+    isInfo ? texts.state : t("citizen:a11y.status", { status: texts.state }),
+    texts.title,
+    texts.body,
+    texts.note,
+    texts.provenance,
+    texts.date,
+  ]
     .filter((x): x is string => x !== null)
     .join(". ");
 
@@ -112,7 +124,7 @@ export function TimelineItemRow({ item, railBelow, onPress }: TimelineItemRowPro
           </StatusChip>
         )}
       </View>
-      {onPress === null ? null : <Icon name="chevron" size={18} color={colors.muted} />}
+      {onPress === null ? null : <Icon name="chevron" size={18} color={palette.muted} />}
     </>
   );
 
@@ -145,16 +157,17 @@ export function TimelineItemRow({ item, railBelow, onPress }: TimelineItemRowPro
   );
 }
 
-const styles = StyleSheet.create({
-  row: {
-    flexDirection: "row",
-    alignItems: "stretch",
-    gap: spacing.sm,
-    paddingHorizontal: spacing.xs,
-  },
-  pressed: { backgroundColor: colors.background },
-  dateCol: { width: 52, paddingTop: spacing.xs },
-  railCol: { width: 24, alignItems: "center" },
-  railLine: { flex: 1, width: 2, marginTop: spacing.xxs, backgroundColor: colors.border },
-  body: { flex: 1, gap: spacing.xxs, paddingBottom: spacing.lg, paddingTop: spacing.xxs },
-});
+const makeStyles = (c: Palette) =>
+  StyleSheet.create({
+    row: {
+      flexDirection: "row",
+      alignItems: "stretch",
+      gap: spacing.sm,
+      paddingHorizontal: spacing.xs,
+    },
+    pressed: { backgroundColor: c.background },
+    dateCol: { width: 52, paddingTop: spacing.xs },
+    railCol: { width: 24, alignItems: "center" },
+    railLine: { flex: 1, width: 2, marginTop: spacing.xxs, backgroundColor: c.border },
+    body: { flex: 1, gap: spacing.xxs, paddingBottom: spacing.lg, paddingTop: spacing.xxs },
+  });

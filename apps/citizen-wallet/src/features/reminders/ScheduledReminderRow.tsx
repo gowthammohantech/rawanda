@@ -1,10 +1,22 @@
 /** A scheduled reminder (CTZ-05 task 6): date + time (Africa/Kigali), "Appointment reminder", chip. */
 import type { Reminder } from "@laif/domain";
 import { formatDateTime, useLanguage } from "@laif/i18n";
-import { AppText, Icon, StatusChip, colors, radii, spacing, useTx } from "@laif/ui-native";
+import {
+  AppText,
+  Icon,
+  StatusChip,
+  radii,
+  spacing,
+  useTx,
+  usePalette,
+  type Palette,
+} from "@laif/ui-native";
+import { useThemedStyles } from "../../theme/useThemedStyles.ts";
 import { StyleSheet, View } from "react-native";
 
 export function ScheduledReminderRow({ reminder }: { reminder: Reminder }) {
+  const palette = usePalette();
+  const styles = useThemedStyles(makeReminderRowStyles);
   const t = useTx();
   const { language } = useLanguage();
   const when = t("citizen:reminders.row.scheduledFor", {
@@ -20,7 +32,7 @@ export function ScheduledReminderRow({ reminder }: { reminder: Reminder }) {
       testID={`scheduled-reminder-${reminder.id}`}
     >
       <View style={styles.icon}>
-        <Icon name="bell" size={16} color={colors.primaryDark} />
+        <Icon name="bell" size={16} color={palette.primaryDark} />
       </View>
       <View style={styles.text}>
         <AppText weight="semibold">{title}</AppText>
@@ -35,27 +47,27 @@ export function ScheduledReminderRow({ reminder }: { reminder: Reminder }) {
   );
 }
 
-export const reminderRowStyles = StyleSheet.create({
-  row: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.md,
-    padding: spacing.md,
-    minHeight: 44,
-    borderWidth: 1,
-    borderColor: colors.borderSoft,
-    borderRadius: radii.md,
-    backgroundColor: colors.surface,
-  },
-  icon: {
-    width: 32,
-    height: 32,
-    borderRadius: radii.pill,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: colors.primarySoft,
-  },
-  text: { flex: 1, gap: spacing.xxs },
-});
-
-const styles = reminderRowStyles;
+/** Row styles shared with the history rows (current palette, CTZ-09 high contrast). */
+export const makeReminderRowStyles = (c: Palette) =>
+  StyleSheet.create({
+    row: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: spacing.md,
+      padding: spacing.md,
+      minHeight: 44,
+      borderWidth: 1,
+      borderColor: c.borderSoft,
+      borderRadius: radii.md,
+      backgroundColor: c.surface,
+    },
+    icon: {
+      width: 32,
+      height: 32,
+      borderRadius: radii.pill,
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: c.primarySoft,
+    },
+    text: { flex: 1, gap: spacing.xxs },
+  });

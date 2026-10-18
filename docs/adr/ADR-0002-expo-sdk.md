@@ -69,20 +69,20 @@ stays at 19.3.0 (the SDK template lists `~19.2.3`); the Expo apps list it in
 
 ## Decision 3 — web app pins
 
-| Package                 | Version | Notes                                                                     |
-| ----------------------- | ------- | ------------------------------------------------------------------------- |
-| `vite`                  | 7.3.7   | **deviation:** phase text says Vite 8; see below                          |
-| `@vitejs/plugin-react`  | 5.2.0   | matches Vite 7                                                            |
-| `@tailwindcss/vite`     | 4.3.3   | with `tailwindcss` 4.3.3 (FND-09)                                         |
-| `react-router`          | 7.9.6   | library/data mode (`createBrowserRouter`); same copy as ui-web/test-utils |
-| `@tanstack/react-query` | 5.90.10 | same copy as ui-web/test-utils                                            |
-| `zustand`               | 5.0.15  |                                                                           |
-| `react-hook-form`       | 7.90.0  |                                                                           |
-| `@hookform/resolvers`   | 5.9.1   | Zod 4 support                                                             |
-| `@playwright/test`      | 1.64.1  | app-local `test:e2e` (`vite preview` + `VITE_LAIF_E2E=1`)                 |
-| `@axe-core/playwright`  | 4.14.0  |                                                                           |
-| `recharts`              | 3.10.1  | programme-admin only (ADM-02 chart kit); ui-web keeps its SVG charts      |
-| `react-is`              | 19.3.1  | programme-admin only: Recharts peer, pinned so no unpinned peer resolves  |
+| Package                 | Version | Notes                                                                                                                          |
+| ----------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `vite`                  | 7.3.7   | **deviation:** phase text says Vite 8; see below                                                                               |
+| `@vitejs/plugin-react`  | 5.2.0   | matches Vite 7                                                                                                                 |
+| `@tailwindcss/vite`     | 4.3.3   | with `tailwindcss` 4.3.3 (FND-09)                                                                                              |
+| `react-router`          | 7.9.6   | library/data mode (`createBrowserRouter`); same copy as ui-web/test-utils                                                      |
+| `@tanstack/react-query` | 5.90.10 | same copy as ui-web/test-utils                                                                                                 |
+| `zustand`               | 5.0.15  |                                                                                                                                |
+| `react-hook-form`       | 7.90.0  |                                                                                                                                |
+| `@hookform/resolvers`   | 5.9.1   | Zod 4 support                                                                                                                  |
+| `@playwright/test`      | 1.64.1  | app-local `test:e2e` (`vite preview` + `VITE_LAIF_E2E=1`); citizen-wallet: Expo web export + `EXPO_PUBLIC_LAIF_E2E=1` (CTZ-09) |
+| `@axe-core/playwright`  | 4.14.0  |                                                                                                                                |
+| `recharts`              | 3.10.1  | programme-admin only (ADM-02 chart kit); ui-web keeps its SVG charts                                                           |
+| `react-is`              | 19.3.1  | programme-admin only: Recharts peer, pinned so no unpinned peer resolves                                                       |
 
 **Vite 7 instead of 8:** Vitest 3.2.7 (ADR-0001) is built on Vite 7, and the FND-09 gallery
 already uses Vite 7.3.7 + plugin-react 5.2.0. Two Vite majors in one hoisted tree would give the
