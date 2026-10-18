@@ -53,11 +53,14 @@ export function FunnelBars({ view, search }: FunnelBarsProps) {
             <Link
               to={`${paths.funnelStage(stage.id)}${search}`}
               data-testid={`funnel-stage-${stage.id}`}
-              aria-label={t("admin:funnel.bars.linkLabel", { stage: label })}
               className="hover:bg-background focus-visible:bg-background block rounded-md px-3 py-2.5"
             >
               <span className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-                <span className="text-ink text-[13px] font-semibold">{label}</span>
+                <span className="text-ink text-[13px] font-semibold">
+                  {label}
+                  {/* The link's name keeps the visible text (WCAG 2.5.3) plus where it goes. */}
+                  <span className="sr-only">{` — ${t("admin:funnel.bars.openHint")}`}</span>
+                </span>
                 <span className="text-ink text-lg font-semibold tabular-nums">
                   <SuppressedValue cell={stage.n} threshold={k} />
                 </span>

@@ -49,6 +49,11 @@ export type AccessibleDataTableProps<T> = {
   footer?: ReactNode;
   /** Hides the "Showing x of y" footer text. */
   hideCount?: boolean;
+  /**
+   * Wide tables (≥ 768 px): the table scrolls horizontally inside a focusable, labelled region
+   * instead of widening the page; the caption is shown above the region so it is never clipped.
+   */
+  scrollable?: boolean;
   className?: string;
 };
 
@@ -79,6 +84,7 @@ export function AccessibleDataTable<T>({
   emptyState,
   footer,
   hideCount = false,
+  scrollable = false,
   className,
 }: AccessibleDataTableProps<T>) {
   const t = useTx();
@@ -109,130 +115,137 @@ export function AccessibleDataTable<T>({
 
   return (
     <div className={cx("w-full", className)}>
-      <table className="w-full border-collapse text-sm max-md:block">
-        <caption
-          className={cx(
-            captionHidden
-              ? "sr-only"
-              : "text-ink pb-3 text-start text-[15px] font-semibold max-md:block",
-          )}
-        >
+      {scrollable && !captionHidden ? (
+        <p aria-hidden="true" className="text-ink m-0 pb-3 text-start text-[15px] font-semibold">
           {caption}
-        </caption>
-        <thead className="max-md:sr-only">
-          <tr className="border-border-soft border-b">
-            {columns.map((column) => {
-              const isSorted = activeSort?.columnId === column.id;
-              const ariaSort =
-                column.sortValue === undefined
-                  ? undefined
-                  : isSorted
-                    ? activeSort.direction
-                    : "none";
-              return (
-                <th
-                  key={column.id}
-                  scope="col"
-                  aria-sort={ariaSort}
+        </p>
+      ) : null}
+      <ScrollRegion enabled={scrollable} label={caption}>
+        <table className="w-full border-collapse text-sm max-md:block">
+          <caption
+            className={cx(
+              captionHidden || scrollable
+                ? "sr-only"
+                : "text-ink pb-3 text-start text-[15px] font-semibold max-md:block",
+            )}
+          >
+            {caption}
+          </caption>
+          <thead className="max-md:sr-only">
+            <tr className="border-border-soft border-b">
+              {columns.map((column) => {
+                const isSorted = activeSort?.columnId === column.id;
+                const ariaSort =
+                  column.sortValue === undefined
+                    ? undefined
+                    : isSorted
+                      ? activeSort.direction
+                      : "none";
+                return (
+                  <th
+                    key={column.id}
+                    scope="col"
+                    aria-sort={ariaSort}
+                    className={cx(
+                      "micro-label text-muted px-3 py-2.5 font-medium",
+                      column.align === "end" ? "text-end" : "text-start",
+                    )}
+                  >
+                    {column.sortValue === undefined ? (
+                      column.header
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => requestSort(column.id)}
+                        className="micro-label text-muted hover:text-ink inline-flex items-center gap-1 rounded-sm font-medium uppercase"
+                      >
+                        {column.header}
+                        <Icon
+                          name={
+                            isSorted
+                              ? activeSort.direction === "ascending"
+                                ? "chevron-up"
+                                : "chevron-down"
+                              : "sort"
+                          }
+                          size={12}
+                        />
+                        <span className="sr-only">
+                          {isSorted
+                            ? t(
+                                activeSort.direction === "ascending"
+                                  ? "common:table.sortedAscending"
+                                  : "common:table.sortedDescending",
+                              )
+                            : t("common:table.sortBy", { column: column.header })}
+                        </span>
+                      </button>
+                    )}
+                  </th>
+                );
+              })}
+              {rowAction === undefined ? null : (
+                <th scope="col" className="micro-label text-muted px-3 py-2.5 text-end font-medium">
+                  {t("common:table.actions")}
+                </th>
+              )}
+            </tr>
+          </thead>
+          <tbody className="max-md:block max-md:space-y-3">
+            {sortedRows.length === 0 ? (
+              <tr className="max-md:block">
+                <td colSpan={allColumns} className="text-muted px-3 py-8 text-center max-md:block">
+                  {emptyState ?? t("common:table.noResults")}
+                </td>
+              </tr>
+            ) : (
+              sortedRows.map((row) => (
+                <tr
+                  key={getRowId(row)}
                   className={cx(
-                    "micro-label text-muted px-3 py-2.5 font-medium",
-                    column.align === "end" ? "text-end" : "text-start",
+                    "border-border-soft hover:bg-background/60 border-b last:border-b-0",
+                    "max-md:block max-md:rounded-md max-md:border max-md:p-3",
                   )}
                 >
-                  {column.sortValue === undefined ? (
-                    column.header
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={() => requestSort(column.id)}
-                      className="micro-label text-muted hover:text-ink inline-flex items-center gap-1 rounded-sm font-medium uppercase"
-                    >
-                      {column.header}
-                      <Icon
-                        name={
-                          isSorted
-                            ? activeSort.direction === "ascending"
-                              ? "chevron-up"
-                              : "chevron-down"
-                            : "sort"
-                        }
-                        size={12}
-                      />
-                      <span className="sr-only">
-                        {isSorted
-                          ? t(
-                              activeSort.direction === "ascending"
-                                ? "common:table.sortedAscending"
-                                : "common:table.sortedDescending",
-                            )
-                          : t("common:table.sortBy", { column: column.header })}
-                      </span>
-                    </button>
+                  {columns.map((column) => {
+                    const Cell = column.isRowHeader === true ? "th" : "td";
+                    return (
+                      <Cell
+                        key={column.id}
+                        data-label={column.header}
+                        {...(column.isRowHeader === true ? { scope: "row" } : {})}
+                        className={cx(
+                          "text-ink px-3 py-3 align-middle font-normal",
+                          column.align === "end" ? "text-end" : "text-start",
+                          "max-md:flex max-md:justify-between max-md:gap-3 max-md:px-0 max-md:py-1 max-md:text-end",
+                          "max-md:before:micro-label max-md:before:text-muted max-md:before:text-start max-md:before:content-[attr(data-label)]",
+                          column.className,
+                        )}
+                      >
+                        {column.cell(row)}
+                      </Cell>
+                    );
+                  })}
+                  {rowAction === undefined ? null : (
+                    <td className="px-3 py-3 text-end max-md:block max-md:px-0 max-md:pt-2">
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        onClick={() => rowAction.onAction(row)}
+                        {...(rowAction.accessibleLabel === undefined
+                          ? {}
+                          : { "aria-label": rowAction.accessibleLabel(row) })}
+                      >
+                        {rowAction.label}
+                      </Button>
+                    </td>
                   )}
-                </th>
-              );
-            })}
-            {rowAction === undefined ? null : (
-              <th scope="col" className="micro-label text-muted px-3 py-2.5 text-end font-medium">
-                {t("common:table.actions")}
-              </th>
+                </tr>
+              ))
             )}
-          </tr>
-        </thead>
-        <tbody className="max-md:block max-md:space-y-3">
-          {sortedRows.length === 0 ? (
-            <tr className="max-md:block">
-              <td colSpan={allColumns} className="text-muted px-3 py-8 text-center max-md:block">
-                {emptyState ?? t("common:table.noResults")}
-              </td>
-            </tr>
-          ) : (
-            sortedRows.map((row) => (
-              <tr
-                key={getRowId(row)}
-                className={cx(
-                  "border-border-soft hover:bg-background/60 border-b last:border-b-0",
-                  "max-md:block max-md:rounded-md max-md:border max-md:p-3",
-                )}
-              >
-                {columns.map((column) => {
-                  const Cell = column.isRowHeader === true ? "th" : "td";
-                  return (
-                    <Cell
-                      key={column.id}
-                      data-label={column.header}
-                      {...(column.isRowHeader === true ? { scope: "row" } : {})}
-                      className={cx(
-                        "text-ink px-3 py-3 align-middle font-normal",
-                        column.align === "end" ? "text-end" : "text-start",
-                        "max-md:flex max-md:justify-between max-md:gap-3 max-md:px-0 max-md:py-1 max-md:text-end",
-                        "max-md:before:micro-label max-md:before:text-muted max-md:before:text-start max-md:before:content-[attr(data-label)]",
-                        column.className,
-                      )}
-                    >
-                      {column.cell(row)}
-                    </Cell>
-                  );
-                })}
-                {rowAction === undefined ? null : (
-                  <td className="px-3 py-3 text-end max-md:block max-md:px-0 max-md:pt-2">
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      onClick={() => rowAction.onAction(row)}
-                      {...(rowAction.accessibleLabel === undefined
-                        ? {}
-                        : { "aria-label": rowAction.accessibleLabel(row) })}
-                    >
-                      {rowAction.label}
-                    </Button>
-                  </td>
-                )}
-              </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      </ScrollRegion>
       {hideCount && footer === undefined ? null : (
         <div className="text-muted flex flex-wrap items-center justify-between gap-3 pt-3 text-xs">
           {hideCount ? (
@@ -243,6 +256,32 @@ export function AccessibleDataTable<T>({
           {footer}
         </div>
       )}
+    </div>
+  );
+}
+
+function ScrollRegion({
+  enabled,
+  label,
+  children,
+}: {
+  enabled: boolean;
+  label: string;
+  children: ReactNode;
+}) {
+  if (!enabled) return <>{children}</>;
+  return (
+    // A scrollable region must be keyboard-reachable (WCAG 2.1.1): focusable + labelled. It is
+    // also the containing block of its sr-only texts, so they never widen the page.
+    <div
+      role="region"
+      aria-label={label}
+      // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+      tabIndex={0}
+      data-testid="table-scroll"
+      className="focus-visible:ring-primary relative rounded-sm focus-visible:ring-2 focus-visible:outline-none md:overflow-x-auto"
+    >
+      {children}
     </div>
   );
 }

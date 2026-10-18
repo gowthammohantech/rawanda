@@ -22,6 +22,12 @@ export type TabsProps = {
   onValueChange?: (value: string) => void;
   /** Right-aligned controls in the tab bar (e.g. a sort select). */
   actions?: ReactNode;
+  /**
+   * Tabs without `content` (the app renders one shared panel, e.g. a filtered list): the id of
+   * that panel. Their triggers then control it instead of pointing at a panel that does not
+   * exist (axe `aria-valid-attr-value`).
+   */
+  panelId?: string;
   className?: string;
 };
 
@@ -33,6 +39,7 @@ export function Tabs({
   defaultValue,
   onValueChange,
   actions,
+  panelId,
   className,
 }: TabsProps) {
   const rootProps = {
@@ -49,6 +56,7 @@ export function Tabs({
               key={tab.value}
               value={tab.value}
               {...(tab.disabled === true ? { disabled: true } : {})}
+              {...(tab.content === undefined ? { "aria-controls": panelId } : {})}
               className={cx(
                 "group target-min text-muted inline-flex items-center gap-2 rounded-t-md px-4 py-2.5 text-sm",
                 "hover:text-ink data-[state=active]:bg-surface data-[state=active]:text-ink data-[state=active]:font-semibold",

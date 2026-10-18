@@ -129,6 +129,7 @@ export function ExportHistoryTable() {
           />
         ) : (
           <AccessibleDataTable
+            scrollable
             caption={t("admin:reports.history.caption")}
             captionHidden
             columns={columns}

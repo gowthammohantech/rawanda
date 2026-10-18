@@ -23,7 +23,7 @@ import {
   useTx,
   type TranslationKey,
 } from "@laif/ui-web";
-import { useState } from "react";
+import { useId, useState } from "react";
 
 import type { AdminFiltersApi } from "../filters/useAdminFilters.ts";
 import { IssueRow } from "./IssueRow.tsx";
@@ -39,6 +39,7 @@ export type IssueQueueProps = {
 
 export function IssueQueue({ api, createKey }: IssueQueueProps) {
   const t = useTx();
+  const baseId = useId();
   const [tab, setTab] = useState<DataQualityIssueStatus>("open");
   const [type, setType] = useState<DataQualityIssueType | null>(null);
   const [page, setPage] = useState(1);
@@ -104,6 +105,7 @@ export function IssueQueue({ api, createKey }: IssueQueueProps) {
   })();
 
   const counts = query.data?.counts;
+  const panelId = `${baseId}-queue-panel`;
   return (
     <Card
       title={t("admin:quality.queue.title")}
@@ -112,6 +114,7 @@ export function IssueQueue({ api, createKey }: IssueQueueProps) {
       <div className="flex flex-col gap-3" data-testid="issue-queue">
         <Tabs
           label={t("admin:quality.queue.tabs")}
+          panelId={panelId}
           value={tab}
           onValueChange={(v) => {
             setTab(v as DataQualityIssueStatus);
@@ -163,7 +166,13 @@ export function IssueQueue({ api, createKey }: IssueQueueProps) {
             {t("admin:quality.readOnlyQueue")}
           </p>
         )}
-        {body}
+        <div
+          id={panelId}
+          role="tabpanel"
+          aria-label={t(`admin:quality.tab.${tab}` as TranslationKey)}
+        >
+          {body}
+        </div>
       </div>
     </Card>
   );

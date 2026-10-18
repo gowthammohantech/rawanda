@@ -40,7 +40,7 @@ export function KpiStrip({ label, items, threshold, computedAt, rulesetVersions 
       aria-label={label}
       data-testid="kpi-strip"
       className={cx(
-        "border-border-soft bg-surface shadow-card grid grid-cols-2 gap-y-4 rounded-lg border px-5 py-4 sm:grid-cols-3",
+        "border-border-soft bg-surface shadow-card grid grid-cols-2 gap-y-4 rounded-lg border px-2 py-4 sm:grid-cols-3",
         items.length >= 6 ? "xl:grid-cols-6" : "xl:grid-cols-5",
       )}
     >
@@ -48,13 +48,13 @@ export function KpiStrip({ label, items, threshold, computedAt, rulesetVersions 
         <div
           key={item.key ?? item.id}
           data-testid={`kpi-${item.key ?? item.id}`}
-          className={cx(
-            "min-w-0 px-4 first:ps-0",
-            index > 0 && "xl:border-border-soft xl:border-s",
-          )}
+          className={cx("min-w-0 px-3", index > 0 && "xl:border-border-soft xl:border-s")}
         >
-          <div className="flex items-center gap-1">
-            <h3 className="micro-label text-muted m-0 truncate font-medium">{item.label}</h3>
+          {/* Labels wrap (never truncated) so the full metric name stays readable at 1280 px. */}
+          <div className="flex items-start gap-1">
+            <h3 className="micro-label text-muted m-0 min-h-[2lh] font-medium break-words hyphens-auto">
+              {item.label}
+            </h3>
             <MetricInfo
               metric={item.id}
               n={item.n ?? item.value}

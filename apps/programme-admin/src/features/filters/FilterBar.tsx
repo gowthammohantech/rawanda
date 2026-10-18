@@ -3,14 +3,17 @@
  * and "Reset filters". Every change goes to the URL (`useAdminFilters`). A custom range is
  * applied with "Apply"; `from > to` (and the other range rules) show an inline field error and
  * nothing is applied. The bar stays interactive while data loads.
+ * ADM-09 (390 px): below 640 px the controls collapse behind a "Filters (n)" button (a disclosure
+ * "sheet"; n = filters that differ from the defaults), so the page starts with the figures.
  */
-import { Button, Icon, Select, TextInput, useTx, type TranslationKey } from "@laif/ui-web";
+import { Button, cx, Icon, Select, TextInput, useTx, type TranslationKey } from "@laif/ui-web";
 import { useId, useState, type FormEvent } from "react";
 
 import { districtLabel, facilityLabel } from "../../app/persona-labels.ts";
 import {
   customRangeIssue,
   DATE_PRESETS,
+  DEFAULT_PRESET,
   type DatePreset,
   type FilterIssue,
 } from "./filterSchema.ts";
@@ -29,6 +32,14 @@ export function FilterBar({ api }: { api: AdminFiltersApi }) {
 
   const districtValue = api.lockedDistrict ?? filters.district ?? ALL;
   const facilityValue = api.lockedFacility ?? filters.facility ?? ALL;
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const sheetId = useId();
+  const active = [
+    filters.preset !== DEFAULT_PRESET,
+    api.lockedDistrict === null && filters.district !== null,
+    api.lockedFacility === null && filters.facility !== null,
+    filters.type !== "all",
+  ].filter(Boolean).length;
 
   return (
     <div
@@ -37,7 +48,26 @@ export function FilterBar({ api }: { api: AdminFiltersApi }) {
       data-testid="filter-bar"
       className="flex flex-col gap-3"
     >
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-[repeat(4,minmax(0,1fr))_auto] lg:items-end">
+      <Button
+        variant="secondary"
+        icon="filter"
+        className="self-start sm:hidden"
+        aria-expanded={sheetOpen}
+        aria-controls={sheetId}
+        onClick={() => setSheetOpen((open) => !open)}
+        data-testid="filters-toggle"
+      >
+        {t("admin:filters.sheetToggle", { n: active })}
+      </Button>
+      <div
+        id={sheetId}
+        className={cx(
+          "gap-3 sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-[repeat(4,minmax(0,1fr))_auto] xl:items-end",
+          sheetOpen
+            ? "border-border-soft bg-surface grid grid-cols-1 rounded-md border p-3 sm:border-0 sm:bg-transparent sm:p-0"
+            : "hidden",
+        )}
+      >
         <Select
           label={t("admin:filters.dateRange")}
           value={customOpen ? "custom" : filters.preset}

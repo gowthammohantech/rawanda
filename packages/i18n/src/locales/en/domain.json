@@ -584,6 +584,10 @@
       "access_grant": {
         "changed": "Access grant changed",
         "revoked": "Access grant revoked"
+      },
+      "settings": {
+        "suppression_threshold_changed": "Suppression threshold changed",
+        "denied": "Settings change denied"
       }
     },
     "clinical": {

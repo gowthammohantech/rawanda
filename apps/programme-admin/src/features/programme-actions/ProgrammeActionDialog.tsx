@@ -10,6 +10,8 @@
  *   every retry, so a double click or a timeout + retry gives exactly one record.
  * - Submit is disabled while pending. A failed save keeps the dialog open with the input
  *   ("Not saved — retry"). Success: toast, close, `adminKeys.programmeActions` invalidated.
+ * - ADM-09 (T-09): with `draftContext` the input is kept as a sessionStorage draft (with the key);
+ *   `restore` reopens it after a session expiry + re-login with the SAME key (exactly one record).
  */
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -40,9 +42,16 @@ import { z } from "zod";
 
 import { facilityLabel } from "../../app/persona-labels.ts";
 import { useServices } from "../../app/providers.tsx";
+import { useDialogDraft, type DialogDraft } from "../../lib/drafts.ts";
 import { isRetryableWriteError, useCreateProgrammeAction } from "./mutations.ts";
 
-type FormValues = { category: string; title: string; note: string; dueDate: string };
+export type ProgrammeActionFormValues = {
+  category: string;
+  title: string;
+  note: string;
+  dueDate: string;
+};
+type FormValues = ProgrammeActionFormValues;
 type FieldName = keyof FormValues;
 const FIELDS: readonly FieldName[] = ["category", "title", "note", "dueDate"];
 
@@ -55,6 +64,10 @@ export type ProgrammeActionDialogProps = {
   defaults?: { category?: ProgrammeActionCategory; title?: string };
   /** Test seam (default `crypto.randomUUID`). */
   createKey?: () => string;
+  /** ADM-09: keep a draft for this context (page path + search); null / omitted = no draft. */
+  draftContext?: string | null;
+  /** ADM-09: a draft found for this context (its key and input are reused). */
+  restore?: DialogDraft<ProgrammeActionFormValues> | null;
 };
 
 const addDays = (day: string, n: number): string =>
@@ -155,6 +168,8 @@ export function ProgrammeActionDialog({
   onAssigned,
   defaults,
   createKey,
+  draftContext = null,
+  restore = null,
 }: ProgrammeActionDialogProps) {
   const t = useTx();
   const { language } = useLanguage();
@@ -162,7 +177,7 @@ export function ProgrammeActionDialog({
   const { clock } = useServices();
   const baseId = useId();
   // One key per dialog opening, reused by every retry.
-  const [key] = useState(() => (createKey ?? (() => crypto.randomUUID()))());
+  const [key] = useState(() => restore?.key ?? (createKey ?? (() => crypto.randomUUID()))());
   const [failure, setFailure] = useState<"retry" | "forbidden" | "other" | null>(null);
   const mutation = useCreateProgrammeAction();
   const dueWindow = programmeActionDueWindow(clock.now());
@@ -174,10 +189,18 @@ export function ProgrammeActionDialog({
       title: defaults?.title ?? "",
       note: "",
       dueDate: addDays(dueWindow.from, 14),
+      ...restore?.values,
     },
     shouldFocusError: true,
   });
-  const { register, handleSubmit, formState, setError, setFocus } = form;
+  const { register, handleSubmit, formState, setError, setFocus, watch } = form;
+  const draft = useDialogDraft<ProgrammeActionFormValues>({
+    kind: "programmeAction",
+    context: draftContext,
+    key,
+    subject: facilityId,
+    subscribe: watch,
+  });
   const errors: FieldErrors<FormValues> = formState.errors;
   const dateText = (day: string) => formatDate(`${day}T12:00:00.000Z`, language);
   const errorText = (field: FieldName): string | undefined =>
@@ -204,6 +227,7 @@ export function ProgrammeActionDialog({
           sourceContext,
         },
       });
+      draft.clear();
       toast({ title: t("admin:actions.toast.assigned"), tone: "positive" });
       onAssigned?.(result.data);
       onClose();
@@ -229,7 +253,9 @@ export function ProgrammeActionDialog({
     <ConfirmDialog
       open
       onOpenChange={(open) => {
-        if (!open) onClose();
+        if (open) return;
+        draft.clear();
+        onClose();
       }}
       title={t("admin:actions.dialog.title")}
       description={t("admin:actions.dialog.description", {

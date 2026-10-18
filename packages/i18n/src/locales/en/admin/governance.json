@@ -96,7 +96,8 @@
       "review": "Reviews (all)",
       "referral": "Referrals (all)",
       "followup": "Follow-ups (all)",
-      "demo": "Demo tools (all)"
+      "demo": "Demo tools (all)",
+      "admin_settings": "Settings changes (all)"
     }
   },
   "access": {

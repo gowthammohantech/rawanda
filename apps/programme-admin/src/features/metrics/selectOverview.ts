@@ -9,14 +9,13 @@
  * additive lines facility → district → programme and series / parts → count. The selected view
  * (programme, one district or one facility) only PICKS its cells from that single result, so
  * "All districts" and "District Alpha" never hide different cells and subtracting one view from
- * another (or from the funnel, for the same lines) recovers nothing hidden. Non-additive values:
+ * another recovers nothing hidden. ADM-09: the pass is SHARED with the funnel
+ * (`programmeSuppression`), so a figure both pages publish is hidden on both or on neither. Non-additive values:
  * distinct people screened is hidden in a narrower view when it differs from an enclosing scope
  * by a small (primary-suppressed) amount; the median follows its basis cell. Rates follow their
  * numerator and denominator cells. The KPI strip values are the view node's protected totals.
  */
 import {
-  countByFacility,
-  countByScreeningType,
   countDistinctPeopleScreened,
   derivedCell,
   medianDaysToReview,
@@ -24,7 +23,6 @@ import {
   PENDING_REVIEW_AGE_BUCKETS,
   rateCell,
   suppressValue,
-  weeklyScreenedVsFlagged,
   type AggregateCell,
   type CellList,
   type MetricsDataset,
@@ -33,14 +31,8 @@ import {
 } from "@laif/analytics";
 
 import { restrictDataset } from "./restrictDataset.ts";
-import {
-  ATTENTION_MEASURES,
-  attentionLines,
-  attentionMeasures,
-  ROOT_NODE,
-  suppressOverScope,
-  viewNodeOf,
-} from "./scopeSuppression.ts";
+import { programmeSuppression, TYPE_KEYS } from "./programmeSuppression.ts";
+import { ROOT_NODE, viewNodeOf } from "./scopeSuppression.ts";
 
 export type FacilityRow = {
   facilityId: string;
@@ -103,29 +95,7 @@ export type SelectOverviewOptions = {
   viewDataset?: MetricsDataset;
 };
 
-const TYPE_KEYS = ["bpOnly", "glucoseOnly", "both", "neither"] as const;
-
 export { restrictDataset };
-
-/** Raw additive measures of one facility (keys: metric ids, `wS:i`, `wF:i`, `t:*`, attention). */
-function facilityMeasures(fds: MetricsDataset, weeks: readonly string[]): Map<string, number> {
-  const out = new Map<string, number>();
-  for (const m of OVERVIEW_COUNT_METRICS) {
-    out.set(
-      m,
-      countByFacility(fds, m).reduce((a, r) => a + r.value, 0),
-    );
-  }
-  const weekly = new Map(weeklyScreenedVsFlagged(fds).map((w) => [w.weekStart, w]));
-  weeks.forEach((w, i) => {
-    out.set(`wS:${i}`, weekly.get(w)?.screened ?? 0);
-    out.set(`wF:${i}`, weekly.get(w)?.flagged ?? 0);
-  });
-  const types = countByScreeningType(fds);
-  for (const t of TYPE_KEYS) out.set(`t:${t}`, types[t]);
-  for (const [m, n] of attentionMeasures(fds)) out.set(m, n);
-  return out;
-}
 
 export function selectOverview(
   ds: MetricsDataset,
@@ -133,27 +103,9 @@ export function selectOverview(
   options: SelectOverviewOptions = {},
 ): OverviewMetrics {
   const view = options.view ?? ALL_VIEW;
-  const weeks = weeklyScreenedVsFlagged(ds).map((w) => w.weekStart);
-  const measures = [
-    ...OVERVIEW_COUNT_METRICS,
-    ...weeks.flatMap((_, i) => [`wS:${i}`, `wF:${i}`]),
-    ...TYPE_KEYS.map((t) => `t:${t}`),
-    ...ATTENTION_MEASURES,
-  ];
-  const pass = suppressOverScope(
-    ds,
-    {
-      measures,
-      facilityMeasures: (fds) => facilityMeasures(fds, weeks),
-      nodeLines: (node, key) => [
-        { members: weeks.map((_, i) => key(node, `wS:${i}`)), total: key(node, "screened") },
-        { members: weeks.map((_, i) => key(node, `wF:${i}`)), total: key(node, "flagged") },
-        { members: TYPE_KEYS.map((t) => key(node, `t:${t}`)), total: key(node, "screened") },
-        ...attentionLines(node, key),
-      ],
-    },
-    threshold,
-  );
+  // ADM-09: ONE joint pass with the funnel (same nodes for the shared figures).
+  const pass = programmeSuppression(ds, threshold);
+  const { weeks } = pass;
   const cellOf = pass.cellOf;
   const root = ROOT_NODE;
 

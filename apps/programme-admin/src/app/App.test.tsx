@@ -104,7 +104,7 @@ describe("programme-admin shell", () => {
     const user = userEvent.setup();
     // A read-only page: /admin/quality persists detected data-quality issues on load (ADM-06),
     // which would change the dataset hash concurrently with this test.
-    const { services, store } = await signedIn("/admin/overview");
+    const { services, store, router } = await signedIn("/admin/overview");
     const seeded = await services.repo.demo.getDemoState();
 
     // Programme personas have no clinical writes: change the local dataset directly.
@@ -122,7 +122,9 @@ describe("programme-admin shell", () => {
     await user.click(await screen.findByRole("menuitem", { name: "Reset demo" }));
     await screen.findByRole("dialog", { name: "Reset demo data?" });
     await user.click(screen.getByRole("button", { name: "Reset demo" }));
-    await screen.findByText("Demo data was reset to the baseline.");
+    // ADM-09: Reset demo returns to the sign-in with "Demo data restored".
+    await screen.findByText("Demo data restored");
+    await waitFor(() => expect(router.state.location.pathname).toBe("/admin/login"));
 
     const after = await services.repo.demo.getDemoState();
     expect(after.datasetHash).toBe(seeded.datasetHash);
@@ -130,8 +132,10 @@ describe("programme-admin shell", () => {
     await waitFor(() =>
       expect(screen.queryByText("You are offline. Changes are saved on this device.")).toBeNull(),
     );
-    // The demo session survives a reset (grants are re-seeded with the same version).
-    expect(services.session.getState().session).not.toBeNull();
+    // ADM-09: the session ends with the reset (no `session.ended`: audit = baseline + demo.reset).
+    expect(services.session.getState().session).toBeNull();
+    expect(await auditEvents(store, "session.ended")).toHaveLength(0);
+    expect(await auditEvents(store, "demo.reset")).toHaveLength(1);
   });
 
   it("renders NotFound inside the shell for unknown routes", async () => {

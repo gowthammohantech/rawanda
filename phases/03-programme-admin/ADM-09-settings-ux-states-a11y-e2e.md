@@ -1,6 +1,6 @@
 # ADM-09 — Settings, UX-state hardening, accessibility, responsive layout and E2E suite
 
-Status: Not started
+**Status:** Done
 
 ## 1. Header
 
@@ -181,3 +181,71 @@ Manual:
 ## 12. Commit
 
 `feat(admin): ADM-09 settings, suppression threshold, reset, a11y, responsive and admin E2E suite`
+
+## 13. Implementation notes (builder)
+
+- **Settings storage:** `AdminSettings` lives in store meta `admin.settings` (no new collection,
+  no Dexie version bump); an absent key IS the seed baseline (k = 5, version 1, `updatedBy`
+  null), so `resetDemo()` (`clearAll`) restores it exactly. Repository: `getAdminSettings()`
+  (`metrics.read`) and `updateAdminSettings(input, key)` (`settings.privacy`; idempotent;
+  `expectedVersion` → `CONFLICT` + `conflict.detected`; `demo conflictOnce` on
+  `audit_event`/`admin-settings`). Contracts: `AdminSettingsSchema`,
+  `AdminSettingsUpdateInputSchema`, `ADMIN_THRESHOLD_MIN = 3` (governance floor, never lower) /
+  `ADMIN_THRESHOLD_MAX = 20`. Audit entity type `audit_event` (as the repository's other system
+  configuration events, `faults` / `clock`).
+- **Audit actions registered:** `admin.settings.suppression_threshold_changed` (change) and
+  `admin.settings.denied` (access; phase name kept, written as the `denyAction` of the
+  permission check) with EN + RW `domain:audit.*` labels. `session.expired` already existed.
+- **Threshold in force:** `useSuppressionThreshold()` reads `adminKeys.settings()`; every figure
+  page is mounted behind `ThresholdGate`, so nothing renders at the baseline k while a different
+  k is in force (a failing refetch keeps the known value). Update → `setQueryData` +
+  invalidate `adminKeys.all`; every derived key and the CSV metadata already carried k.
+- **Joint Overview + Funnel suppression (open item):** both pages now pick their cells from ONE
+  pass (`features/metrics/programmeSuppression.ts`): the shared figures (recorded = screened,
+  flagged, reviewed, dismissed, referred, weekly recorded / flagged) are the same nodes;
+  page-only measures are extra nodes of the same pass. `programmeSuppression.test.ts` proves
+  identical definitions and identical hidden cells in every view at k = 3, 5, 10, 20. The
+  attention measures stay a separate connected group (Timeliness reconciliation unchanged).
+- **`dataQualityIssues` stays hashed (open item):** triage state is real, user-changed data and
+  belongs in the dataset fingerprint; reset clears it. Tests that compare hashes avoid
+  `/admin/quality` (which upserts detected issues) — unchanged, documented in `App.test.tsx`.
+- **Reset demo** (Settings card with type-`RESET` and the topbar menu): `resetDemo()` → cache
+  cleared, drafts cleared, session signed out WITHOUT `session.ended` (audit = baseline + one
+  `demo.reset`) → `/admin/login` with "Demo data restored". Deviation: the topbar reset now
+  also ends the session (previously kept it); `shell.spec.ts` / `App.test.tsx` updated.
+- **Faults:** the full `FaultConfig` is held by `DemoToolsProvider` (optimistic; re-read after
+  every mutation because a write can consume `conflictOnce`). Panel: slow network, server error
+  and timeout (off / 1 in 4 / always), offline, conflict on the next threshold write, "Clear all
+  faults". "Fault simulation on" pill (links to Settings). The repository logs each toggle as
+  `demo.fault_toggled` (FND-07 behaviour, kept) — the footnote says they are demo tooling
+  outside the governance trail rather than "not audited".
+- **Session expiry (T-09):** `expireAdminSession` records `session.expired`, then marks the
+  session expired (actor → null; other tabs follow via `storage` events). The next navigation,
+  or a query / mutation failing because of it (QueryCache / MutationCache `onError` →
+  `noticeExpiry`), redirects to `/admin/login?next=<path+search>&persona=<id>&expired=1`; the
+  sign-in page ends the expired session and shows "Your demo session expired…". Drafts:
+  `lib/drafts.ts` (sessionStorage, keyed by idempotency key, one per dialog slot) for the
+  programme-action dialog (funnel drill-down and quality "Send to facility"), the triage
+  dialog, the grant editor and the export reason step (with the export attempt key). Drafts are
+  offered back only right after a re-login from an expired session (armed by the sign-in page,
+  disarmed by the next navigation); any other sign-in drops them; Reset demo clears them.
+- **A11y / responsive:** focus moves to the page `h1` on navigation; titles
+  "{Page} · Programme Dashboard · CareConnect (Demo)"; skip link text stays the shared "Skip to
+  main content". Shared additive ui-web changes: `AccessibleDataTable scrollable` (table scrolls
+  in a focusable, labelled region with the caption above — fixes the ADM-05 worker table / RW
+  caption clipping, the audit explorer and the report preview at 1024 / 768), `AppShell rail` +
+  `compactSidebar` (768 icon rail, 208 px sidebar until 1280), `Tabs panelId` (tabs without
+  content control a shared panel: axe `aria-valid-attr-value` on the quality queue). KPI labels
+  wrap instead of truncating. Funnel stage links keep their visible text as accessible name
+  (axe `label-content-name-mismatch`). 390 px: "Filters (n)" disclosure. RW "Correlation id"
+  translated ("Kode y'ihuza"). Charts already render no SVG while the table is shown and never
+  animate; `app/responsive.css` adds `prefers-reduced-motion`.
+- **Offline:** the shell prefetches every page chunk after sign-in (`app/pageChunks.ts`) so a
+  browser that goes offline can still open every dashboard.
+- **E2E seam:** `VITE_LAIF_E2E=1` builds expose `window.__laifAdminE2E.setFaults` (used to arm a
+  timeout while the modal dialog is open).
+- **Tests:** `uxStates.test.tsx` (9 pages × initial/loading/loaded, empty, validation, server
+  error, permission denied, offline + stale overview and settings conflict/success),
+  `features/settings/*.test.tsx` (validation, permission, conflict, reset Dexie-dump equality,
+  session expiry + draft restore exactly once), `i18n.test.ts`, `contrast.test.ts`; E2E
+  `admin-story`, `a11y`, `responsive`, `resilience`, `i18n` (+ updated `shell`).

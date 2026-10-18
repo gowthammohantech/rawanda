@@ -34,11 +34,16 @@ import {
   type TranslationKey,
 } from "@laif/ui-web";
 import { useState } from "react";
+import { useLocation } from "react-router";
 
 import { facilityLabel } from "../../app/persona-labels.ts";
 import { useRepository, useServices } from "../../app/providers.tsx";
 import { emitAdminAudit } from "../../lib/audit.ts";
-import { ProgrammeActionDialog } from "../programme-actions/ProgrammeActionDialog.tsx";
+import { findDraft } from "../../lib/drafts.ts";
+import {
+  ProgrammeActionDialog,
+  type ProgrammeActionFormValues,
+} from "../programme-actions/ProgrammeActionDialog.tsx";
 import {
   isRetryableWriteError,
   useRefreshQuality,
@@ -46,7 +51,7 @@ import {
   useTriageIssue,
 } from "./mutations.ts";
 import { IssueStatusPill, IssueTypePill } from "./pills.tsx";
-import { TriageDialog } from "./TriageDialog.tsx";
+import { TriageDialog, type TriageFormValues } from "./TriageDialog.tsx";
 
 const DAY_MS = 86_400_000;
 
@@ -92,7 +97,24 @@ export function IssueRow({ issue, filters, createKey }: IssueRowProps) {
   const capabilities = useTriageCapabilities()(issue.facilityId);
   const newKey = createKey ?? (() => crypto.randomUUID());
   const [state, setState] = useState<RowState>({ kind: "idle" });
-  const [dialog, setDialog] = useState<"resolve" | "send" | null>(null);
+  // ADM-09 (T-09): a draft left by an expired session on this URL reopens its dialog.
+  const location = useLocation();
+  const draftContext = `${location.pathname}${location.search}`;
+  const [restore, setRestore] = useState(() => ({
+    triage: findDraft<TriageFormValues>("triage", draftContext),
+    send: findDraft<ProgrammeActionFormValues>("programmeAction", `${draftContext}#${issue.id}`),
+  }));
+  const [dialog, setDialog] = useState<"resolve" | "send" | null>(() =>
+    restore.triage?.subject === issue.id
+      ? "resolve"
+      : restore.send?.subject === issue.facilityId
+        ? "send"
+        : null,
+  );
+  const closeDialog = () => {
+    setDialog(null);
+    setRestore({ triage: null, send: null });
+  };
   const [resolving, setResolving] = useState<ConflictResolution | null>(null);
 
   const typeLabel = t(`admin:quality.type.${issue.type}` as TranslationKey);
@@ -417,7 +439,9 @@ export function IssueRow({ issue, filters, createKey }: IssueRowProps) {
       {dialog === "resolve" ? (
         <TriageDialog
           issue={issue}
-          onClose={() => setDialog(null)}
+          onClose={closeDialog}
+          draftContext={draftContext}
+          restore={restore.triage?.subject === issue.id ? restore.triage : null}
           onConflict={(error, note) => onConflict(error, { action: "resolve", note })}
           {...(createKey === undefined ? {} : { createKey })}
         />
@@ -430,8 +454,10 @@ export function IssueRow({ issue, filters, createKey }: IssueRowProps) {
             category: "data_completeness_check",
             title: t("admin:quality.sendTitle", { type: typeLabel, ref: issue.subjectRef }),
           }}
-          onClose={() => setDialog(null)}
+          onClose={closeDialog}
           onAssigned={onAssigned}
+          draftContext={`${draftContext}#${issue.id}`}
+          restore={restore.send?.subject === issue.facilityId ? restore.send : null}
           {...(createKey === undefined ? {} : { createKey })}
         />
       ) : null}

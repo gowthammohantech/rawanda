@@ -15,6 +15,13 @@ export type AppShellProps = {
   topbar?: Omit<TopbarProps, "onOpenNavigation">;
   /** Banners under the topbar (RoleBanner, OfflineBanner …). The DemoBanner is not optional. */
   banners?: ReactNode;
+  /**
+   * Optional icon rail shown from 768 px to 1023 px (tablet), next to the menu button that opens
+   * the full sidebar drawer. Omitted = the drawer only below 1024 px (unchanged default).
+   */
+  rail?: ReactNode;
+  /** Narrower inline sidebar (208 px) from 1024 px to 1279 px, the full 240 px from 1280 px. */
+  compactSidebar?: boolean;
   children?: ReactNode;
   className?: string;
 };
@@ -24,7 +31,15 @@ export type AppShellProps = {
  * SkipLink, the DemoBanner ("DEMONSTRATION — SYNTHETIC PATIENT DATA — NOT FOR CLINICAL USE")
  * and a LanguageSwitcher; none of them can be turned off by props.
  */
-export function AppShell({ sidebar, topbar, banners, children, className }: AppShellProps) {
+export function AppShell({
+  sidebar,
+  topbar,
+  banners,
+  rail,
+  compactSidebar = false,
+  children,
+  className,
+}: AppShellProps) {
   const t = useTx();
   const [navOpen, setNavOpen] = useState(false);
   const drawerSidebar = isValidElement(sidebar)
@@ -39,9 +54,17 @@ export function AppShell({ sidebar, topbar, banners, children, className }: AppS
         data-testid="app-shell"
         className="bg-canvas lg:rounded-shell mx-auto flex max-w-[1600px] gap-6 p-3 sm:p-4 lg:my-4 lg:w-[calc(100%-32px)] lg:p-5"
       >
-        <aside className="sticky top-12 hidden max-h-[calc(100dvh-120px)] min-h-[560px] w-60 shrink-0 self-start lg:block">
+        <aside
+          className={cx(
+            "sticky top-12 hidden max-h-[calc(100dvh-120px)] min-h-[560px] shrink-0 self-start lg:block",
+            compactSidebar ? "w-52 xl:w-60" : "w-60",
+          )}
+        >
           {sidebar}
         </aside>
+        {rail === undefined ? null : (
+          <div className="sticky top-12 hidden shrink-0 self-start md:block lg:hidden">{rail}</div>
+        )}
         <Drawer
           open={navOpen}
           onOpenChange={setNavOpen}

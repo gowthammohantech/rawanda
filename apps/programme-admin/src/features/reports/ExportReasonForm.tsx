@@ -14,7 +14,7 @@ import {
   type ExportReasonCode,
 } from "@laif/contracts";
 import { Button, CONTROL_CLASS, cx, Icon, useTx, type TranslationKey } from "@laif/ui-web";
-import { useId } from "react";
+import { useEffect, useId } from "react";
 import { useForm, useWatch, type FieldErrors } from "react-hook-form";
 
 export type ExportReasonValues = {
@@ -33,6 +33,8 @@ export type ExportReasonFormProps = {
   defaultValues: ExportReasonValues;
   onBack: () => void;
   onSubmit: (reason: ExportReason, values: ExportReasonValues) => void;
+  /** ADM-09: every change (the builder keeps a sessionStorage draft for an expired session). */
+  onChange?: (values: ExportReasonValues) => void;
 };
 
 function ErrorText({ id, children }: { id: string; children: string }) {
@@ -48,7 +50,12 @@ function ErrorText({ id, children }: { id: string; children: string }) {
   );
 }
 
-export function ExportReasonForm({ defaultValues, onBack, onSubmit }: ExportReasonFormProps) {
+export function ExportReasonForm({
+  defaultValues,
+  onBack,
+  onSubmit,
+  onChange,
+}: ExportReasonFormProps) {
   const t = useTx();
   const id = useId();
   const form = useForm<ExportReasonValues, unknown, ExportReason>({
@@ -56,7 +63,14 @@ export function ExportReasonForm({ defaultValues, onBack, onSubmit }: ExportReas
     defaultValues,
     shouldFocusError: true,
   });
-  const { register, handleSubmit, formState, control } = form;
+  const { register, handleSubmit, formState, control, subscribe } = form;
+  useEffect(() => {
+    if (onChange === undefined) return;
+    return subscribe({
+      formState: { values: true },
+      callback: ({ values }) => onChange({ ...EMPTY_REASON, ...values }),
+    });
+  }, [subscribe, onChange]);
   const errors: FieldErrors<ExportReasonValues> = formState.errors;
   const code = useWatch({ control, name: "reasonCode" });
   const text = useWatch({ control, name: "reasonText" });

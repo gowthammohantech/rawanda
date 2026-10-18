@@ -36,4 +36,26 @@ describe("Tabs", () => {
     expect(screen.getByRole("tabpanel").textContent).toBe("Waiting content");
     await expectNoAxeViolations(container);
   });
+
+  it("tabs without content control the app's shared panel (panelId)", async () => {
+    const { container } = renderUi(
+      <>
+        <Tabs
+          label="Queue"
+          panelId="queue-panel"
+          tabs={[
+            { value: "open", label: "Open", count: 3 },
+            { value: "done", label: "Resolved", count: 1 },
+          ]}
+        />
+        <div id="queue-panel" role="tabpanel" aria-label="Queue items">
+          <p>Items</p>
+        </div>
+      </>,
+    );
+    for (const tab of screen.getAllByRole("tab")) {
+      expect(tab.getAttribute("aria-controls")).toBe("queue-panel");
+    }
+    await expectNoAxeViolations(container);
+  });
 });

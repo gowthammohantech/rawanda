@@ -61,7 +61,7 @@
       "location": "Ikigo / akarere",
       "change": "Impinduka",
       "justification": "Impamvu",
-      "correlation": "Correlation"
+      "correlation": "Ihuza"
     },
     "filter": {
       "label": "Kuyungurura igitabo cy'igenzura",
@@ -70,7 +70,7 @@
       "entity": "Ubwoko bw'ikintu",
       "from": "Kuva (itariki ya Kigali)",
       "to": "Kugeza (itariki ya Kigali)",
-      "correlation": "Correlation id",
+      "correlation": "Kode y'ihuza",
       "any": "Byose",
       "apply": "Shyiraho ibyungurura",
       "clear": "Kuraho ibyungurura",
@@ -81,7 +81,7 @@
         "entity": "Hitamo ubwoko bw'ikintu buri ku rutonde.",
         "date": "Andika itariki nka YYYY-MM-DD.",
         "dateOrder": "Itariki itangira igomba kuba mbere cyangwa ingana n'iya nyuma.",
-        "correlation": "Correlation id igizwe n'inyuguti, imibare, utudomo, utubago, uturongo cyangwa utuvuguto gusa.",
+        "correlation": "Kode y'ihuza igizwe n'inyuguti, imibare, utudomo, utubago, uturongo cyangwa utuvuguto gusa.",
         "page": "Nimero ya paji ntiyemewe."
       }
     },
@@ -96,7 +96,8 @@
       "review": "Isuzumwa n'abaganga (ryose)",
       "referral": "Kohereza ahandi (kose)",
       "followup": "Ikurikirana (ryose)",
-      "demo": "Ibikoresho by'igerageza (byose)"
+      "demo": "Ibikoresho by'igerageza (byose)",
+      "admin_settings": "Ihinduka ry'igenamiterere (byose)"
     }
   },
   "access": {

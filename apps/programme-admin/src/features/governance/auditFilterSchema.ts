@@ -33,6 +33,8 @@ export const AUDIT_ACTION_FILTERS = [
   "admin.drilldown.viewed",
   "admin.programme_action.",
   "admin.quality_issue.",
+  // ADM-09: threshold changes and denied attempts.
+  "admin.settings.",
   "conflict.",
   "screening.",
   "review.",

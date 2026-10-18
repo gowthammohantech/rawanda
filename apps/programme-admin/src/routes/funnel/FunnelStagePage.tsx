@@ -39,9 +39,13 @@ import { STAGE_METRIC, useFunnelHeader } from "../../features/funnel/stageMeta.t
 import { StageBreakdownTable } from "../../features/funnel/StageBreakdownTable.tsx";
 import { WeeklyStageTrend } from "../../features/funnel/WeeklyStageTrend.tsx";
 import { useAssignAvailability } from "../../features/programme-actions/mutations.ts";
-import { ProgrammeActionDialog } from "../../features/programme-actions/ProgrammeActionDialog.tsx";
+import {
+  ProgrammeActionDialog,
+  type ProgrammeActionFormValues,
+} from "../../features/programme-actions/ProgrammeActionDialog.tsx";
 import { ProgrammeActionsCard } from "../../features/programme-actions/ProgrammeActionsCard.tsx";
 import { emitAdminAudit } from "../../lib/audit.ts";
+import { findDraft } from "../../lib/drafts.ts";
 import { makeIdempotencyKey } from "../../lib/idempotency.ts";
 import { NotFoundPage } from "../errors/NotFoundPage.tsx";
 import { useDocumentTitle } from "../useDocumentTitle.ts";
@@ -87,7 +91,12 @@ function StageDrilldown({ stage }: { stage: FunnelStageId }) {
   const query = useFunnelStage(api, stage);
   const { subtitle } = useFunnelHeader(api);
   const canAssign = useAssignAvailability();
-  const [assignFor, setAssignFor] = useState<string | null>(null);
+  // ADM-09 (T-09): a draft left by an expired session on this exact URL reopens the dialog.
+  const draftContext = `${location.pathname}${location.search}`;
+  const [restore, setRestore] = useState(() =>
+    findDraft<ProgrammeActionFormValues>("programmeAction", draftContext),
+  );
+  const [assignFor, setAssignFor] = useState<string | null>(restore?.subject ?? null);
   const [highlight, setHighlight] = useState<string | null>(null);
   const stageLabel = t(`admin:funnel.stage.${stage}` as TranslationKey);
   const scope = { district: api.filters.district, facility: api.filters.facility };
@@ -147,8 +156,13 @@ function StageDrilldown({ stage }: { stage: FunnelStageId }) {
         <ProgrammeActionDialog
           facilityId={assignFor}
           sourceContext={sourceContext}
-          onClose={() => setAssignFor(null)}
+          onClose={() => {
+            setAssignFor(null);
+            setRestore(null);
+          }}
           onAssigned={(action) => setHighlight(action.id)}
+          draftContext={draftContext}
+          restore={restore !== null && restore.subject === assignFor ? restore : null}
         />
       )}
     </div>

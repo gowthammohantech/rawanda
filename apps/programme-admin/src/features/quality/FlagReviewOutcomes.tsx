@@ -95,7 +95,14 @@ export function FlagReviewOutcomes({
           <p className="text-muted m-0 mb-2 font-mono text-[11px] tracking-wide">
             {t("admin:quality.fairness.label")}
           </p>
-          <div className="overflow-x-auto">
+          {/* ADM-09: may scroll in RW / narrow cards — a focusable, labelled region (WCAG 2.1.1). */}
+          <div
+            role="region"
+            aria-label={t("admin:quality.fairness.caption")}
+            // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+            tabIndex={0}
+            className="focus-visible:ring-primary relative overflow-x-auto rounded-sm focus-visible:ring-2 focus-visible:outline-none"
+          >
             <table className="w-full border-collapse text-xs" data-testid="fairness-table">
               <caption className="sr-only">{t("admin:quality.fairness.caption")}</caption>
               <thead>

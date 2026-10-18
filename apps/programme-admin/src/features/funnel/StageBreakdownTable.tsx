@@ -163,7 +163,13 @@ export function StageBreakdownTable({
     });
 
   return (
-    <div className="overflow-x-auto">
+    <div
+      role="region"
+      aria-label={t("admin:funnel.table.caption", { stage: stageLabel })}
+      // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+      tabIndex={0}
+      className="focus-visible:ring-primary relative overflow-x-auto rounded-sm focus-visible:ring-2 focus-visible:outline-none"
+    >
       <table className="w-full border-collapse text-[13px]" data-testid="stage-breakdown">
         <caption className="sr-only">
           {t("admin:funnel.table.caption", { stage: stageLabel })}

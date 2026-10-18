@@ -24,8 +24,8 @@ import {
   useTx,
   type RadioCardOption,
 } from "@laif/ui-web";
-import { useQuery } from "@tanstack/react-query";
-import { useId, useMemo, useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useId, useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 
 import { districtLabel, grantScopeSummary } from "../../app/persona-labels.ts";
@@ -42,6 +42,8 @@ import {
   safeNext,
   startAdminSession,
 } from "../../auth/signIn.ts";
+import { armDraftRestore, clearAllDrafts } from "../../lib/drafts.ts";
+import { adminKeys } from "../../lib/queryKeys.ts";
 import { useDocumentTitle } from "../useDocumentTitle.ts";
 
 const ALL = "all" as const;
@@ -54,6 +56,14 @@ export function LoginPage() {
   const next = safeNext(params.get("next"));
   const errorId = useId();
   useDocumentTitle(t("admin:auth.title"));
+
+  // ADM-09: an expired session (RequireSession redirected here) ends now; its scoped figures go.
+  const queryClient = useQueryClient();
+  useEffect(() => {
+    if (services.session.getState().session?.expired !== true) return;
+    services.session.signOut();
+    queryClient.removeQueries({ queryKey: adminKeys.scoped });
+  }, [services, queryClient]);
 
   const grantsQuery = useQuery({
     queryKey: ACCESS_GRANTS_QUERY_KEY,
@@ -158,6 +168,10 @@ export function LoginPage() {
     try {
       if (services.session.getState().session !== null) await endAdminSession(services);
       await startAdminSession(services, { persona, grant, reportingDistrictId });
+      // ADM-09: after an expired session, open dialogs come back with their drafts; any other
+      // sign-in starts clean.
+      if (params.get("expired") === "1") armDraftRestore();
+      else clearAllDrafts();
       void navigate(next ?? homePathFor(persona, grant, reportingDistrictId), { replace: true });
     } catch (caught) {
       setSubmitError(caught);
@@ -198,7 +212,15 @@ export function LoginPage() {
               {t("admin:auth.title")}
             </h1>
             <p className="text-muted text-sm">{t("admin:auth.intro")}</p>
-            {params.get("next") === null ? null : (
+            {params.get("expired") === "1" ? (
+              <p
+                role="status"
+                data-testid="session-expired-notice"
+                className="border-risk-warning/25 bg-risk-warning-soft text-ink rounded-md border px-3 py-2 text-sm"
+              >
+                {t("admin:states.sessionExpired")}
+              </p>
+            ) : params.get("next") === null ? null : (
               <p className="text-muted text-sm">{t("admin:auth.redirectNotice")}</p>
             )}
           </div>

@@ -63,10 +63,15 @@ export function safeNext(next: string | null): string | null {
   return next;
 }
 
-export function loginPathFor(next: string | null, personaId?: string): string {
+export function loginPathFor(
+  next: string | null,
+  personaId?: string,
+  options: { expired?: boolean } = {},
+): string {
   const params = new URLSearchParams();
   if (next !== null) params.set("next", next);
   if (personaId !== undefined) params.set("persona", personaId);
+  if (options.expired === true) params.set("expired", "1");
   const query = params.toString();
   return query === "" ? LOGIN_PATH : `${LOGIN_PATH}?${query}`;
 }
@@ -99,6 +104,22 @@ export async function startAdminSession(
     throw error;
   }
   return session;
+}
+
+/**
+ * ADM-09 "Expire session now" (T-09): records `session.expired` while the actor is still valid,
+ * then marks the session expired — the next navigation or failing call signs in again.
+ */
+export async function expireAdminSession(
+  services: Pick<AppServices, "session" | "repo">,
+): Promise<void> {
+  const { session } = services.session.getState();
+  if (session === null) return;
+  try {
+    await emitAdminAudit(services.repo, session, { action: "session.expired" });
+  } finally {
+    services.session.expire();
+  }
 }
 
 /** Records `session.ended` (best effort — signing out always succeeds) and signs out. */

@@ -31,9 +31,11 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { facilityLabel } from "../../app/persona-labels.ts";
+import { useDialogDraft, type DialogDraft } from "../../lib/drafts.ts";
 import { isRetryableWriteError, useTriageIssue } from "./mutations.ts";
 
-type FormValues = { note: string };
+export type TriageFormValues = { note: string };
+type FormValues = TriageFormValues;
 
 const formSchema = z.object({ note: z.string() }).superRefine((values, ctx) => {
   if (!TriageNote.safeParse(values.note).success) {
@@ -48,6 +50,10 @@ export type TriageDialogProps = {
   onConflict?: (error: RepositoryError, note: string) => void;
   /** Test seam (default `crypto.randomUUID`). */
   createKey?: () => string;
+  /** ADM-09: keep a sessionStorage draft for this context (path + search); null = none. */
+  draftContext?: string | null;
+  /** ADM-09: a draft left by an expired session (its key and note are reused). */
+  restore?: DialogDraft<TriageFormValues> | null;
 };
 
 export function TriageDialog({
@@ -56,19 +62,28 @@ export function TriageDialog({
   onResolved,
   onConflict,
   createKey,
+  draftContext = null,
+  restore = null,
 }: TriageDialogProps) {
   const t = useTx();
   const { toast } = useToast();
   const id = useId();
-  const [key] = useState(() => (createKey ?? (() => crypto.randomUUID()))());
+  const [key] = useState(() => restore?.key ?? (createKey ?? (() => crypto.randomUUID()))());
   const [failure, setFailure] = useState<"retry" | "forbidden" | "other" | null>(null);
   const mutation = useTriageIssue();
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: { note: "" },
+    defaultValues: { note: restore?.values.note ?? "" },
     shouldFocusError: true,
   });
-  const { register, handleSubmit, formState, setError, setFocus } = form;
+  const { register, handleSubmit, formState, setError, setFocus, watch } = form;
+  const draft = useDialogDraft<TriageFormValues>({
+    kind: "triage",
+    context: draftContext,
+    key,
+    subject: issue.id,
+    subscribe: watch,
+  });
   const noteError =
     formState.errors.note === undefined
       ? undefined
@@ -91,6 +106,7 @@ export function TriageDialog({
       });
       toast({ title: t("admin:quality.toast.resolved"), tone: "positive" });
       onResolved?.(result.data);
+      draft.clear();
       onClose();
     } catch (error) {
       if (
@@ -104,6 +120,7 @@ export function TriageDialog({
       }
       if (isRepositoryError(error) && error.code === "CONFLICT") {
         onConflict?.(error, values.note);
+        draft.clear();
         onClose();
         return;
       }
@@ -121,7 +138,9 @@ export function TriageDialog({
     <ConfirmDialog
       open
       onOpenChange={(open) => {
-        if (!open) onClose();
+        if (open) return;
+        draft.clear();
+        onClose();
       }}
       title={t("admin:quality.dialog.resolveTitle")}
       description={t("admin:quality.dialog.resolveDescription", {

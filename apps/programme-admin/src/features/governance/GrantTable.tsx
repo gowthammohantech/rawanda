@@ -24,12 +24,14 @@ import {
   type TranslationKey,
 } from "@laif/ui-web";
 import { useState } from "react";
+import { useLocation } from "react-router";
 
 import { districtLabel, facilityLabel } from "../../app/persona-labels.ts";
 import { useServices, useSessionStore, useAdminSession } from "../../app/providers.tsx";
 import { findAdminPersona } from "../../auth/personas.ts";
 import { grantChangeLines } from "./grantFormat.ts";
-import { GrantEditDialog } from "./GrantEditDialog.tsx";
+import { findDraft } from "../../lib/drafts.ts";
+import { GrantEditDialog, type GrantFormValues } from "./GrantEditDialog.tsx";
 import { useGrantHistory, useGrants } from "./queries.ts";
 
 function GrantHistory({ grantId }: { grantId: string }) {
@@ -95,7 +97,16 @@ export function GrantTable() {
   const actor = store.actor();
   const canConfigure = actor !== null && checkAccess(actor, "roles.configure").allowed;
   const query = useGrants();
-  const [editing, setEditing] = useState<AccessGrant | null>(null);
+  // ADM-09 (T-09): a grant-edit draft left by an expired session reopens on this URL.
+  const location = useLocation();
+  const draftContext = `${location.pathname}${location.search}`;
+  const [restore, setRestore] = useState(() => findDraft<GrantFormValues>("grant", draftContext));
+  const [editingId, setEditingId] = useState<string | null>(restore?.subject ?? null);
+  const editing = query.data?.find((g) => g.id === editingId) ?? null;
+  const setEditing = (grant: AccessGrant | null) => {
+    setEditingId(grant?.id ?? null);
+    if (grant === null) setRestore(null);
+  };
   const [highlighted, setHighlighted] = useState<string | null>(null);
 
   const scope = (g: AccessGrant) =>
@@ -212,6 +223,8 @@ export function GrantTable() {
           grants={query.data}
           onClose={() => setEditing(null)}
           onSaved={(saved) => setHighlighted(saved.id)}
+          draftContext={draftContext}
+          restore={restore?.subject === editing.id ? restore : null}
         />
       )}
     </div>

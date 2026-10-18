@@ -186,6 +186,26 @@ describe("AppShell", () => {
     expect(screen.queryByRole("dialog")).toBeNull();
   });
 
+  it("renders an optional tablet rail (768–1023 px) and a compact sidebar width", () => {
+    const { container } = renderUi(
+      <AppShell
+        sidebar={<Sidebar sections={sections} LinkComponent={NavLink} />}
+        rail={<nav aria-label="Shortcuts">rail</nav>}
+        compactSidebar
+      >
+        <h1>Queue</h1>
+      </AppShell>,
+      { route: "/clinical/queue" },
+    );
+    const rail = screen.getByRole("navigation", { name: "Shortcuts" }).parentElement;
+    expect(rail?.className).toContain("md:block");
+    expect(rail?.className).toContain("lg:hidden");
+    const sidebarAside = [...container.querySelectorAll("aside")].find((a) =>
+      a.querySelector("nav"),
+    );
+    expect(sidebarAside?.className).toContain("w-52 xl:w-60");
+  });
+
   it("renders the banner in Kinyarwanda", () => {
     renderUi(
       <AppShell sidebar={<Sidebar sections={sections} />}>

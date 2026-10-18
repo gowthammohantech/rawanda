@@ -379,6 +379,7 @@ export function AuditExplorer() {
           />
         ) : (
           <AccessibleDataTable
+            scrollable
             caption={t("admin:governance.audit.caption")}
             captionHidden
             columns={columns}

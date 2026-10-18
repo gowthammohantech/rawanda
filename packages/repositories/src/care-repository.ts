@@ -18,6 +18,7 @@ import type { ProgrammeMetrics } from "@laif/analytics";
 import type { ActorContext } from "@laif/auth-demo";
 import type {
   AccessGrant,
+  AdminSettings,
   RulesetHistoryEntry,
   DataQualityIssue,
   ExportAudit,
@@ -92,6 +93,7 @@ import type {
 } from "./services/quality-issues.ts";
 import type { ExportAuditFilterInput } from "./services/audit.ts";
 import type { AccessGrantUpdateCall } from "./services/access-grants.ts";
+import type { AdminSettingsUpdateCall } from "./services/admin-settings.ts";
 import type { StoreAdapter } from "./store/store-adapter.ts";
 import type { FaultConfig, FaultConfigPatch, FaultInjector } from "./transport/faults.ts";
 
@@ -377,6 +379,18 @@ export interface CareRepository {
   updateAccessGrant(i: AccessGrantUpdateCall, key: string): Promise<WriteResult<AccessGrant>>;
   /** ADM-08: the demo ruleset history (newest first; no thresholds) — `metrics.read`. */
   listRulesets(): Promise<RulesetHistoryEntry[]>;
+  /**
+   * ADM-09: programme admin settings (small-cell threshold; meta `admin.settings`, absent = seed
+   * baseline k = 5) — `metrics.read`.
+   */
+  getAdminSettings(): Promise<AdminSettings>;
+  /**
+   * ADM-09: change the threshold — `settings.privacy` (denied → `admin.settings.denied`),
+   * idempotent on `key`, `expectedVersion` (stale → `CONFLICT` with `latest`), range
+   * `ADMIN_THRESHOLD_MIN`–`ADMIN_THRESHOLD_MAX`, justification 10–300. Audited
+   * `admin.settings.suppression_threshold_changed` (before / after).
+   */
+  updateAdminSettings(i: AdminSettingsUpdateCall, key: string): Promise<WriteResult<AdminSettings>>;
   /**
    * ADM-03: non-clinical programme follow-up actions for a facility manager. Create needs
    * `programme_action.write` in the facility's scope and is idempotent on `key`; update carries

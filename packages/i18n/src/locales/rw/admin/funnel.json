@@ -24,7 +24,8 @@
     "ofRecorded": "{{pct}}% by'ibyanditswe",
     "base": "Ishingiro: isuzuma ryose ryanditswe",
     "pctHidden": "% byahishwe kubera ibanga",
-    "largestDrop": "IGABANUKA RIRUTA AYANDI · {{pct}}% by'icyiciro kibanziriza"
+    "largestDrop": "IGABANUKA RIRUTA AYANDI · {{pct}}% by'icyiciro kibanziriza",
+    "openHint": "fungura ibisobanuro birambuye by'imibare rusange"
   },
   "empty": {
     "title": "Nta suzuma muri iki gihe",

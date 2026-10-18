@@ -19,11 +19,16 @@ import { LoginPage } from "../routes/login/LoginPage.tsx";
 import { AdminShell } from "./AdminShell.tsx";
 import { BASE_PATH, START_PATH } from "./config.ts";
 import { paths } from "./nav.ts";
+import { registerPageLoader } from "./pageChunks.ts";
+import { ThresholdGate } from "./ThresholdGate.tsx";
 
 const page = <M extends Record<string, unknown>>(
   load: () => Promise<M>,
   name: keyof M & string,
-): ComponentType => lazy(async () => ({ default: (await load())[name] as ComponentType }));
+): ComponentType => {
+  registerPageLoader(load);
+  return lazy(async () => ({ default: (await load())[name] as ComponentType }));
+};
 
 const OverviewPage = page(() => import("../routes/overview/OverviewPage.tsx"), "OverviewPage");
 const FunnelPage = page(() => import("../routes/funnel/FunnelPage.tsx"), "FunnelPage");
@@ -45,11 +50,15 @@ const GovernancePage = page(
 const SettingsPage = page(() => import("../routes/settings/SettingsPage.tsx"), "SettingsPage");
 
 function guarded(route: AdminRouteId, Page: ComponentType): ReactNode {
+  const page = (
+    <Suspense fallback={<LoadingSkeleton variant="card" lines={4} />}>
+      <Page />
+    </Suspense>
+  );
   return (
     <RequireCapability route={route}>
-      <Suspense fallback={<LoadingSkeleton variant="card" lines={4} />}>
-        <Page />
-      </Suspense>
+      {/* ADM-09: figures only once the threshold in force is known (Settings shows its own). */}
+      {route === "settings" ? page : <ThresholdGate>{page}</ThresholdGate>}
     </RequireCapability>
   );
 }

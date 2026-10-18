@@ -11,6 +11,7 @@ export type ChartTableProps<T> = {
 export function ChartTable<T>({ caption, columns, rows, getRowId }: ChartTableProps<T>) {
   return (
     <AccessibleDataTable
+      scrollable
       caption={caption}
       captionHidden
       columns={columns}

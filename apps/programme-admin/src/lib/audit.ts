@@ -14,6 +14,8 @@ import type { AdminSession } from "../auth/sessionStore.ts";
 export const ADMIN_AUDIT_ACTIONS = [
   "session.started",
   "session.ended",
+  // ADM-09: "Expire session now" (recorded before the session is marked expired).
+  "session.expired",
   "access.denied",
   // ADM-03: aggregate drill-down view; the user's choice after a programme-action conflict.
   "admin.drilldown.viewed",

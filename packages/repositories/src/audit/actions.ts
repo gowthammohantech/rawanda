@@ -188,6 +188,11 @@ export const AUDIT_ACTIONS = {
   "admin.access_simulation.run": accessClient,
   "admin.access_grant.changed": change,
   "admin.access_grant.revoked": change,
+  // ── Programme admin (ADM-09) ────────────────────────────────────────────
+  // Settings: threshold change (before / after, justification) and a denied change attempt
+  // (`updateAdminSettings` without `settings.privacy`; phase name kept, not `access.denied`).
+  "admin.settings.suppression_threshold_changed": change,
+  "admin.settings.denied": access,
 
   // ── Health worker app (HWM-09; phase names `sync.manual_requested` /
   // `sync.duplicate_tap_coalesced` are UI-originated, so app-prefixed) ─────────

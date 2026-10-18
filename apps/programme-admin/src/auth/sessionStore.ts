@@ -45,6 +45,11 @@ export type AdminSession = {
    * by the "Return to …" banner (absent / null for a normal sign-in).
    */
   returnToPersonaId?: PersonaId | null;
+  /**
+   * ADM-09 (T-09) "Expire session now": the session is expired. Repository calls no longer carry
+   * an actor; the next navigation or failing query / mutation redirects to the sign-in.
+   */
+  expired?: boolean;
 };
 
 export type AdminSessionState = {
@@ -53,6 +58,8 @@ export type AdminSessionState = {
   grant: AccessGrant | null;
   /** Bumped when re-validation applied a newer grant version (shell shows a notice). */
   grantChanges: number;
+  /** ADM-09: a query / mutation failed after the session expired → redirect now. */
+  expiryNoticed: boolean;
 };
 
 export type SignInInput = {
@@ -82,6 +89,10 @@ export type AdminSessionStore = {
   revalidate(grants: readonly AccessGrant[], nowIso?: string): RevalidateResult;
   /** FND-06 actor of the signed-in persona, scope from its grant (null when signed out). */
   actor(): ActorContext | null;
+  /** ADM-09: marks the session expired (persisted; other tabs follow via `storage` events). */
+  expire(): void;
+  /** ADM-09: a call failed while expired (RequireSession redirects at once). */
+  noticeExpiry(): void;
 };
 
 const SIGNED_OUT: AdminSessionState = {
@@ -89,6 +100,7 @@ const SIGNED_OUT: AdminSessionState = {
   persona: null,
   grant: null,
   grantChanges: 0,
+  expiryNoticed: false,
 };
 
 /** `localStorage`, or an in-memory fallback when site data is blocked (private mode). */
@@ -118,7 +130,7 @@ function restore(
     const grant = AccessGrantSchema.parse(parsed.grant);
     const { session } = parsed;
     if (session.personaId !== persona.id || grant.personaId !== persona.id) return SIGNED_OUT;
-    return { session, persona, grant, grantChanges: 0 };
+    return { session, persona, grant, grantChanges: 0, expiryNoticed: false };
   } catch {
     return SIGNED_OUT;
   }
@@ -175,7 +187,7 @@ export function createAdminSessionStore(
         ...(input.returnToPersonaId ? { returnToPersonaId: input.returnToPersonaId } : {}),
       };
       persist(session, grant);
-      store.setState({ session, persona, grant, grantChanges: 0 }, true);
+      store.setState({ session, persona, grant, grantChanges: 0, expiryNoticed: false }, true);
       return session;
     },
     signOut,
@@ -212,10 +224,51 @@ export function createAdminSessionStore(
       return "updated";
     },
     actor() {
-      const { persona, grant } = store.getState();
-      return persona === null ? null : actorForPersona(persona, { grant });
+      const { persona, grant, session } = store.getState();
+      if (persona === null || session?.expired === true) return null;
+      return actorForPersona(persona, { grant });
+    },
+    expire() {
+      const { session, grant } = store.getState();
+      if (session === null || grant === null || session.expired === true) return;
+      const next: AdminSession = { ...session, expired: true };
+      persist(next, grant);
+      store.setState((state) => ({ ...state, session: next }));
+    },
+    noticeExpiry() {
+      const { session, expiryNoticed } = store.getState();
+      if (session?.expired === true && !expiryNoticed) {
+        store.setState((state) => ({ ...state, expiryNoticed: true }));
+      }
     },
   };
+}
+
+/**
+ * Other tabs of the same browser (ADM-09): an expiry or sign-out there applies here too (same
+ * `localStorage` session). Returns the unsubscribe function.
+ */
+export function followOtherTabs(session: AdminSessionStore): () => void {
+  if (typeof window === "undefined") return () => undefined;
+  const onStorage = (event: StorageEvent) => {
+    if (event.key !== SESSION_STORAGE_KEY) return;
+    const current = session.getState().session;
+    if (current === null) return;
+    if (event.newValue === null) {
+      session.signOut();
+      return;
+    }
+    try {
+      const parsed = JSON.parse(event.newValue) as Persisted;
+      if (parsed.session.correlationId === current.correlationId && parsed.session.expired) {
+        session.expire();
+      }
+    } catch {
+      // Ignore malformed values.
+    }
+  };
+  window.addEventListener("storage", onStorage);
+  return () => window.removeEventListener("storage", onStorage);
 }
 
 /** React binding: `useAdminSessionState(services.session, (s) => s.persona)`. */

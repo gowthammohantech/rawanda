@@ -134,6 +134,7 @@ export function WorkerTable({ rows, threshold, filters }: WorkerTableProps) {
   return (
     <div data-testid="worker-table">
       <AccessibleDataTable
+        scrollable
         caption={t("admin:workload.table.caption")}
         columns={columns}
         rows={rows}

@@ -25,10 +25,14 @@ import { useReturnToPersona } from "../features/governance/mutations.ts";
 import { resolveScopeFromSearch } from "../auth/scope.ts";
 import { endAdminSession, loginPathFor } from "../auth/signIn.ts";
 import { useDemoTools } from "./demo-tools.tsx";
-import { scopeSearchOf, sidebarSections } from "./nav.ts";
+import { FaultPill } from "./FaultPill.tsx";
+import { IconRail } from "./IconRail.tsx";
+import { paths, scopeSearchOf, sidebarSections } from "./nav.ts";
 import { grantScopeLabel, personaOption, reportingScopeLabel } from "./persona-labels.ts";
 import { useAdminSession, useServices } from "./providers.tsx";
 import { useOnline } from "./useOnline.ts";
+import { prefetchPageChunks } from "./pageChunks.ts";
+import { useRouteFocus } from "./useRouteFocus.ts";
 
 export function AdminShell() {
   const { epoch } = useDemoTools();
@@ -42,11 +46,22 @@ function ShellChrome() {
   const location = useLocation();
   const { toast } = useToast();
   const online = useOnline();
+  useRouteFocus();
+  // ADM-09: warm every page chunk once the shell is up (offline navigation keeps working).
+  useEffect(() => {
+    if (import.meta.env.MODE === "test") return;
+    const handle = window.setTimeout(prefetchPageChunks, 1500);
+    return () => window.clearTimeout(handle);
+  }, []);
   const persona = useAdminSession((s) => s.persona);
   const grant = useAdminSession((s) => s.grant);
   const session = useAdminSession((s) => s.session);
   const grantChanges = useAdminSession((s) => s.grantChanges);
   const { faults, setFault, reset, loadScenario, scenarios } = useDemoTools();
+  // ADM-09: Reset demo restores the baseline, ends the session and returns to the sign-in.
+  const resetDemo = async () => {
+    if (await reset()) void navigate(paths.login, { replace: true });
+  };
   const returnTo = findAdminPersona(session?.returnToPersonaId ?? null);
   const returnToPersona = useReturnToPersona();
 
@@ -85,6 +100,8 @@ function ShellChrome() {
   return (
     <AppShell
       sidebar={<Sidebar sections={sections} LinkComponent={NavLink} />}
+      rail={<IconRail sections={sections} />}
+      compactSidebar
       topbar={{
         searchSlot: (
           <div role="search" className="max-w-md" title={t("admin:shell.search.comingLater")}>
@@ -98,13 +115,16 @@ function ShellChrome() {
           </div>
         ),
         demoTools: (
-          <DemoToolsMenu
-            faults={faults}
-            onFaultChange={setFault}
-            onReset={reset}
-            scenarios={scenarios}
-            onLoadScenario={(id) => void loadScenario(id)}
-          />
+          <>
+            <FaultPill />
+            <DemoToolsMenu
+              faults={faults}
+              onFaultChange={setFault}
+              onReset={resetDemo}
+              scenarios={scenarios}
+              onLoadScenario={(id) => void loadScenario(id)}
+            />
+          </>
         ),
         persona: (
           <PersonaSwitcher

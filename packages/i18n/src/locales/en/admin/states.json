@@ -1,0 +1,12 @@
+{
+  "offline": "You are offline. Showing data stored on this device.",
+  "sessionExpired": "Your demo session expired. Sign in again to continue.",
+  "retry": "Retry",
+  "titleSuffix": "Programme Dashboard · CareConnect (Demo)",
+  "settingsUnavailable": "Dashboard settings unavailable",
+  "loading": "Loading…",
+  "empty": "No data for this period and scope.",
+  "error": "Figures could not be loaded. No numbers are shown rather than wrong ones.",
+  "stale": "Data changed — Refresh",
+  "permissionDenied": "You do not have access to this view. The attempt was recorded."
+}

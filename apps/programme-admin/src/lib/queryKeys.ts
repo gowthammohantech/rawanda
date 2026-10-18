@@ -33,6 +33,11 @@ export const adminKeys = {
   all: ["admin"] as const,
   /** ADM-08: every AccessGrant (sign-in, session re-validation, Roles tab); not scoped. */
   grants: () => ["admin", "accessGrants"] as const,
+  /**
+   * ADM-09: programme settings (small-cell threshold). Not scoped: one value for every persona;
+   * every derived key below carries the threshold itself, so a change recomputes them all.
+   */
+  settings: () => ["admin", "settings"] as const,
   scoped: ["admin", "scoped"] as const,
   scope: (scopeKey: ScopeKey) => [...adminKeys.scoped, scopeKey] as const,
   dataset: (scopeKey: ScopeKey, filters: FilterKey) =>

@@ -24,7 +24,8 @@
     "ofRecorded": "{{pct}}% of recorded",
     "base": "Base: all recorded screenings",
     "pctHidden": "% hidden to protect privacy",
-    "largestDrop": "LARGEST DROP · {{pct}}% of previous"
+    "largestDrop": "LARGEST DROP · {{pct}}% of previous",
+    "openHint": "open the aggregate drill-down"
   },
   "empty": {
     "title": "No screenings in this period",

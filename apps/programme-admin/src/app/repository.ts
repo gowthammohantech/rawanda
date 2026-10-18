@@ -25,16 +25,18 @@ export type CreateAppRepositoryOptions = {
   store?: StoreAdapter;
   /** Skip the simulated latency (default: on in `VITE_LAIF_E2E=1` builds). */
   noLatency?: boolean;
+  /** Test seam: replaces the latency sleep (e.g. a gate that holds every call). */
+  sleep?: (ms: number) => Promise<void>;
 };
 
 export function createAppRepository(options: CreateAppRepositoryOptions): CareRepository {
-  const { session, store, clock, ids, noLatency = IS_E2E } = options;
+  const { session, store, clock, ids, noLatency = IS_E2E, sleep } = options;
   return createCareRepository({
     store: store ?? createDexieStoreAdapter({ dbName: dexieDbName(APP_ID) }),
     clock,
     ids,
     appId: APP_ID,
     getActor: () => session.actor(),
-    ...(noLatency ? { sleep: () => Promise.resolve() } : {}),
+    ...(sleep !== undefined ? { sleep } : noLatency ? { sleep: () => Promise.resolve() } : {}),
   });
 }

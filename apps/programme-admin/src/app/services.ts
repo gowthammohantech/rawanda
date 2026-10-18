@@ -8,7 +8,7 @@ import {
 import type { I18nInstance } from "@laif/i18n";
 import type { CareRepository, StoreAdapter } from "@laif/repositories";
 import { createWebIdGenerator } from "@laif/repositories/ids/web";
-import { QueryClient } from "@tanstack/react-query";
+import { MutationCache, QueryCache, QueryClient } from "@tanstack/react-query";
 
 import { createAdminSessionStore, type AdminSessionStore } from "../auth/sessionStore.ts";
 import { createAppRepository } from "./repository.ts";
@@ -24,11 +24,22 @@ export type AppServices = {
   ids: IdGenerator;
 };
 
-export function createAppQueryClient(): QueryClient {
+/**
+ * ADM-09 (T-09): when a query or mutation fails after "Expire session now", the session store is
+ * told (`noticeExpiry`) and RequireSession redirects to the sign-in with `next` = this view.
+ */
+export function createAppQueryClient(
+  session?: Pick<AdminSessionStore, "noticeExpiry">,
+): QueryClient {
+  const onError = () => session?.noticeExpiry();
   return new QueryClient({
+    queryCache: new QueryCache({ onError }),
+    mutationCache: new MutationCache({ onError }),
     defaultOptions: {
-      queries: { retry: 1, staleTime: 30_000, refetchOnWindowFocus: false },
-      mutations: { retry: false },
+      // ADM-09: the data is local (IndexedDB), so a browser that is offline keeps querying and
+      // writing (`networkMode: "always"`; TanStack's default would pause every query offline).
+      queries: { retry: 1, staleTime: 30_000, refetchOnWindowFocus: false, networkMode: "always" },
+      mutations: { retry: false, networkMode: "always" },
     },
   });
 }
@@ -39,6 +50,7 @@ export type CreateAppServicesOptions = {
   store?: StoreAdapter;
   noLatency?: boolean;
   session?: AdminSessionStore;
+  sleep?: (ms: number) => Promise<void>;
 };
 
 export function createAppServices(options: CreateAppServicesOptions): AppServices {
@@ -51,13 +63,14 @@ export function createAppServices(options: CreateAppServicesOptions): AppService
     session,
     clock,
     ids,
-    queryClient: createAppQueryClient(),
+    queryClient: createAppQueryClient(session),
     repo: createAppRepository({
       session,
       clock,
       ids,
       ...(options.store === undefined ? {} : { store: options.store }),
       ...(options.noLatency === undefined ? {} : { noLatency: options.noLatency }),
+      ...(options.sleep === undefined ? {} : { sleep: options.sleep }),
     }),
   };
 }

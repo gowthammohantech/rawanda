@@ -18,3 +18,4 @@ export * from "./dataQualityIssue.ts";
 export * from "./exportAudit.ts";
 export * from "./governance.ts";
 export * from "./citizen/index.ts";
+export * from "./adminSettings.ts";

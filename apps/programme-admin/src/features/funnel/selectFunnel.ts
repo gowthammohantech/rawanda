@@ -4,7 +4,8 @@
  * stage, facility, district or week — never a patient or record id.
  *
  * Privacy (ADM-02 open gap "differencing across views"): suppression runs ONCE over the whole
- * grant scope (`funnelHierarchy`: facility → district → programme + weekly series), and every
+ * grant scope (facility → district → programme + weekly series; since ADM-09 the SAME pass as the
+ * overview, `programmeSuppression`, so the two pages never disagree on a shared figure), and every
  * narrower view only picks its cells from that result. So "all districts" and "District Alpha"
  * never hide different cells of the same table, and subtracting one view from another reveals
  * nothing hidden. Consequence: a district view may show a value as hidden that a single-district
@@ -13,7 +14,6 @@
 import {
   derivedCell,
   FUNNEL_STAGES,
-  funnelHierarchy,
   largestDrop,
   type AggregateCell,
   type FunnelColumn,
@@ -23,6 +23,8 @@ import {
   type FunnelStageId,
   type MetricsDataset,
 } from "@laif/analytics";
+
+import { funnelHierarchyOf, programmeSuppression } from "../metrics/programmeSuppression.ts";
 
 export type FunnelScopeSelection = { district: string | null; facility: string | null };
 
@@ -91,7 +93,8 @@ export function selectFunnel(
   scope: FunnelScopeSelection,
   threshold: number,
 ): FunnelView {
-  const h = funnelHierarchy(ds, threshold);
+  // ADM-09: the funnel reads the pass it shares with the overview (`programmeSuppression`).
+  const h = funnelHierarchyOf(ds, programmeSuppression(ds, threshold), threshold);
   const node =
     selectedNode(h.root, h.districts, scope) ??
     zeroNode(scope.facility ?? scope.district ?? "", h.root);

@@ -222,6 +222,7 @@ export function AccessSimulator() {
               disabled={persona === null}
               onClick={() => tryIt()}
               data-testid="simulation-try-it"
+              className="h-auto max-w-full py-2 text-start whitespace-normal!"
             >
               {t("admin:governance.sim.tryIt", { persona: persona?.displayName ?? "" })}
             </Button>

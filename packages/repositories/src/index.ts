@@ -64,4 +64,9 @@ export type {
 } from "./services/quality-issues.ts";
 export type { ExportAuditFilterInput } from "./services/audit.ts";
 export type { AccessGrantUpdateCall } from "./services/access-grants.ts";
+export {
+  ADMIN_SETTINGS_META_KEY,
+  baselineAdminSettings,
+  type AdminSettingsUpdateCall,
+} from "./services/admin-settings.ts";
 export { Engine, TxContext, type EngineMode, type MutationSpec } from "./core/engine.ts";

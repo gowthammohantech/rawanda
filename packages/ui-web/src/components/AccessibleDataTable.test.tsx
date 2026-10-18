@@ -38,6 +38,23 @@ describe("AccessibleDataTable", () => {
     await expectNoAxeViolations(container);
   });
 
+  it("scrollable: a focusable labelled scroll region, caption shown above and kept for SR", async () => {
+    const { container } = renderUi(
+      <AccessibleDataTable
+        caption="Workers"
+        columns={columns}
+        rows={rows}
+        getRowId={(r) => r.id}
+        scrollable
+      />,
+    );
+    const region = screen.getByRole("region", { name: "Workers" });
+    expect(region.tabIndex).toBe(0);
+    expect(within(region).getByRole("table", { name: "Workers" })).toBeTruthy();
+    expect(container.querySelector("p[aria-hidden='true']")?.textContent).toBe("Workers");
+    await expectNoAxeViolations(container);
+  });
+
   it("sorts with the keyboard and updates aria-sort", async () => {
     const user = userEvent.setup();
     renderUi(

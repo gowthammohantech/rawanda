@@ -1,0 +1,87 @@
+{
+  "title": "Igenamiterere",
+  "subtitle": "Ururimi, umubare muto uhishwa, amakosa y'igerageza, igihe cy'akazi no gusubiza igerageza ku ntangiriro.",
+  "language": "Ururimi",
+  "languageHint": "Bibikwa kuri iki gikoresho kandi bigumaho nyuma yo kongera gufungura cyangwa nta murandasi. Imibare ni imwe mu ndimi zose.",
+  "languageSaved": "Byabitswe: {{language}}",
+  "threshold": {
+    "label": "Umubare muto uhishwa (igerageza)",
+    "description": "Imibare irenze zeru kandi iri munsi y'uyu mubare ihishwa ku mbonerahamwe zose, ku bisobanuro birambuye no ku madosiye ya CSV.",
+    "value": "k = {{k}}",
+    "demoTag": "Agaciro k'igerageza",
+    "readOnly": "Bishyirwaho n'umuyobozi wa porogaramu (politiki y'igerageza, ntiyemerewe gukoreshwa nyabyo).",
+    "baseline": "agaciro k'ibanze k'igerageza",
+    "lastChanged": "Byahinduwe bwa nyuma na {{by}}, {{at}} (verisiyo {{version}})",
+    "newValue": "Umubare mushya",
+    "hint": "Umubare wuzuye kuva kuri {{min}} kugeza kuri {{max}}. {{min}} ni wo muto wemewe n'imiyoborere.",
+    "justification": "Impamvu",
+    "justificationHint": "Inyuguti {{min}}–{{max}}, byandikwa mu gitabo cy'igenzura (zimaze kuba {{count}}).",
+    "auditNote": "Iri hinduka ryandikwa mu igenzura hamwe n'agaciro gashaje, agashya n'impamvu yawe.",
+    "preview": "Kuri k = {{k}}, imibare {{n}} mu Incamake y'ubu yahishwa.",
+    "previewLoading": "Turabara igaragaza…",
+    "previewUnavailable": "Igaragaza ntiriboneka ubu.",
+    "save": "Bika umubare",
+    "toast": {
+      "saved": "Umubare wavuguruwe — imbonerahamwe zongeye kubarwa"
+    },
+    "validation": {
+      "range": "Andika umubare wuzuye kuva kuri 3 kugeza kuri 20",
+      "unchanged": "Uyu ni wo mubare usanzwe ukoreshwa.",
+      "justification": "Tanga impamvu y'inyuguti {{min}} kugeza kuri {{max}}."
+    },
+    "conflict": {
+      "title": "Umubare wahinduwe n'undi muntu",
+      "description": "Ihinduka ryawe ntiryabitswe. Gumana agaciro gaheruka cyangwa ushyireho akawe hejuru yako."
+    },
+    "notSaved": "Ntibyabitswe — ongera ugerageze. Ibyo wanditse biracyahari.",
+    "forbidden": "Umuyobozi wa porogaramu wenyine ni we ushobora guhindura uyu mubare. Igerageza ryanditswe.",
+    "failed": "Umubare ntiwashoboye kubikwa."
+  },
+  "faults": {
+    "title": "Kwigana amakosa y'igerageza",
+    "description": "Igana ibibazo by'umurandasi urebe uko buri paji yitwara. Nta serivisi nyayo irimo.",
+    "pill": "Kwigana amakosa birakora",
+    "none": "Nta makosa",
+    "latency": "Umurandasi utinda",
+    "latencyHint": "Buri gusaba gutegereza amasegonda 1.5–3.",
+    "serverError": "Ikosa rya seriveri",
+    "serverErrorHint": "Gusaba binanirwa mbere yo gukora (nta kibikwa).",
+    "timeout": "Gutinda (igisubizo cyabuze)",
+    "timeoutHint": "Ibyanditswe birabikwa ariko igisubizo kikabura; kongera kugerageza ntibigomba kubyikuba.",
+    "rate": {
+      "off": "Bifunze",
+      "sometimes": "Rimwe na rimwe (1 kuri 4)",
+      "always": "Buri gihe"
+    },
+    "offline": "Nta murandasi",
+    "offlineHint": "Buri gusaba kunanirwa nk'aho umurandasi wabuze.",
+    "conflict": "Ukutumvikana ku ihinduka rikurikira ry'umubare",
+    "conflictHint": "Kubika gukurikira kwitwara nk'aho undi muntu yabanje guhindura umubare.",
+    "clear": "Kuraho amakosa yose",
+    "footnote": "Ni ibikoresho by'igerageza gusa: guhindura amakosa si ibyemezo by'akazi kandi ntibiri mu nyandiko z'igenzura ry'imiyoborere. Gusubiza igerageza ku ntangiriro birabikuraho."
+  },
+  "session": {
+    "title": "Igihe cy'igerageza",
+    "demoTag": "Guhindura uruhare mu igerageza",
+    "persona": "Umuntu w'igerageza",
+    "role": "Uruhare",
+    "grant": "Uburenganzira bwo kwinjira",
+    "grantValue": "{{scope}} (verisiyo {{version}})",
+    "started": "Byatangiye",
+    "expireHint": "Rangiza igihe ugerageze ibiba iyo kwinjira kurangiye: igikorwa gikurikira kizagusaba kongera kwinjira kigusubize aho wari uri.",
+    "expire": "Rangiza igihe ubu",
+    "expiredToast": "Igihe cyarangiye. Igikorwa gikurikira kizagusaba kongera kwinjira.",
+    "expiredStatus": "Iki gihe cyarangiye. Fungura indi paji cyangwa ukore igikorwa wongere winjire."
+  },
+  "reset": {
+    "title": "Gusubiza igerageza ku ntangiriro",
+    "description": "Bisubiza ibintu uko byari biri: amakuru, igitabo cy'igenzura, igenamiterere, isaha y'igerageza. Birangiza iki gihe.",
+    "open": "Subiza igerageza ku ntangiriro…",
+    "dialogTitle": "Gusubiza amakuru y'igerageza ku ntangiriro?",
+    "dialogDescription": "Ibyahinduwe byose muri iri gerageza bivanwaho kandi usubira ku kwinjira.",
+    "confirm": "Andika RESET kugira ngo usubize amakuru y'igerageza",
+    "confirmHint": "Andika ijambo {{token}} uko riri, mu nyuguti nkuru.",
+    "confirmButton": "Subiza ku ntangiriro",
+    "done": "Amakuru y'igerageza yasubijwe"
+  }
+}

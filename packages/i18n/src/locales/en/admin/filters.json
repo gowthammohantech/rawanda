@@ -36,5 +36,6 @@
     "futureDate": "End date cannot be after today",
     "rangeTooLong": "A date range can cover at most 366 days",
     "facilityDistrict": "The facility does not belong to the selected district"
-  }
+  },
+  "sheetToggle": "Filters ({{n}})"
 }

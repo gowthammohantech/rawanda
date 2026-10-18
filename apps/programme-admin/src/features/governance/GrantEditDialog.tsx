@@ -50,6 +50,7 @@ import { useServices } from "../../app/providers.tsx";
 import { findAdminPersona } from "../../auth/personas.ts";
 import { emitAdminAudit } from "../../lib/audit.ts";
 import { isRetryableWriteError } from "../programme-actions/mutations.ts";
+import { useDialogDraft, type DialogDraft } from "../../lib/drafts.ts";
 import { scopeText } from "./grantFormat.ts";
 import { useRefreshGrants, useUpdateGrant } from "./mutations.ts";
 
@@ -269,14 +270,20 @@ export type GrantEditDialogProps = {
   onSaved?: (grant: AccessGrant) => void;
   /** Test seam (default `crypto.randomUUID`). */
   createKey?: () => string;
+  /** ADM-09: keep a sessionStorage draft for this context (path + search); null = none. */
+  draftContext?: string | null;
+  /** ADM-09: a draft left by an expired session (its key and input are reused). */
+  restore?: DialogDraft<GrantFormValues> | null;
 };
 
 export function GrantEditDialog({
   grant,
   grants,
-  onClose,
+  onClose: close,
   onSaved,
   createKey,
+  draftContext = null,
+  restore = null,
 }: GrantEditDialogProps) {
   const t = useTx();
   const { language } = useLanguage();
@@ -284,7 +291,7 @@ export function GrantEditDialog({
   const services = useServices();
   const baseId = useId();
   const newKey = useMemo(() => createKey ?? (() => crypto.randomUUID()), [createKey]);
-  const [key, setKey] = useState(newKey);
+  const [key, setKey] = useState(() => restore?.key ?? newKey());
   const [version, setVersion] = useState(grant.version);
   const [failure, setFailure] = useState<Failure>(null);
   const [conflict, setConflict] = useState<ConflictState | null>(null);
@@ -303,10 +310,22 @@ export function GrantEditDialog({
   );
   const form = useForm<GrantFormValues>({
     resolver: zodResolver(schema),
-    defaultValues: defaultGrantValues(grant),
+    defaultValues: restore === null ? defaultGrantValues(grant) : restore.values,
     shouldFocusError: true,
   });
-  const { register, handleSubmit, formState, setError, setValue, control } = form;
+  const { register, handleSubmit, formState, setError, setValue, control, watch } = form;
+  const draft = useDialogDraft<GrantFormValues>({
+    kind: "grant",
+    context: draftContext,
+    key,
+    subject: grant.id,
+    subscribe: watch,
+  });
+  // Every way out of the dialog (saved, cancelled, kept the latest) drops the draft.
+  const onClose = () => {
+    draft.clear();
+    close();
+  };
   const errors: FieldErrors<GrantFormValues> = formState.errors;
   const districtIds = useWatch({ control, name: "districtIds" });
   const facilityMode = useWatch({ control, name: "facilityMode" });

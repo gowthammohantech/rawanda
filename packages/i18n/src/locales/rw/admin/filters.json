@@ -36,5 +36,6 @@
     "futureDate": "Itariki irangiriraho ntishobora kurenga uyu munsi",
     "rangeTooLong": "Igihe ntigishobora kurenza iminsi 366",
     "facilityDistrict": "Iryo vuriro ntiri mu karere katoranyijwe"
-  }
+  },
+  "sheetToggle": "Ibyo gushungura ({{n}})"
 }

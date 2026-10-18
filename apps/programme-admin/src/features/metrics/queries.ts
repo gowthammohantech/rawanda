@@ -11,16 +11,19 @@ import { useQuery, useQueryClient, type QueryClient } from "@tanstack/react-quer
 
 import { useAdminSession, useRepository } from "../../app/providers.tsx";
 import { adminKeys, scopeKeyOf, type FilterKey } from "../../lib/queryKeys.ts";
+import { useAdminSettings } from "../settings/queries.ts";
 import type { AdminFiltersApi } from "../filters/useAdminFilters.ts";
 import { loadMetricsDataset, type LoadedDataset, type ScopeAccess } from "./loadMetricsDataset.ts";
 import { selectOverview, type OverviewMetrics } from "./selectOverview.ts";
 
 /**
- * The small-cell threshold in force. ADM-09 adds the settings UI; until then it is the demo
- * default (`DEMO_SMALL_CELL_THRESHOLD`, pending data-governance approval).
+ * The small-cell threshold in force (ADM-09: `AdminSettings.suppressionThreshold`, set by the
+ * programme lead on Settings; baseline `DEMO_SMALL_CELL_THRESHOLD`). Every page is mounted behind
+ * `ThresholdGate`, which waits for the settings, so the baseline fallback is never used to
+ * render figures while a different threshold is in force.
  */
 export function useSuppressionThreshold(): number {
-  return DEMO_SMALL_CELL_THRESHOLD;
+  return useAdminSettings().data?.suppressionThreshold ?? DEMO_SMALL_CELL_THRESHOLD;
 }
 
 export function filterKeyOf(api: Pick<AdminFiltersApi, "filters" | "period">): FilterKey {
@@ -89,10 +92,18 @@ async function computeOverview(
   };
 }
 
-export function useOverviewMetrics(api: Pick<AdminFiltersApi, "filters" | "period">) {
+/**
+ * `thresholdOverride` — Settings' live preview ("At k = {k}, n cells … would be suppressed"):
+ * the same overview at a candidate threshold (its own key; only the count is shown).
+ */
+export function useOverviewMetrics(
+  api: Pick<AdminFiltersApi, "filters" | "period">,
+  thresholdOverride?: number,
+) {
   const repo = useRepository();
   const client = useQueryClient();
-  const threshold = useSuppressionThreshold();
+  const inForce = useSuppressionThreshold();
+  const threshold = thresholdOverride ?? inForce;
   const { access, scopeKey } = useAccess();
   return useQuery({
     queryKey: adminKeys.overview(scopeKey, filterKeyOf(api), threshold),

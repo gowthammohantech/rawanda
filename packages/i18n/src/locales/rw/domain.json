@@ -584,6 +584,10 @@
       "access_grant": {
         "changed": "Uburenganzira bwahinduwe",
         "revoked": "Uburenganzira bwakuweho"
+      },
+      "settings": {
+        "suppression_threshold_changed": "Umubare muto uhishwa wahinduwe",
+        "denied": "Guhindura igenamiterere byanzwe"
       }
     },
     "clinical": {

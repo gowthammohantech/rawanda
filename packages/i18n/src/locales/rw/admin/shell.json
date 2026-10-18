@@ -1,7 +1,8 @@
 {
   "nav": {
     "settings": "Igenamiterere",
-    "locked": "Ntibiboneka ku ruhare rwawe rw'igerageza"
+    "locked": "Ntibiboneka ku ruhare rwawe rw'igerageza",
+    "rail": "Inzira z'ihuse"
   },
   "scopeStrip": "Urareba imibare rusange",
   "scopeStripLabel": "Aho raporo igarukira: {{scope}}",

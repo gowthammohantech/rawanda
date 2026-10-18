@@ -34,7 +34,8 @@ import {
   type TranslationKey,
 } from "@laif/ui-web";
 import { useQueryClient } from "@tanstack/react-query";
-import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useLocation } from "react-router";
 
 import { districtLabel, facilityLabel } from "../../app/persona-labels.ts";
 import { useServices } from "../../app/providers.tsx";
@@ -44,6 +45,7 @@ import type { AdminFiltersApi } from "../filters/useAdminFilters.ts";
 import { useSuppressionThreshold } from "../metrics/queries.ts";
 import { reportRowsOf } from "./exportCsv.ts";
 import { requestExport, type ExportResult } from "./exportService.ts";
+import { clearDraftsOf, findDraft, saveDraft } from "../../lib/drafts.ts";
 import { EMPTY_REASON, ExportReasonForm, type ExportReasonValues } from "./ExportReasonForm.tsx";
 import { useClockMinute, useReportPreview } from "./queries.ts";
 import { ReportPreviewTable, type PreviewRow } from "./ReportPreviewTable.tsx";
@@ -59,6 +61,16 @@ type StepId = (typeof STEPS)[number];
 
 /** The disabled de-identified record-level option (pending a data-governance decision). */
 const RECORD_LEVEL = "record_level" as const;
+
+type ExportAttempt = { key: string; exportId: string };
+
+/** ADM-09 draft of the export flow (form input + attempt key; no figures). */
+type ExportDraft = {
+  template: ReportTemplateId;
+  granularity: ReportGranularity;
+  reasonValues: ExportReasonValues;
+  attempt: ExportAttempt | null;
+};
 
 export type ReportBuilderProps = {
   api: AdminFiltersApi;
@@ -78,11 +90,34 @@ export function ReportBuilder({
 }: ReportBuilderProps) {
   const t = useTx();
   const { session } = useServices();
-  const [step, setStep] = useState<StepId>("template");
-  const [template, setTemplate] = useState<ReportTemplateId>(initialTemplate);
-  const [granularity, setGranularity] = useState<ReportGranularity>("scope_total");
-  const [reasonValues, setReasonValues] = useState<ExportReasonValues>(EMPTY_REASON);
+  const location = useLocation();
+  // ADM-09 (T-09): an export reason (and export attempt key) left by an expired session on this
+  // URL is restored at the reason step; an unchanged reason reuses the attempt key.
+  const draftContext = `${location.pathname}${location.search}`;
+  const [restore] = useState(() => findDraft<ExportDraft>("exportReason", draftContext));
+  const make = useCallback(() => (createKey ?? (() => crypto.randomUUID()))(), [createKey]);
+  const [step, setStep] = useState<StepId>(restore === null ? "template" : "reason");
+  const [template, setTemplate] = useState<ReportTemplateId>(
+    restore?.values.template ?? initialTemplate,
+  );
+  const [granularity, setGranularity] = useState<ReportGranularity>(
+    restore?.values.granularity ?? "scope_total",
+  );
+  const [reasonValues, setReasonValues] = useState<ExportReasonValues>(
+    restore?.values.reasonValues ?? EMPTY_REASON,
+  );
   const [reason, setReason] = useState<ExportReason | null>(null);
+  const [attempt, setAttempt] = useState<ExportAttempt | null>(restore?.values.attempt ?? null);
+  const [draftKey] = useState(() => restore?.key ?? make());
+  const saveExportDraft = (values: Partial<ExportDraft>) =>
+    saveDraft<ExportDraft>({
+      kind: "exportReason",
+      context: draftContext,
+      key: draftKey,
+      subject: "report",
+      values: { template, granularity, reasonValues, attempt, ...values },
+    });
+  const dropExportDraft = () => clearDraftsOf("exportReason", draftContext);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const firstRender = useRef(true);
 
@@ -157,9 +192,16 @@ export function ReportBuilder({
         <ExportReasonForm
           defaultValues={reasonValues}
           onBack={() => go("preview")}
+          onChange={(values) => saveExportDraft({ reasonValues: values })}
           onSubmit={(parsed, values) => {
+            // A changed reason is a new export attempt (new idempotency key).
+            const same =
+              attempt !== null && JSON.stringify(values) === JSON.stringify(reasonValues);
+            const next = same && attempt !== null ? attempt : { key: make(), exportId: make() };
+            setAttempt(next);
             setReason(parsed);
             setReasonValues(values);
+            saveExportDraft({ reasonValues: values, attempt: next });
             go("export");
           }}
         />
@@ -170,13 +212,16 @@ export function ReportBuilder({
           granularity={effective}
           reason={reason}
           canExport={canExport}
+          attempt={attempt ?? { key: make(), exportId: make() }}
+          onDone={dropExportDraft}
           onBack={() => go("reason")}
           onRestart={() => {
             setReason(null);
             setReasonValues(EMPTY_REASON);
+            setAttempt(null);
+            dropExportDraft();
             go("template");
           }}
-          {...(createKey === undefined ? {} : { createKey })}
           {...(download === undefined ? {} : { download })}
         />
       )}
@@ -362,9 +407,10 @@ function ExportStep({
   granularity,
   reason,
   canExport,
+  attempt,
+  onDone,
   onBack,
   onRestart,
-  createKey,
   download,
 }: {
   api: AdminFiltersApi;
@@ -372,9 +418,11 @@ function ExportStep({
   granularity: ReportGranularity;
   reason: ExportReason;
   canExport: boolean;
+  /** Idempotency key + export id of this attempt (kept across retries and a re-login). */
+  attempt: ExportAttempt;
+  onDone: () => void;
   onBack: () => void;
   onRestart: () => void;
-  createKey?: () => string;
   download?: (text: string, fileName: string) => void;
 }) {
   const t = useTx();
@@ -384,9 +432,6 @@ function ExportStep({
   const client = useQueryClient();
   const threshold = useSuppressionThreshold();
   const minute = useClockMinute();
-  const make = createKey ?? (() => crypto.randomUUID());
-  // Created once when this step mounts; every retry reuses them.
-  const [attempt] = useState(() => ({ key: make(), exportId: make() }));
   const generatedAt = useRef<Date | null>(null);
   const [pending, setPending] = useState(false);
   const [status, setStatus] = useState<ExportStatus>({ kind: "idle" });
@@ -427,6 +472,7 @@ function ExportStep({
         },
       );
       setStatus({ kind: "done", result });
+      onDone();
       toast({
         title: t("admin:reports.toast.generated", { fileName: result.fileName }),
         tone: "positive",

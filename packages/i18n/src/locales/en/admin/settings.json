@@ -1,0 +1,87 @@
+{
+  "title": "Settings",
+  "subtitle": "Language, privacy threshold, demo faults, session and demo reset.",
+  "language": "Language",
+  "languageHint": "Saved on this device and kept after reload or offline. Numbers are the same in every language.",
+  "languageSaved": "Saved: {{language}}",
+  "threshold": {
+    "label": "Small-number suppression threshold (demo)",
+    "description": "Counts above zero and below this number are hidden on every dashboard, drill-down and CSV export.",
+    "value": "k = {{k}}",
+    "demoTag": "Demo value",
+    "readOnly": "Set by programme lead (demo policy, not approved for production).",
+    "baseline": "demo baseline",
+    "lastChanged": "Last changed by {{by}}, {{at}} (version {{version}})",
+    "newValue": "New threshold",
+    "hint": "Whole number from {{min}} to {{max}}. {{min}} is the governance minimum.",
+    "justification": "Justification",
+    "justificationHint": "{{min}}–{{max}} characters, recorded in the audit log ({{count}} so far).",
+    "auditNote": "The change is audited with the old and new value and your justification.",
+    "preview": "At k = {{k}}, {{n}} cells in the current Overview would be suppressed.",
+    "previewLoading": "Calculating the preview…",
+    "previewUnavailable": "Preview not available right now.",
+    "save": "Save threshold",
+    "toast": {
+      "saved": "Threshold updated — dashboards recalculated"
+    },
+    "validation": {
+      "range": "Enter a whole number from 3 to 20",
+      "unchanged": "This is already the threshold in force.",
+      "justification": "Give a justification of {{min}} to {{max}} characters."
+    },
+    "conflict": {
+      "title": "The threshold was changed by someone else",
+      "description": "Your change was not saved. Keep the latest value, or apply yours on top of it."
+    },
+    "notSaved": "Not saved — retry. Your input is kept.",
+    "forbidden": "Only the programme lead can change the threshold. The attempt was recorded.",
+    "failed": "The threshold could not be saved."
+  },
+  "faults": {
+    "title": "Demo fault simulation",
+    "description": "Simulate network problems to see how each page behaves. No real service is involved.",
+    "pill": "Fault simulation on",
+    "none": "No faults",
+    "latency": "Slow network",
+    "latencyHint": "Every call waits 1.5–3 seconds.",
+    "serverError": "Server error",
+    "serverErrorHint": "Calls fail before they run (nothing is saved).",
+    "timeout": "Timeout (lost response)",
+    "timeoutHint": "The write is saved but the answer is lost; retrying must not duplicate it.",
+    "rate": {
+      "off": "Off",
+      "sometimes": "Sometimes (1 in 4)",
+      "always": "Always"
+    },
+    "offline": "Offline",
+    "offlineHint": "Every call fails as if the connection were lost.",
+    "conflict": "Conflict on the next threshold change",
+    "conflictHint": "The next save behaves as if someone else changed the threshold first.",
+    "clear": "Clear all faults",
+    "footnote": "Demo tooling only: fault switches are not business decisions and are not part of the governance audit trail. Reset demo clears them."
+  },
+  "session": {
+    "title": "Demo session",
+    "demoTag": "Demo role switch",
+    "persona": "Persona",
+    "role": "Role",
+    "grant": "Access grant",
+    "grantValue": "{{scope}} (version {{version}})",
+    "started": "Started",
+    "expireHint": "Expire the session to test what happens when a sign-in runs out: your next action asks you to sign in again and returns you to the same view.",
+    "expire": "Expire session now",
+    "expiredToast": "Session expired. Your next action will ask you to sign in again.",
+    "expiredStatus": "This session has expired. Navigate or act to sign in again."
+  },
+  "reset": {
+    "title": "Reset demo",
+    "description": "Restores the exact baseline: data, audit log, settings, demo clock. Ends this session.",
+    "open": "Reset demo…",
+    "dialogTitle": "Reset the demo data?",
+    "dialogDescription": "Every change made in this demo is removed and you return to the sign-in.",
+    "confirm": "Type RESET to restore the demo data",
+    "confirmHint": "Type the word {{token}} exactly, in capital letters.",
+    "confirmButton": "Reset demo",
+    "done": "Demo data restored"
+  }
+}

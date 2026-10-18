@@ -94,6 +94,7 @@ export function ReportPreviewTable({
   ];
   return (
     <AccessibleDataTable
+      scrollable
       caption={t("admin:reports.preview.caption")}
       columns={columns}
       rows={rows}

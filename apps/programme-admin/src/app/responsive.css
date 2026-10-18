@@ -1,0 +1,18 @@
+/*
+ * Programme Admin responsive + motion layer (ADM-09 task 7/8). Layout breakpoints live in the
+ * Tailwind classes (sidebar ≥ 1024 px — 208 px until 1280 px, icon rail 768–1023 px, off-canvas
+ * drawer below; 8/4 grids ≥ 1024 px; KPI strip 2 → 3+2 → one row ≥ 1280 px; tables stacked below
+ * 768 px and scrolling inside their card above; filters behind "Filters (n)" below 640 px).
+ * Page-level horizontal scroll is fixed at its source (never masked with overflow clipping) and
+ * asserted in `e2e/responsive.spec.ts`. This file holds what classes cannot: reduced motion.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

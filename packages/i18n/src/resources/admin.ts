@@ -17,6 +17,8 @@ import enAdminWorkload from "../locales/en/admin/workload.json";
 import enAdminQuality from "../locales/en/admin/quality.json";
 import enAdminReports from "../locales/en/admin/reports.json";
 import enAdminGovernance from "../locales/en/admin/governance.json";
+import enAdminSettings from "../locales/en/admin/settings.json";
+import enAdminStates from "../locales/en/admin/states.json";
 import rwAdminBase from "../locales/rw/admin.json";
 import rwAdminShell from "../locales/rw/admin/shell.json";
 import rwAdminAuth from "../locales/rw/admin/auth.json";
@@ -32,6 +34,8 @@ import rwAdminWorkload from "../locales/rw/admin/workload.json";
 import rwAdminQuality from "../locales/rw/admin/quality.json";
 import rwAdminReports from "../locales/rw/admin/reports.json";
 import rwAdminGovernance from "../locales/rw/admin/governance.json";
+import rwAdminSettings from "../locales/rw/admin/settings.json";
+import rwAdminStates from "../locales/rw/admin/states.json";
 
 export const enAdmin = {
   ...enAdminBase,
@@ -49,6 +53,8 @@ export const enAdmin = {
   quality: enAdminQuality,
   reports: enAdminReports,
   governance: enAdminGovernance,
+  settings: enAdminSettings,
+  states: enAdminStates,
 } as const;
 
 export const rwAdmin: object = {
@@ -67,4 +73,6 @@ export const rwAdmin: object = {
   quality: rwAdminQuality,
   reports: rwAdminReports,
   governance: rwAdminGovernance,
+  settings: rwAdminSettings,
+  states: rwAdminStates,
 };

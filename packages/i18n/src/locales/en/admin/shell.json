@@ -1,7 +1,8 @@
 {
   "nav": {
     "settings": "Settings",
-    "locked": "Not available for your demo role"
+    "locked": "Not available for your demo role",
+    "rail": "Navigation shortcuts"
   },
   "scopeStrip": "Viewing aggregate data",
   "scopeStripLabel": "Reporting scope: {{scope}}",
