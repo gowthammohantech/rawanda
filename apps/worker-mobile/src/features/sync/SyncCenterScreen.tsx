@@ -8,7 +8,8 @@
  * last sync time; offline → Sync now disabled with the reason (OfflineBanner); server error →
  * result toast + rows with plain-language error and next retry; conflict → decision section
  * first; permission denied → Not accepted with explanation; success → toast, rows move to Synced
- * recently, the live region announces the counts.
+ * recently, the live region announces the counts. HWM-10: a device clock more than 5 min off the
+ * simulated server shows the clock-drift warning row.
  */
 import { formatDateTime, useLanguage } from "@laif/i18n";
 import {
@@ -26,6 +27,7 @@ import { useState } from "react";
 import { RefreshControl, ScrollView, StyleSheet } from "react-native";
 
 import { AppHeader } from "../../components/AppHeader.tsx";
+import { ClockDriftNotice } from "../../components/ClockDriftNotice.tsx";
 import type { SyncOpRow } from "../../data/syncCenter.ts";
 import { useNetwork } from "../../network/NetworkProvider.tsx";
 import { useSyncRunning } from "../../sync/SyncTriggersProvider.tsx";
@@ -93,6 +95,7 @@ export function SyncCenterScreen() {
           pending={data?.badgeCount ?? 0}
           onOpenNetwork={() => router.push("/settings/network")}
         />
+        <ClockDriftNotice testID="sync-clock-drift" />
         <SyncNowButton offline={offline} running={running} onPress={() => void syncNow()} />
 
         {center.status === "error" ? (

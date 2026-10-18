@@ -85,15 +85,20 @@ export function SessionProvider({ children }: { children?: ReactNode }) {
     }
   }, [sessionRepo, queryClient]);
 
+  // The local session can be cleared underneath the restored status (Reset demo signs out
+  // before the re-check finishes): never report "signed in" without a session.
+  const effective: SessionStatus =
+    (status === "signed_in" || status === "revoked") && session === null ? "signed_out" : status;
+
   const value = useMemo<SessionContextValue>(
     () => ({
-      status,
-      session: status === "signed_in" || status === "revoked" ? session : null,
+      status: effective,
+      session: effective === "signed_in" || effective === "revoked" ? session : null,
       signIn,
       signOut,
       refresh,
     }),
-    [status, session, signIn, signOut, refresh],
+    [effective, session, signIn, signOut, refresh],
   );
 
   if (status === "loading") return <BrandSplash />;

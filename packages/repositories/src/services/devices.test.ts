@@ -120,3 +120,69 @@ describe("device service (HWM-01)", () => {
     expect(await h.repo.device.endSession("missing")).toBeNull();
   });
 });
+
+describe("device activity log (HWM-10)", () => {
+  const worker = () => createHarness({ appId: "worker", personaId: PERSONA_IDS.chwAlpha1A });
+  const screening = (h: Awaited<ReturnType<typeof createHarness>>) => ({
+    patientId: h.seed.patients.find((p) => p.facilityId === FACILITY_IDS.alpha1)!.id,
+    measuredAt: "2026-10-14T05:10:00.000Z",
+    systolic: 126,
+    diastolic: 80,
+    notes: "Private free-text note about the visit",
+  });
+
+  it("after a reset only the baseline demo.reset is listed (seed history excluded)", async () => {
+    const h = await worker();
+    await h.repo.demo.resetDemo();
+    const rows = await h.repo.device.listActivity();
+    expect(rows.map((r) => [r.action, r.source])).toEqual([["demo.reset", "device"]]);
+  });
+
+  it("lists device + server-mirrored events newest first, metadata only (no notes)", async () => {
+    const h = await worker();
+    await h.repo.demo.resetDemo();
+    h.clock.advanceBy(60_000);
+    await h.repo.createScreening(screening(h), h.key());
+    h.clock.advanceBy(60_000);
+    await h.repo.sync.process({ trigger: "manual" });
+    const rows = await h.repo.device.listActivity();
+    const actions = rows.map((r) => r.action);
+    expect(actions).toContain("screening.submitted");
+    expect(actions).toContain("sync.op_acknowledged");
+    expect(rows.some((r) => r.source === "server")).toBe(true);
+    expect(actions.at(-1)).toBe("demo.reset");
+    const times = rows.map((r) => r.occurredAt);
+    expect([...times].sort().reverse()).toEqual(times);
+    const json = JSON.stringify(rows);
+    expect(json).not.toContain("Private free-text note");
+    for (const row of rows) {
+      expect(Object.keys(row).sort()).toEqual(
+        [
+          "action",
+          "actorId",
+          "actorRole",
+          "category",
+          "correlationId",
+          "entityId",
+          "entityType",
+          "id",
+          "occurredAt",
+          "outcome",
+          "source",
+        ].sort(),
+      );
+    }
+  });
+
+  it("signed out or revoked → FORBIDDEN", async () => {
+    const h = await worker();
+    await h.attachDevice();
+    await h.repo.sync.revokeDevice();
+    await expect(h.repo.device.listActivity()).rejects.toMatchObject({
+      code: "FORBIDDEN",
+      reason: "SESSION_REVOKED",
+    });
+    h.as(null);
+    await expect(h.repo.device.listActivity()).rejects.toMatchObject({ code: "FORBIDDEN" });
+  });
+});

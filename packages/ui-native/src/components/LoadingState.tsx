@@ -1,6 +1,6 @@
 import { ActivityIndicator, StyleSheet, View } from "react-native";
 
-import { a11yState } from "../a11y.ts";
+import { a11yState, useReduceMotion } from "../a11y.ts";
 import { useTx } from "../i18n.ts";
 import { colors, radii, spacing } from "../tokens.ts";
 import { AppText } from "./AppText.tsx";
@@ -18,6 +18,8 @@ export type LoadingStateProps = {
 export function LoadingState({ label, variant = "spinner", rows = 3 }: LoadingStateProps) {
   const t = useTx();
   const text = label ?? t("common:state.loading");
+  // HWM-10: "Reduce motion" on → no spinning indicator (the label still announces progress).
+  const reduceMotion = useReduceMotion();
   if (variant === "skeleton") {
     return (
       <View
@@ -46,7 +48,9 @@ export function LoadingState({ label, variant = "spinner", rows = 3 }: LoadingSt
       {...a11yState({ busy: true })}
       style={styles.spinner}
     >
-      <ActivityIndicator size="large" color={colors.primary} />
+      {reduceMotion ? null : (
+        <ActivityIndicator testID="loading-spinner" size="large" color={colors.primary} />
+      )}
       <AppText color="muted">{text}</AppText>
     </View>
   );

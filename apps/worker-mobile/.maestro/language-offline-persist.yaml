@@ -1,0 +1,32 @@
+# HWM-10 regression: RW chosen in Settings while offline stays after a restart (before and after
+# sign-in) and survives Reset demo; the revoked and sign-in screens switch language too.
+appId: host.exp.Exponent
+---
+- runFlow: subflows/fresh-start.yaml
+- runFlow: subflows/sign-in.yaml
+- runFlow: subflows/set-offline.yaml
+- tapOn:
+    id: "avatar-button"
+- tapOn: "Ikinyarwanda"
+- assertVisible: "Byabitswe kuri iki gikoresho"
+- stopApp
+- launchApp
+- assertVisible:
+    id: "today-screen"
+- tapOn:
+    id: "avatar-button"
+- assertVisible: "Igenamiterere"
+- scrollUntilVisible:
+    element:
+      id: "open-reset-demo"
+- tapOn:
+    id: "open-reset-demo"
+- tapOn:
+    id: "reset-confirm-input"
+- inputText: "RESET"
+- hideKeyboard
+- tapOn:
+    id: "reset-confirm"
+- assertVisible: "Amakuru y'igerageza yasubijweho"
+- assertVisible: "Hitamo umwirondoro w'igerageza"
+- tapOn: "English"

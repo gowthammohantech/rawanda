@@ -1,0 +1,35 @@
+# HWM-10 (FRD §7): offline screening → Simulate device revocation → online → revoked screen with
+# no patient data and "1 item is kept…" → RW on the revoked screen → Restore device (demo only)
+# → the kept item syncs once.
+appId: host.exp.Exponent
+---
+- runFlow: subflows/fresh-start.yaml
+- runFlow: subflows/sign-in.yaml
+- runFlow: subflows/set-offline.yaml
+- runFlow: subflows/record-screening.yaml
+- tapOn:
+    id: "avatar-button"
+- tapOn:
+    id: "settings-offline"
+- scrollUntilVisible:
+    element:
+      id: "open-revoke-device"
+- tapOn:
+    id: "open-revoke-device"
+- tapOn: "Revoke this device (demo)"
+- assertVisible:
+    id: "revoked-screen"
+- assertVisible: "This device has been revoked (simulated)"
+- assertVisible: "1 item is kept on this device and was not sent"
+- assertNotVisible:
+    id: "tab-bar"
+- tapOn: "Ikinyarwanda"
+- assertVisible: "Iki gikoresho cyahagaritswe (kwigana)"
+- tapOn: "English"
+- tapOn:
+    id: "restore-device"
+- assertVisible:
+    id: "today-screen"
+- tapOn:
+    id: "tab-sync"
+- assertVisible: "Synced recently"

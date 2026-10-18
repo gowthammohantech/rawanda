@@ -231,3 +231,27 @@ describe("layout helpers", () => {
     expect(screen.getByTestId("icon-home")).toBeTruthy();
   });
 });
+
+describe("reduced motion (HWM-10)", () => {
+  afterEach(() => vi.restoreAllMocks());
+
+  it("LoadingState drops the spinner (label still announced) when Reduce motion is on", async () => {
+    vi.spyOn(AccessibilityInfo, "isReduceMotionEnabled").mockResolvedValue(true);
+    renderNative(<LoadingState label="Restoring" />);
+    expect(screen.getByLabelText("Restoring").getAttribute("aria-busy")).toBe("true");
+    await act(async () => {
+      await Promise.resolve();
+    });
+    expect(screen.queryByTestId("loading-spinner")).toBeNull();
+    expect(screen.getByText("Restoring")).toBeTruthy();
+  });
+
+  it("LoadingState keeps the spinner by default", async () => {
+    vi.spyOn(AccessibilityInfo, "isReduceMotionEnabled").mockResolvedValue(false);
+    renderNative(<LoadingState label="Restoring" />);
+    await act(async () => {
+      await Promise.resolve();
+    });
+    expect(screen.getByTestId("loading-spinner")).toBeTruthy();
+  });
+});

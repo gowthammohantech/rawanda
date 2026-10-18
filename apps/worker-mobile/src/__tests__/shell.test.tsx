@@ -279,7 +279,7 @@ describe("worker-mobile shell (HWM-01)", () => {
     expect(await screen.findByText("Reset demo data?")).toBeTruthy();
     const buttons = screen.getAllByRole("button", { name: "Reset demo" });
     fireEvent.click(buttons[buttons.length - 1]!);
-    await screen.findByText("Demo data was reset to the baseline.");
+    await screen.findByText("Demo data restored");
 
     expect(await store.get("patients", patientId)).toBeDefined();
     expect(await store.getAll("deviceSessions")).toHaveLength(0);

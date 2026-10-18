@@ -1,0 +1,15 @@
+{
+  "label": "Igikoresho cyahagaritswe",
+  "title": "Iki gikoresho cyahagaritswe (kwigana)",
+  "message": "Iki gikoresho cyahagaritswe n'umugenzuzi wawe (kwigana). Amakuru y'abarwayi arahishwe kandi nta kintu cyoherezwa.",
+  "kept_one": "Ikintu {{count}} kigumye kuri iki gikoresho kandi nticyoherejwe",
+  "kept_other": "Ibintu {{count}} bigumye kuri iki gikoresho kandi ntibyoherejwe",
+  "keptNone": "Nta kintu kitoherejwe kiri kuri iki gikoresho.",
+  "restore": "Subizaho igikoresho (igerageza gusa)",
+  "restoreHint": "Bikuraho ihagarikwa ryiganwa. Ibyagumye byoherezwa mu guhuza gukurikira.",
+  "restored": "Igikoresho cyasubijweho. Ibyagumye birimo guhuzwa.",
+  "restoreFailed": "Igikoresho ntiyashoboye gusubizwaho. Ongera ugerageze.",
+  "revoked": "Igikoresho cyahagaritswe (kwigana)",
+  "policy": "Mu ikoreshwa nyaryo, amabwiriza ku gikoresho cyabuze (urugero gusiba kure cyangwa kohereza mbere) aracyategerejwe. Iri gerageza rigumana amakuru kandi ntiriyohereza.",
+  "language": "Ururimi"
+}

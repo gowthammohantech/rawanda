@@ -1,0 +1,15 @@
+{
+  "label": "Device revoked",
+  "title": "This device has been revoked (simulated)",
+  "message": "This device has been revoked by your supervisor (simulated). Patient data is hidden and nothing is sent.",
+  "kept_one": "{{count}} item is kept on this device and was not sent",
+  "kept_other": "{{count}} items are kept on this device and were not sent",
+  "keptNone": "No unsent items are on this device.",
+  "restore": "Restore device (demo only)",
+  "restoreHint": "Clears the simulated revocation. Kept items are sent at the next sync.",
+  "restored": "Device restored. Kept items are syncing.",
+  "restoreFailed": "The device could not be restored. Try again.",
+  "revoked": "Device revoked (simulated)",
+  "policy": "In a real deployment the lost-device policy (for example remote wipe or upload first) is still to be decided. This demo keeps the data and does not send it.",
+  "language": "Language"
+}

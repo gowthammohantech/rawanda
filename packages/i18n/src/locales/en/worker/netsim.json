@@ -37,5 +37,13 @@
   "needsDecision": "Needs your decision",
   "lastSynced": "Last synced",
   "never": "Not yet",
-  "updated": "Simulation updated"
+  "updated": "Simulation updated",
+  "reassign": "Simulate task reassignment",
+  "reassignDone": "The sync server reassigned this follow-up to {{worker}}.",
+  "reassignNone": "No other worker at this facility to reassign to.",
+  "clock": "Device clock (simulated)",
+  "clockOk": "Correct",
+  "clockAhead": "+10 min",
+  "clockBehind": "−30 min",
+  "clockHint": "Moves only this device's clock against the simulated server. A difference over 5 minutes shows a warning after the next sync."
 }

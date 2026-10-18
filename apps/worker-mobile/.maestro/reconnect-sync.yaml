@@ -1,0 +1,16 @@
+# HWM-10 regression: offline save → back online → the automatic / manual sync acknowledges it
+# ("Synced recently"); nothing stays waiting.
+appId: host.exp.Exponent
+---
+- runFlow: subflows/fresh-start.yaml
+- runFlow: subflows/sign-in.yaml
+- runFlow: subflows/set-offline.yaml
+- runFlow: subflows/record-screening.yaml
+- runFlow: subflows/set-offline.yaml
+- tapOn:
+    id: "tab-sync"
+- tapOn:
+    id: "sync-now"
+    optional: true
+- assertVisible: "Synced recently"
+- assertVisible: "Everything on this device is synced"
