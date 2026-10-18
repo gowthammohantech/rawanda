@@ -93,6 +93,9 @@
   "resolution": {
     "glucose_context_corrected": "Itsinda rikwitaho ryongeyeho ko utari wariye mbere y'iki gipimo (ku gifu cyambaye ubusa).",
     "reading_time_confirmed": "Itsinda rikwitaho ryagenzuye isaha igipimo cyafatiweho kandi yari yo.",
+    "reading_value_corrected": "Itsinda rikwitaho ryakosoye agaciro k'igipimo muri iki gisubizo. Agaciro ka mbere kabikwa mu mateka y'amakuru.",
+    "personal_details_corrected": "Itsinda rikwitaho ryakosoye umwirondoro wawe. Amakuru ya mbere abikwa mu mateka y'amakuru.",
+    "record_checked_no_change": "Itsinda rikwitaho ryagenzuye amakuru yawe kandi yari ari ukuri, nta cyahinduwe.",
     "unknown": "Itsinda rikwitaho ryarangije kugenzura icyifuzo cyawe."
   },
   "target": {

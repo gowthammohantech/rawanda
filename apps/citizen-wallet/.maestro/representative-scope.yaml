@@ -1,0 +1,21 @@
+# CTZ-09 representative scope (T-02): Jean-Paul (CTZ-P4) sees Grace's record only; a deep link
+# to Marie's (CTZ-P1) result shows "permission denied" and nothing of the record.
+appId: host.exp.Exponent
+---
+- launchApp:
+    clearState: true
+- tapOn: "Continue"
+- tapOn:
+    id: "persona-card-persona-citizen-rep"
+- assertVisible:
+    id: "representative-banner"
+- assertVisible:
+    id: "result-card-4497cc75-4458-5f0c-8489-ca75444c0e4a"
+- assertNotVisible:
+    id: "result-card-0e18b111-ba16-5968-8e25-b711ba20cdf6"
+# Marie's result id (CTZ-P1) via deep link.
+- openLink: "laifwallet://health/0e18b111-ba16-5968-8e25-b711ba20cdf6"
+- assertVisible:
+    id: "permission-denied"
+- assertNotVisible:
+    id: "result-readings"

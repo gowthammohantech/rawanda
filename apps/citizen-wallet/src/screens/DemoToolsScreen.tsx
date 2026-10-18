@@ -5,8 +5,11 @@
  * (`latencyMs`), `error500` (`serverErrorRate`), `unavailable` (`dependencyUnavailableRate`) and
  * `conflict-next-write` (`conflictOnce` on the active patient). Offline + scenarios: the FND-10
  * `DemoToolsSheet`.
+ * CTZ-09 task 10: "Simulate care-team confirmation" — DEMO, represents an action in the Clinical
+ * Portal (`repo.demo.simulateCareTeamConfirmation`, audited `demo.simulated_staff_action`).
  */
 import { formatDateTime, useLanguage } from "@laif/i18n";
+import { RepositoryError } from "@laif/repositories";
 import { citizenFaultPatch, type CitizenFaultToggle } from "@laif/repositories/citizen";
 import {
   AppHeader,
@@ -31,6 +34,7 @@ import { useCitizenRepo } from "../data/repo.tsx";
 import { useDemoTools } from "../demo-tools.tsx";
 import { useWallet } from "../providers.tsx";
 import { emitDemoClockChanged } from "../state/events.ts";
+import { useTitleFocus } from "../a11y/useTitleFocus.ts";
 
 const DAY_MS = 86_400_000;
 
@@ -38,6 +42,7 @@ type CitizenToggles = Record<CitizenFaultToggle, boolean>;
 
 export function DemoToolsScreen() {
   const t = useTx();
+  const titleRef = useTitleFocus();
   const router = useRouter();
   const repo = useCitizenRepo();
   const queryClient = useQueryClient();
@@ -110,12 +115,29 @@ export function DemoToolsScreen() {
     }
   };
 
+  /** Returns the promise, so the Button stays busy until it settles (no double submit). */
+  const simulateConfirmation = async () => {
+    if (patientId === null) return;
+    try {
+      await repo.demo.simulateCareTeamConfirmation({ patientId });
+      await queryClient.invalidateQueries();
+      toast({ title: t("citizen:more.demo.simulateDone"), tone: "positive" });
+    } catch (error) {
+      if (error instanceof RepositoryError && error.code === "VALIDATION_ERROR") {
+        toast({ title: t("citizen:more.demo.simulateNothing") });
+      } else {
+        failed();
+      }
+    }
+  };
+
   return (
     <Screen
       testID="demo-tools-screen"
       offline={demo.faults.offline}
       header={
         <AppHeader
+          titleRef={titleRef}
           title={t("citizen:more.demo.title")}
           onBack={() => (router.canGoBack() ? router.back() : router.replace("/"))}
         />
@@ -160,6 +182,27 @@ export function DemoToolsScreen() {
             {t("citizen:more.demo.baseline")}
           </Button>
         </View>
+      </Section>
+
+      <Section title={t("citizen:more.demo.simulateTitle")}>
+        <MicroLabel tone="warning">{t("citizen:more.demo.eyebrow")}</MicroLabel>
+        <AppText color="muted" testID="simulate-confirmation-note">
+          {t(
+            patientId === null
+              ? "citizen:more.demo.simulateNeedsPersona"
+              : "citizen:more.demo.simulateNote",
+          )}
+        </AppText>
+        <Button
+          variant="secondary"
+          icon="check"
+          disabled={patientId === null}
+          accessibilityHint={t("citizen:more.demo.simulateHint")}
+          onPress={simulateConfirmation}
+          testID="simulate-confirmation"
+        >
+          {t("citizen:more.demo.simulateConfirmation")}
+        </Button>
       </Section>
 
       <Section title={t("citizen:more.demo.faultsTitle")}>

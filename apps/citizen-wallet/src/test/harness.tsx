@@ -1,5 +1,5 @@
 /** Boots the real wallet shell (AppRoot → Boot → providers) on a memory store for tests. */
-import { createI18n } from "@laif/i18n";
+import { createI18n, languageStorageKey, type Language } from "@laif/i18n";
 import { createWebLanguageStorage } from "@laif/i18n/web";
 import { createMemoryStoreAdapter, type StoreAdapter } from "@laif/repositories";
 import type { CitizenRepository } from "@laif/repositories/citizen";
@@ -48,18 +48,25 @@ export async function renderShell(
   options: {
     store?: StoreAdapter;
     readyTestId?: string;
+    /** Simulated network latency off (default); `false` keeps the FaultConfig `latencyMs`. */
+    noLatency?: boolean;
+    /** UI language at boot (stored preference, like a relaunch); default English. */
+    language?: Language;
     /** Runs after boot services exist (e.g. sign a persona in) and before the first render. */
     before?: (services: ShellServices) => void;
   } = {},
 ): Promise<ShellView> {
   const store = options.store ?? createMemoryStoreAdapter();
+  if (options.language !== undefined) {
+    window.localStorage.setItem(languageStorageKey(APP_ID), options.language);
+  }
   const services = await bootServices();
   options.before?.(services);
   const view = render(
     <AppRoot
       bootstrap={() => Promise.resolve(services)}
       openStore={() => Promise.resolve(store)}
-      noLatency
+      noLatency={options.noLatency ?? true}
       safeAreaMetrics={TEST_SAFE_AREA_METRICS}
     >
       <CaptureRepo />

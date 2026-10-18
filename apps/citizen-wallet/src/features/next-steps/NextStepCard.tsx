@@ -12,17 +12,19 @@ import {
   Icon,
   MicroLabel,
   StatusChip,
-  colors,
   radii,
   shadows,
   spacing,
   useTx,
+  usePalette,
+  type Palette,
 } from "@laif/ui-native";
 import { StyleSheet, View } from "react-native";
 
 import { ApprovedByLine } from "./ApprovedByLine.tsx";
 import { KIND_SPECS, stepTexts } from "./copy.ts";
 import { DatePassedNotice } from "./DatePassedNotice.tsx";
+import { useThemedStyles } from "../../theme/useThemedStyles.ts";
 
 export type NextStepCardProps = {
   step: ApprovedInstruction;
@@ -67,6 +69,8 @@ export function NextStepCard({
   openHint,
   testID,
 }: NextStepCardProps) {
+  const palette = usePalette();
+  const styles = useThemedStyles(makeStyles);
   const t = useTx();
   const { language } = useLanguage();
   const spec = KIND_SPECS[step.kind];
@@ -76,7 +80,7 @@ export function NextStepCard({
     <View style={styles.card} testID={testID ?? `next-step-card-${step.id}`}>
       <View style={styles.kicker}>
         <View style={styles.icon}>
-          <Icon name={spec.icon} size={16} color={colors.primaryDark} />
+          <Icon name={spec.icon} size={16} color={palette.primaryDark} />
         </View>
         <MicroLabel>{label === "kicker" ? t("citizen:nextSteps.kicker") : texts.type}</MicroLabel>
       </View>
@@ -87,7 +91,7 @@ export function NextStepCard({
         {texts.message}
       </AppText>
       <View style={styles.row}>
-        <Icon name="clock" size={16} color={colors.muted} />
+        <Icon name="clock" size={16} color={palette.muted} />
         <AppText weight="semibold" style={styles.flex} testID="appointment-row">
           {when}
         </AppText>
@@ -112,25 +116,26 @@ export function NextStepCard({
   );
 }
 
-const styles = StyleSheet.create({
-  card: {
-    borderWidth: 1,
-    borderColor: colors.borderSoft,
-    borderRadius: radii.lg,
-    padding: spacing.lg,
-    gap: spacing.md,
-    backgroundColor: colors.surface,
-    ...shadows.card,
-  },
-  kicker: { flexDirection: "row", alignItems: "center", gap: spacing.sm },
-  icon: {
-    width: 28,
-    height: 28,
-    borderRadius: radii.pill,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: colors.primarySoft,
-  },
-  row: { flexDirection: "row", alignItems: "center", gap: spacing.sm },
-  flex: { flex: 1 },
-});
+const makeStyles = (c: Palette) =>
+  StyleSheet.create({
+    card: {
+      borderWidth: 1,
+      borderColor: c.borderSoft,
+      borderRadius: radii.lg,
+      padding: spacing.lg,
+      gap: spacing.md,
+      backgroundColor: c.surface,
+      ...shadows.card,
+    },
+    kicker: { flexDirection: "row", alignItems: "center", gap: spacing.sm },
+    icon: {
+      width: 28,
+      height: 28,
+      borderRadius: radii.pill,
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: c.primarySoft,
+    },
+    row: { flexDirection: "row", alignItems: "center", gap: spacing.sm },
+    flex: { flex: 1 },
+  });

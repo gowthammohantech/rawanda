@@ -6,7 +6,7 @@
  */
 import type { ApprovedInstruction } from "@laif/domain";
 import { formatDateTime, useLanguage } from "@laif/i18n";
-import { AppText, Button, Icon, announce, colors, spacing, useTx } from "@laif/ui-native";
+import { AppText, Button, Icon, announce, spacing, useTx, usePalette } from "@laif/ui-native";
 import { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 
@@ -21,6 +21,7 @@ export type AcknowledgeButtonProps = {
 };
 
 export function AcknowledgeButton({ step, onReload }: AcknowledgeButtonProps) {
+  const palette = usePalette();
   const t = useTx();
   const { language } = useLanguage();
   const ack = useAcknowledge(step);
@@ -37,7 +38,7 @@ export function AcknowledgeButton({ step, onReload }: AcknowledgeButtonProps) {
         accessibilityRole="text"
         testID="acknowledged"
       >
-        <Icon name="check" size={18} color={colors.positive} />
+        <Icon name="check" size={18} color={palette.positive} />
         <AppText weight="semibold" color="positive">
           {t("citizen:nextSteps.acknowledgedOn", {
             date: formatDateTime(ack.acknowledgedAt, language),

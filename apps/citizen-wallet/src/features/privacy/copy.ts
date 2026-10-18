@@ -60,10 +60,16 @@ export function stepperIndexOf(status: CorrectionRequestStatus): number {
   }
 }
 
-/** Seeded staff outcome keys with approved citizen copy (else a generic "finished" line). */
+/**
+ * Staff outcome keys with citizen copy (`@laif/domain` `CORRECTION_RESOLUTION_KEYS`, CLN-09);
+ * anything else shows a generic "finished" line.
+ */
 export const KNOWN_RESOLUTION_KEYS: ReadonlySet<string> = new Set([
   "glucose_context_corrected",
   "reading_time_confirmed",
+  "reading_value_corrected",
+  "personal_details_corrected",
+  "record_checked_no_change",
 ]);
 
 export function resolutionKeyOf(key: string | null): TranslationKey {

@@ -5,5 +5,13 @@
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "customConditions": ["react-native"]
   },
-  "include": ["app", "src", "vitest.config.ts", ".expo/types/**/*.ts", "expo-env.d.ts"]
+  "include": [
+    "app",
+    "src",
+    "vitest.config.ts",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts",
+    "e2e",
+    "playwright.config.ts"
+  ]
 }

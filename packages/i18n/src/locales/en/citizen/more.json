@@ -20,7 +20,14 @@
     "conflict": "Conflict on next write",
     "conflictHint": "The next saved change to your record conflicts once.",
     "moreTools": "Offline and scenarios",
-    "failed": "The demo tool could not run. Try again."
+    "failed": "The demo tool could not run. Try again.",
+    "simulateTitle": "Care team (demo)",
+    "simulateConfirmation": "Simulate care-team confirmation (demo)",
+    "simulateNote": "DEMO — represents an action in the Clinical Portal. Marks your nearest planned next step as attended, confirmed by the care team.",
+    "simulateHint": "Marks the nearest planned next step as confirmed by the care team (demo only).",
+    "simulateDone": "Care-team confirmation simulated (demo). Your timeline is updated.",
+    "simulateNothing": "There is no planned next step to confirm.",
+    "simulateNeedsPersona": "Choose a demo persona first."
   },
   "sections": {
     "myData": "MY DATA",

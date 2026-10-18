@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { Modal, Pressable, ScrollView, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { useReduceMotion } from "../a11y.ts";
 import { colors, radii, shadows, spacing, withAlpha } from "../tokens.ts";
 import { AppText } from "./AppText.tsx";
 import { IconButton } from "./IconButton.tsx";
@@ -32,6 +33,8 @@ export function Sheet({
   dismissible = true,
   testID,
 }: SheetProps) {
+  // OS "Reduce motion" → the sheet appears without the slide animation.
+  const reduceMotion = useReduceMotion();
   const close = () => {
     if (dismissible) onClose();
   };
@@ -39,7 +42,7 @@ export function Sheet({
     <Modal
       visible={visible}
       transparent
-      animationType="slide"
+      animationType={reduceMotion ? "none" : "slide"}
       onRequestClose={close}
       statusBarTranslucent
     >

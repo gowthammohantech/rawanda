@@ -1,0 +1,87 @@
+# CTZ-09 FRD Scenario 1 (enrol → result → next step → reminder → attend → updated status):
+# Reset → Aline (CTZ-P5, enrolment pending) → verify 246810 → consent → (seeded switch) Marie
+# (CTZ-P1) → My health → result → Next steps → "I have read this" → Reminders → Demo tools +7 days
+# → reminder banner → Got it → Timeline: reminder NOTE row + appointment still WAITING → Demo tools
+# "Simulate care-team confirmation (demo)" (represents a Clinical Portal action) → Timeline DONE.
+appId: host.exp.Exponent
+---
+- launchApp:
+    clearState: true
+- runFlow: reset-demo.yaml
+- tapOn: "Continue"
+# Aline (CTZ-P5): simulated verification with the labelled demo code.
+- tapOn:
+    id: "persona-card-persona-citizen-pending"
+- assertVisible:
+    id: "verify-screen"
+- tapOn:
+    id: "code-input-digit-1"
+- inputText: "246810"
+- hideKeyboard
+- tapOn:
+    id: "verify-submit"
+- assertVisible: "Sharing your information"
+- tapOn: "I have read this"
+- tapOn:
+    id: "consent-give"
+- assertVisible: "Consent saved"
+# Seeded switch: Aline's new record has no results yet → continue as Marie (CTZ-P1).
+- tapOn:
+    id: "wallet-menu"
+- tapOn:
+    id: "switch-persona"
+- tapOn:
+    id: "persona-card-persona-citizen-1"
+- assertVisible: "My health"
+# The result whose review produced the approved appointment.
+- scrollUntilVisible:
+    element:
+      id: "result-card-0e18b111-ba16-5968-8e25-b711ba20cdf6"
+- tapOn:
+    id: "result-card-0e18b111-ba16-5968-8e25-b711ba20cdf6"
+- assertVisible:
+    id: "review-provenance"
+- scrollUntilVisible:
+    element:
+      id: "result-next-steps"
+- tapOn:
+    id: "result-next-steps"
+- tapOn:
+    id: "next-step-open-3840d669-bf47-5b52-b832-d069bf3b53c4"
+- scrollUntilVisible:
+    element:
+      id: "acknowledge"
+- tapOn:
+    id: "acknowledge"
+- assertVisible:
+    id: "acknowledged"
+# Reminders: one scheduled for the day before; move the demo clock past it.
+- tapOn: "Reminders"
+- assertVisible: "SCHEDULED"
+- tapOn: "More"
+- tapOn:
+    id: "more-demo-tools"
+- tapOn: "Advance +7 days"
+- back
+- tapOn:
+    id: "reminder-inbox-banner"
+- tapOn:
+    id: "reminder-got-it-843eeacc-f2e2-5b91-8431-0cccf2d697fb"
+- tapOn: "Timeline"
+- assertVisible: "NOTE\\. Reminder sent \\(demo\\).*"
+- assertVisible:
+    id: "timeline-item-step:3840d669-bf47-5b52-b832-d069bf3b53c4"
+- assertVisible: "Status: WAITING\\. Appointment.*"
+# Seeded scenario step (DEMO — represents an action in the Clinical Portal).
+- tapOn: "More"
+- tapOn:
+    id: "more-demo-tools"
+- scrollUntilVisible:
+    element:
+      id: "simulate-confirmation"
+- tapOn:
+    id: "simulate-confirmation"
+- assertVisible: "Care-team confirmation simulated \\(demo\\).*"
+- back
+- tapOn: "Timeline"
+- assertVisible: "Status: DONE\\. Appointment.*"
