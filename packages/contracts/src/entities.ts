@@ -94,6 +94,7 @@ import {
 import { z } from "zod";
 
 import { DataQualityIssueSchema } from "./dataQualityIssue.ts";
+import { ExportAuditSchema } from "./exportAudit.ts";
 import { ProgrammeActionSchema } from "./programmeAction.ts";
 
 import {
@@ -608,4 +609,5 @@ export const ENTITY_SCHEMAS = {
   device_session: DeviceSessionSchema,
   programme_action: ProgrammeActionSchema,
   data_quality_issue: DataQualityIssueSchema,
+  export_audit: ExportAuditSchema,
 } as const satisfies Record<(typeof ENTITY_TYPES)[number], z.ZodType>;

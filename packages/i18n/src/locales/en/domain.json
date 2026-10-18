@@ -269,7 +269,8 @@
     "sync_operation": "Sync operation",
     "device_session": "Device session",
     "programme_action": "Programme action",
-    "data_quality_issue": "Data-quality issue"
+    "data_quality_issue": "Data-quality issue",
+    "export_audit": "Export record"
   },
   "pathwayStage": {
     "DRAFT_SCREENING": "Draft screening",

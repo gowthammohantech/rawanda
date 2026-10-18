@@ -98,6 +98,23 @@ export function defer(error: RepositoryError, audit: DeferredAudit): RepositoryE
   return error;
 }
 
+/** A record written after the rollback, with the deferred audits (ext ADM-07: denied exports). */
+export type DeferredRecord = { collection: LocalCollectionName; record: { id: string } };
+
+const deferredRecords = new WeakMap<RepositoryError, DeferredRecord[]>();
+
+/**
+ * Attaches a record that must survive the rollback of a failed write (e.g. the `denied`
+ * ExportAudit row of ADM-07, so access reports include failures). Written in the same
+ * post-rollback transaction as the deferred audits.
+ */
+export function deferRecord(error: RepositoryError, record: DeferredRecord): RepositoryError {
+  const list = deferredRecords.get(error) ?? [];
+  list.push(record);
+  deferredRecords.set(error, list);
+  return error;
+}
+
 export type Versioned = { id: string; version: number; updatedAt: string };
 
 export type MutationOutcome<T extends Versioned> = {
@@ -321,9 +338,17 @@ export class Engine {
   async fail(error: unknown): Promise<RepositoryError> {
     const err = toRepositoryError(error);
     const audits = deferredAudits.get(err);
-    if ((audits && audits.length > 0) || (this.mode !== "remote" && this.faults.dirty)) {
+    const records = deferredRecords.get(err) ?? [];
+    if (
+      (audits && audits.length > 0) ||
+      records.length > 0 ||
+      (this.mode !== "remote" && this.faults.dirty)
+    ) {
       try {
         await this.store.transaction(async (tx) => {
+          for (const { collection, record } of records) {
+            await tx.put(collection, toJson(record));
+          }
           for (const audit of audits ?? []) {
             await emitAudit(tx, {
               ...auditInputOf(audit),

@@ -1,0 +1,185 @@
+{
+  "eyebrow": "Raporo n'iyohereza",
+  "title": "Raporo",
+  "subtitle": "Raporo rusange za {{from}} – {{to}} · {{scope}}",
+  "ack": "Nemeza ko iyi raporo irimo imibare rusange gusa",
+  "denied": {
+    "role": "Uruhare rwawe ntirwemerewe gukura raporo"
+  },
+  "recordLevelUnavailable": "Ntibishoboka: gukura amakuru y'umuntu ku giti cye bisaba uruhushya rw'abashinzwe imicungire y'amakuru",
+  "recordLevelNote": "Imibare rusange yonyine ni yo ishobora gukurwa. Gukura amakuru y'umurwayi ku giti cye ntibibaho muri iyi porototipe.",
+  "done": "Raporo yakozwe · {{fileName}}",
+  "downloadAgain": "Ongera ukuremo",
+  "export": "Kuramo CSV",
+  "retry": "Ongera ugerageze",
+  "newReport": "Raporo nshya",
+  "error": {
+    "notGenerated": "Raporo ntiyakozwe — nta kintu cyakuweho.",
+    "code": "Kode y'ikosa: {{code}}",
+    "forbidden": "Iyohereza ryanzwe: uruhare cyangwa urwego rwawe ntibibyemera. Igerageza ryanditswe."
+  },
+  "toast": {
+    "generated": "Raporo yakozwe · {{fileName}}",
+    "forbidden": "Iyohereza ntiryemewe (FORBIDDEN) — ryanditswe mu gitabo cy'igenzura"
+  },
+  "granularity": {
+    "label": "Urwego rw'imibare",
+    "hint": "Igihe n'urwego biva mu gice cy'iyungurura kiri hejuru.",
+    "unavailable": "{{label}} (ntibiboneka kuri uru rwego)",
+    "scope_total": "Igiteranyo cy'urwego",
+    "district": "Ku karere",
+    "facility": "Ku kigo nderabuzima",
+    "week": "Ku cyumweru"
+  },
+  "history": {
+    "title": "Amateka y'iyohereza",
+    "subtitle": "Igerageza ryose ryo kohereza mu rwego rwawe, harimo n'iryanzwe.",
+    "caption": "Amateka y'iyohereza",
+    "empty": "Nta raporo irakorwa muri uru rwego.",
+    "emptyTitle": "Nta yohereza rirabaho",
+    "error": "Amateka y'iyohereza ntiyabonetse.",
+    "period": "{{from}} – {{to}}",
+    "col": {
+      "time": "Igihe",
+      "persona": "Umukoresha / uruhare",
+      "template": "Ubwoko bwa raporo",
+      "scope": "Urwego",
+      "period": "Igihe",
+      "reason": "Impamvu",
+      "rows": "Imirongo",
+      "suppressed": "Imibare yahishwe",
+      "checksum": "Igenzura (checksum)",
+      "status": "Uko bihagaze"
+    },
+    "status": {
+      "generated": "YAKOZWE",
+      "denied": "YANZWE"
+    }
+  },
+  "offline": {
+    "title": "Ntumurongo wa interineti",
+    "body": "Raporo zikorerwa kuri iki gikoresho, bityo iyohereza rirakora. Amakuru y'igeragezwa ari hano."
+  },
+  "previewOnly": {
+    "title": "Kureba gusa",
+    "body": "Uruhare rwawe rushobora kureba raporo ariko ntirushobora kuzikura."
+  },
+  "preview": {
+    "allScope": "Urwego rwose",
+    "caption": "Igaragaza rya raporo (imirongo ya CSV)",
+    "col": {
+      "node": "Urwego / icyumweru",
+      "metric": "Igipimo",
+      "value": "Agaciro",
+      "numerator": "Umubare wo hejuru",
+      "denominator": "Umubare wo hasi"
+    },
+    "empty": "Nta makuru y'iki gihe. Ushobora gukura dosiye irimo ibisobanuro gusa.",
+    "emptyTitle": "Nta makuru y'iki gihe",
+    "error": "Igaragaza ntiryakozwe.",
+    "legend": "<{{k}} = munsi ya {{k}}, byahishwe kurinda ubuzima bwite (ubusa muri CSV, suppressed=true)",
+    "pct": "{{pct}}%",
+    "rows": "Imirongo: {{n}}",
+    "suppressed": "Imibare yahishwe: {{n}}",
+    "week": "Icyumweru cya {{date}}"
+  },
+  "reason": {
+    "label": "Impamvu yo gukura raporo",
+    "textLabel": "Ibisobanuro",
+    "textHint": "Birakenewe kuri \"Ibindi\": inyuguti {{min}} kugeza {{max}}.",
+    "code": {
+      "programme_review": "Isuzuma rya porogaramu",
+      "district_meeting": "Inama y'akarere",
+      "data_quality_followup": "Gukurikirana ubuziranenge bw'amakuru",
+      "evaluation_reporting": "Raporo y'isuzuma",
+      "other": "Ibindi"
+    }
+  },
+  "validation": {
+    "reasonCode": "Hitamo impamvu yo gukura raporo",
+    "reasonText": "Sobanura impamvu mu nyuguti {{min}} kugeza {{max}}",
+    "ack": "Emeza ko raporo irimo imibare rusange gusa"
+  },
+  "stepper": {
+    "label": "Intambwe za raporo",
+    "heading": "Intambwe {{n}} kuri {{total}}: {{step}}",
+    "template": "Ubwoko",
+    "preview": "Igaragaza",
+    "reason": "Impamvu",
+    "export": "Kohereza",
+    "back": "Subira inyuma",
+    "next": "Komeza"
+  },
+  "summary": {
+    "template": "Ubwoko bwa raporo",
+    "granularity": "Urwego rw'imibare",
+    "period": "Igihe",
+    "scope": "Urwego",
+    "reason": "Impamvu"
+  },
+  "template": {
+    "legend": "Ubwoko bwa raporo",
+    "programme_summary": {
+      "name": "Incamake ya porogaramu",
+      "description": "Abasuzumwe, abagaragajwe, abasuzumwe na muganga, abavanyweho, aboherejwe, abarangije; iminsi yo hagati yo gusuzuma"
+    },
+    "funnel_by_facility": {
+      "name": "Inzira y'ubuvuzi",
+      "description": "Intambwe eshanu z'inzira n'ishami ry'abavanyweho"
+    },
+    "timeliness": {
+      "name": "Igihe",
+      "description": "Iminsi yo hagati na percentile ya 90 yo gusuzuma, ibyarenze igihe, imyaka y'isuzuma ritegereje"
+    },
+    "quality": {
+      "name": "Umutekano n'ubuziranenge",
+      "description": "Amakuru abura, ibimenyetso by'irangamuntu bitajyanye, ibipimo bisimbura, ibyasubiwemo byakumiriwe, uburinganire ku gitsina n'imyaka"
+    },
+    "workload_facility": {
+      "name": "Akazi (ku kigo)",
+      "description": "Imirimo yahawe n'iyarangiye, iminota ku munsi w'umurwayi — ku kigo gusa, nta na rimwe ku mukozi"
+    },
+    "record_level": {
+      "name": "CSV y'amakuru ku giti cye adafite umwirondoro"
+    }
+  },
+  "watermark": {
+    "title": "Ibiri muri dosiye",
+    "body": "CSV itangirana n'ikimenyetso cy'IGERAGEZA n'imirongo y'urwego, igihe, igipimo (k = {{k}}) n'impamvu. Imibare yahishwe iba ubusa na suppressed=true. Irangirana n'umubare w'imirongo na checksum ya SHA-256."
+  },
+  "metric": {
+    "screened": "Isuzuma ryanditswe",
+    "flagged": "Ibyagaragajwe ngo bisuzumwe",
+    "reviewed": "Byasuzumwe na muganga",
+    "dismissed": "Byavanyweho (nta rundi ruzinduko)",
+    "referred": "Byoherejwe / gukurikirana byateganyijwe",
+    "follow_up_completed": "Gukurikirana byarangiye (bifite ibimenyetso)",
+    "median_days_to_review": "Iminsi yo hagati yo gusuzuma",
+    "p90_days_to_review": "Percentile ya 90 y'iminsi yo gusuzuma",
+    "reviews_completed": "Isuzuma ryarangiye",
+    "overdue_referrals": "Ibyoherejwe byarenze igihe",
+    "overdue_follow_ups": "Gukurikirana byarenze igihe",
+    "weekly_median_days_to_review": "Iminsi yo hagati yo gusuzuma (icyumweru)",
+    "weekly_reviews_completed": "Isuzuma ryarangiye (icyumweru)",
+    "weekly_overdue_referrals": "Ibyoherejwe byarenze igihe ku mpera y'icyumweru",
+    "weekly_overdue_follow_ups": "Gukurikirana byarenze igihe ku mpera y'icyumweru",
+    "screenings_missing_fields": "Isuzuma ribura amakuru ya ngombwa",
+    "identity_mismatches": "Irangamuntu rishobora kutajyana",
+    "duplicate_identifiers": "Imibare iranga yisubiyemo",
+    "orphan_screenings": "Isuzuma ridafite dosiye y'umurwayi",
+    "overturned_flag_rate": "Ibimenyetso byavanyweho (PROXY)",
+    "missed_flag_proxy": "Ibyazamuwe n'intoki (PROXY)",
+    "duplicate_submissions_prevented": "Ibyoherejwe kabiri byakumiriwe",
+    "tasks_assigned": "Imirimo yo gukurikirana yahawe",
+    "tasks_completed": "Imirimo yarangiye",
+    "task_completion_rate": "Igipimo cy'imirimo yarangiye",
+    "tasks_unable_to_reach": "Ntibyashobotse kubageraho",
+    "tasks_overdue": "Imirimo yarenze igihe",
+    "patient_days": "Iminsi y'abarwayi",
+    "minutes_per_patient_day": "Iminota y'abakozi ku munsi w'umurwayi (PROXY)",
+    "missing_field": "Ibura: {{field}}",
+    "pending_reviews": "Isuzuma ritegereje: {{bucket}}",
+    "funnel": "Inzira: {{stage}}",
+    "fairness": "{{group}} · {{column}}"
+  }
+}

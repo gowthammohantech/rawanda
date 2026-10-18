@@ -50,7 +50,8 @@ describe("toAggregateCsv", () => {
     expect(lines[0]).toBe(CSV_WATERMARK);
     expect(lines[0]).toBe("# DEMONSTRATION — SYNTHETIC PATIENT DATA — NOT FOR CLINICAL USE");
     expect(lines[1]).toBe(CSV_WATERMARK_RW);
-    expect(lines.slice(2, 2 + CSV_META_KEYS.length)).toEqual([
+    expect(lines[2]).toBe("# Synthetic demonstration data");
+    expect(lines.slice(3, 3 + CSV_META_KEYS.length)).toEqual([
       "# export_id=exp-0001",
       "# generated_at=2026-10-14T08:00:00+02:00",
       "# generated_by_persona=persona-lead-programme",
@@ -61,6 +62,7 @@ describe("toAggregateCsv", () => {
       "# template=follow_up_summary",
       "# granularity=district",
       "# suppression_threshold=5",
+      "# suppression_policy=DEMO_NOT_APPROVED",
       "# ruleset_versions=demo-ruleset-2026.10-v1",
       "# metric_version=demo-metrics-1",
       "# reason_code=programme_review",
@@ -69,7 +71,7 @@ describe("toAggregateCsv", () => {
   });
 
   it("writes suppressed cells empty with suppressed=true (long format, totals included)", () => {
-    const body = lines.slice(2 + CSV_META_KEYS.length).filter((l) => l !== "");
+    const body = lines.slice(3 + CSV_META_KEYS.length).filter((l) => l !== "");
     expect(body[0]).toBe(TABLE_CSV_COLUMNS.join(","));
     expect(body.slice(1)).toEqual([
       "district_id,dist-alpha,metric_id,screenings_recorded,40,false,",
