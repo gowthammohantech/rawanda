@@ -109,9 +109,7 @@ describe("AuditExplorer", () => {
       // Programme-level session events are the analyst's own.
       expect(row.textContent).toContain(PERSONA_IDS.analystAlpha);
     }
-    await act(async () => {
-      screen.getByRole("button", { name: "Clear filters" }).click();
-    });
+    await userEvent.click(screen.getByRole("button", { name: "Clear filters" }));
     await waitFor(() => expect(bodyRows().length).toBeGreaterThan(0));
     for (const row of bodyRows()) expect(row.textContent).not.toContain("Demo District Beta");
   });
