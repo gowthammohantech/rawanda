@@ -80,11 +80,10 @@ describe("export CSV (District Alpha analyst, programme summary by facility)", (
 
   it("neutralises a label starting with = and quotes commas / quotes (RFC 4180)", async () => {
     const csv = await analystCsv(
-      (base) =>
-        ((key, values) =>
-          String(key).startsWith("admin:reports.metric.screened")
-            ? '=HYPERLINK("x"),1'
-            : base(key, values)) as Tx,
+      (base) => (key, values) =>
+        String(key).startsWith("admin:reports.metric.screened")
+          ? '=HYPERLINK("x"),1'
+          : base(key, values),
     );
     expect(csv.text).toContain(`,"'=HYPERLINK(""x""),1",`);
     expect(csv.text).not.toMatch(/,=HYPERLINK/);
@@ -113,11 +112,10 @@ describe("export CSV (District Alpha analyst, programme summary by facility)", (
     const patient = seed.patients[0]!;
     await expect(
       analystCsv(
-        (base) =>
-          ((key, values) =>
-            String(key) === "admin:reports.metric.flagged"
-              ? patient.syntheticIdentifier
-              : base(key, values)) as Tx,
+        (base) => (key, values) =>
+          String(key) === "admin:reports.metric.flagged"
+            ? patient.syntheticIdentifier
+            : base(key, values),
       ),
     ).rejects.toThrow(AggregateOnlyError);
     const { services, t } = await signedInServices(PERSONA_IDS.analystAlpha);
