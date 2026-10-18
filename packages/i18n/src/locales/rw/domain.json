@@ -269,7 +269,8 @@
     "sync_operation": "Igikorwa cyo guhuza",
     "device_session": "Igikoresho cyinjiwemo",
     "programme_action": "Igikorwa cya porogaramu",
-    "data_quality_issue": "Ikibazo cy'ubuziranenge bw'amakuru"
+    "data_quality_issue": "Ikibazo cy'ubuziranenge bw'amakuru",
+    "export_audit": "Inyandiko y'iyohereza"
   },
   "pathwayStage": {
     "DRAFT_SCREENING": "Ipimwa ritararangira",

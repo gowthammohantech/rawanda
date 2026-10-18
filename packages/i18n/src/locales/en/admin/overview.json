@@ -280,5 +280,6 @@
       "label": "Dismissal reasons",
       "numerator": "Dismissed flags by structured reason code (free text is never shown)"
     }
-  }
+  },
+  "exportAggregate": "Export aggregate"
 }

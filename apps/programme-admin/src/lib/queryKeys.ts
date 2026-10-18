@@ -56,6 +56,29 @@ export const adminKeys = {
   /** ADM-06: one queue page (tab + page; the filters include the issue-type chip). */
   qualityIssues: (scopeKey: ScopeKey, filters: QualityQueueKey, tab: string, page: number) =>
     [...adminKeys.qualityIssuesAll(scopeKey), filters, tab, page] as const,
+  /**
+   * ADM-07: report preview (scope-wide selectors; threshold part of the key; the demo-clock
+   * minute only for templates whose figures depend on it — null otherwise).
+   */
+  reportPreview: (
+    scopeKey: ScopeKey,
+    template: string,
+    granularity: string,
+    filters: FilterKey,
+    threshold: number,
+    minute: string | null = null,
+  ) =>
+    [
+      ...adminKeys.scope(scopeKey),
+      "reportPreview",
+      template,
+      granularity,
+      filters,
+      threshold,
+      minute,
+    ] as const,
+  /** ADM-07: export history (ExportAudit rows visible to the persona). */
+  exports: (scopeKey: ScopeKey) => [...adminKeys.scope(scopeKey), "exports"] as const,
   /** ADM-03: programme follow-up actions in the grant scope. */
   programmeActions: (scopeKey: ScopeKey) =>
     [...adminKeys.scope(scopeKey), "programmeActions"] as const,

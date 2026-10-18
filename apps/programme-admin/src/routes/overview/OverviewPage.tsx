@@ -17,6 +17,7 @@ import {
   EmptyState,
   ErrorState,
   errorCodeOf,
+  Icon,
   LoadingSkeleton,
   MicroLabel,
   PageHeader,
@@ -56,6 +57,14 @@ import { useDocumentTitle } from "../useDocumentTitle.ts";
 const pctOf = (cell: AggregateCell): number | null =>
   cell.suppressed || cell.value === null ? null : Math.round(cell.value * 100);
 
+/** `/admin/reports?template=programme_summary&<filters>` (ADM-07 task 10). */
+export function reportsLinkOf(filterSearch: string): string {
+  const params = new URLSearchParams(filterSearch);
+  const out = new URLSearchParams({ template: "programme_summary" });
+  for (const [k, v] of params) out.set(k, v);
+  return `${paths.reports}?${out.toString()}`;
+}
+
 export function OverviewPage() {
   const t = useTx();
   const { language } = useLanguage();
@@ -94,6 +103,17 @@ export function OverviewPage() {
             to: formatDate(`${api.period.to}T12:00:00.000Z`, language),
             scope,
           })}
+          secondaryActions={
+            // ADM-07 hook: the summary report for the same filters.
+            <Link
+              to={reportsLinkOf(api.searchString)}
+              data-testid="overview-export-link"
+              className="border-border bg-surface text-ink hover:bg-background inline-flex min-h-10 items-center gap-2 rounded-sm border px-3 py-2 text-sm font-medium"
+            >
+              <Icon name="download" size={16} />
+              {t("admin:overview.exportAggregate")}
+            </Link>
+          }
         />
       </div>
       <ScopeStrip />

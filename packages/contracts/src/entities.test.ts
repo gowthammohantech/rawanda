@@ -360,6 +360,28 @@ const fixtures: Record<(typeof ENTITY_TYPES)[number], Record<string, unknown>> =
       },
     ],
   },
+  export_audit: {
+    ...base,
+    id: "6f1c2a9e-8b7d-4c6e-9a1b-2d3e4f5a6b7d",
+    idempotencyKey: "3f1c2a9e-8b7d-4c6e-9a1b-2d3e4f5a6b7d",
+    actorId: "persona-analyst-alpha",
+    role: "district_analyst",
+    grantId: "grant-analyst-alpha",
+    correlationId: "cor-000001",
+    scope: { districtIds: ["dist-alpha"], facilityIds: ["fac-alpha-1", "fac-alpha-2"] },
+    period: { from: "2026-07-17", to: "2026-10-14" },
+    template: "programme_summary",
+    granularity: "facility",
+    reasonCode: "district_meeting",
+    reasonText: null,
+    rowCount: 14,
+    suppressedCells: 3,
+    sha256: "a".repeat(64),
+    fileName: "laif-demo_programme_summary_dist-alpha_2026-07-17_2026-10-14_6f1c2a9e.csv",
+    csvText: "\uFEFF# DEMONSTRATION — SYNTHETIC PATIENT DATA — NOT FOR CLINICAL USE\r\n",
+    status: "generated",
+    deniedReason: null,
+  },
 };
 
 const entries = Object.entries(ENTITY_SCHEMAS) as [

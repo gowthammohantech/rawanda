@@ -1,15 +1,20 @@
 /**
  * Aggregate CSV (FND-06 task 12) — the ONLY aggregate CSV builder. ADM-07 extends this file
- * (BOM, trailer checksum, `assertAggregateOnly`); CLN-10's audit export reuses the low-level
- * `escapeCsvCell` / `toCsvRows` (not aggregate, so no denylist there).
+ * (UTF-8 BOM, `# END` trailer with a SHA-256 of the data rows, `assertAggregateOnly`, the
+ * `Synthetic demonstration data` and `suppression_policy` lines, a derived `suppressed` flag for
+ * generic rows); CLN-10's audit export reuses the low-level `escapeCsvCell` / `toCsvRows` (not
+ * aggregate, so no denylist there).
  *
- * Layout: line 1 `CSV_WATERMARK`, line 2 its Kinyarwanda translation, then `# key=value`
- * metadata lines, then the header and data rows. RFC 4180 quoting, CRLF line endings. Header
- * labels are English machine names (decision: exports are English for data portability).
+ * Layout: [BOM] line 1 `CSV_WATERMARK`, line 2 its Kinyarwanda translation, line 3
+ * `# Synthetic demonstration data`, then `# key=value` metadata lines, then the header and data
+ * rows, then (ADM-07 option) `# END rows=<n> suppressed_cells=<m> sha256=<hex>`. RFC 4180
+ * quoting, CRLF line endings. Header labels are English machine names (decision: exports are
+ * English for data portability); label COLUMNS may carry the UI language.
  */
 import type { Role } from "@laif/domain";
 
 import { KIGALI_UTC_OFFSET_MS } from "./filters.ts";
+import { sha256Hex } from "./sha256.ts";
 import type { SuppressedNumber, SuppressedTable } from "./suppression.ts";
 import { METRIC_VERSION } from "./types.ts";
 
@@ -18,6 +23,15 @@ export const CSV_WATERMARK =
 /** RW translation line (same text as `demo:banner` RW; needs linguistic review). */
 export const CSV_WATERMARK_RW =
   "# IGERAGEZA — AMAKURU Y'ABARWAYI B'IKITEGEREREZO — NTIBIKORESHWA MU BUVUZI" as const;
+
+/** Line 3 (spec §10): every aggregate file says it is synthetic demonstration data. */
+export const CSV_SYNTHETIC_LINE = "# Synthetic demonstration data" as const;
+
+/** UTF-8 byte-order mark, so spreadsheet apps decode Kinyarwanda diacritics correctly. */
+export const CSV_BOM = String.fromCharCode(0xfeff);
+
+/** Small-cell policy stamp: the demo threshold is not an approved disclosure policy. */
+export const DEMO_SUPPRESSION_POLICY = "DEMO_NOT_APPROVED" as const;
 
 const CRLF = "\r\n";
 
@@ -90,6 +104,8 @@ export type AggregateCsvMeta = {
   template: string;
   granularity: string;
   suppressionThreshold: number;
+  /** Defaults to `DEMO_SUPPRESSION_POLICY`. */
+  suppressionPolicy?: string;
   rulesetVersions: readonly string[];
   /** Defaults to `METRIC_VERSION`. */
   metricVersion?: string;
@@ -108,6 +124,7 @@ export const CSV_META_KEYS = [
   "template",
   "granularity",
   "suppression_threshold",
+  "suppression_policy",
   "ruleset_versions",
   "metric_version",
   "reason_code",
@@ -129,6 +146,7 @@ export function csvMetadataLines(meta: AggregateCsvMeta): string[] {
     template: meta.template,
     granularity: meta.granularity,
     suppression_threshold: String(meta.suppressionThreshold),
+    suppression_policy: meta.suppressionPolicy ?? DEMO_SUPPRESSION_POLICY,
     ruleset_versions: list(meta.rulesetVersions),
     metric_version: meta.metricVersion ?? METRIC_VERSION,
     reason_code: meta.reasonCode,
@@ -138,7 +156,11 @@ export function csvMetadataLines(meta: AggregateCsvMeta): string[] {
 
 export type AggregateCsvValue = CsvCell | SuppressedNumber;
 
-/** Generic aggregate rows (ADM-07 report templates). A `SuppressedNumber` renders its value. */
+/**
+ * Generic aggregate rows (ADM-07 report templates). A `SuppressedNumber` renders its value (empty
+ * when suppressed). With a `suppressed` column, a row whose `suppressed` cell is null / undefined
+ * gets it derived: `true` when any `SuppressedNumber` of the row is suppressed.
+ */
 export type AggregateRows = {
   columns: readonly string[];
   rows: ReadonlyArray<readonly AggregateCsvValue[]>;
@@ -192,14 +214,59 @@ function tableRows(table: SuppressedTable): AggregateRows {
 const isTable = (input: SuppressedTable | AggregateRows): input is SuppressedTable =>
   "cells" in input;
 
+export type AggregateCsvOptions = {
+  /** Prefix the UTF-8 BOM (ADM-07 downloads: on). */
+  bom?: boolean;
+  /** Append `# END rows=<n> suppressed_cells=<m> sha256=<hex>` (ADM-07 downloads: on). */
+  trailer?: boolean;
+};
+
+export type AggregateCsv = {
+  /** The file content. */
+  text: string;
+  /** Data rows (header excluded). */
+  rowCount: number;
+  /** Suppressed cells: rows with `suppressed=true` (or suppressed `SuppressedNumber`s). */
+  suppressedCells: number;
+  /** SHA-256 (hex) of the data rows: their CSV lines joined with CRLF, no header, no trailer. */
+  sha256: string;
+};
+
+/** The `# END …` trailer line. */
+export function csvTrailerLine(rowCount: number, suppressedCells: number, sha256: string): string {
+  return `# END rows=${rowCount} suppressed_cells=${suppressedCells} sha256=${sha256}`;
+}
+
+function withSuppressedFlag(data: AggregateRows): {
+  rows: CsvCell[][];
+  suppressedCells: number;
+} {
+  const flag = data.columns.indexOf("suppressed");
+  let suppressedCells = 0;
+  const rows = data.rows.map((row) => {
+    const hidden = row.filter((v) => isSuppressedNumber(v) && v.suppressed).length;
+    const out = row.map(plain);
+    if (flag === -1) {
+      suppressedCells += hidden;
+      return out;
+    }
+    if (out[flag] === null || out[flag] === undefined) out[flag] = hidden > 0;
+    if (out[flag] === true) suppressedCells += 1;
+    return out;
+  });
+  return { rows, suppressedCells };
+}
+
 /**
- * Builds the watermarked aggregate CSV. Throws `PatientLevelExportError` if any column (or, for a
- * table, a dimension or row/column key) is a denylisted patient-level name.
+ * Builds the watermarked aggregate CSV (+ its row / suppressed counts and checksum). Throws
+ * `PatientLevelExportError` if any column (or, for a table, a dimension or row/column key) is a
+ * denylisted patient-level name, and `RangeError` on a row / header length mismatch.
  */
-export function toAggregateCsv(
+export function buildAggregateCsv(
   input: SuppressedTable | AggregateRows,
   meta: AggregateCsvMeta,
-): string {
+  options: AggregateCsvOptions = {},
+): AggregateCsv {
   if (isTable(input)) {
     assertNoPatientLevelColumns([
       input.rowDimension,
@@ -215,11 +282,114 @@ export function toAggregateCsv(
       throw new RangeError(`row has ${row.length} cells, header has ${data.columns.length}`);
     }
   }
+  const { rows, suppressedCells } = withSuppressedFlag(data);
+  const body = toCsvRows(rows);
+  const sha256 = sha256Hex(body);
   const lines = [
     CSV_WATERMARK,
     CSV_WATERMARK_RW,
+    CSV_SYNTHETIC_LINE,
     ...csvMetadataLines(meta),
-    toCsvRows([data.columns, ...data.rows.map((r) => r.map(plain))]),
+    toCsvRows([data.columns]),
+    ...(rows.length === 0 ? [] : [body]),
+    ...(options.trailer === true ? [csvTrailerLine(rows.length, suppressedCells, sha256)] : []),
   ];
-  return lines.join(CRLF) + CRLF;
+  const text = (options.bom === true ? CSV_BOM : "") + lines.join(CRLF) + CRLF;
+  return { text, rowCount: rows.length, suppressedCells, sha256 };
+}
+
+/** The CSV text only (`buildAggregateCsv(…).text`). */
+export function toAggregateCsv(
+  input: SuppressedTable | AggregateRows,
+  meta: AggregateCsvMeta,
+  options: AggregateCsvOptions = {},
+): string {
+  return buildAggregateCsv(input, meta, options).text;
+}
+
+// ── Aggregate-only guard (ADM-07 task 3) ─────────────────────────────────────
+
+/** The fixed column order of an ADM-07 report CSV. */
+export const REPORT_CSV_COLUMNS = [
+  "period_start",
+  "period_end",
+  "granularity",
+  "district_id",
+  "district_label",
+  "facility_id",
+  "facility_label",
+  "week_start",
+  "metric_id",
+  "metric_label",
+  "value",
+  "suppressed",
+  "numerator",
+  "denominator",
+  "metric_version",
+] as const;
+export type ReportCsvColumn = (typeof REPORT_CSV_COLUMNS)[number];
+
+/** Seed synthetic identifiers (`DEMO-P-0001`, `DEMO-A-0023`, `DEMO-C-0005`, `DEMO-FX-01`). */
+export const SYNTHETIC_IDENTIFIER_PATTERN = /\bDEMO-[A-Z]{1,3}-[0-9A-Za-z]{2,}\b/;
+/** Any UUID (v4 runtime ids and the seed's deterministic record ids). */
+export const UUID_PATTERN = /\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b/i;
+
+export type AggregateOnlyViolation =
+  | { kind: "column"; column: string }
+  | { kind: "value"; column: string; rule: "synthetic_identifier" | "uuid" | "forbidden_value" };
+
+export class AggregateOnlyError extends Error {
+  readonly violations: AggregateOnlyViolation[];
+  constructor(violations: AggregateOnlyViolation[]) {
+    super(
+      `aggregate export rejected: ${violations
+        .map((v) => (v.kind === "column" ? `column ${v.column}` : `${v.rule} in ${v.column}`))
+        .join(", ")}`,
+    );
+    this.name = "AggregateOnlyError";
+    this.violations = violations;
+  }
+}
+
+export type AssertAggregateOnlyOptions = {
+  /** Allowed row keys (default `REPORT_CSV_COLUMNS`). */
+  allowedColumns?: readonly string[];
+  /** Exact strings that must never appear in a cell (e.g. seeded patient display names). */
+  forbiddenValues?: readonly string[];
+};
+
+/**
+ * "No patient-level export" enforced in code (ADM-07 task 3): throws `AggregateOnlyError` when a
+ * row has a key outside the allowed column set (or a denylisted patient-level column), or a
+ * string cell contains a seed synthetic identifier, a UUID or a forbidden value. Runs on every
+ * export, before the CSV is built.
+ */
+export function assertAggregateOnly(
+  rows: ReadonlyArray<Readonly<Record<string, unknown>>>,
+  options: AssertAggregateOnlyOptions = {},
+): void {
+  const allowed = new Set(options.allowedColumns ?? REPORT_CSV_COLUMNS);
+  const forbidden = (options.forbiddenValues ?? []).map((v) => v.trim()).filter((v) => v !== "");
+  const violations: AggregateOnlyViolation[] = [];
+  const seen = new Set<string>();
+  const add = (v: AggregateOnlyViolation): void => {
+    const id = JSON.stringify(v);
+    if (seen.has(id)) return;
+    seen.add(id);
+    violations.push(v);
+  };
+  for (const row of rows) {
+    for (const [column, value] of Object.entries(row)) {
+      if (!allowed.has(column) || DENY.has(normalise(column))) add({ kind: "column", column });
+      if (typeof value !== "string") continue;
+      if (SYNTHETIC_IDENTIFIER_PATTERN.test(value)) {
+        add({ kind: "value", column, rule: "synthetic_identifier" });
+      }
+      if (UUID_PATTERN.test(value)) add({ kind: "value", column, rule: "uuid" });
+      if (forbidden.some((f) => value.includes(f))) {
+        add({ kind: "value", column, rule: "forbidden_value" });
+      }
+    }
+  }
+  if (violations.length > 0) throw new AggregateOnlyError(violations);
 }

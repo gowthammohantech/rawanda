@@ -19,6 +19,7 @@ import type { ActorContext } from "@laif/auth-demo";
 import type {
   AccessGrant,
   DataQualityIssue,
+  ExportAudit,
   ProgrammeAction,
   AuditFilterSchema,
   CareTaskInputSchema,
@@ -88,6 +89,7 @@ import type {
   TriageQualityIssueCall,
   UpsertDetectedIssuesResult,
 } from "./services/quality-issues.ts";
+import type { ExportAuditFilterInput } from "./services/audit.ts";
 import type { StoreAdapter } from "./store/store-adapter.ts";
 import type { FaultConfig, FaultConfigPatch, FaultInjector } from "./transport/faults.ts";
 
@@ -326,7 +328,13 @@ export interface CareRepository {
   listTimeEntries(f?: MetricsFilterInput): Promise<TimeEntry[]>;
   /** ADM-02: latest write to a metric source (stale-data chip); `metrics.read`. */
   getMetricsFreshness(): Promise<{ lastWriteAt: string | null }>;
+  /**
+   * Aggregate / audit export record. ADM-07: also stores an ExportAudit (`generated`, with the
+   * CSV bytes; or `denied`, written after the rollback with `export.denied`); idempotent on `key`.
+   */
   recordExport(i: ExportRecordCall, key: string): Promise<WriteResult<AuditEvent>>;
+  /** ADM-07: export history — own attempts, plus in-scope exports for governance readers. */
+  listExportAudits(f?: ExportAuditFilterInput): Promise<ExportAudit[]>;
   listAuditEvents(f?: AuditFilterInput): Promise<Page<AuditEvent>>;
   /** UI-originated access / session / demo events only (registry `client: true`). */
   recordAuditEvent(i: ClientAuditInput): Promise<AuditEvent>;
