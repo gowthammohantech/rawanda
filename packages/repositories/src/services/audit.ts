@@ -19,23 +19,59 @@ import {
   type Page,
   type WriteResult,
 } from "@laif/contracts";
-import type { AuditEvent, DistrictId, EntityType, FacilityId } from "@laif/domain";
+import type {
+  AuditEvent,
+  DistrictId,
+  EntityType,
+  FacilityId,
+  JsonValue,
+  Patient,
+  PatientId,
+} from "@laif/domain";
 import type { z } from "zod";
 
 import { isClientAuditAction } from "../audit/actions.ts";
 import type { AuditFilterInput, ExportRecordCall } from "../care-repository.ts";
 import { defer, deferRecord, type Engine } from "../core/engine.ts";
 import { RepositoryError } from "../errors.ts";
+import type { StoreAdapter } from "../store/store-adapter.ts";
 import { paginate, parseFilter, READ_PERMISSIONS, readPermission, sortBy } from "./shared.ts";
 
 export type ExportAuditFilterInput = z.input<typeof ExportAuditFilterSchema>;
 
+/** Patient id, or the id of the patient whose synthetic identifier matches (any facility). */
+async function resolvePatientRef(tx: StoreAdapter, value: PatientId): Promise<PatientId> {
+  const needle = value.trim().toUpperCase();
+  const match = (await tx.getAll<Patient>("patients")).find(
+    (p) => p.id === value || p.syntheticIdentifier.toUpperCase() === needle,
+  );
+  return match?.id ?? value;
+}
+
 export function createAuditService(engine: Engine) {
   return {
-    /** Newest first. Audited as `audit.viewed` (de-duplicated per actor per minute). */
+    /**
+     * Newest first. Audited as `audit.viewed` (de-duplicated per actor per minute; the change
+     * summary carries the filter summary + result count).
+     *
+     * Scope (CL-08, CLN-10): an event is visible when its facility / district / patient is in the
+     * actor's scope. A FACILITY-scoped actor (clinical portal) additionally sees its OWN unbound
+     * (`facilityId` null) and own denied events (the WF-04 attempt is evidence for the person who
+     * made it) and never sees other actors' unbound events. Filter values outside the scope are
+     * ignored (no rows); an `entityId` / `patientId` filter that only matches out-of-scope events
+     * appends one `access.denied` (outcome `denied`, de-duplicated per minute).
+     * ADM-08: a scoped governance reader (`audit.read_scoped`) sees its OWN unlocated events
+     * only (never other personas' programme-level governance events).
+     */
     listAuditEvents(f?: AuditFilterInput): Promise<Page<AuditEvent>> {
       return engine.read(async (ctx) => {
-        const filter = parseFilter(AuditFilterSchema, f);
+        const parsed = parseFilter(AuditFilterSchema, f);
+        // A `patientId` filter may be a synthetic identifier (`DEMO-P-0009`): resolved against
+        // EVERY patient so an out-of-scope one is still detected (empty result + access.denied).
+        const filter =
+          parsed.patientId === undefined
+            ? parsed
+            : { ...parsed, patientId: await resolvePatientRef(ctx.tx, parsed.patientId) };
         const permission = readPermission(ctx, READ_PERMISSIONS.audit, {
           entityType: "audit_event",
           entityId: "log",
@@ -54,26 +90,37 @@ export function createAuditService(engine: Engine) {
             { entityType: "district", entityId: districtId },
           );
         }
-        const action = filter.action;
-        // ADM-08: a scoped reader (`audit.read_scoped`, district analyst) sees events located
-        // inside its grant, plus its OWN unlocated events (sessions, own governance views) —
-        // never other personas' programme-level governance events.
+        const actor = ctx.actor;
+        const selfId = actor?.personaId ?? null;
+        const facilityScoped = actor?.scope.kind === "facility";
+        // ADM-08: a scoped governance reader (`audit.read_scoped`, district analyst) sees events
+        // located inside its grant, plus its OWN unlocated events (sessions, own governance views)
+        // — never other personas' programme-level governance events.
         const scopedReader = permission === "audit.read_scoped";
         const visible = (e: AuditEvent): boolean => {
+          const own = selfId !== null && e.actorId === selfId;
           const located = e.facilityId !== null || e.districtId !== null;
-          if (scopedReader && !located) return e.actorId !== null && e.actorId === ctx.actorId;
+          if (facilityScoped) {
+            if (own && (e.facilityId === null || e.outcome === "denied")) return true;
+            if (!located) return false;
+          }
+          if (scopedReader && !located) return own;
           return ctx.can(permission, {
             facilityId: e.facilityId,
             districtId: e.districtId,
             patientId: e.patientId,
           });
         };
-        const rows = (await ctx.tx.getAll<AuditEvent>("auditEvents")).filter(
+        const matchesAction = (name: string, pattern: string): boolean =>
+          name === pattern || (pattern.endsWith(".") && name.startsWith(pattern));
+        const action = filter.action;
+        const actions = filter.actions;
+        const all = await ctx.tx.getAll<AuditEvent>("auditEvents");
+        const rows = all.filter(
           (e) =>
             visible(e) &&
-            (!action ||
-              e.action === action ||
-              (action.endsWith(".") && e.action.startsWith(action))) &&
+            (!action || matchesAction(e.action, action)) &&
+            (!actions || actions.some((pattern) => matchesAction(e.action, pattern))) &&
             (!filter.actorId || e.actorId === filter.actorId) &&
             (!filter.actorRole || e.actorRole === filter.actorRole) &&
             (!filter.categories || filter.categories.includes(e.category)) &&
@@ -89,11 +136,43 @@ export function createAuditService(engine: Engine) {
             (!filter.from || e.occurredAt >= filter.from) &&
             (!filter.to || e.occurredAt <= filter.to),
         );
+        // An entity / patient filter that points at another facility's records: ignored + audited.
+        for (const [key, value] of [
+          ["entityId", filter.entityId],
+          ["patientId", filter.patientId],
+        ] as const) {
+          if (value === undefined) continue;
+          const hidden = all.find(
+            (e) => (key === "entityId" ? e.entityId : e.patientId) === value && !visible(e),
+          );
+          if (hidden === undefined || all.some((e) => e[key] === value && visible(e))) continue;
+          const minute = String(Math.floor(ctx.now.getTime() / 60_000));
+          const metaKey = `audit.denied.${selfId ?? "anonymous"}.auditFilter.${key}.${value}`;
+          if ((await ctx.tx.getMeta(metaKey)) === minute) continue;
+          await ctx.tx.setMeta(metaKey, minute);
+          await ctx.audit({
+            action: "access.denied",
+            entityType: hidden.entityType,
+            entityId: hidden.entityId,
+            outcome: "denied",
+            ...ctx.scopeOf({
+              facilityId: hidden.facilityId,
+              districtId: hidden.districtId,
+              patientId: hidden.patientId,
+            }),
+            changeSummary: { permission, reason: "SCOPE", via: "audit_filter", filter: key },
+          });
+        }
+        const summary: { [key: string]: JsonValue } = {};
+        for (const [key, value] of Object.entries(filter)) {
+          if (key === "page" || key === "pageSize" || value === undefined) continue;
+          summary[key] = value;
+        }
         await ctx.auditAccess({
           action: "audit.viewed",
           entityType: "audit_event",
           entityId: "log",
-          changeSummary: { results: rows.length },
+          changeSummary: { results: rows.length, filters: summary },
         });
         return paginate(
           sortBy(rows, (e) => e.occurredAt, "desc"),

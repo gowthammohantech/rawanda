@@ -19,11 +19,20 @@ test("WF-01 step 7: confirm a worker-reported completion", async ({ page }) => {
 
   const awaitingTab = page.getByRole("tab", { name: /^Awaiting confirmation/ });
   await awaitingTab.click();
-  const table = page.getByTestId("task-table");
-  const rows = table.locator("tbody tr");
+  await expect(awaitingTab).toHaveAttribute("aria-selected", "true");
+  // Scope rows to THIS tab's panel: the tab switch is a router navigation rendered in a React
+  // transition, so for a frame the previous tab's (Due soon) table is still mounted. Counting
+  // `task-table` rows straight after the click raced that frame (badge 1 vs 4 stale rows).
+  const panel = page.getByRole("tabpanel", { name: /^Awaiting confirmation/ });
+  // Data rows only (the empty state is rendered as a full-width row without a row header).
+  const rows = panel
+    .getByTestId("task-table")
+    .getByRole("row")
+    .filter({ has: page.getByRole("rowheader") });
   await expect(rows.first()).toBeVisible();
-  const count = await rows.count();
-  await expect(awaitingTab).toContainText(String(count));
+  const count = Number((await awaitingTab.locator("span").innerText()).trim());
+  expect(count).toBeGreaterThan(0);
+  await expect(rows).toHaveCount(count);
 
   const axe = await new AxeBuilder({ page }).include("[data-testid=tasks-page]").analyze();
   expect(axe.violations.map((violation) => violation.id)).toEqual([]);
@@ -41,5 +50,7 @@ test("WF-01 step 7: confirm a worker-reported completion", async ({ page }) => {
   await expect(page.getByTestId("tasks-announcement")).toContainText("Completed");
 
   await page.keyboard.press("Escape");
-  await expect(awaitingTab).toContainText(String(count - 1));
+  await expect(awaitingTab.locator("span")).toHaveText(String(count - 1));
+  await expect(rows).toHaveCount(count - 1);
+  if (count - 1 === 0) await expect(panel.getByTestId("tasks-empty")).toBeVisible();
 });

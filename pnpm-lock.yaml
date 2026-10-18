@@ -188,6 +188,9 @@ importers:
       '@hookform/resolvers':
         specifier: 5.9.1
         version: 5.9.1(@sinclair/typebox@0.27.12)(@standard-schema/spec@1.1.0)(react-hook-form@7.90.0(@types/react@19.3.0)(react@19.3.0))(zod@4.6.7)
+      '@laif/analytics':
+        specifier: workspace:*
+        version: link:../../packages/analytics
       '@laif/auth-demo':
         specifier: workspace:*
         version: link:../../packages/auth-demo

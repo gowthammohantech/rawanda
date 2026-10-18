@@ -10,7 +10,7 @@
 | Depends on | CLN-09 |
 | Trace | PRD CL-08, PRD §9 ("every clinically significant change and sensitive read is auditable"); FRD CL-08, FRD §5 (audit fields), §7 (log access, change, export, privilege updates), T-01, T-02, T-08; spec §2.1 `/clinical/audit`, WF-01 step 10, WF-04 step 2–3; BRD BR-08 |
 | Size | M |
-| Status | Not started |
+| Status | Done |
 
 ## 2. Goal
 

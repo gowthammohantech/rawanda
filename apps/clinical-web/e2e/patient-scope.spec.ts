@@ -1,8 +1,8 @@
 /**
  * CLN-03 / WF-04 in Chromium: clinician Alpha-1 → Ctrl+K search → open a patient (provenance +
  * KPI strip) → the Beta-1 patient's name returns 0 rows → its direct URL is denied without any
- * patient data → RW labels. The `access.denied` event itself is asserted in PatientPage.test
- * (CLN-10's audit explorer extends this spec).
+ * patient data → the `access.denied` event is listed under the audit explorer's `Denied access`
+ * chip (CLN-10) → RW labels.
  */
 import { expect, test } from "@playwright/test";
 
@@ -48,6 +48,20 @@ test("WF-04: search excludes the Beta-1 patient and its direct URL is denied", a
   const body = (await page.locator("body").textContent()) ?? "";
   expect(body).not.toContain(WF04.name);
   expect(body).not.toContain(WF04.syntheticId);
+
+  // CLN-10: the denied attempt is in the audit log under the Denied access chip.
+  await page.goto("/clinical/audit");
+  await page.getByTestId("audit-chip-deniedAccess").click();
+  await expect(page).toHaveURL(/chip=deniedAccess/);
+  const denied = page
+    .getByTestId("audit-table")
+    .getByRole("row")
+    .filter({ has: page.locator('[data-action="access.denied"]') })
+    .filter({ hasText: WF04.id });
+  await expect(denied.first()).toBeVisible();
+  await page.goBack();
+  await page.goBack();
+  await expect(page.getByTestId("permission-denied")).toBeVisible();
 
   // Labels translate to Kinyarwanda.
   await page.getByRole("button", { name: "Ikinyarwanda" }).click();
