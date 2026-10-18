@@ -349,6 +349,7 @@ export function createCitizenRepository(input: CitizenRepositoryDeps): CitizenRe
         displayName: patient?.displayName ?? "",
         relationship: link.relationship,
         consentState: await consentStateOf(ctx, link.patientId),
+        facilityId: patient?.facilityId ?? null,
       });
     }
     return out;
@@ -1330,6 +1331,32 @@ export function createCitizenRepository(input: CitizenRepositoryDeps): CitizenRe
           entityId: actor.personaId,
           correlationId: asId<CorrelationId>(ctx.ids()),
           changeSummary: { noticeVersion },
+        });
+      });
+    },
+
+    recordSupportViewed() {
+      return engine.write(async (ctx) => {
+        const actor = citizenActor(ctx, "support");
+        await ctx.audit({
+          action: "citizen.support.viewed",
+          entityType: "persona",
+          entityId: actor.personaId,
+          correlationId: asId<CorrelationId>(ctx.ids()),
+          changeSummary: {},
+        });
+      });
+    },
+
+    recordHelpViewed() {
+      return engine.write(async (ctx) => {
+        const actor = citizenActor(ctx, "help");
+        await ctx.audit({
+          action: "citizen.help.viewed",
+          entityType: "persona",
+          entityId: actor.personaId,
+          correlationId: asId<CorrelationId>(ctx.ids()),
+          changeSummary: {},
         });
       });
     },

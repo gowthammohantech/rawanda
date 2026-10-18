@@ -20,3 +20,5 @@ export * from "./suppression.ts";
 export * from "./aggregate-cells.ts";
 export * from "./catalogue.ts";
 export * from "./csv.ts";
+export * from "./sha256.ts";
+export * from "./reports.ts";

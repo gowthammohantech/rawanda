@@ -1,0 +1,32 @@
+{
+  "title": "Help topics",
+  "eyebrow": "HELP",
+  "intro": "Short answers about using this app. They are not medical advice.",
+  "topics": {
+    "reviewed": {
+      "question": "What does 'Reviewed' mean?",
+      "answer": "Someone on your care team has looked at the result. The app only shows results your care team has checked.",
+      "link": "Go to My health"
+    },
+    "latestCheck": {
+      "question": "Why can't I see my latest check?",
+      "answer": "A new check appears after your care team has reviewed it. Until then the Timeline shows that it is waiting.",
+      "link": "Go to Timeline"
+    },
+    "stopReminders": {
+      "question": "How do I stop reminders?",
+      "answer": "Open Reminders, then Reminder settings, and turn reminders off. You can turn them on again at any time.",
+      "link": "Open reminder settings"
+    },
+    "demoPersona": {
+      "question": "What is a demo persona?",
+      "answer": "A demo persona is a made-up person you can try this app as. It is not a real sign-in, and none of the information is real.",
+      "link": "About this demo"
+    },
+    "correction": {
+      "question": "How do I ask for a correction?",
+      "answer": "If something in your record looks wrong, you can ask your care team to check it. Asking does not change your record.",
+      "link": "Ask for a correction"
+    }
+  }
+}

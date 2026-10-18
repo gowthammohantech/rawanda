@@ -389,6 +389,8 @@ export const ENTITY_TYPES = [
   "programme_action",
   // ext (ADM-06): data-quality issue + its triage state (collection `dataQualityIssues`).
   "data_quality_issue",
+  // ext (ADM-07): aggregate export record, generated or denied (collection `exportAudits`).
+  "export_audit",
 ] as const;
 export type EntityType = (typeof ENTITY_TYPES)[number];
 

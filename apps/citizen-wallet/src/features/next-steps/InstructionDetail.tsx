@@ -26,21 +26,16 @@ import { KIND_SPECS, stepTexts } from "./copy.ts";
 import { DatePassedNotice } from "./DatePassedNotice.tsx";
 import { FacilityContactCard } from "./FacilityContactCard.tsx";
 import { ApprovedChip, whenText } from "./NextStepCard.tsx";
+import { SupportLink } from "../support/SupportLink.tsx";
 
 export type InstructionDetailProps = {
   step: ApprovedInstruction;
   onReload: () => unknown;
-  onOpenSupport: () => void;
   /** CTZ-07 "Something wrong?" → correction request with this step preselected. */
   onReportProblem: () => void;
 };
 
-export function InstructionDetail({
-  step,
-  onReload,
-  onOpenSupport,
-  onReportProblem,
-}: InstructionDetailProps) {
+export function InstructionDetail({ step, onReload, onReportProblem }: InstructionDetailProps) {
   const t = useTx();
   const { language } = useLanguage();
   const texts = stepTexts(t, step);
@@ -96,14 +91,7 @@ export function InstructionDetail({
       <InfoCallout testID="to-change">
         {`${t("citizen:nextSteps.toChangeContact")} ${t("citizen:nextSteps.noAdvice")}`}
       </InfoCallout>
-      <Button
-        variant="ghost"
-        onPress={onOpenSupport}
-        accessibilityHint={t("citizen:nextSteps.supportHint")}
-        testID="next-step-support"
-      >
-        {t("citizen:nextSteps.supportLink")}
-      </Button>
+      <SupportLink testID="next-step-support" />
       <Button
         variant="ghost"
         icon="alert"

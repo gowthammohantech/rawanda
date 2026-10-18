@@ -76,7 +76,7 @@ describe("result detail access", () => {
     fireEvent.click(screen.getByTestId("result-next-steps"));
     expect(routerLog.at(-1)).toEqual({ method: "push", href: "/next-steps" });
     fireEvent.click(screen.getByTestId("result-support"));
-    expect(routerLog.at(-1)).toEqual({ method: "push", href: "/more" });
+    expect(routerLog.at(-1)).toEqual({ method: "push", href: "/more/support" });
 
     await waitFor(async () => expect(await viewedOf(view.store, linked.id)).toHaveLength(1));
     // Window focus / reconnect while mounted never read (and log) again.

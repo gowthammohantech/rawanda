@@ -30,6 +30,11 @@ describe("welcome", () => {
     expect(lastHref()).toBe("/about-demo");
     fireEvent.click(screen.getByTestId("welcome-demo-tools"));
     expect(lastHref()).toBe("/demo-tools");
+    // CTZ-08 task 11: language/text size and help are reachable before a persona is chosen.
+    fireEvent.click(screen.getByTestId("welcome-accessibility"));
+    expect(lastHref()).toBe("/accessibility");
+    fireEvent.click(screen.getByTestId("welcome-support"));
+    expect(lastHref()).toBe("/support");
   });
 
   it("switching to RW re-renders the onboarding copy and persists before any persona", async () => {

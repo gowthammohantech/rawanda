@@ -269,7 +269,8 @@
     "sync_operation": "Igikorwa cyo guhuza",
     "device_session": "Igikoresho cyinjiwemo",
     "programme_action": "Igikorwa cya porogaramu",
-    "data_quality_issue": "Ikibazo cy'ubuziranenge bw'amakuru"
+    "data_quality_issue": "Ikibazo cy'ubuziranenge bw'amakuru",
+    "export_audit": "Inyandiko y'iyohereza"
   },
   "pathwayStage": {
     "DRAFT_SCREENING": "Ipimwa ritararangira",
@@ -520,7 +521,8 @@
         "viewed": "Intambwe ikurikira yarebwe mu gasanduku"
       },
       "support": {
-        "callback_requested": "Hasabwe guhamagarwa"
+        "callback_requested": "Hasabwe guhamagarwa",
+        "viewed": "Ahabona ubufasha harebwe muri porogaramu"
       },
       "settings": {
         "changed": "Igenamiterere ry'agasanduku ryahinduwe"
@@ -552,6 +554,9 @@
       "correction": {
         "viewed": "Icyifuzo cyo gukosora cyarebwe mu gasanduku",
         "duplicate_blocked": "Icyifuzo cya kabiri cyo gukosora ikintu kimwe cyahagaritswe"
+      },
+      "help": {
+        "viewed": "Ingingo z'ubufasha zarebwe muri porogaramu"
       }
     },
     "admin": {

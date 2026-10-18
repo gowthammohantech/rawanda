@@ -1,6 +1,6 @@
 # ADM-07 — Reports and aggregate CSV export with watermark and audit
 
-Status: Not started
+**Status:** Done
 
 ## 1. Header
 
@@ -173,3 +173,13 @@ Manual:
 ## 12. Commit
 
 `feat(admin): ADM-07 aggregate report builder and audited CSV export`
+
+## 13. Implementation notes (builder)
+
+- **One suppression pass:** `packages/analytics/src/reports.ts` `buildReportRows(template, sections, opts)` only formats cells. The cells come from the page selectors (`selectOverview`, `selectFunnel`, `selectTimeliness`, `selectQuality`, `selectWorkload`) run over the full-grant dataset (`features/reports/reportSources.ts`). So a CSV cell is suppressed exactly when the dashboard hides it. This deviates from the phase's `buildReportRows(template, ds, opts)` signature because the scope-wide pass lives in the app. `reportSources.test.ts` checks parity per template.
+- **CSV (`csv.ts`, extended in place):** `buildAggregateCsv` returns `{ text, rowCount, suppressedCells, sha256 }`. With options it adds the UTF-8 BOM and the `# END rows= suppressed_cells= sha256=` trailer (pure synchronous `sha256Hex`, SHA-256 of the data-row lines joined with CRLF). It also adds `# Synthetic demonstration data` as line 3 and the `suppression_policy=DEMO_NOT_APPROVED` metadata key, derives the `suppressed` flag for generic rows, and provides `assertAggregateOnly` (column allow-list + denylist, seed synthetic-id / UUID patterns, injected forbidden values).
+- **Metadata format** is FND-06's (`period=<from>/<to>`, one `key=value` per line, the FND RW watermark text = `demo:banner`), not the phase's combined lines. Scope ids are always explicit.
+- **ExportAudit:** `ENTITY_TYPES` + `export_audit` (collection `exportAudits`). `recordExport` (extended, input fields optional so CLN-10 calls stay valid) stores the `generated` record with the CSV bytes. Denials write `export.denied` (denial `capability|scope`, requested scope) plus a `denied` row after the rollback, through a new additive engine helper `deferRecord`. `listExportAudits` returns the persona's own rows, plus every in-scope row for `audit.read`/`audit.read_scoped` roles.
+- **Idempotency:** the key and export id are created when step 4 mounts, and `generatedAt` is fixed at the first submit, so a retry produces identical bytes. A key that already has a `generated` row re-downloads the stored bytes without a new audit. Concurrent calls share one promise.
+- **Empty period:** rows with zero values are still exported (zero is shown, PO decision 8). The preview shows "No data for this period" when every value is 0.
+- **Granularity `district`** is disabled for facility-only grants and when a facility filter is set.

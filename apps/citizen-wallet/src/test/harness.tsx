@@ -13,6 +13,7 @@ import { useCitizenRepo } from "../data/repo.tsx";
 import { createAppQueryClient, type ShellServices } from "../services.ts";
 import { createAppSession } from "../session.ts";
 import { createWalletStore } from "../state/session.ts";
+import { createDisplayStore } from "../theme/displayStore.ts";
 
 const captured: { repo: CitizenRepository | null } = { repo: null };
 
@@ -31,6 +32,7 @@ export async function bootServices(): Promise<ShellServices> {
     i18n,
     session,
     wallet: createWalletStore(session, window.localStorage),
+    display: createDisplayStore(window.localStorage),
     queryClient: createAppQueryClient(),
   };
 }

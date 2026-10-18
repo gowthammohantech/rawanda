@@ -76,11 +76,17 @@ export const CITIZEN_ACCESS_PURPOSES = [
 ] as const;
 export type CitizenAccessPurpose = (typeof CITIZEN_ACCESS_PURPOSES)[number];
 
-/** Text scale presets (CTZ-08). */
-export const CITIZEN_TEXT_SCALES = [1, 1.15, 1.3] as const;
+/** Text scale presets (CTZ-08: Standard / Large / Larger / Largest). */
+export const CITIZEN_TEXT_SCALES = [1, 1.15, 1.3, 1.5] as const;
 export type CitizenTextScale = (typeof CITIZEN_TEXT_SCALES)[number];
 
-const TextScaleSchema = z.union([z.literal(1), z.literal(1.15), z.literal(1.3)]);
+export const CitizenTextScaleSchema = z.union([
+  z.literal(1),
+  z.literal(1.15),
+  z.literal(1.3),
+  z.literal(1.5),
+]);
+const TextScaleSchema = CitizenTextScaleSchema;
 
 // ── Stored records ───────────────────────────────────────────────────────────
 

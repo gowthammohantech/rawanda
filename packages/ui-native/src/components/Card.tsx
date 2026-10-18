@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { StyleSheet, View, type StyleProp, type ViewStyle } from "react-native";
 
+import { usePalette } from "../theme.tsx";
 import { colors, radii, shadows, spacing } from "../tokens.ts";
 import { AppText } from "./AppText.tsx";
 import { MicroLabel } from "./MicroLabel.tsx";
@@ -28,6 +29,7 @@ export function Card({
   style,
   testID,
 }: CardProps) {
+  const palette = usePalette();
   const hasHeader = title !== undefined || eyebrow !== undefined || meta !== undefined;
   return (
     <View
@@ -36,6 +38,10 @@ export function Card({
         styles.card,
         variant === "muted" ? styles.muted : styles.surface,
         variant === "flat" ? styles.flat : null,
+        {
+          borderColor: palette.borderSoft,
+          backgroundColor: variant === "muted" ? palette.background : palette.surface,
+        },
         style,
       ]}
     >

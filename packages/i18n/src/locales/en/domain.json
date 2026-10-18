@@ -269,7 +269,8 @@
     "sync_operation": "Sync operation",
     "device_session": "Device session",
     "programme_action": "Programme action",
-    "data_quality_issue": "Data-quality issue"
+    "data_quality_issue": "Data-quality issue",
+    "export_audit": "Export record"
   },
   "pathwayStage": {
     "DRAFT_SCREENING": "Draft screening",
@@ -520,7 +521,8 @@
         "viewed": "Next step viewed in the wallet"
       },
       "support": {
-        "callback_requested": "Call-back requested"
+        "callback_requested": "Call-back requested",
+        "viewed": "Support screen viewed in the wallet"
       },
       "settings": {
         "changed": "Wallet settings changed"
@@ -552,6 +554,9 @@
       "correction": {
         "viewed": "Correction request viewed in the wallet",
         "duplicate_blocked": "Second correction request for the same item blocked"
+      },
+      "help": {
+        "viewed": "Help topics viewed in the wallet"
       }
     },
     "admin": {

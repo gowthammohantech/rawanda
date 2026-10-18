@@ -42,6 +42,7 @@ import type {
   ApprovedInstruction,
   CitizenObservationItem,
   ConsentState,
+  FacilityId,
   PatientId,
   PersonaId,
   ReleasedObservation,
@@ -74,6 +75,8 @@ export type CitizenLinkedPatient = {
   displayName: string;
   relationship: PatientLinkRelationship;
   consentState: ConsentState;
+  /** CTZ-08: the care team's facility (Support "who to contact"); null if unknown. */
+  facilityId: FacilityId | null;
 };
 
 /**
@@ -239,6 +242,10 @@ export interface CitizenRepository {
   recordAccessHistoryViewed(patientId: string): Promise<void>;
   /** CTZ-07: the privacy notice was opened — `citizen.privacy_notice.viewed` (audit). */
   recordPrivacyNoticeViewed(noticeVersion: string): Promise<void>;
+  /** CTZ-08: the Support screen was shown — `citizen.support.viewed` (audit; no patient data). */
+  recordSupportViewed(): Promise<void>;
+  /** CTZ-08: the Help topics screen was shown — `citizen.help.viewed` (audit; no patient data). */
+  recordHelpViewed(): Promise<void>;
   /**
    * CTZ-07: what the citizen may ask to correct (released results, approved next steps, then
    * personal details). Link + consent required; a representative only sees the represented

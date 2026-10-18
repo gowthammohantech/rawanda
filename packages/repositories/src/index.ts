@@ -62,4 +62,5 @@ export type {
   TriageQualityIssueCall,
   UpsertDetectedIssuesResult,
 } from "./services/quality-issues.ts";
+export type { ExportAuditFilterInput } from "./services/audit.ts";
 export { Engine, TxContext, type EngineMode, type MutationSpec } from "./core/engine.ts";

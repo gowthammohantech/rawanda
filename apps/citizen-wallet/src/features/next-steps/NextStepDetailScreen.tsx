@@ -53,7 +53,6 @@ export function NextStepDetailScreen({ instructionId }: { instructionId: string 
           key={`${step.data.id}:${step.data.version}`}
           step={step.data}
           onReload={() => step.refetch()}
-          onOpenSupport={() => router.push("/more")}
           onReportProblem={() =>
             router.push({
               pathname: "/more/privacy/corrections/new",

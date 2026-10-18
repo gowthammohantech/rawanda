@@ -2,7 +2,10 @@
  * Demo tools state (FND-11 task 5): Reset demo, Offline / Slow network / Server errors (mapped
  * onto the FND-07 `FaultConfig` by `faultPatchForToggle`) and Load scenario (`SCENARIOS` for
  * this app). Switches update optimistically, so the OfflineBanner appears in the same render.
+ * CTZ-08: Reset demo also restores the baseline display preferences — language `en`, standard
+ * text size, high contrast off (the seeded `ctz_settings` rows are reset by `resetDemo`).
  */
+import { DEFAULT_LANGUAGE, useLanguage } from "@laif/i18n";
 import { SCENARIOS } from "@laif/mock-data";
 import {
   faultPatchForToggle,
@@ -24,6 +27,7 @@ import {
 
 import { APP_ID } from "./config.ts";
 import { useCitizenRepo } from "./data/repo.tsx";
+import { useDisplayStore } from "./theme/ThemeProvider.tsx";
 
 export type DemoToolsValue = {
   faults: DemoFaultToggleState;
@@ -45,6 +49,8 @@ export function DemoToolsProvider({ children }: { children?: ReactNode }) {
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const t = useTx();
+  const { setLanguage } = useLanguage();
+  const display = useDisplayStore();
   const [faults, setFaults] = useState<DemoFaultToggleState>(ALL_OFF);
   const [epoch, setEpoch] = useState(0);
 
@@ -92,12 +98,14 @@ export function DemoToolsProvider({ children }: { children?: ReactNode }) {
   const reset = useCallback(async () => {
     try {
       await repo.demo.resetDemo();
+      display.getState().reset();
+      await setLanguage(DEFAULT_LANGUAGE);
       await afterDatasetChange();
       toast({ title: t("demo:tools.resetDone") });
     } catch {
       failed();
     }
-  }, [repo, afterDatasetChange, toast, t, failed]);
+  }, [repo, afterDatasetChange, toast, t, failed, display, setLanguage]);
 
   const scenarios = useMemo(
     () =>

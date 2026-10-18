@@ -1,12 +1,14 @@
 /**
  * Wallet tabs (CTZ-02 task 10): My health, Next steps, Reminders, Timeline, More. Safe-area
  * aware, item min height 56, labels wrap (two lines) instead of truncating at large font
- * scales; each tab has a `tabBarAccessibilityLabel`. The focused tab is remembered (relaunch).
+ * scales (CTZ-08: OS dynamic type capped at 3× on tab labels only); each tab has a
+ * `tabBarAccessibilityLabel`. The focused tab is remembered (relaunch).
  * CTZ-05: the reminder inbox banner sits above the tabs (and runs the simulated delivery).
  */
 import {
   AppText,
   bottomTabBarScreenOptions,
+  maxFontSizeMultiplier,
   minTouchTarget,
   tabBarIcon,
   useTx,
@@ -28,6 +30,7 @@ function tabLabel(text: string) {
         weight="medium"
         align="center"
         numberOfLines={2}
+        maxFontSizeMultiplier={maxFontSizeMultiplier.tabLabel}
         {...(typeof color === "string" ? { colorValue: color } : { color: "muted" as const })}
       >
         {text}

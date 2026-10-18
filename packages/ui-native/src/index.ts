@@ -23,12 +23,32 @@ export {
   fontFamilies,
   shadows,
   tokens,
+  highContrastColors,
+  HIGH_CONTRAST_TEXT_PAIRS,
+  contrastRatio,
+  TEXT_SCALES,
+  type TextScale,
   type ColorToken,
   type SemanticColorToken,
   type SpacingToken,
   type TypeVariant,
   type FontFamilyToken,
 } from "./tokens.ts";
+export {
+  DisplayPrefsProvider,
+  DEFAULT_DISPLAY_PREFS,
+  HIGH_CONTRAST_TONE_COLORS,
+  useDisplayPrefs,
+  usePalette,
+  useToneColors,
+  useScaledFont,
+  paletteFor,
+  resolveColor,
+  scaledType,
+  toHighContrast,
+  type DisplayPrefs,
+  type Palette,
+} from "./theme.tsx";
 export { useTx, useOptionalTx, type TranslationKey, type TranslationValues } from "./i18n.ts";
 export {
   a11yState,

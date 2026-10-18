@@ -1,0 +1,41 @@
+{
+  "title": "Uburyo bworoshya ikoreshwa",
+  "eyebrow": "IGENAMITERERE",
+  "intro": "Orohereza gusoma no gukoresha porogaramu.",
+  "language": {
+    "title": "Ururimi",
+    "hint": "Ikora nta murandasi. Porogaramu ihinduka ako kanya.",
+    "names": {
+      "en": "English",
+      "rw": "Ikinyarwanda"
+    }
+  },
+  "textSize": "Ingano y'inyandiko",
+  "textSizeHint": "Ingano y'inyandiko wahisemo kuri telefoni yawe nayo ikomeza gukurikizwa.",
+  "scale": {
+    "standard": "Isanzwe",
+    "large": "Nini",
+    "larger": "Nini cyane",
+    "largest": "Nini kurushaho"
+  },
+  "preview": {
+    "eyebrow": "IGERAGEZA",
+    "title": "Urugero rw'igisubizo",
+    "body": "Uku ni ko inyandiko izagaragara muri porogaramu. Ni urugero, si amakuru y'ubuzima bwawe.",
+    "chip": "Byasuzumwe"
+  },
+  "highContrast": "Itandukaniro ry'amabara rikomeye",
+  "highContrastHint": "Inyandiko z'umukara, imirongo igaragara cyane n'amabara yijimye.",
+  "lowData": {
+    "title": "Ikoresha rito rya interineti",
+    "body": "Iyi porogaramu y'igerageza ikora nta murandasi. Ntikurura amafoto cyangwa amashusho."
+  },
+  "loading": "Turimo gufungura igenamiterere ryawe",
+  "saved": "Byabitswe",
+  "saveError": "Impinduka yawe ntiyabitswe. Twagaruye igenamiterere wari wabitse.",
+  "retry": "Ongera ugerageze",
+  "conflict": "Igenamiterere ryawe ryahinduriwe ahandi. Twafunguye iryo wabitse.",
+  "deviceOnly": "Ibi wahisemo bibikwa kuri iyi telefoni. Numara guhitamo umuntu w'igerageza, bizanabikwa kuri konti yawe.",
+  "welcomeLink": "Ururimi n'ingano y'inyandiko",
+  "audioLater": "Gusomerwa mu ijwi ntibiraba muri iri gerageza."
+}

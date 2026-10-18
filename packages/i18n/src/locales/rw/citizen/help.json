@@ -1,0 +1,32 @@
+{
+  "title": "Ingingo z'ubufasha",
+  "eyebrow": "UBUFASHA",
+  "intro": "Ibisubizo bigufi ku ikoreshwa ry'iyi porogaramu. Si inama z'ubuvuzi.",
+  "topics": {
+    "reviewed": {
+      "question": "'Byasuzumwe' bisobanura iki?",
+      "answer": "Umwe mu bagize itsinda rikwitaho yarebye igisubizo. Porogaramu yerekana gusa ibisubizo itsinda rikwitaho ryasuzumye.",
+      "link": "Jya ku Buzima bwanjye"
+    },
+    "latestCheck": {
+      "question": "Kuki ntabona isuzuma ryanjye riheruka?",
+      "answer": "Isuzuma rishya rigaragara nyuma y'uko itsinda rikwitaho ririsuzumye. Kugeza icyo gihe, Amateka yerekana ko rigitegerejwe.",
+      "link": "Jya ku Mateka"
+    },
+    "stopReminders": {
+      "question": "Nahagarika nte kwibutswa?",
+      "answer": "Fungura Kwibutswa, hanyuma Igenamiterere ryo kwibutswa, uzimye kwibutswa. Ushobora kongera kubifungura igihe icyo ari cyo cyose.",
+      "link": "Fungura igenamiterere ryo kwibutswa"
+    },
+    "demoPersona": {
+      "question": "Umuntu w'igerageza ni iki?",
+      "answer": "Umuntu w'igerageza ni umuntu w'impimbano ushobora gukoresha ugerageza iyi porogaramu. Si ukwinjira nyakuri, kandi nta makuru n'amwe ari ay'ukuri.",
+      "link": "Ibyerekeye iri gerageza"
+    },
+    "correction": {
+      "question": "Nasaba nte gukosora?",
+      "answer": "Niba hari ikintu kiri mu makuru yawe gisa n'ikitari cyo, ushobora gusaba itsinda rikwitaho kukigenzura. Gusaba ntibihindura amakuru yawe.",
+      "link": "Saba gukosora"
+    }
+  }
+}

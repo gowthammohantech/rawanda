@@ -7,5 +7,10 @@
     "descriptionMax": "Bigabanye (inyuguti 500 ntarengwa).",
     "suggestedMax": "Bigabanye (inyuguti 200 ntarengwa).",
     "mustUnderstand": "Kanda ku kazu kugira ngo ukomeze."
+  },
+  "callback": {
+    "topicRequired": "Hitamo icyo ikibazo cyawe kivugaho.",
+    "windowRequired": "Hitamo igihe cy'umunsi.",
+    "noteMax": "Bigabanye (inyuguti 300 ntarengwa)."
   }
 }

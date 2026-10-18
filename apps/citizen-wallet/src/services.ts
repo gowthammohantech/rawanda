@@ -7,12 +7,15 @@ import { APP_ID } from "./config.ts";
 import { platform } from "./platform";
 import { createAppSession, type AppSession } from "./session.ts";
 import { createWalletStore, type WalletStore } from "./state/session.ts";
+import { createDisplayStore, type DisplayStore } from "./theme/displayStore.ts";
 
 export type ShellServices = {
   i18n: I18nInstance;
   session: AppSession;
   /** CTZ-02 wallet context (account, active patient, last tab) over `session`. */
   wallet: WalletStore;
+  /** CTZ-08 device display preferences (text scale, high contrast). */
+  display: DisplayStore;
   queryClient: QueryClient;
 };
 
@@ -38,6 +41,7 @@ export async function bootstrapShell(): Promise<ShellServices> {
     i18n,
     session,
     wallet: createWalletStore(session, storage),
+    display: createDisplayStore(storage),
     queryClient: createAppQueryClient(),
   };
 }

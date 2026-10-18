@@ -11,7 +11,8 @@ import {
 import { a11yState, touchTarget } from "../a11y.ts";
 import { Icon } from "../icons/Icon.tsx";
 import type { IconName } from "../icons/icon-data.ts";
-import { colors, radii, spacing } from "../tokens.ts";
+import { usePalette, type Palette } from "../theme.tsx";
+import { radii, spacing } from "../tokens.ts";
 import { AppText } from "./AppText.tsx";
 
 export const BUTTON_VARIANTS = ["primary", "secondary", "ghost", "danger"] as const;
@@ -36,12 +37,17 @@ export type ButtonProps = {
   accessibilityLabel?: string;
   accessibilityHint?: string;
   fullWidth?: boolean;
+  /** App-level text size multiplier for the label (CTZ-08; default: `DisplayPrefsProvider`). */
+  textScale?: number;
   style?: StyleProp<ViewStyle>;
   testID?: string;
 };
 
-const VARIANT: Record<ButtonVariant, { bg: string; fg: string; border: string; pressed: string }> =
-  {
+type VariantColors = { bg: string; fg: string; border: string; pressed: string };
+
+/** Variant colours for a palette (normal or high contrast; CTZ-08). */
+function variantColors(colors: Palette): Record<ButtonVariant, VariantColors> {
+  return {
     primary: {
       bg: colors.primary,
       fg: colors.onPrimary,
@@ -67,6 +73,7 @@ const VARIANT: Record<ButtonVariant, { bg: string; fg: string; border: string; p
       pressed: colors.danger,
     },
   };
+}
 
 function isPromiseLike(value: unknown): value is PromiseLike<unknown> {
   return (
@@ -89,14 +96,16 @@ export function Button({
   accessibilityLabel,
   accessibilityHint,
   fullWidth = false,
+  textScale,
   style,
   testID,
 }: ButtonProps) {
+  const colors = usePalette();
   const lock = useRef(false);
   const [pending, setPending] = useState(false);
   const busy = loading || pending;
   const inactive = disabled || busy;
-  const palette = VARIANT[variant];
+  const palette = variantColors(colors)[variant];
 
   const handlePress = useCallback(
     (event: GestureResponderEvent) => {
@@ -152,6 +161,7 @@ export function Button({
         variant={size === "sm" ? "caption" : "body"}
         colorValue={palette.fg}
         align="center"
+        {...(textScale === undefined ? {} : { textScale })}
       >
         {children}
       </AppText>

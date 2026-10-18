@@ -15,4 +15,5 @@ export * from "./field-errors.ts";
 export * from "./admin.ts";
 export * from "./programmeAction.ts";
 export * from "./dataQualityIssue.ts";
+export * from "./exportAudit.ts";
 export * from "./citizen/index.ts";

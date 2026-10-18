@@ -33,6 +33,7 @@
   "consentSub": "Give or withdraw consent",
   "accessibilityRow": "Accessibility",
   "supportRow": "Support",
-  "laterPhase": "Coming soon in this demo",
-  "demoToolsSub": "Reset, clock and simulated faults"
+  "demoToolsSub": "Reset, clock and simulated faults",
+  "accessibilitySub": "Language, text size, high contrast",
+  "supportSub": "Contact your care team, help topics"
 }

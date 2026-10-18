@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { SafeAreaView, type Edge } from "react-native-safe-area-context";
 
+import { usePalette } from "../theme.tsx";
 import { colors, spacing } from "../tokens.ts";
 import { DemoBanner } from "./DemoBanner.tsx";
 import { OfflineBanner } from "./OfflineBanner.tsx";
@@ -50,6 +51,7 @@ export function Screen({
   contentStyle,
   testID,
 }: ScreenProps) {
+  const palette = usePalette();
   const content = scroll ? (
     <ScrollView
       style={styles.flex}
@@ -62,7 +64,11 @@ export function Screen({
     <View style={[styles.flex, contentStyle]}>{children}</View>
   );
   return (
-    <SafeAreaView edges={edges} style={styles.root} testID={testID ?? "screen"}>
+    <SafeAreaView
+      edges={edges}
+      style={[styles.root, { backgroundColor: palette.background }]}
+      testID={testID ?? "screen"}
+    >
       <DemoBanner />
       {header ?? null}
       {offline ? (
