@@ -1,0 +1,11 @@
+# Signs in the default CHW (persona-chw-alpha1-a, Alpha 1 facility) from the sign-in screen.
+appId: host.exp.Exponent
+---
+- tapOn:
+    id: "persona-card-persona-chw-alpha1-a"
+- tapOn:
+    id: "persona-continue"
+- tapOn:
+    id: "scope-continue"
+- assertVisible:
+    id: "today-screen"

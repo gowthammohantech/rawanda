@@ -14,6 +14,8 @@ import enWorkerScreening from "../locales/en/worker/screening.json";
 import enWorkerReview from "../locales/en/worker/review.json";
 import enWorkerTasks from "../locales/en/worker/tasks.json";
 import enWorkerFollowup from "../locales/en/worker/followup.json";
+import enWorkerRevocation from "../locales/en/worker/revocation.json";
+import enWorkerA11y from "../locales/en/worker/a11y.json";
 import rwWorkerBase from "../locales/rw/worker.json";
 import rwWorkerAuth from "../locales/rw/worker/auth.json";
 import rwWorkerHome from "../locales/rw/worker/home.json";
@@ -26,6 +28,8 @@ import rwWorkerScreening from "../locales/rw/worker/screening.json";
 import rwWorkerReview from "../locales/rw/worker/review.json";
 import rwWorkerTasks from "../locales/rw/worker/tasks.json";
 import rwWorkerFollowup from "../locales/rw/worker/followup.json";
+import rwWorkerRevocation from "../locales/rw/worker/revocation.json";
+import rwWorkerA11y from "../locales/rw/worker/a11y.json";
 
 export const enWorker = {
   ...enWorkerBase,
@@ -40,6 +44,8 @@ export const enWorker = {
   review: enWorkerReview,
   tasks: enWorkerTasks,
   followup: enWorkerFollowup,
+  revocation: enWorkerRevocation,
+  a11y: enWorkerA11y,
 } as const;
 
 export const rwWorker: object = {
@@ -55,4 +61,6 @@ export const rwWorker: object = {
   review: rwWorkerReview,
   tasks: rwWorkerTasks,
   followup: rwWorkerFollowup,
+  revocation: rwWorkerRevocation,
+  a11y: rwWorkerA11y,
 };

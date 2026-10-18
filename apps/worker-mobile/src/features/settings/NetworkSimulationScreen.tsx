@@ -12,6 +12,8 @@
  * | Failure type + rate: lost reply (timeout) | `timeoutRate` (dropped acknowledgement, after commit) |
  * | Simulate a clinician update               | `repo.sync.simulateRemoteEdit('followUp', id, …)`  |
  * | Make the next sync conflict               | `conflictOnce` (follow-up)                         |
+ * | Simulate task reassignment (HWM-10)       | `simulateRemoteEdit('follow_up', id, { assignedWorkerId })` |
+ * | Device clock (simulated, HWM-10)          | app-side offset (`demo/clockDrift.ts`), not a fault |
  *
  * The HWM-02 "Run one sync pass" dev button moved to the Sync center (HWM-09 "Sync now"); going
  * back online here triggers a sync by itself (HWM-09 `online` trigger).
@@ -19,6 +21,7 @@
  */
 import { formatDateTime, useLanguage } from "@laif/i18n";
 import type { FollowUp, Patient } from "@laif/domain";
+import { DEMO_PERSONAS } from "@laif/mock-data";
 import type { FaultConfig, FaultConfigPatch } from "@laif/repositories";
 import {
   Button,
@@ -41,7 +44,11 @@ import { AppHeader } from "../../components/AppHeader.tsx";
 import { useSyncStatus } from "../../data/hooks/useSyncStatus.ts";
 import { invalidateAfterWrite } from "../../data/queryKeys.ts";
 import { useNetwork } from "../../network/NetworkProvider.tsx";
+import { DEVICE_CLOCK_PRESETS, type DeviceClockPreset } from "../../demo/clockDrift.ts";
+import { useDeviceClock } from "../../demo/useDeviceClock.ts";
 import { useRepository } from "../../providers.tsx";
+import { useSession } from "../../session/useSession.ts";
+import { WORKER_ROLES } from "../../session/store.ts";
 
 export const LATENCY_PRESETS = {
   none: [0, 0],
@@ -62,6 +69,28 @@ export const FAILURE_MODES = {
 export type FailureMode = keyof typeof FAILURE_MODES;
 
 const DAY_MS = 86_400_000;
+
+/** Another demo worker assigned to the same facility (the reassignment target), or null. */
+export function reassignmentTarget(
+  facilityId: string,
+  currentPersonaId: string,
+): { id: string; displayName: string } | null {
+  const other = DEMO_PERSONAS.find(
+    (p) =>
+      p.id !== currentPersonaId &&
+      p.role === "community_health_worker" &&
+      WORKER_ROLES.includes(p.role) &&
+      (p.facilityIds as readonly string[]).includes(facilityId),
+  );
+  return other === undefined ? null : { id: other.id, displayName: other.displayName };
+}
+
+function clockPresetOf(minutes: number): DeviceClockPreset | null {
+  const match = (Object.keys(DEVICE_CLOCK_PRESETS) as DeviceClockPreset[]).find(
+    (key) => DEVICE_CLOCK_PRESETS[key] === minutes,
+  );
+  return match ?? null;
+}
 
 export function latencyPresetOf(config: Pick<FaultConfig, "latencyMs">): LatencyPreset | null {
   const [min, max] = config.latencyMs;
@@ -109,6 +138,10 @@ export function NetworkSimulationScreen({ onBack }: NetworkSimulationScreenProps
   const [modeChoice, setModeChoice] = useState<FailureMode>(failure.mode ?? "server_error");
   const mode = failure.mode ?? modeChoice;
   const [followUpId, setFollowUpId] = useState<string | null>(null);
+  const { session } = useSession();
+  const deviceClock = useDeviceClock();
+  const target =
+    session === null ? null : reassignmentTarget(session.facilityId, session.persona.id);
 
   const followUps = useQuery({
     queryKey: ["home", "netsim", "followUps"],
@@ -158,6 +191,21 @@ export function NetworkSimulationScreen({ onBack }: NetworkSimulationScreenProps
         conflictOnce: [...config.conflictOnce, { entityType: "follow_up", entityId: selected.id }],
       });
       toast({ title: t("worker:netsim.conflictArmed") });
+    } catch {
+      failed();
+    }
+  };
+
+  const simulateReassignment = async () => {
+    if (selected === null || target === null) return;
+    try {
+      // "A supervisor reassigned this task" on the sync server: the worker's next queued update
+      // to it is refused (`FORBIDDEN` / `TASK_REASSIGNED`) and kept on the device (HWM-08/09).
+      await repo.sync.simulateRemoteEdit("follow_up", selected.id, {
+        assignedWorkerId: target.id,
+      });
+      await invalidateAfterWrite(queryClient);
+      toast({ title: t("worker:netsim.reassignDone", { worker: target.displayName }) });
     } catch {
       failed();
     }
@@ -280,11 +328,38 @@ export function NetworkSimulationScreen({ onBack }: NetworkSimulationScreenProps
         >
           {t("worker:netsim.conflictNext")}
         </Button>
+        <Button
+          testID="netsim-reassign"
+          variant="secondary"
+          icon="people"
+          disabled={selected === null || target === null}
+          onPress={() => void simulateReassignment()}
+        >
+          {t("worker:netsim.reassign")}
+        </Button>
+        {target === null ? (
+          <InfoCallout icon="info">{t("worker:netsim.reassignNone")}</InfoCallout>
+        ) : null}
         {config.conflictOnce.length > 0 ? (
           <StatusChip tone="warning" testID="netsim-conflicts-armed">
             {t("worker:netsim.conflictPending", { count: config.conflictOnce.length })}
           </StatusChip>
         ) : null}
+      </Section>
+
+      <Section title={t("worker:netsim.clock")}>
+        <SegmentedControl<DeviceClockPreset>
+          testID="netsim-device-clock"
+          label={t("worker:netsim.clock")}
+          value={clockPresetOf(deviceClock.offsetMinutes)}
+          onChange={(value) => deviceClock.setOffset(DEVICE_CLOCK_PRESETS[value])}
+          options={[
+            { value: "ok", label: t("worker:netsim.clockOk") },
+            { value: "ahead", label: t("worker:netsim.clockAhead") },
+            { value: "behind", label: t("worker:netsim.clockBehind") },
+          ]}
+        />
+        <InfoCallout icon="clock">{t("worker:netsim.clockHint")}</InfoCallout>
       </Section>
 
       <Section title={t("worker:netsim.status")}>

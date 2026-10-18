@@ -1,0 +1,18 @@
+# HWM-10 Maestro suite (`pnpm --filter @laif/worker-mobile test:maestro`): every top-level flow in
+# this folder, against Expo Go (`host.exp.Exponent`) or a dev build with the worker app open.
+# Each flow starts with Reset demo through the shared subflow, so the order does not matter;
+# shared steps live in `subflows/` (not run on their own).
+flows:
+  - "*"
+executionOrder:
+  continueOnFailure: true
+  flowsOrder:
+    - shell
+    - hwm01-sign-in
+    - offline-save-restart
+    - reconnect-sync
+    - duplicate-submission
+    - conflict-resolution
+    - language-offline-persist
+    - revocation
+    - reset-demo

@@ -15,11 +15,13 @@ import {
   type Metrics,
 } from "react-native-safe-area-context";
 
+import type { DeviceClockStore } from "./demo/clockDrift.ts";
 import type { ShellServices } from "./services.ts";
 import type { SessionStore } from "./session/store.ts";
 
 const RepositoryContext = createContext<CareRepository | null>(null);
 const SessionStoreContext = createContext<SessionStore | null>(null);
+const DeviceClockContext = createContext<DeviceClockStore | null>(null);
 
 export function RepositoryProvider({
   repo,
@@ -54,6 +56,13 @@ export function useSessionStore(): SessionStore {
   return store;
 }
 
+/** HWM-10 simulated device clock (offset + detected drift). */
+export function useDeviceClockStore(): DeviceClockStore {
+  const store = useContext(DeviceClockContext);
+  if (store === null) throw new Error("useDeviceClockStore must be used inside <AppProviders>");
+  return store;
+}
+
 export type AppProvidersProps = {
   services: ShellServices;
   /** Test seam (jsdom cannot measure insets). */
@@ -71,7 +80,9 @@ export function AppProviders({
       <SafeAreaProvider initialMetrics={safeAreaMetrics}>
         <ToastProvider>
           <QueryClientProvider client={services.queryClient}>
-            <PersonaProvider session={services.session}>{children}</PersonaProvider>
+            <DeviceClockContext.Provider value={services.deviceClock}>
+              <PersonaProvider session={services.session}>{children}</PersonaProvider>
+            </DeviceClockContext.Provider>
           </QueryClientProvider>
         </ToastProvider>
       </SafeAreaProvider>

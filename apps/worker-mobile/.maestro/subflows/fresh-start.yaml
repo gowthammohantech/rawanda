@@ -1,0 +1,31 @@
+# Baseline: if signed in, Settings → Reset demo (type RESET); ends on the sign-in screen.
+appId: host.exp.Exponent
+---
+- launchApp
+- runFlow:
+    when:
+      visible:
+        id: "revoked-screen"
+    commands:
+      - tapOn:
+          id: "restore-device"
+- runFlow:
+    when:
+      visible:
+        id: "avatar-button"
+    commands:
+      - tapOn:
+          id: "avatar-button"
+      - scrollUntilVisible:
+          element:
+            id: "open-reset-demo"
+      - tapOn:
+          id: "open-reset-demo"
+      - tapOn:
+          id: "reset-confirm-input"
+      - inputText: "RESET"
+      - hideKeyboard
+      - tapOn:
+          id: "reset-confirm"
+- assertVisible:
+    id: "sign-in-screen"

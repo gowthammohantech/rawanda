@@ -12,6 +12,9 @@
  *   `session.started` in one transaction.
  * - `endSession()`: marks the record `ended` + `session.ended`; nothing else is touched
  *   (unsynced work stays on the device). A revoked session stays revoked.
+ * - `listActivity()` (HWM-10): the device's Activity log since the current seed baseline (meta
+ *   `demoClockIso`) + the simulated server's events about this device's ops — audit metadata
+ *   only (no snapshots, change summaries or free text); signed-in, non-revoked session only.
  */
 import { actorForPersona, checkAccess } from "@laif/auth-demo";
 import {
@@ -23,18 +26,40 @@ import {
 } from "@laif/contracts";
 import {
   asId,
+  type AuditEvent,
   type DemoPersona,
   type DeviceId,
   type DeviceSession,
   type DeviceSessionId,
+  type SyncOperation,
 } from "@laif/domain";
 import { z } from "zod";
 
-import type { DeviceApi, StartDeviceSessionCall } from "../care-repository.ts";
+import type { DeviceActivityEntry, DeviceApi, StartDeviceSessionCall } from "../care-repository.ts";
 import { defer, type Engine, type TxContext } from "../core/engine.ts";
 import { RepositoryError } from "../errors.ts";
 
 export const DEVICE_ID_META_KEY = "device_id" as const;
+
+/** Store meta written by every seed / reset: the start of the current baseline. */
+const BASELINE_META_KEY = "demoClockIso" as const;
+
+const toEntry = (
+  event: AuditEvent,
+  source: DeviceActivityEntry["source"],
+): DeviceActivityEntry => ({
+  id: event.id,
+  action: event.action,
+  category: event.category,
+  outcome: event.outcome,
+  actorId: event.actorId,
+  actorRole: event.actorRole,
+  entityType: event.entityType,
+  entityId: event.entityId,
+  correlationId: event.correlationId,
+  occurredAt: event.occurredAt,
+  source,
+});
 
 /** The scope check of a device sign-in: may the persona work with this facility's patients? */
 export const DEVICE_SIGN_IN_PERMISSION = "patient.read" as const;
@@ -81,6 +106,43 @@ export function createDeviceService(engine: Engine, options: { remote: boolean }
         const id = ctx.ids();
         await ctx.tx.setMeta(DEVICE_ID_META_KEY, id);
         return id;
+      });
+    },
+
+    listActivity() {
+      return engine.read(async (ctx) => {
+        // No permission (device bookkeeping) but a signed-in, non-revoked device session.
+        ctx.authorize(null, undefined, { entityType: "audit_event", entityId: "device_activity" });
+        const since = (await ctx.tx.getMeta(BASELINE_META_KEY)) ?? "";
+        const local = (await ctx.tx.getAll<AuditEvent>("auditEvents")).filter(
+          (e) => e.occurredAt >= since,
+        );
+        const rows = local.map((e) => toEntry(e, "device"));
+        if (options.remote) {
+          const ops = await ctx.tx.getAll<SyncOperation>("syncOperations");
+          const correlations = new Set<string>([
+            ...ops.map((op) => op.correlationId),
+            ...local.map((e) => e.correlationId),
+          ]);
+          const personaId = ctx.actor?.personaId ?? null;
+          for (const e of await ctx.tx.getAll<AuditEvent>("remote_auditEvents")) {
+            if (e.occurredAt < since) continue;
+            const mine =
+              correlations.has(e.correlationId) || (personaId !== null && e.actorId === personaId);
+            if (mine) rows.push(toEntry(e, "server"));
+          }
+        }
+        return rows.sort((a, b) =>
+          a.occurredAt === b.occurredAt
+            ? a.source === b.source
+              ? 0
+              : a.source === "server"
+                ? -1
+                : 1
+            : a.occurredAt < b.occurredAt
+              ? 1
+              : -1,
+        );
       });
     },
 

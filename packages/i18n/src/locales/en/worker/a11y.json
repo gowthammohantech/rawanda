@@ -1,0 +1,8 @@
+{
+  "statusPill": "Status: {{status}}",
+  "errorCount_one": "{{count}} field needs attention",
+  "errorCount_other": "{{count}} fields need attention",
+  "clockWarning": "Warning: {{message}}",
+  "activityFilter": "Activity type filter",
+  "resetField": "Reset confirmation, type RESET"
+}

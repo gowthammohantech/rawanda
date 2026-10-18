@@ -6,6 +6,7 @@
  */
 import { useFieldErrorText, type FieldErrorLike } from "@laif/i18n";
 import {
+  announce,
   AppText,
   colors,
   ErrorState,
@@ -121,7 +122,13 @@ export function FormBanner({
 /** "Check the highlighted fields" + one line per field error (re-translated on EN⇄RW). */
 export function ErrorSummary({ errors }: { errors: readonly FieldErrorLike[] }) {
   const t = useTx();
-  if (errors.length === 0) return null;
+  const count = errors.length;
+  // HWM-10 a11y: the error count is announced whenever it changes (VoiceOver; TalkBack reads
+  // the polite live region).
+  useEffect(() => {
+    if (count > 0) announce(t("worker:a11y.errorCount", { count }));
+  }, [count, t]);
+  if (count === 0) return null;
   return (
     <FormBanner testID="form-error-summary">
       <AppText weight="semibold" colorValue={colors.danger}>

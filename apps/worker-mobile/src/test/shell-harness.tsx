@@ -13,6 +13,7 @@ import { useEffect, type ReactNode } from "react";
 import { AppRoot } from "../AppRoot.tsx";
 import { APP_ID } from "../config.ts";
 import { useRepository } from "../providers.tsx";
+import { createDeviceClockStore } from "../demo/clockDrift.ts";
 import { createAppQueryClient, type ShellServices } from "../services.ts";
 import { createSessionStore } from "../session/store.ts";
 
@@ -32,6 +33,7 @@ export async function bootServices(): Promise<ShellServices> {
     i18n,
     session: createSessionStore(window.localStorage),
     queryClient: createAppQueryClient(),
+    deviceClock: createDeviceClockStore(window.localStorage),
   };
 }
 
@@ -44,20 +46,28 @@ export type ShellView = RenderResult & {
 
 export async function renderShell(
   children: ReactNode,
-  options: { store?: StoreAdapter; readyTestId?: string } = {},
+  options: {
+    store?: StoreAdapter;
+    readyTestId?: string;
+    /** Wraps the whole app (e.g. a `DisplayPrefsProvider` for the font-scale tests). */
+    wrap?: (app: ReactNode) => ReactNode;
+  } = {},
 ): Promise<ShellView> {
   const store = options.store ?? createMemoryStoreAdapter();
   const services = await bootServices();
+  const wrap = options.wrap ?? ((app: ReactNode) => app);
   const view = render(
-    <AppRoot
-      bootstrap={() => Promise.resolve(services)}
-      openStore={() => Promise.resolve(store)}
-      noLatency
-      safeAreaMetrics={TEST_SAFE_AREA_METRICS}
-    >
-      <CaptureRepo />
-      {children}
-    </AppRoot>,
+    wrap(
+      <AppRoot
+        bootstrap={() => Promise.resolve(services)}
+        openStore={() => Promise.resolve(store)}
+        noLatency
+        safeAreaMetrics={TEST_SAFE_AREA_METRICS}
+      >
+        <CaptureRepo />
+        {children}
+      </AppRoot>,
+    ),
   );
   if (options.readyTestId !== undefined) {
     await screen.findAllByTestId(options.readyTestId, {}, { timeout: 10_000 });

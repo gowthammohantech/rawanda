@@ -1,0 +1,22 @@
+# HWM-10 regression (T-04): Sync now tapped five times → one run, exactly one screening per
+# idempotency key on the simulated server ("1 synced").
+appId: host.exp.Exponent
+---
+- runFlow: subflows/fresh-start.yaml
+- runFlow: subflows/sign-in.yaml
+- runFlow: subflows/set-offline.yaml
+- runFlow: subflows/record-screening.yaml
+- tapOn:
+    id: "tab-sync"
+- tapOn:
+    id: "open-network-simulation-from-sync"
+- tapOn: "Work offline (simulated)"
+- back
+- repeat:
+    times: 5
+    commands:
+      - tapOn:
+          id: "sync-now"
+          optional: true
+- assertVisible: "1 synced"
+- assertVisible: "Synced recently"

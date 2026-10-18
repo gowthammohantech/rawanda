@@ -594,7 +594,11 @@
     "worker": {
       "sync": {
         "manual_requested": "Gusaba guhuza n'intoki",
-        "duplicate_tap_coalesced": "Gukanda \"Huza ubu\" byongeye byahujwe n'ihuza riri gukorwa"
+        "duplicate_tap_coalesced": "Gukanda \"Huza ubu\" byongeye byahujwe n'ihuza riri gukorwa",
+        "clock_drift_detected": "Isaha y'igikoresho itandukanye n'iya seriveri"
+      },
+      "settings": {
+        "language_changed": "Ururimi rwa porogaramu rwahinduwe"
       }
     }
   }

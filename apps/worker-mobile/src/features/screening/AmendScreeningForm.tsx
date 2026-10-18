@@ -21,6 +21,7 @@ import {
 import { domainKey, useLanguage } from "@laif/i18n";
 import { RepositoryError } from "@laif/repositories";
 import {
+  announce,
   AppText,
   Button,
   colors,
@@ -151,7 +152,10 @@ export function AmendScreeningForm({
   const save = async () => {
     setAttempted(true);
     setFailure(null);
-    if (issues.length > 0) return;
+    if (issues.length > 0) {
+      announce(t("worker:a11y.errorCount", { count: issues.length }));
+      return;
+    }
     try {
       await amend(screening, toAmendCall(values), key);
       toast({ title: (tx) => tx("worker:review.amend.saved") });
