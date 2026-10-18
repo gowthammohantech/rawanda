@@ -19,8 +19,20 @@ export type FilterKey = AdminFilters & { periodFrom: string; periodTo: string };
 /** ADM-06: the queue's filters (global filters + the issue-type chip). */
 export type QualityQueueKey = FilterKey & { issueType: string | null };
 
+/** ADM-08: audit-explorer filters (URL `aaction`, `arole`, `aentity`, `afrom`, `ato`, `acorr`). */
+export type AuditFilterKey = {
+  action: string | null;
+  role: string | null;
+  entity: string | null;
+  from: string | null;
+  to: string | null;
+  correlationId: string | null;
+};
+
 export const adminKeys = {
   all: ["admin"] as const,
+  /** ADM-08: every AccessGrant (sign-in, session re-validation, Roles tab); not scoped. */
+  grants: () => ["admin", "accessGrants"] as const,
   scoped: ["admin", "scoped"] as const,
   scope: (scopeKey: ScopeKey) => [...adminKeys.scoped, scopeKey] as const,
   dataset: (scopeKey: ScopeKey, filters: FilterKey) =>
@@ -56,6 +68,43 @@ export const adminKeys = {
   /** ADM-06: one queue page (tab + page; the filters include the issue-type chip). */
   qualityIssues: (scopeKey: ScopeKey, filters: QualityQueueKey, tab: string, page: number) =>
     [...adminKeys.qualityIssuesAll(scopeKey), filters, tab, page] as const,
+  /**
+   * ADM-07: report preview (scope-wide selectors; threshold part of the key; the demo-clock
+   * minute only for templates whose figures depend on it — null otherwise).
+   */
+  reportPreview: (
+    scopeKey: ScopeKey,
+    template: string,
+    granularity: string,
+    filters: FilterKey,
+    threshold: number,
+    minute: string | null = null,
+  ) =>
+    [
+      ...adminKeys.scope(scopeKey),
+      "reportPreview",
+      template,
+      granularity,
+      filters,
+      threshold,
+      minute,
+    ] as const,
+  /** ADM-07: export history (ExportAudit rows visible to the persona). */
+  exports: (scopeKey: ScopeKey) => [...adminKeys.scope(scopeKey), "exports"] as const,
+  /** ADM-08: ruleset history + in-scope evaluated counts (threshold part of the key). */
+  rulesets: (scopeKey: ScopeKey, threshold: number = 0) =>
+    [...adminKeys.scope(scopeKey), "rulesets", threshold] as const,
+  /** ADM-08: every audit-explorer page of a scope (a governance write marks them stale). */
+  auditAll: (scopeKey: ScopeKey) => [...adminKeys.scope(scopeKey), "audit"] as const,
+  /** ADM-08: one audit-explorer page. */
+  audit: (scopeKey: ScopeKey, filters: AuditFilterKey, page: number) =>
+    [...adminKeys.auditAll(scopeKey), filters, page] as const,
+  /** ADM-08: access report aggregates (period window in the key). */
+  accessReport: (scopeKey: ScopeKey, filters: { from: string; to: string }) =>
+    [...adminKeys.scope(scopeKey), "accessReport", filters] as const,
+  /** ADM-08: version history of one grant (from its `admin.access_grant.*` audit events). */
+  grantHistory: (scopeKey: ScopeKey, grantId: string) =>
+    [...adminKeys.scope(scopeKey), "grantHistory", grantId] as const,
   /** ADM-03: programme follow-up actions in the grant scope. */
   programmeActions: (scopeKey: ScopeKey) =>
     [...adminKeys.scope(scopeKey), "programmeActions"] as const,

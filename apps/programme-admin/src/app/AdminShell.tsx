@@ -5,9 +5,9 @@
  * demo persona" / "End session") + RoleBanner ("Demo role … not authentication") +
  * OfflineBanner (demo Offline switch or `navigator.onLine === false`) + the routed page.
  */
-import { actorForPersona } from "@laif/auth-demo";
 import {
   AppShell,
+  Button,
   DemoToolsMenu,
   OfflineBanner,
   PersonaSwitcher,
@@ -20,7 +20,8 @@ import {
 import { useEffect, useMemo, useRef } from "react";
 import { NavLink, Outlet, useLocation, useNavigate } from "react-router";
 
-import { ADMIN_PERSONAS } from "../auth/personas.ts";
+import { ADMIN_PERSONAS, findAdminPersona } from "../auth/personas.ts";
+import { useReturnToPersona } from "../features/governance/mutations.ts";
 import { resolveScopeFromSearch } from "../auth/scope.ts";
 import { endAdminSession, loginPathFor } from "../auth/signIn.ts";
 import { useDemoTools } from "./demo-tools.tsx";
@@ -46,12 +47,14 @@ function ShellChrome() {
   const session = useAdminSession((s) => s.session);
   const grantChanges = useAdminSession((s) => s.grantChanges);
   const { faults, setFault, reset, loadScenario, scenarios } = useDemoTools();
+  const returnTo = findAdminPersona(session?.returnToPersonaId ?? null);
+  const returnToPersona = useReturnToPersona();
 
   const scopeSearch = scopeSearchOf(location.search);
   const sections = useMemo(
     () =>
       sidebarSections(
-        persona === null ? null : actorForPersona(persona, { grant }),
+        persona === null ? null : { persona, grant },
         scopeSearch,
         t("admin:shell.nav.locked"),
       ),
@@ -129,6 +132,32 @@ function ShellChrome() {
               roleLabel={personaOption(persona, t).roleLabel}
               {...(scopeLabel === undefined ? {} : { scopeLabel })}
             />
+          )}
+          {returnTo === null || persona === null ? null : (
+            <div
+              role="region"
+              aria-label={t("admin:governance.sim.returnBannerLabel")}
+              data-testid="simulation-return-banner"
+              className="border-risk-warning/25 bg-risk-warning-soft text-ink flex flex-wrap items-center justify-between gap-2 rounded-md border px-4 py-2 text-[13px]"
+            >
+              <span>
+                {t("admin:governance.sim.returnBanner", {
+                  persona: persona.displayName,
+                  original: returnTo.displayName,
+                })}
+              </span>
+              <Button
+                size="sm"
+                variant="secondary"
+                onClick={() =>
+                  returnToPersona(returnTo.id).catch(() =>
+                    toast({ title: t("demo:tools.actionFailed"), tone: "danger" }),
+                  )
+                }
+              >
+                {t("admin:governance.sim.returnTo", { persona: returnTo.displayName })}
+              </Button>
+            </div>
           )}
           {faults.offline || !online ? <OfflineBanner /> : null}
         </>

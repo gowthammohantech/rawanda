@@ -196,6 +196,8 @@ export const AuditFilterSchema = z
     ...pageShape,
     /** Action name or dot prefix (e.g. `review.` matches `review.decided`). */
     action: z.string().trim().max(100).optional(),
+    /** ext (CLN-10): any of these action names / dot prefixes (AND-ed with `action`). */
+    actions: z.array(z.string().trim().min(1).max(100)).max(500).optional(),
     actorId: PersonaIdSchema.optional(),
     actorRole: z.enum(ROLES).optional(),
     categories: z.array(z.enum(AUDIT_CATEGORIES)).optional(),
@@ -211,6 +213,76 @@ export const AuditFilterSchema = z
   })
   .superRefine(refineRange);
 export type AuditFilter = z.output<typeof AuditFilterSchema>;
+
+/** CLN-10 audit explorer: action families (the app maps each onto registered action names). */
+export const AUDIT_ACTION_FAMILIES = [
+  "all",
+  "auth",
+  "access",
+  "patient",
+  "screening",
+  "review",
+  "referral",
+  "followup",
+  "conflict",
+  "audit",
+  "demo",
+] as const;
+export type AuditActionFamily = (typeof AUDIT_ACTION_FAMILIES)[number];
+
+/** CLN-10 quick-filter chips. */
+export const AUDIT_QUICK_FILTERS = [
+  "decisions",
+  "dismissals",
+  "referrals",
+  "tasks",
+  "sensitiveReads",
+  "deniedAccess",
+  "conflicts",
+  "demoControls",
+] as const;
+export type AuditQuickFilter = (typeof AUDIT_QUICK_FILTERS)[number];
+
+/** CLN-10: rows per audit explorer page. */
+export const AUDIT_EXPLORER_PAGE_SIZE = 50;
+
+const optionalText = (max: number) =>
+  z.preprocess(
+    (value) => (typeof value === "string" && value.trim() === "" ? undefined : value),
+    z
+      .string()
+      .trim()
+      .max(max, { error: vMsg("tooLong", { max }) })
+      .optional(),
+  );
+
+/**
+ * CLN-10 audit explorer URL / form state (`?family=&chip=&actor=&role=&entityType=&entityId=
+ * &patient=&correlation=&from=&to=&page=`). `from` / `to` are Africa/Kigali calendar days; the app
+ * converts them to UTC instants (`@laif/i18n` `kigaliDayStartUtc` / `kigaliDayEndUtc`) and maps the
+ * rest onto `AuditFilterSchema` (scope is always enforced by the repository). `patient` is a
+ * synthetic identifier (`DEMO-P-0001`) or a patient id. `from > to` → `to: dateRangeOrder`.
+ */
+export const AuditExplorerFilterSchema = z
+  .object({
+    actionFamily: z.enum(AUDIT_ACTION_FAMILIES).default("all"),
+    chip: z.enum(AUDIT_QUICK_FILTERS).optional(),
+    actorId: optionalText(100),
+    role: z.preprocess((value) => (value === "" ? undefined : value), z.enum(ROLES).optional()),
+    entityType: z.preprocess(
+      (value) => (value === "" ? undefined : value),
+      z.enum(ENTITY_TYPES).optional(),
+    ),
+    entityId: optionalText(100),
+    patient: optionalText(100),
+    correlationId: optionalText(100),
+    from: z.preprocess((value) => (value === "" ? undefined : value), IsoDate.optional()),
+    to: z.preprocess((value) => (value === "" ? undefined : value), IsoDate.optional()),
+    page: z.coerce.number().int().min(1).default(1),
+  })
+  .superRefine(refineRange);
+export type AuditExplorerFilterInput = z.input<typeof AuditExplorerFilterSchema>;
+export type AuditExplorerFilter = z.output<typeof AuditExplorerFilterSchema>;
 
 /** Aggregate metrics filter: Kigali calendar days (`YYYY-MM-DD`), scope ids (FND-06). */
 export const MetricsFilterSchema = z

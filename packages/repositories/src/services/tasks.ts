@@ -13,9 +13,13 @@ import {
 import {
   asId,
   careTaskMachine,
+  CORRECTION_RESOLUTION_STATUS,
   type CareTask,
   type CareTaskId,
   type CareTaskStatus,
+  type CorrectionRequestPayload,
+  type CorrectionRequestStatus,
+  type CorrectionResolutionKey,
   type Patient,
 } from "@laif/domain";
 import { roleHasPermission } from "@laif/auth-demo";
@@ -47,6 +51,28 @@ async function patientOf(ctx: TxContext, id: string | undefined): Promise<Patien
     });
   }
   return patient;
+}
+
+/**
+ * CLN-09: keeps the citizen-visible state of a routed correction request (`payload.requestStatus`,
+ * set by CTZ-07) in step with the task: start → `in_review`, complete → the status implied by the
+ * staff `resolutionKey` (vocabulary) or `resolved_no_change`. Other kinds / unrouted requests: no
+ * payload change.
+ */
+function correctionPayload(
+  task: CareTask,
+  requestStatus: CorrectionRequestStatus,
+  resolutionKey?: CorrectionResolutionKey,
+): { payload?: CorrectionRequestPayload } {
+  if (task.kind !== "correction_request") return {};
+  if (task.payload.requestStatus === undefined && resolutionKey === undefined) return {};
+  return {
+    payload: {
+      ...task.payload,
+      requestStatus,
+      ...(resolutionKey === undefined ? {} : { resolutionKey }),
+    },
+  };
 }
 
 export function createTaskService(engine: Engine) {
@@ -163,11 +189,32 @@ export function createTaskService(engine: Engine) {
           let justification: string | null = null;
           switch (input.action) {
             case "start":
-              next = ctx.touch(task, { status: move("in_progress") });
+              next = ctx.touch(task, {
+                status: move("in_progress"),
+                ...correctionPayload(task, "in_review"),
+              });
               break;
-            case "complete":
-              next = ctx.touch(task, { status: move("done"), completedAt: ctx.nowIso });
+            case "complete": {
+              if (input.resolutionKey !== undefined && task.kind !== "correction_request") {
+                throw new RepositoryError("VALIDATION_ERROR", {
+                  fieldErrors: { resolutionKey: { key: "invalid", params: {} } },
+                });
+              }
+              const resolved =
+                input.resolutionKey === undefined
+                  ? correctionPayload(task, "resolved_no_change")
+                  : correctionPayload(
+                      task,
+                      CORRECTION_RESOLUTION_STATUS[input.resolutionKey],
+                      input.resolutionKey,
+                    );
+              next = ctx.touch(task, {
+                status: move("done"),
+                completedAt: ctx.nowIso,
+                ...resolved,
+              });
               break;
+            }
             case "cancel":
               next = ctx.touch(task, {
                 status: move("cancelled_with_reason"),
@@ -190,7 +237,14 @@ export function createTaskService(engine: Engine) {
             entityId: task.id,
             before: task,
             after: next,
-            changeSummary: { action: input.action, from: task.status, to: next.status },
+            changeSummary: {
+              action: input.action,
+              from: task.status,
+              to: next.status,
+              ...(input.action === "complete" && input.resolutionKey !== undefined
+                ? { resolutionKey: input.resolutionKey }
+                : {}),
+            },
             justification,
           });
           return {

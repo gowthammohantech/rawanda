@@ -3,7 +3,8 @@
  * the (fault-wrapped) repository — pending reviews and the WF-02 follow-up version — and
  * "Simulate worker updating follow-up (WF-02)": `repository.demo.simulateExternalUpdate()` saves a
  * new version of SEED_ANCHORS.WF02_FOLLOWUP_CONFLICT as `persona-chw-alpha1-a (simulated)`, which
- * appends `demo.concurrent_update_simulated` attributed to that simulated actor. The next save
+ * appends `demo.concurrent_update_simulated` attributed to that simulated actor (CLN-09: status
+ * `contacted`, a worker note and a later due date). The next save
  * of the follow-up from the portal (CLN-09) then gets `CONFLICT` with `latest`.
  */
 import { PERSONA_IDS, SEED_ANCHORS } from "@laif/mock-data";
@@ -23,9 +24,12 @@ import { QueryErrorState } from "../../components/QueryErrorState.tsx";
 import { clinicalKeys } from "../../data/queryKeys.ts";
 import { useRepository } from "../../data/useRepository.ts";
 import { useSession } from "../../session/useSession.ts";
+import { demoNowIso } from "../patients/hooks.ts";
 
 const WF02 = SEED_ANCHORS.WF02_FOLLOWUP_CONFLICT;
 const DAY_MS = 24 * 60 * 60 * 1000;
+/** Synthetic record content written by the simulated worker (data, not UI copy). */
+export const SIMULATED_NOTE = "Visited the household; patient will attend on Friday (simulated).";
 
 export function ScenarioCard() {
   const t = useTx();
@@ -53,10 +57,20 @@ export function ScenarioCard() {
     if (current === null || current === undefined) return;
     setBusy(true);
     try {
+      const nowIso = await demoNowIso(repo);
+      // CLN-09 task 5: the simulated worker records the visit (status `contacted`), adds a note
+      // and moves the due date — a later portal save on the old version must then conflict.
       const result = await repo.demo.simulateExternalUpdate(
         "followUp",
         WF02.followUpId,
-        { dueAt: new Date(Date.parse(current.dueAt) + DAY_MS).toISOString() },
+        {
+          status: "contacted",
+          dueAt: new Date(Date.parse(current.dueAt) + DAY_MS).toISOString(),
+          notes: [
+            ...current.notes,
+            { at: nowIso, by: PERSONA_IDS.chwAlpha1A, text: SIMULATED_NOTE },
+          ],
+        },
         PERSONA_IDS.chwAlpha1A,
       );
       await queryClient.invalidateQueries({ queryKey: clinicalKeys.all(fac) });

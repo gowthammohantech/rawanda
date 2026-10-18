@@ -231,7 +231,10 @@ describe("sync queue — WF-02 end to end", () => {
     const [op] = await ops(h);
     await h.repo.sync.resolveConflict(op!.id, "keep_latest", h.key());
     const [superseded, ...rest] = await ops(h);
-    expect(rest).toEqual([]);
+    // HWM-09: no new op for the entity — only the resolution notice for the server.
+    expect(rest.map((o) => [o.entityType, o.entityId, o.opType])).toEqual([
+      ["sync_operation", op!.id, "command"],
+    ]);
     expect(superseded).toMatchObject({ status: "superseded", payload: op!.payload });
     expect(await h.store.get("followUps", op!.entityId)).toEqual(op!.serverSnapshot);
     await expect(h.repo.sync.resolveConflict(op!.id, "keep_latest", h.key())).rejects.toMatchObject(

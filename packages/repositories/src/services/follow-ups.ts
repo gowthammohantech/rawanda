@@ -3,6 +3,8 @@
  * machine, worker completion → clinician confirmation (WF-01 step 7), derived overdue, counts.
  * Note: `followUpMachine.terminal` is `[]` (completed → contacted return edge) — "closed" means
  * `status === 'completed'`, never "terminal".
+ * CLN-09 adds `getFollowUp` (scoped single read for the task drawer; out of scope → FORBIDDEN +
+ * `access.denied`).
  */
 import {
   FollowUpFilterSchema,
@@ -125,6 +127,17 @@ async function scopedFollowUps(ctx: TxContext, f: FollowUpFilterInput | undefine
 
 export function createFollowUpService(engine: Engine) {
   return {
+    getFollowUp(id: string): Promise<FollowUp | null> {
+      return engine.read(async (ctx) => {
+        const target = { entityType: "follow_up", entityId: id } as const;
+        const permission = readPermission(ctx, READ_PERMISSIONS.followUp, target);
+        const followUp = await ctx.find<FollowUp>("follow_up", id);
+        if (!followUp) return null;
+        ctx.authorize(permission, followUpResource(followUp), target);
+        return followUp;
+      });
+    },
+
     listFollowUps(f?: FollowUpFilterInput): Promise<Page<FollowUp>> {
       return engine.read(async (ctx) => {
         const { filter, rows } = await scopedFollowUps(ctx, f);

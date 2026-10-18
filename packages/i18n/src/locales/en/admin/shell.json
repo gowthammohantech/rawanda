@@ -20,5 +20,5 @@
     "settings": "Threshold, fault and session settings arrive in ADM-09."
   },
   "loading": "Checking the demo data on this device…",
-  "grantChanged": "Your demo access grant changed. The new scope applies from this page on."
+  "grantChanged": "Your access changed — view refreshed."
 }

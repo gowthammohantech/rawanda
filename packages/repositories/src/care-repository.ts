@@ -18,7 +18,9 @@ import type { ProgrammeMetrics } from "@laif/analytics";
 import type { ActorContext } from "@laif/auth-demo";
 import type {
   AccessGrant,
+  RulesetHistoryEntry,
   DataQualityIssue,
+  ExportAudit,
   ProgrammeAction,
   AuditFilterSchema,
   CareTaskInputSchema,
@@ -88,6 +90,8 @@ import type {
   TriageQualityIssueCall,
   UpsertDetectedIssuesResult,
 } from "./services/quality-issues.ts";
+import type { ExportAuditFilterInput } from "./services/audit.ts";
+import type { AccessGrantUpdateCall } from "./services/access-grants.ts";
 import type { StoreAdapter } from "./store/store-adapter.ts";
 import type { FaultConfig, FaultConfigPatch, FaultInjector } from "./transport/faults.ts";
 
@@ -141,7 +145,20 @@ export type ReviewDetail = {
 
 export type ReviewCounts = Record<"pending" | "urgent" | "overdue" | "assigned" | "all", number>;
 
-export type SyncTrigger = "manual" | "manual_dev" | "auto" | "startup" | "online" | "interval";
+/**
+ * What started a `sync.process()` run. HWM-09 adds `foreground` (app became active),
+ * `after_write` (a local write was committed) and `after_resolution` (a conflict was resolved).
+ */
+export type SyncTrigger =
+  | "manual"
+  | "manual_dev"
+  | "auto"
+  | "startup"
+  | "online"
+  | "interval"
+  | "foreground"
+  | "after_write"
+  | "after_resolution";
 
 /** One `sync.process()` run (persisted in `syncRuns`). */
 export type SyncRun = {
@@ -190,6 +207,13 @@ export interface SyncApi {
   process(options?: { trigger?: SyncTrigger }): Promise<SyncRun>;
   /** `retryable_failure` (or `blocked_revoked` after restore) → `queued`, schedule cleared. */
   retryNow(opId: string): Promise<SyncOperation>;
+  /**
+   * HWM-09: the device's own sync audit trail of one op (or several), oldest first — every
+   * local audit event whose `changeSummary` names the op (`opId` / `originalOpId` / `newOpId` /
+   * `noticeOpId`). Only ids of this device's own queue and only `sync.*` / `conflict.*` events;
+   * `justification` (free text) is always `null`. No permission needed (sync bookkeeping).
+   */
+  history(opIds: string | readonly string[]): Promise<AuditEvent[]>;
   resolveConflict(
     opId: string,
     resolution: ConflictResolution,
@@ -299,6 +323,8 @@ export interface CareRepository {
   /** CLN-08: destination / due date of an open referral; `changeReason` required. */
   editReferral(i: ReferralEditCall, key: string): Promise<WriteResult<Referral>>;
   listFollowUps(f?: FollowUpFilterInput): Promise<Page<FollowUp>>;
+  /** CLN-09: scoped single read (task drawer `?id=`); out of scope → FORBIDDEN (audited). */
+  getFollowUp(id: string): Promise<FollowUp | null>;
   createFollowUp(i: FollowUpCall, key: string): Promise<WriteResult<FollowUp>>;
   updateFollowUp(i: FollowUpUpdateCall, key: string): Promise<WriteResult<FollowUp>>;
   listTasks(f?: TaskFilterInput): Promise<Page<CareTask>>;
@@ -326,7 +352,13 @@ export interface CareRepository {
   listTimeEntries(f?: MetricsFilterInput): Promise<TimeEntry[]>;
   /** ADM-02: latest write to a metric source (stale-data chip); `metrics.read`. */
   getMetricsFreshness(): Promise<{ lastWriteAt: string | null }>;
+  /**
+   * Aggregate / audit export record. ADM-07: also stores an ExportAudit (`generated`, with the
+   * CSV bytes; or `denied`, written after the rollback with `export.denied`); idempotent on `key`.
+   */
   recordExport(i: ExportRecordCall, key: string): Promise<WriteResult<AuditEvent>>;
+  /** ADM-07: export history — own attempts, plus in-scope exports for governance readers. */
+  listExportAudits(f?: ExportAuditFilterInput): Promise<ExportAudit[]>;
   listAuditEvents(f?: AuditFilterInput): Promise<Page<AuditEvent>>;
   /** UI-originated access / session / demo events only (registry `client: true`). */
   recordAuditEvent(i: ClientAuditInput): Promise<AuditEvent>;
@@ -336,6 +368,15 @@ export interface CareRepository {
    * patient data. ADM-08 adds the grant edits.
    */
   listAccessGrants(): Promise<AccessGrant[]>;
+  /**
+   * ADM-08: edit / revoke a grant — `roles.configure`, idempotent on `key`, `expectedVersion`
+   * in the input (stale → `CONFLICT` with `latest`), lockout rule `LAST_ADMIN`, scope ⊆ known
+   * districts / facilities. Audited `admin.access_grant.changed` / `.revoked` (before / after,
+   * justification, version n → n+1). Grants are never deleted.
+   */
+  updateAccessGrant(i: AccessGrantUpdateCall, key: string): Promise<WriteResult<AccessGrant>>;
+  /** ADM-08: the demo ruleset history (newest first; no thresholds) — `metrics.read`. */
+  listRulesets(): Promise<RulesetHistoryEntry[]>;
   /**
    * ADM-03: non-clinical programme follow-up actions for a facility manager. Create needs
    * `programme_action.write` in the facility's scope and is idempotent on `key`; update carries

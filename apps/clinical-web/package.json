@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "5.9.1",
+    "@laif/analytics": "workspace:*",
     "@laif/auth-demo": "workspace:*",
     "@laif/contracts": "workspace:*",
     "@laif/domain": "workspace:*",

@@ -1,7 +1,7 @@
 /**
  * Demo scope model (FND-06 task 3). Demo-only — not security.
  */
-import type { DemoPersona, DistrictId, FacilityId, PatientId, PersonaId } from "@laif/domain";
+import type { DemoPersona, DistrictId, FacilityId, PatientId, PersonaId, Role } from "@laif/domain";
 import { FACILITY_TO_DISTRICT } from "@laif/mock-data";
 
 export type Scope =
@@ -14,14 +14,31 @@ export type Scope =
 export type ScopeKind = Scope["kind"];
 
 /**
- * Structural view of the ADM-01 `AccessGrant` (`AccessGrantSchema` lands in @laif/contracts in
- * ADM-01). Only the fields scope derivation needs.
+ * Structural view of the ADM-01 `AccessGrant` (`AccessGrantSchema` in @laif/contracts). Only the
+ * fields scope derivation needs; ADM-08 adds the optional `role` (a grant edit can change the
+ * role: it wins over the persona's own role) and the validity window (`validTo` in the past =
+ * `GRANT_EXPIRED`, see `evaluateAccess`).
  */
 export type AccessGrantLike = {
   personaId: PersonaId;
   districtIds: readonly DistrictId[];
   facilityIds: readonly FacilityId[] | "ALL_IN_DISTRICTS";
+  role?: Role;
+  /** UTC ISO. */
+  validFrom?: string;
+  /** UTC ISO; the grant no longer applies at or after this instant. */
+  validTo?: string;
 };
+
+/** True when the grant's `validTo` is at or before `now` (no `validTo` = open-ended). */
+export function isGrantExpired(
+  grant: Pick<AccessGrantLike, "validTo"> | null | undefined,
+  now: Date | string,
+): boolean {
+  if (!grant || grant.validTo === undefined) return false;
+  const nowMs = typeof now === "string" ? Date.parse(now) : now.getTime();
+  return Date.parse(grant.validTo) <= nowMs;
+}
 
 export type ScopePersona = Pick<
   DemoPersona,

@@ -5,7 +5,7 @@
  */
 import { roleHasPermission } from "@laif/auth-demo";
 import type { AccessGrant } from "@laif/contracts";
-import { asId, type CorrelationId, type DistrictId } from "@laif/domain";
+import { asId, type CorrelationId, type DistrictId, type PersonaId } from "@laif/domain";
 
 import { BASE_PATH, LOGIN_PATH, START_PATH } from "../app/config.ts";
 import type { AppServices } from "../app/services.ts";
@@ -75,6 +75,8 @@ export type StartSessionInput = {
   persona: AdminPersona;
   grant: AccessGrant;
   reportingDistrictId: DistrictId | null;
+  /** ADM-08 access simulator "Try it": the persona to offer "Return to …" for. */
+  returnToPersonaId?: PersonaId | null;
 };
 
 /** Signs in and records `session.started`; if the audit write fails the session is undone. */
@@ -113,4 +115,29 @@ export async function endAdminSession(
   }
   services.session.signOut();
   services.queryClient.removeQueries({ queryKey: ["admin", "scoped"] });
+}
+
+/**
+ * Demo persona switch without passing through "signed out" (ADM-08 access simulator "Try it" and
+ * "Return to …"): records `session.ended` for the current session (best effort), then starts
+ * the new one (`session.started`). Scoped caches are dropped so no figures of the previous
+ * persona survive. DEMO ROLE SWITCH — NOT AUTHENTICATION.
+ */
+export async function switchAdminSession(
+  services: Pick<AppServices, "session" | "repo" | "clock" | "ids" | "queryClient">,
+  input: StartSessionInput,
+): Promise<AdminSession> {
+  const { session } = services.session.getState();
+  if (session !== null) {
+    try {
+      await emitAdminAudit(services.repo, session, {
+        action: "session.ended",
+        changeSummary: { switchedTo: input.persona.id },
+      });
+    } catch {
+      // The switch still happens; the failed audit write is retried by nobody (demo).
+    }
+  }
+  services.queryClient.removeQueries({ queryKey: ["admin", "scoped"] });
+  return startAdminSession(services, input);
 }

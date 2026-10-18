@@ -172,4 +172,92 @@ describe("care tasks + correction requests", () => {
     );
     expect(clinical.data.facilityId).toBe(FACILITY_IDS.alpha1);
   });
+
+  it("CLN-09: resolving a routed correction request sets requestStatus + vocabulary resolutionKey", async () => {
+    const h = await createHarness({ personaId: PERSONA_IDS.clinAlpha1 });
+    const patientId = SEED_ANCHORS.WF01_FLAGGED_REVIEW.patientId;
+    const created = await h.repo.createTask(
+      {
+        kind: "correction_request",
+        patientId,
+        payload: {
+          targetType: "patient",
+          targetId: patientId,
+          description: "My fasting status was not recorded.",
+          suggestedValue: "Fasting",
+          requestStatus: "submitted",
+          assignedRole: "clinician",
+        },
+      },
+      h.key(),
+    );
+    const started = await h.repo.updateTask(
+      { taskId: created.data.id, expectedVersion: created.entityVersion, action: "start" },
+      h.key(),
+    );
+    expect(started.data.payload).toMatchObject({ requestStatus: "in_review" });
+    // Free text is never accepted as an outcome key.
+    await expect(
+      h.repo.updateTask(
+        {
+          taskId: created.data.id,
+          expectedVersion: started.entityVersion,
+          action: "complete",
+          resolutionKey: "Checked, all fine" as never,
+        },
+        h.key(),
+      ),
+    ).rejects.toMatchObject({ code: "VALIDATION_ERROR" });
+    const done = await h.repo.updateTask(
+      {
+        taskId: created.data.id,
+        expectedVersion: started.entityVersion,
+        action: "complete",
+        resolutionKey: "glucose_context_corrected",
+      },
+      h.key(),
+    );
+    expect(done.data).toMatchObject({
+      status: "done",
+      payload: {
+        requestStatus: "resolved_amended",
+        resolutionKey: "glucose_context_corrected",
+        suggestedValue: "Fasting",
+      },
+    });
+    const events = (
+      await h.store.getAll<{ action: string; entityId: string; changeSummary: unknown }>(
+        "auditEvents",
+      )
+    ).filter((e) => e.action === "task.updated" && e.entityId === created.data.id);
+    expect(events.at(-1)?.changeSummary).toMatchObject({
+      action: "complete",
+      resolutionKey: "glucose_context_corrected",
+    });
+
+    // A resolution key on another task kind is rejected.
+    const callback = await h.repo.createTask(
+      {
+        kind: "callback_request",
+        patientId,
+        payload: { topic: "appointment_question", window: "morning", note: "" },
+      },
+      h.key(),
+    );
+    const cbStarted = await h.repo.updateTask(
+      { taskId: callback.data.id, expectedVersion: 1, action: "start" },
+      h.key(),
+    );
+    await expect(
+      h.repo.updateTask(
+        {
+          taskId: callback.data.id,
+          expectedVersion: cbStarted.entityVersion,
+          action: "complete",
+          resolutionKey: "reading_time_confirmed",
+        },
+        h.key(),
+      ),
+    ).rejects.toMatchObject({ code: "VALIDATION_ERROR" });
+  });
 });

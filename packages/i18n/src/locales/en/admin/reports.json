@@ -1,0 +1,185 @@
+{
+  "eyebrow": "Reports & exports",
+  "title": "Reports",
+  "subtitle": "Aggregate reports for {{from}} – {{to}} · {{scope}}",
+  "ack": "I confirm this export contains aggregate figures only",
+  "denied": {
+    "role": "Your role cannot export"
+  },
+  "recordLevelUnavailable": "Not available: record-level export requires data-governance approval",
+  "recordLevelNote": "Only aggregate figures can be exported. Patient-level export does not exist in this prototype.",
+  "done": "Export generated · {{fileName}}",
+  "downloadAgain": "Download again",
+  "export": "Export CSV",
+  "retry": "Retry export",
+  "newReport": "New report",
+  "error": {
+    "notGenerated": "Export not generated — nothing was downloaded.",
+    "code": "Error code: {{code}}",
+    "forbidden": "Export refused: your role or scope does not allow this export. The attempt was recorded."
+  },
+  "toast": {
+    "generated": "Export generated · {{fileName}}",
+    "forbidden": "Export not allowed (FORBIDDEN) — recorded in the audit log"
+  },
+  "granularity": {
+    "label": "Granularity",
+    "hint": "Period and scope come from the filter bar above.",
+    "unavailable": "{{label}} (not available for this scope)",
+    "scope_total": "Scope total",
+    "district": "By district",
+    "facility": "By facility",
+    "week": "By week"
+  },
+  "history": {
+    "title": "Export history",
+    "subtitle": "Every export attempt in your scope, including refused ones.",
+    "caption": "Export history",
+    "empty": "No export has been generated in this scope yet.",
+    "emptyTitle": "No exports yet",
+    "error": "The export history could not be loaded.",
+    "period": "{{from}} – {{to}}",
+    "col": {
+      "time": "Time",
+      "persona": "Persona / role",
+      "template": "Template",
+      "scope": "Scope",
+      "period": "Period",
+      "reason": "Reason",
+      "rows": "Rows",
+      "suppressed": "Suppressed cells",
+      "checksum": "Checksum",
+      "status": "Status"
+    },
+    "status": {
+      "generated": "GENERATED",
+      "denied": "DENIED"
+    }
+  },
+  "offline": {
+    "title": "You are offline",
+    "body": "Reports are built on this device, so exports still work. The demo data is local."
+  },
+  "previewOnly": {
+    "title": "Preview only",
+    "body": "Your role can preview reports but cannot export them."
+  },
+  "preview": {
+    "allScope": "Whole scope",
+    "caption": "Report preview (the rows of the CSV)",
+    "col": {
+      "node": "Scope / week",
+      "metric": "Metric",
+      "value": "Value",
+      "numerator": "Numerator",
+      "denominator": "Denominator"
+    },
+    "empty": "No data for this period. You can still export a file with the metadata.",
+    "emptyTitle": "No data for this period",
+    "error": "The preview could not be built.",
+    "legend": "<{{k}} = fewer than {{k}}, hidden to protect privacy (blank in the CSV, suppressed=true)",
+    "pct": "{{pct}}%",
+    "rows": "Rows: {{n}}",
+    "suppressed": "Suppressed cells: {{n}}",
+    "week": "Week of {{date}}"
+  },
+  "reason": {
+    "label": "Reason for export",
+    "textLabel": "Details",
+    "textHint": "Required for \"Other\": {{min}} to {{max}} characters.",
+    "code": {
+      "programme_review": "Programme review",
+      "district_meeting": "District meeting",
+      "data_quality_followup": "Data-quality follow-up",
+      "evaluation_reporting": "Evaluation reporting",
+      "other": "Other"
+    }
+  },
+  "validation": {
+    "reasonCode": "Choose a reason for the export",
+    "reasonText": "Describe the reason in {{min}} to {{max}} characters",
+    "ack": "Confirm that the export contains aggregate figures only"
+  },
+  "stepper": {
+    "label": "Report steps",
+    "heading": "Step {{n}} of {{total}}: {{step}}",
+    "template": "Template",
+    "preview": "Preview",
+    "reason": "Reason",
+    "export": "Export",
+    "back": "Back",
+    "next": "Next"
+  },
+  "summary": {
+    "template": "Template",
+    "granularity": "Granularity",
+    "period": "Period",
+    "scope": "Scope",
+    "reason": "Reason"
+  },
+  "template": {
+    "legend": "Report template",
+    "programme_summary": {
+      "name": "Programme summary",
+      "description": "Screened, flagged, reviewed, dismissed, referred, completed; median days to review"
+    },
+    "funnel_by_facility": {
+      "name": "Pathway funnel",
+      "description": "The five funnel stages and the dismissed branch"
+    },
+    "timeliness": {
+      "name": "Timeliness",
+      "description": "Median and 90th percentile days to review, overdue referrals and follow-ups, pending-review age"
+    },
+    "quality": {
+      "name": "Safety & quality",
+      "description": "Missing fields, identity mismatch signals, overturned / missed-flag proxies, duplicates prevented, fairness by sex and age band"
+    },
+    "workload_facility": {
+      "name": "Workload (facility level)",
+      "description": "Tasks assigned and completed, minutes per patient-day — facility level only, never per worker"
+    },
+    "record_level": {
+      "name": "De-identified record-level CSV"
+    }
+  },
+  "watermark": {
+    "title": "What the file contains",
+    "body": "The CSV starts with the DEMONSTRATION watermark and the scope, period, threshold (k = {{k}}) and reason lines. Suppressed cells are blank with suppressed=true. It ends with a row count and a SHA-256 checksum."
+  },
+  "metric": {
+    "screened": "Screenings recorded",
+    "flagged": "Flagged for review",
+    "reviewed": "Clinically reviewed",
+    "dismissed": "Dismissed (no extra visit)",
+    "referred": "Referred / follow-up planned",
+    "follow_up_completed": "Follow-up completed (evidenced)",
+    "median_days_to_review": "Median days to review",
+    "p90_days_to_review": "90th percentile days to review",
+    "reviews_completed": "Reviews completed",
+    "overdue_referrals": "Overdue referrals",
+    "overdue_follow_ups": "Overdue follow-ups",
+    "weekly_median_days_to_review": "Median days to review (week)",
+    "weekly_reviews_completed": "Reviews completed (week)",
+    "weekly_overdue_referrals": "Overdue referrals at week end",
+    "weekly_overdue_follow_ups": "Overdue follow-ups at week end",
+    "screenings_missing_fields": "Screenings with missing required fields",
+    "identity_mismatches": "Possible identity mismatches",
+    "duplicate_identifiers": "Duplicate identifiers",
+    "orphan_screenings": "Screenings without a patient record",
+    "overturned_flag_rate": "Overturned flags (PROXY)",
+    "missed_flag_proxy": "Manual escalations (missed-flag PROXY)",
+    "duplicate_submissions_prevented": "Duplicate submissions prevented",
+    "tasks_assigned": "Follow-up tasks assigned",
+    "tasks_completed": "Tasks completed",
+    "task_completion_rate": "Task completion rate",
+    "tasks_unable_to_reach": "Unable to reach",
+    "tasks_overdue": "Tasks overdue",
+    "patient_days": "Patient-days",
+    "minutes_per_patient_day": "Staff minutes per patient-day (PROXY)",
+    "missing_field": "Missing: {{field}}",
+    "pending_reviews": "Reviews pending: {{bucket}}",
+    "funnel": "Funnel: {{stage}}",
+    "fairness": "{{group}} · {{column}}"
+  }
+}

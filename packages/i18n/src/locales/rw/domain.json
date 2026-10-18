@@ -269,7 +269,9 @@
     "sync_operation": "Igikorwa cyo guhuza",
     "device_session": "Igikoresho cyinjiwemo",
     "programme_action": "Igikorwa cya porogaramu",
-    "data_quality_issue": "Ikibazo cy'ubuziranenge bw'amakuru"
+    "data_quality_issue": "Ikibazo cy'ubuziranenge bw'amakuru",
+    "export_audit": "Inyandiko y'iyohereza",
+    "access_grant": "Uburenganzira bwo kugera ku makuru"
   },
   "pathwayStage": {
     "DRAFT_SCREENING": "Ipimwa ritararangira",
@@ -423,7 +425,10 @@
       "duplicate_suppressed": "Kohereza kabiri byakumiriwe",
       "op_acknowledged": "Impinduka yahujwe",
       "op_rejected": "Impinduka ntiyemewe",
-      "conflict_resolved": "Ukuvuguruzanya mu guhuza kwakemuwe"
+      "conflict_resolved": "Ukuvuguruzanya mu guhuza kwakemuwe",
+      "run_started": "Guhuza byatangiye",
+      "run_finished": "Guhuza byarangiye",
+      "retry_scheduled": "Kongera kugerageza guhuza byateganyijwe"
     },
     "task": {
       "created": "Igikorwa cyashyizweho",
@@ -569,11 +574,27 @@
       "quality_issue": {
         "detected": "Ikibazo cy'ubuziranenge bw'amakuru cyagaragaye (sisitemu)",
         "triaged": "Ikibazo cy'ubuziranenge bw'amakuru cyasuzumwe"
+      },
+      "audit": {
+        "viewed": "Igitabo cy'igenzura cyarebwe"
+      },
+      "access_simulation": {
+        "run": "Igerageza ry'uburenganzira ryakozwe"
+      },
+      "access_grant": {
+        "changed": "Uburenganzira bwahinduwe",
+        "revoked": "Uburenganzira bwakuweho"
       }
     },
     "clinical": {
       "referral": {
         "updated": "Aho yoherejwe cyangwa itariki ntarengwa byahinduwe"
+      }
+    },
+    "worker": {
+      "sync": {
+        "manual_requested": "Gusaba guhuza n'intoki",
+        "duplicate_tap_coalesced": "Gukanda \"Huza ubu\" byongeye byahujwe n'ihuza riri gukorwa"
       }
     }
   }

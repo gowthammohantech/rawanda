@@ -73,6 +73,20 @@ describe("admin session store", () => {
     expect(store.getState().session).toBeNull();
   });
 
+  it("re-validation ends the session once the grant's validTo has passed (ADM-08 revoke)", () => {
+    const store = createAdminSessionStore(createMemoryStorage());
+    signInAnalyst(store);
+    const revoked = {
+      ...analystGrant,
+      version: 2,
+      validTo: "2026-10-14T07:00:00.000Z",
+    } as typeof analystGrant;
+    expect(store.revalidate([revoked], "2026-10-14T06:30:00.000Z")).toBe("updated");
+    expect(store.getState().session).not.toBeNull();
+    expect(store.revalidate([revoked], "2026-10-14T07:00:00.000Z")).toBe("revoked");
+    expect(store.getState().session).toBeNull();
+  });
+
   it("the once-registry claims a key once", () => {
     const store = createAdminSessionStore(createMemoryStorage());
     expect(store.once.claim("k")).toBe(true);

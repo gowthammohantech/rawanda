@@ -12,7 +12,7 @@
 | Depends on | HWM-06, HWM-08 |
 | Trace | PRD HW-05, HW-08, §10 edge cases · FRD HW-05, HW-08, §5 (`SYNC_PENDING`, `SYNC_CONFLICT`), §6 · BRD BR-09 · Tech spec §2.2 "Sync center", §5.2 SyncOperation, WF-02 (all steps), §8 Worker rows · FRD T-04, T-05, T-09 |
 | Size | L |
-| Status | Planned |
+| Status | Done |
 
 ## 2. Goal
 

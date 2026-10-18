@@ -1,0 +1,88 @@
+# HWM-09 device gate (not part of `pnpm verify`): `pnpm --filter @laif/worker-mobile test:maestro`
+# with the app open in Expo Go / a dev build, starting signed out, all simulation toggles off.
+# Network simulation → "Simulate a clinician update" on a task → record an outcome on it offline →
+# online → Sync tab → Sync now (tapped twice) → "Needs your decision" → compare table → Re-apply →
+# confirm → synced; the op detail shows the conflict and the resolution in its history.
+appId: host.exp.Exponent
+---
+- launchApp
+- tapOn:
+    id: "persona-card-persona-chw-alpha1-a"
+- tapOn:
+    id: "persona-continue"
+- tapOn:
+    id: "scope-continue"
+- assertVisible:
+    id: "today-screen"
+# Offline, then a clinician update on the server for the overdue task.
+- tapOn:
+    id: "avatar-button"
+- tapOn:
+    id: "open-network-simulation"
+- tapOn: "Work offline (simulated)"
+- tapOn:
+    id: "netsim-follow-up"
+- tapOn:
+    text: ".*due.*"
+    index: 0
+- tapOn:
+    id: "netsim-clinician-update"
+- assertVisible: "A clinician update was simulated on the sync server."
+- back
+- back
+# Record a contact attempt on the same task (the first overdue one).
+- tapOn:
+    id: "tab-tasks"
+- tapOn:
+    text: "Overdue"
+    index: 0
+- tapOn: "Overdue · 5 days"
+- tapOn:
+    id: "record-attempt"
+- tapOn: "Home visit"
+- tapOn: "Reached"
+- tapOn:
+    id: "attempt-save"
+- assertVisible: "Saved on this device"
+# Online → Sync tab → Sync now (twice).
+- tapOn:
+    id: "tab-sync"
+- tapOn:
+    id: "open-network-simulation-from-sync"
+- tapOn: "Work offline (simulated)"
+- assertVisible: "Online"
+- back
+- tapOn:
+    id: "sync-now"
+    optional: true
+- tapOn:
+    id: "sync-now"
+    optional: true
+- assertVisible: "Needs your decision"
+- tapOn: "Contact attempt"
+- assertVisible:
+    id: "conflict-screen"
+- assertVisible: "This task changed on the server after you saved your update. Nothing has been overwritten."
+- assertVisible:
+    id: "version-compare"
+- assertVisible: "Changed"
+# Re-apply → confirm.
+- tapOn:
+    id: "choose-reapply"
+- assertVisible: "Re-apply your update?"
+- tapOn:
+    text: "Re-apply my update on the latest version"
+    index: 1
+- assertVisible: "Your update will be re-applied on the latest version"
+- assertVisible:
+    id: "sync-screen"
+- assertVisible: "Synced recently"
+# The original op: superseded, its history shows the conflict and the resolution.
+- tapOn: "Contact attempt"
+- assertVisible:
+    id: "op-detail-screen"
+- scrollUntilVisible:
+    element:
+      id: "op-history"
+- assertVisible: "Version conflict detected"
+- assertVisible: "Sync conflict resolved"

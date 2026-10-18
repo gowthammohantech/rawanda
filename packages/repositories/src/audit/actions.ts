@@ -177,11 +177,33 @@ export const AUDIT_ACTIONS = {
   // `data_quality_issue`). Triage audits carry the note LENGTH, never the note text.
   "admin.quality_issue.detected": change,
   "admin.quality_issue.triaged": change,
+  // ── Programme admin (ADM-08) ────────────────────────────────────────────
+  // Governance audit-log view (an access audit of the audit log, once per session + filter key)
+  // and access-simulator runs are recorded by the admin UI. Grant edits / revocations are change
+  // events of `updateAccessGrant` (before/after, justification, version n → n+1). Phase prose
+  // `admin.access_grant.conflict` / `.denied` map to the canonical `conflict.detected` /
+  // `access.denied` (entityType `access_grant`; `LAST_ADMIN` is the denial reason of the lockout
+  // rule), as for ADM-06.
+  "admin.audit.viewed": accessClient,
+  "admin.access_simulation.run": accessClient,
+  "admin.access_grant.changed": change,
+  "admin.access_grant.revoked": change,
+
+  // ── Health worker app (HWM-09; phase names `sync.manual_requested` /
+  // `sync.duplicate_tap_coalesced` are UI-originated, so app-prefixed) ─────────
+  "worker.sync.manual_requested": accessClient,
+  "worker.sync.duplicate_tap_coalesced": accessClient,
 
   // ── Sync & devices ───────────────────────────────────────────────────────
   "sync.op_acknowledged": change,
   "sync.op_rejected": change,
   "sync.conflict_resolved": security,
+  // HWM-09: emitted by the FND-07 sync queue (cross-cutting, unprefixed like `sync.op_*`).
+  // `sync.run_*` only for runs with something to send (or manual); `sync.retry_scheduled` per
+  // retryable failure with its next attempt time.
+  "sync.run_started": change,
+  "sync.run_finished": change,
+  "sync.retry_scheduled": change,
   "device.revoked": security,
   "device.restored": security,
 } as const satisfies Record<string, AuditActionSpec>;

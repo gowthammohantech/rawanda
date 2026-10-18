@@ -1,0 +1,73 @@
+# HWM-09 device gate (not part of `pnpm verify`): `pnpm --filter @laif/worker-mobile test:maestro`
+# with the app open in Expo Go / a dev build, starting signed out, all simulation toggles off.
+# Offline → record a contact attempt → Sync tab: "Waiting to sync", Sync now disabled with the
+# reason → Online → Sync now tapped five times quickly → one run ("1 synced"), the item moves to
+# "Synced recently" with its server event id; the sync details show one acknowledgement.
+appId: host.exp.Exponent
+---
+- launchApp
+- tapOn:
+    id: "persona-card-persona-chw-alpha1-a"
+- tapOn:
+    id: "persona-continue"
+- tapOn:
+    id: "scope-continue"
+- assertVisible:
+    id: "today-screen"
+# Offline (simulated).
+- tapOn:
+    id: "avatar-button"
+- tapOn:
+    id: "open-network-simulation"
+- tapOn: "Work offline (simulated)"
+- assertVisible: "Offline (simulated)"
+- back
+- back
+# One local write: a contact attempt on an overdue task.
+- tapOn:
+    id: "tab-tasks"
+- tapOn:
+    text: "Overdue"
+    index: 0
+- tapOn: "Overdue · 5 days"
+- tapOn:
+    id: "record-attempt"
+- tapOn: "Phone"
+- tapOn: "Not reached"
+- tapOn:
+    id: "attempt-save"
+- assertVisible: "Saved on this device"
+# Sync tab while offline.
+- tapOn:
+    id: "tab-sync"
+- assertVisible:
+    id: "sync-screen"
+- assertVisible: "Waiting to sync"
+- assertVisible: "Offline (simulated) — items are safe on this device"
+# Online again from the Sync center's link, then five quick taps.
+- tapOn:
+    id: "open-network-simulation-from-sync"
+- tapOn: "Work offline (simulated)"
+- assertVisible: "Online"
+- back
+- tapOn:
+    id: "sync-now"
+- tapOn:
+    id: "sync-now"
+    optional: true
+- tapOn:
+    id: "sync-now"
+    optional: true
+- tapOn:
+    id: "sync-now"
+    optional: true
+- tapOn:
+    id: "sync-now"
+    optional: true
+- assertVisible: "Synced recently"
+- assertVisible: "Everything on this device is synced"
+- assertVisible: "Server event .*"
+- tapOn: "Contact attempt"
+- assertVisible:
+    id: "op-detail-screen"
+- assertVisible: "Change synced"

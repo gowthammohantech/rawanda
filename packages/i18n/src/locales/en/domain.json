@@ -269,7 +269,9 @@
     "sync_operation": "Sync operation",
     "device_session": "Device session",
     "programme_action": "Programme action",
-    "data_quality_issue": "Data-quality issue"
+    "data_quality_issue": "Data-quality issue",
+    "export_audit": "Export record",
+    "access_grant": "Access grant"
   },
   "pathwayStage": {
     "DRAFT_SCREENING": "Draft screening",
@@ -423,7 +425,10 @@
       "duplicate_suppressed": "Duplicate submission prevented",
       "op_acknowledged": "Change synced",
       "op_rejected": "Change not accepted",
-      "conflict_resolved": "Sync conflict resolved"
+      "conflict_resolved": "Sync conflict resolved",
+      "run_started": "Sync run started",
+      "run_finished": "Sync run finished",
+      "retry_scheduled": "Sync retry scheduled"
     },
     "task": {
       "created": "Task created",
@@ -569,11 +574,27 @@
       "quality_issue": {
         "detected": "Data-quality issue detected (system)",
         "triaged": "Data-quality issue triaged"
+      },
+      "audit": {
+        "viewed": "Governance audit log viewed"
+      },
+      "access_simulation": {
+        "run": "Access simulation run"
+      },
+      "access_grant": {
+        "changed": "Access grant changed",
+        "revoked": "Access grant revoked"
       }
     },
     "clinical": {
       "referral": {
         "updated": "Referral destination or due date changed"
+      }
+    },
+    "worker": {
+      "sync": {
+        "manual_requested": "Manual sync requested",
+        "duplicate_tap_coalesced": "Repeated \"Sync now\" tap joined the running sync"
       }
     }
   }

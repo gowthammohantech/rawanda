@@ -101,6 +101,8 @@ export const ENTITY_COLLECTIONS = {
   device_session: "deviceSessions",
   programme_action: "programmeActions",
   data_quality_issue: "dataQualityIssues",
+  export_audit: "exportAudits",
+  access_grant: "accessGrants",
 } as const satisfies Record<EntityType, LocalCollectionName>;
 
 const ENTITY_ALIASES: Readonly<Record<string, EntityType>> = Object.fromEntries([
@@ -118,6 +120,8 @@ const ENTITY_ALIASES: Readonly<Record<string, EntityType>> = Object.fromEntries(
   ["deviceSession", "device_session"],
   ["programmeAction", "programme_action"],
   ["dataQualityIssue", "data_quality_issue"],
+  ["exportAudit", "export_audit"],
+  ["accessGrant", "access_grant"],
 ]) as Record<string, EntityType>;
 
 /** Accepts an entity type (`follow_up`), a collection (`followUps`) or camelCase (`followUp`). */

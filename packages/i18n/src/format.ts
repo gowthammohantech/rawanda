@@ -237,6 +237,28 @@ export function formatRelativeToNow(
   return fill(lookup(lng, `relative.${base}_${plural}`), { count });
 }
 
+// ── Kigali calendar days → UTC instants (CLN-10 date-range filters) ─────────
+function kigaliDayStartMs(day: string): number {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(day);
+  if (match === null) throw new RangeError(`Invalid calendar day: ${day}`);
+  const [, y, m, d] = match;
+  const ms = Date.UTC(Number(y), Number(m) - 1, Number(d));
+  if (new Date(ms).toISOString().slice(0, 10) !== day) {
+    throw new RangeError(`Invalid calendar day: ${day}`);
+  }
+  return ms - KIGALI_UTC_OFFSET_MS;
+}
+
+/** `"2026-10-14"` (Kigali day) → `"2026-10-13T22:00:00.000Z"`: the first instant of that day. */
+export function kigaliDayStartUtc(day: string): string {
+  return new Date(kigaliDayStartMs(day)).toISOString();
+}
+
+/** `"2026-10-14"` (Kigali day) → `"2026-10-14T21:59:59.999Z"`: the last instant of that day. */
+export function kigaliDayEndUtc(day: string): string {
+  return new Date(kigaliDayStartMs(day) + DAY_MS - 1).toISOString();
+}
+
 // ── Numbers & measurements ───────────────────────────────────────────────────
 export type NumberFormatOptions = FormatOptions & {
   minimumFractionDigits?: number;

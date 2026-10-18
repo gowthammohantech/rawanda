@@ -9,7 +9,7 @@ import type { ReactNode } from "react";
 import { createBrowserRouter, Navigate, type RouteObject } from "react-router";
 
 import { ClinicalShell } from "../components/shell/ClinicalShell.tsx";
-import { AuditPage } from "../features/audit/AuditPage.tsx";
+import { AuditExplorerPage } from "../features/audit/AuditExplorerPage.tsx";
 import { LoginPage } from "../features/login/LoginPage.tsx";
 import { PatientPage } from "../features/patients/PatientPage.tsx";
 import { PatientSearchPage } from "../features/patients/PatientSearchPage.tsx";
@@ -56,7 +56,7 @@ export const appRoutes: RouteObject[] = [
           screen("decision", <DecisionPage />),
           screen("referrals", <ReferralsPage />),
           screen("tasks", <TasksPage />),
-          screen("audit", <AuditPage />),
+          screen("audit", <AuditExplorerPage />),
           screen("settings", <SettingsPage />),
           { path: "*", element: <NotFoundPage /> },
         ],

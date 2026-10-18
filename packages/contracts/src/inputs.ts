@@ -13,6 +13,7 @@ import {
   COMPLETION_EVIDENCE_TYPES,
   CONTACT_METHODS,
   CONTACT_RESULTS,
+  CORRECTION_RESOLUTION_KEYS,
   DISMISS_REASON_CODES,
   ENTITY_TYPES,
   FOLLOW_UP_OUTCOMES,
@@ -52,6 +53,15 @@ import {
   ReferralIdSchema,
   ReviewIdSchema,
 } from "./entities.ts";
+import {
+  EXPORT_GRANULARITIES,
+  EXPORT_REASON_CODES,
+  EXPORT_REASON_TEXT_MAX,
+  EXPORT_REASON_TEXT_MIN,
+  EXPORT_CSV_MAX_CHARS,
+  EXPORT_FILE_NAME_PATTERN,
+  ExportPeriodSchema,
+} from "./exportAudit.ts";
 import { vMsg } from "./messages.ts";
 import {
   IdempotencyKey,
@@ -60,6 +70,7 @@ import {
   JsonValueSchema,
   NonEmptyTrimmed,
   Reason,
+  UuidLike,
   Version,
   boundedText,
   idSchema,
@@ -584,7 +595,13 @@ const careTaskUpdateBase = {
 
 export const CareTaskUpdateInputSchema = z.discriminatedUnion("action", [
   z.object({ ...careTaskUpdateBase, action: z.literal("start") }),
-  z.object({ ...careTaskUpdateBase, action: z.literal("complete"), note: optionalNote() }),
+  z.object({
+    ...careTaskUpdateBase,
+    action: z.literal("complete"),
+    note: optionalNote(),
+    /** CLN-09: correction requests only — the outcome KEY shown to the citizen (vocabulary). */
+    resolutionKey: z.enum(CORRECTION_RESOLUTION_KEYS).optional(),
+  }),
   z.object({ ...careTaskUpdateBase, action: z.literal("cancel"), reason: Reason }),
   z.object({
     ...careTaskUpdateBase,
@@ -667,20 +684,8 @@ export type ReleaseCareInstructionInput = z.output<typeof ReleaseCareInstruction
 
 // ── Exports ──────────────────────────────────────────────────────────────────
 
-/** ADM-07 export reason codes (demo placeholders). */
-export const EXPORT_REASON_CODES = [
-  "programme_review",
-  "district_meeting",
-  "data_quality_followup",
-  "evaluation_reporting",
-  "other",
-] as const;
-export type ExportReasonCode = (typeof EXPORT_REASON_CODES)[number];
-
-export const EXPORT_GRANULARITIES = ["scope_total", "district", "facility", "week"] as const;
-export type ExportGranularity = (typeof EXPORT_GRANULARITIES)[number];
-export const EXPORT_REASON_TEXT_MIN = 10;
-export const EXPORT_REASON_TEXT_MAX = 300;
+// `EXPORT_REASON_CODES`, `EXPORT_GRANULARITIES` and the reason-text bounds live in
+// `exportAudit.ts` (ADM-07) so the ExportAudit entity schema needs no import of this module.
 
 /** Aggregate export record (ADM-07, CLN-10); `reasonText` is required when `other`. */
 export const ExportRecordInputSchema = z
@@ -698,6 +703,22 @@ export const ExportRecordInputSchema = z
     rowCount: z.number().int().min(0),
     suppressedCells: z.number().int().min(0),
     sha256: z.string().regex(/^[0-9a-f]{64}$/u, { error: vMsg("invalidFormat") }),
+    // ── ext (ADM-07): the ExportAudit record (all optional, so CLN-10 calls stay valid) ──
+    /** Export id written in the CSV `export_id` line (default: a new runtime id). */
+    exportId: UuidLike.optional(),
+    /** Kigali calendar days of the exported period. */
+    period: ExportPeriodSchema.optional(),
+    fileName: z
+      .string()
+      .regex(EXPORT_FILE_NAME_PATTERN, { error: vMsg("invalidFormat") })
+      .optional(),
+    /** The exact CSV, stored for idempotent re-downloads. */
+    csvText: z
+      .string()
+      .max(EXPORT_CSV_MAX_CHARS, { error: vMsg("tooLong", { max: EXPORT_CSV_MAX_CHARS }) })
+      .optional(),
+    grantId: NonEmptyTrimmed.optional(),
+    correlationId: CorrelationIdSchema.optional(),
   })
   .superRefine((v, ctx) => {
     if (v.reasonCode === "other" && v.reasonText === undefined) {

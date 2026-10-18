@@ -1,9 +1,6 @@
-import { useTx } from "@laif/ui-native";
+import { SyncCenterScreen } from "../../../../src/features/sync/SyncCenterScreen.tsx";
 
-import { TabPlaceholder } from "../../../../src/components/TabPlaceholder.tsx";
-
-/** Placeholder (built in HWM-09). */
+/** Sync tab (HWM-09): the Sync center. */
 export default function SyncTab() {
-  const t = useTx();
-  return <TabPlaceholder title={t("worker:nav.sync")} phase="HWM-09" testID="sync-screen" />;
+  return <SyncCenterScreen />;
 }

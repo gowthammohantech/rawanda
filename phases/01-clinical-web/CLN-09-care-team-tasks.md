@@ -10,7 +10,7 @@
 | Depends on | CLN-08 |
 | Trace | PRD CL-07; FRD CL-07, FRD §4, §5 (`OVERDUE` derived), T-04, T-05, T-06; spec §2.1 `/clinical/tasks`, §5.2 FollowUp machine; WF-01 step 7 (clinician confirms completion), **WF-02 steps 3–5** (stale version → 409, local vs latest, explicit resolution, audit); BRD BR-06, BO-03 |
 | Size | L |
-| Status | Not started |
+| Status | Done |
 
 ## 2. Goal
 

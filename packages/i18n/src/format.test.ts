@@ -10,6 +10,8 @@ import {
   formatTime,
   intlLocaleFor,
   KIGALI_TZ,
+  kigaliDayEndUtc,
+  kigaliDayStartUtc,
   resetFormatFeatureDetection,
   supportsIntlTimeZone,
 } from "./format.ts";
@@ -137,5 +139,18 @@ describe("numbers and measurements", () => {
     }
     expect(formatNumber(1234.5)).toBe("1,234.5");
     expect(formatNumber(7.8, "rw", { minimumFractionDigits: 2 })).toBe("7.80");
+  });
+});
+
+describe("Kigali calendar days → UTC range (CLN-10)", () => {
+  it("maps a Kigali day onto its first / last UTC instant", () => {
+    expect(kigaliDayStartUtc("2026-10-14")).toBe("2026-10-13T22:00:00.000Z");
+    expect(kigaliDayEndUtc("2026-10-14")).toBe("2026-10-14T21:59:59.999Z");
+    expect(kigaliDayStartUtc("2026-01-01")).toBe("2025-12-31T22:00:00.000Z");
+  });
+
+  it("rejects malformed or impossible days", () => {
+    expect(() => kigaliDayStartUtc("14/10/2026")).toThrow(RangeError);
+    expect(() => kigaliDayStartUtc("2026-02-30")).toThrow(RangeError);
   });
 });
