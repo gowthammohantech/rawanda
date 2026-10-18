@@ -40,15 +40,15 @@ import {
   type Tone,
 } from "@laif/ui-web";
 import { useQueryClient } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 
 import { useDemoTools } from "../../app/demo-tools.tsx";
 import { routes } from "../../app/routes.ts";
 import { ConflictPanel } from "../../components/ConflictPanel.tsx";
 import { PageHeader } from "../../components/PageHeader.tsx";
-import { QueryErrorState } from "../../components/QueryErrorState.tsx";
-import { clinicalErrorKeys, toClinicalError } from "../../data/errors.ts";
+import { AsyncBoundary } from "../../components/AsyncBoundary.tsx";
+import { clinicalErrorKeys } from "../../data/errors.ts";
 import { clinicalKeys } from "../../data/queryKeys.ts";
 import { useSession } from "../../session/useSession.ts";
 import { personaName } from "../timeline/people.ts";
@@ -149,12 +149,13 @@ function LoadingLayout() {
   const t = useTx();
   return (
     <div
+      role="group"
       aria-busy="true"
       aria-label={t("clinical:review.loading")}
       data-testid="review-loading"
-      className="grid gap-4 lg:grid-cols-3"
+      className="grid gap-4 xl:grid-cols-3"
     >
-      <div className="space-y-4 lg:col-span-2">
+      <div className="space-y-4 xl:col-span-2">
         <LoadingSkeleton variant="card" lines={4} />
         <LoadingSkeleton variant="card" lines={5} />
       </div>
@@ -179,60 +180,48 @@ export function ReviewDetailPage() {
     />
   );
 
-  if (query.isPending) {
-    return (
-      <>
-        {simpleHeader}
-        <LoadingLayout />
-      </>
-    );
-  }
+  const backLink = (
+    <Link to={routes.queue()} className={linkClass}>
+      {t("clinical:review.notFound.back")}
+    </Link>
+  );
+  const notFound = (
+    <div data-testid="review-not-found">
+      <EmptyState
+        icon="search"
+        title={t("clinical:review.notFound.title")}
+        description={t("clinical:review.notFound.description")}
+        action={backLink}
+      />
+    </div>
+  );
+  const fallback = (content: ReactNode) => (
+    <>
+      {simpleHeader}
+      {content}
+    </>
+  );
 
-  // A failed REFETCH (e.g. simulated offline) keeps showing the last loaded review.
-  if (query.isError && query.data === undefined) {
-    const error = toClinicalError(query.error);
-    return (
-      <>
-        {simpleHeader}
-        {error.code === "FORBIDDEN" ? (
-          <div data-testid="permission-denied" data-reason="review-scope">
-            <PermissionDenied
-              message={t("clinical:review.denied.body")}
-              action={
-                <Link to={routes.queue()} className={linkClass}>
-                  {t("clinical:review.notFound.back")}
-                </Link>
-              }
-            />
-          </div>
-        ) : (
-          <QueryErrorState error={query.error} onRetry={() => void query.refetch()} />
-        )}
-      </>
-    );
-  }
-
-  if (query.data === null || query.data === undefined) {
-    return (
-      <>
-        {simpleHeader}
-        <div data-testid="review-not-found">
-          <EmptyState
-            icon="search"
-            title={t("clinical:review.notFound.title")}
-            description={t("clinical:review.notFound.description")}
-            action={
-              <Link to={routes.queue()} className={linkClass}>
-                {t("clinical:review.notFound.back")}
-              </Link>
-            }
-          />
+  // A failed REFETCH (e.g. simulated offline) keeps showing the last loaded review, labelled
+  // "Last updated hh:mm" by the boundary.
+  return (
+    <AsyncBoundary
+      query={query}
+      testId="review"
+      wrapFallback={fallback}
+      loadingFallback={<LoadingLayout />}
+      permissionFallback={
+        <div data-testid="permission-denied" data-reason="review-scope">
+          <PermissionDenied message={t("clinical:review.denied.body")} action={backLink} />
         </div>
-      </>
-    );
-  }
-
-  return <ReviewDetailLoaded detail={query.data} />;
+      }
+      isEmpty={(detail) => detail === null}
+      emptyFallback={notFound}
+      notFoundFallback={notFound}
+    >
+      {(detail) => (detail === null ? fallback(notFound) : <ReviewDetailLoaded detail={detail} />)}
+    </AsyncBoundary>
+  );
 }
 
 function ReviewDetailLoaded({ detail }: { detail: ReviewDetail }) {
@@ -469,8 +458,9 @@ function ReviewDetailLoaded({ detail }: { detail: ReviewDetail }) {
           </section>
         ) : null}
 
-        <div className="grid gap-4 lg:grid-cols-3">
-          <div className="min-w-0 space-y-4 lg:col-span-2">
+        {/* CLN-11: two columns from 1280 px; below, one column with the evidence first. */}
+        <div className="grid gap-4 xl:grid-cols-3" data-testid="review-layout">
+          <div className="min-w-0 space-y-4 xl:col-span-2">
             {snapshot !== null && explanation !== null ? (
               <ReviewFlagHeader
                 review={review}

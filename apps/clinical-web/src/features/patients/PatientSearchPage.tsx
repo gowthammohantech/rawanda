@@ -11,14 +11,13 @@
  * with the query LENGTH, result count and filter keys only — never the query text.
  */
 import type { SelectOption } from "@laif/ui-web";
-import { EmptyState, LoadingSkeleton, useTx } from "@laif/ui-web";
-import { formatTime, useLanguage } from "@laif/i18n";
+import { EmptyState, useTx } from "@laif/ui-web";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { NavigationType, useLocation, useNavigationType, useSearchParams } from "react-router";
 
 import { facilityLabel } from "../../app/persona-labels.ts";
 import { PageHeader } from "../../components/PageHeader.tsx";
-import { QueryErrorState } from "../../components/QueryErrorState.tsx";
+import { AsyncBoundary } from "../../components/AsyncBoundary.tsx";
 import { useRepository } from "../../data/useRepository.ts";
 import { useSession } from "../../session/useSession.ts";
 import { useSwitchFacility } from "../../session/useSwitchFacility.ts";
@@ -29,7 +28,6 @@ import { PatientSearchForm } from "./PatientSearchForm.tsx";
 
 export function PatientSearchPage() {
   const t = useTx();
-  const { language } = useLanguage();
   const repo = useRepository();
   const { activeFacilityId, permittedFacilityIds } = useSession();
   const switchFacility = useSwitchFacility();
@@ -138,42 +136,31 @@ export function PatientSearchPage() {
     />
   );
 
-  let body;
-  if (query.data === undefined) {
-    body = query.isError ? (
-      <QueryErrorState error={query.error} onRetry={() => void query.refetch()} />
-    ) : (
-      <div aria-busy="true" aria-label={t("clinical:patients.search.loading")}>
-        <LoadingSkeleton variant="table" lines={6} />
-      </div>
-    );
-  } else {
-    body = (
-      <>
-        {query.isError ? (
-          <p
-            role="status"
-            data-testid="patients-last-updated"
-            className="border-risk-warning/25 bg-risk-warning-soft text-risk-warning mb-3 rounded-md border px-3 py-2 text-[13px]"
-          >
-            {t("clinical:patients.search.lastUpdated", {
-              time: formatTime(new Date(query.dataUpdatedAt).toISOString(), language),
-            })}
-          </p>
-        ) : null}
+  const body = (
+    <AsyncBoundary
+      query={query}
+      testId="patients"
+      loadingLabel={t("clinical:patients.search.loading")}
+      skeleton="table"
+      skeletonLines={6}
+      staleMessage={(time) => t("clinical:patients.search.lastUpdated", { time })}
+      isEmpty={(data) => data.items.length === 0}
+      emptyFallback={<div data-testid="patient-results">{emptyState}</div>}
+    >
+      {(data) => (
         <div aria-busy={query.isFetching} data-testid="patient-results">
           <PatientResultsTable
-            rows={query.data.items}
+            rows={data.items}
             page={search.page}
             pageSize={PATIENT_SEARCH_PAGE_SIZE}
-            total={query.data.total}
+            total={data.total}
             onPageChange={(page) => update({ page }, false)}
             emptyState={emptyState}
           />
         </div>
-      </>
-    );
-  }
+      )}
+    </AsyncBoundary>
+  );
 
   return (
     <>

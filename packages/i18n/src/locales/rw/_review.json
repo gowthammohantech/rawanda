@@ -3992,5 +3992,8 @@
   "clinical:audit.export.csv.scope": "needs clinical/linguistic review",
   "clinical:audit.export.csv.demoFacility": "needs clinical/linguistic review",
   "clinical:audit.export.csv.exportedBy": "needs clinical/linguistic review",
-  "clinical:audit.export.csv.filters": "needs clinical/linguistic review"
+  "clinical:audit.export.csv.filters": "needs clinical/linguistic review",
+  "clinical:settings.loading": "needs clinical/linguistic review",
+  "clinical:common.languageFallbackNotice": "needs clinical/linguistic review",
+  "clinical:decision.evidence.disclosure": "needs clinical/linguistic review"
 }

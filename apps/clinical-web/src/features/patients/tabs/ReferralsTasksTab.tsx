@@ -55,7 +55,7 @@ export function ReferralsTasksTab({ patient }: { patient: Patient }) {
 
   if (timeline.isPending) {
     return (
-      <div aria-busy="true" aria-label={t("clinical:timeline.followUp.loading")}>
+      <div role="group" aria-busy="true" aria-label={t("clinical:timeline.followUp.loading")}>
         <LoadingSkeleton lines={4} />
       </div>
     );

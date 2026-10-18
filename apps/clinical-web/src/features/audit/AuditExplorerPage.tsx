@@ -20,7 +20,6 @@ import {
   EmptyState,
   InfoCallout,
   KeyValueList,
-  LoadingSkeleton,
   Pagination,
   useToast,
   useTx,
@@ -31,7 +30,7 @@ import { useSearchParams } from "react-router";
 import { useDemoTools } from "../../app/demo-tools.tsx";
 import { facilityLabel } from "../../app/persona-labels.ts";
 import { PageHeader } from "../../components/PageHeader.tsx";
-import { QueryErrorState } from "../../components/QueryErrorState.tsx";
+import { AsyncBoundary } from "../../components/AsyncBoundary.tsx";
 import { toClinicalError } from "../../data/errors.ts";
 import { useSession } from "../../session/useSession.ts";
 import { useDemoNow } from "../decision/hooks.ts";
@@ -173,40 +172,42 @@ export function AuditExplorerPage() {
         {page === undefined ? "" : t("clinical:audit.results", { count: page.total })}
       </p>
 
-      {events.isPending ? (
-        <div aria-busy="true" aria-label={t("clinical:audit.loading")} data-testid="audit-loading">
-          <LoadingSkeleton variant="table" lines={8} />
-        </div>
-      ) : events.isError ? (
-        <QueryErrorState error={events.error} onRetry={() => void events.refetch()} />
-      ) : (
-        <AuditTable
-          rows={rows}
-          total={page?.total ?? 0}
-          onOpen={openEvent}
-          onCorrelation={filterCorrelation}
-          emptyState={
-            <div data-testid="audit-empty">
-              <EmptyState
-                icon="search"
-                title={t("clinical:audit.empty")}
-                description={t("clinical:audit.emptyHint")}
-                onClearFilters={() => setSearchParams(new URLSearchParams())}
-              />
-            </div>
-          }
-          footer={
-            (page?.total ?? 0) > AUDIT_EXPLORER_PAGE_SIZE ? (
-              <Pagination
-                page={filter.page}
-                pageSize={AUDIT_EXPLORER_PAGE_SIZE}
-                total={page?.total ?? 0}
-                onPageChange={(next) => apply({ ...filter, page: next })}
-              />
-            ) : undefined
-          }
-        />
-      )}
+      <AsyncBoundary
+        query={events}
+        testId="audit"
+        loadingLabel={t("clinical:audit.loading")}
+        skeleton="table"
+        skeletonLines={8}
+      >
+        {(data) => (
+          <AuditTable
+            rows={data.items}
+            total={data.total}
+            onOpen={openEvent}
+            onCorrelation={filterCorrelation}
+            emptyState={
+              <div data-testid="audit-empty">
+                <EmptyState
+                  icon="search"
+                  title={t("clinical:audit.empty")}
+                  description={t("clinical:audit.emptyHint")}
+                  onClearFilters={() => setSearchParams(new URLSearchParams())}
+                />
+              </div>
+            }
+            footer={
+              data.total > AUDIT_EXPLORER_PAGE_SIZE ? (
+                <Pagination
+                  page={filter.page}
+                  pageSize={AUDIT_EXPLORER_PAGE_SIZE}
+                  total={data.total}
+                  onPageChange={(next) => apply({ ...filter, page: next })}
+                />
+              ) : undefined
+            }
+          />
+        )}
+      </AsyncBoundary>
 
       <AuditEventDrawer
         event={selected}

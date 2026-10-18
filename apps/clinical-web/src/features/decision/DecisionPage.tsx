@@ -27,6 +27,7 @@ import {
   Button,
   Card,
   EmptyState,
+  Icon,
   InfoCallout,
   LoadingSkeleton,
   PermissionDenied,
@@ -38,13 +39,14 @@ import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } fro
 import { useForm, useWatch, type Resolver } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router";
 
+import { MEDIA, useMediaQuery } from "../../app/useMediaQuery.ts";
 import { useDemoTools } from "../../app/demo-tools.tsx";
 import { facilityLabel } from "../../app/persona-labels.ts";
 import { routes } from "../../app/routes.ts";
 import { ConflictPanel } from "../../components/ConflictPanel.tsx";
 import { PageHeader } from "../../components/PageHeader.tsx";
-import { QueryErrorState } from "../../components/QueryErrorState.tsx";
-import { toClinicalError, type ClinicalError } from "../../data/errors.ts";
+import { AsyncBoundary } from "../../components/AsyncBoundary.tsx";
+import type { ClinicalError } from "../../data/errors.ts";
 import { clinicalKeys } from "../../data/queryKeys.ts";
 import { useSession } from "../../session/useSession.ts";
 import { useReview } from "../reviews/hooks.ts";
@@ -70,6 +72,7 @@ function LoadingLayout() {
   const t = useTx();
   return (
     <div
+      role="group"
       aria-busy="true"
       aria-label={t("clinical:decision.loading")}
       data-testid="decision-loading"
@@ -98,41 +101,40 @@ export function DecisionPage() {
     />
   );
 
-  let body;
-  if (query.isPending) body = <LoadingLayout />;
-  else if (query.isError && query.data === undefined) {
-    const error = toClinicalError(query.error);
-    body =
-      error.code === "FORBIDDEN" ? (
+  const backLink = (
+    <Link to={routes.queue()} className={linkClass}>
+      {t("clinical:review.notFound.back")}
+    </Link>
+  );
+  const notFound = (
+    <div data-testid="review-not-found">
+      <EmptyState
+        icon="search"
+        title={t("clinical:review.notFound.title")}
+        description={t("clinical:review.notFound.description")}
+        action={backLink}
+      />
+    </div>
+  );
+  const body = (
+    <AsyncBoundary
+      query={query}
+      testId="decision-query"
+      loadingFallback={<LoadingLayout />}
+      permissionFallback={
         <div data-testid="permission-denied" data-reason="review-scope">
-          <PermissionDenied
-            message={t("clinical:review.denied.body")}
-            action={
-              <Link to={routes.queue()} className={linkClass}>
-                {t("clinical:review.notFound.back")}
-              </Link>
-            }
-          />
+          <PermissionDenied message={t("clinical:review.denied.body")} action={backLink} />
         </div>
-      ) : (
-        <QueryErrorState error={query.error} onRetry={() => void query.refetch()} />
-      );
-  } else if (query.data === null || query.data === undefined) {
-    body = (
-      <div data-testid="review-not-found">
-        <EmptyState
-          icon="search"
-          title={t("clinical:review.notFound.title")}
-          description={t("clinical:review.notFound.description")}
-          action={
-            <Link to={routes.queue()} className={linkClass}>
-              {t("clinical:review.notFound.back")}
-            </Link>
-          }
-        />
-      </div>
-    );
-  } else body = <DecisionLoaded key={query.data.review.id} detail={query.data} />;
+      }
+      isEmpty={(detail) => detail === null}
+      emptyFallback={notFound}
+      notFoundFallback={notFound}
+    >
+      {(detail) =>
+        detail === null ? notFound : <DecisionLoaded key={detail.review.id} detail={detail} />
+      }
+    </AsyncBoundary>
+  );
 
   return (
     <>
@@ -186,6 +188,7 @@ function DecisionLoaded({ detail }: { detail: ReviewDetail }) {
   const { persona, activeFacilityId } = useSession();
   const { faultConfig } = useDemoTools();
   const { review } = detail;
+  const compact = useMediaQuery(MEDIA.belowLg);
   const me = persona?.id ?? null;
   const open = isReviewOpen(review);
   const mine = review.status === "in_review" && review.startedBy === me;
@@ -376,14 +379,28 @@ function DecisionLoaded({ detail }: { detail: ReviewDetail }) {
 
   // ── Render ──────────────────────────────────────────────────────────────
   const sidebar = <DecisionEvidenceSummary detail={detail} />;
+  // CLN-11: below 1024 px the evidence sidebar collapses into an "Evidence" disclosure above
+  // the form (closed by default, so the decision form stays in view).
   const layout = (main: ReactNode) => (
     <div
       className="grid gap-4 lg:grid-cols-3"
       data-testid="decision-page"
       data-review-id={review.id}
     >
+      {compact ? (
+        <details
+          data-testid="decision-evidence-disclosure"
+          className="border-border-soft bg-surface shadow-card rounded-lg border"
+        >
+          <summary className="target-min text-ink flex cursor-pointer items-center gap-2 px-4 py-3 text-sm font-semibold">
+            <Icon name="eye" size={16} />
+            {t("clinical:decision.evidence.disclosure")}
+          </summary>
+          <div className="space-y-4 px-2 pb-2">{sidebar}</div>
+        </details>
+      ) : null}
       <div className="min-w-0 space-y-4 lg:col-span-2">{main}</div>
-      <div className="min-w-0 space-y-4">{sidebar}</div>
+      {compact ? null : <div className="min-w-0 space-y-4">{sidebar}</div>}
     </div>
   );
 

@@ -1,4 +1,5 @@
 /* Clinical Web Portal: the shared kit stylesheet (tokens, fonts, Tailwind v4) + this app's classes. */
 @import "@laif/ui-web/styles.css";
+@import "./styles/responsive.css";
 
 @source "./";

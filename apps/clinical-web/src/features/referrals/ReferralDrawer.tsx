@@ -47,6 +47,7 @@ import { allowedActions, type ReferralAction } from "./model.ts";
 import { OverduePill, ReferralStatusPill } from "./ReferralTable.tsx";
 import { ReferralStepper } from "./ReferralStepper.tsx";
 import { UpdateReferralDialog } from "./UpdateReferralDialog.tsx";
+import { DRAWER_FULL_SCREEN_CLASS } from "../../components/responsive.ts";
 
 export type ReferralDrawerProps = {
   id: string | null;
@@ -69,6 +70,7 @@ export function ReferralDrawer({ id, onClose, nowIso, patients }: ReferralDrawer
 
   return (
     <Drawer
+      className={DRAWER_FULL_SCREEN_CLASS}
       open={id !== null}
       onOpenChange={(open) => {
         if (!open) onClose();
@@ -83,7 +85,7 @@ export function ReferralDrawer({ id, onClose, nowIso, patients }: ReferralDrawer
     >
       <div data-testid="referral-drawer" data-referral-id={id ?? ""}>
         {query.isPending ? (
-          <div aria-busy="true" aria-label={t("clinical:referrals.drawer.loading")}>
+          <div role="group" aria-busy="true" aria-label={t("clinical:referrals.drawer.loading")}>
             <LoadingSkeleton lines={6} />
           </div>
         ) : denied ? (

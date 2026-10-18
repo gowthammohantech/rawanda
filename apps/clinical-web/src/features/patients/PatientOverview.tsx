@@ -125,7 +125,7 @@ export function PatientOverview({ patient }: { patient: Patient }) {
           />
         </div>
       )}
-      <div className="grid items-start gap-4 lg:grid-cols-2">
+      <div className="grid items-start gap-4 lg:grid-cols-2 [&>*]:min-w-0">
         <Card title={t("clinical:patients.record.latest.title")} as="section">
           {stats.data === undefined ? (
             <LoadingSkeleton lines={4} />

@@ -46,6 +46,7 @@ export function ScreeningsTab({ patient }: { patient: Patient }) {
   if (screenings.isPending) {
     return (
       <div
+        role="group"
         aria-busy="true"
         aria-label={t("clinical:timeline.screenings.loading")}
         className="space-y-3"

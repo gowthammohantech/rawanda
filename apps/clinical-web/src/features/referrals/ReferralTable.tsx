@@ -16,6 +16,7 @@ import type { ReactNode } from "react";
 
 import { facilityLabel } from "../../app/persona-labels.ts";
 import type { PatientNames } from "./hooks.ts";
+import { STACK_BELOW_LG_CLASS } from "../../components/responsive.ts";
 
 export const REFERRAL_STATUS_TONE: Record<Referral["status"], Tone> = {
   created: "info",
@@ -41,7 +42,12 @@ export function OverduePill({ dueAt }: { dueAt: string }) {
   const { language } = useLanguage();
   return (
     <span data-testid="referral-overdue" title={t("clinical:referrals.overdueHint")}>
-      <StatusChip tone="danger" icon="clock">
+      {/* CLN-11: the dated label wraps (long in RW) instead of widening the table. */}
+      <StatusChip
+        tone="danger"
+        icon="clock"
+        className="w-auto! rounded-md! [&_.truncate]:whitespace-normal"
+      >
         {t("clinical:referrals.overdueDerived", { date: formatDate(dueAt, language) })}
       </StatusChip>
     </span>
@@ -129,6 +135,7 @@ export function ReferralTable({
   return (
     <div data-testid="referral-table">
       <AccessibleDataTable
+        className={STACK_BELOW_LG_CLASS}
         caption={caption}
         captionHidden
         columns={columns}

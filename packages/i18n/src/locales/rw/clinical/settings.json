@@ -48,5 +48,6 @@
     "simulateWf02Hint": "Ibika verisiyo nshya y'ikurikirana rya WF-02 nk'umujyanama w'ubuzima wiganwa, ku buryo kubika gukurikira mu rubuga kugaragaza ukutumvikana kwa verisiyo.",
     "simulatedActor": "Umukozi wiganwa",
     "simulatedDone": "Ikurikirana ryavuguruwe n'umukozi wiganwa (verisiyo {{version}})"
-  }
+  },
+  "loading": "Igenamiterere rya demo riri gufunguka"
 }

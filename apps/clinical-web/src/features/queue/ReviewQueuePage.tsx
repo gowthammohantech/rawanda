@@ -11,21 +11,13 @@
  * Permission denied (no `review.read`) is the route guard's `PermissionDenied`.
  */
 import type { FacilityId } from "@laif/domain";
-import { formatTime, useLanguage } from "@laif/i18n";
-import {
-  Button,
-  EmptyState,
-  LoadingSkeleton,
-  useToast,
-  useTx,
-  type SelectOption,
-} from "@laif/ui-web";
+import { Button, EmptyState, useToast, useTx, type SelectOption } from "@laif/ui-web";
 import { useCallback, useEffect, useRef } from "react";
 import { NavigationType, useLocation, useNavigationType } from "react-router";
 
 import { facilityLabel } from "../../app/persona-labels.ts";
 import { PageHeader } from "../../components/PageHeader.tsx";
-import { QueryErrorState } from "../../components/QueryErrorState.tsx";
+import { AsyncBoundary } from "../../components/AsyncBoundary.tsx";
 import { useRepository } from "../../data/useRepository.ts";
 import { useSession } from "../../session/useSession.ts";
 import { useSwitchFacility } from "../../session/useSwitchFacility.ts";
@@ -37,7 +29,6 @@ import { useQueueKpis, useQueueUrlState, useReviewQueue } from "./useReviewQueue
 
 export function ReviewQueuePage() {
   const t = useTx();
-  const { language } = useLanguage();
   const repo = useRepository();
   const { toast } = useToast();
   const location = useLocation();
@@ -136,45 +127,34 @@ export function ReviewQueuePage() {
     />
   );
 
-  let body;
-  if (list.data === undefined) {
-    body = list.isError ? (
-      <QueryErrorState error={list.error} onRetry={() => void list.refetch()} />
-    ) : (
-      <div aria-busy="true" aria-label={t("clinical:queue.loading")} data-testid="queue-loading">
-        <LoadingSkeleton variant="lines" lines={5} />
-      </div>
-    );
-  } else {
-    body = (
-      <>
-        {list.isError ? (
-          <p
-            role="status"
-            data-testid="queue-last-updated"
-            className="border-risk-warning/25 bg-risk-warning-soft text-risk-warning mb-3 rounded-md border px-3 py-2 text-[13px]"
-          >
-            {t("clinical:queue.lastUpdated", {
-              time: formatTime(new Date(list.dataUpdatedAt).toISOString(), language),
-            })}
-          </p>
-        ) : null}
+  const body = (
+    <AsyncBoundary
+      query={list}
+      testId="queue"
+      loadingLabel={t("clinical:queue.loading")}
+      skeleton="lines"
+      skeletonLines={5}
+      staleMessage={(time) => t("clinical:queue.lastUpdated", { time })}
+      isEmpty={(data) => data.items.length === 0}
+      emptyFallback={
         <div aria-busy={list.isFetching} data-testid="queue-results">
-          {list.data.items.length === 0 ? (
-            emptyState
-          ) : (
-            <QueueList
-              key={`${filter.tab}|${filter.page}`}
-              data={list.data}
-              page={filter.page}
-              personaId={personaId}
-              onPageChange={(page) => update({ page })}
-            />
-          )}
+          {emptyState}
         </div>
-      </>
-    );
-  }
+      }
+    >
+      {(data) => (
+        <div aria-busy={list.isFetching} data-testid="queue-results">
+          <QueueList
+            key={`${filter.tab}|${filter.page}`}
+            data={data}
+            page={filter.page}
+            personaId={personaId}
+            onPageChange={(page) => update({ page })}
+          />
+        </div>
+      )}
+    </AsyncBoundary>
+  );
 
   return (
     <>

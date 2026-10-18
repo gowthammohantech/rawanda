@@ -39,16 +39,16 @@ Eleven phases rather than ten: the PRD asks for happy-path, permission-denied an
 
 ## FRD coverage matrix
 
-| FRD req | Primary phase | Also exercised in | Happy / denied / error tests |
+| FRD req | Primary phase | Also exercised in | Happy / denied / error tests (+ every screen's error / denied / offline state: `stateMatrix.test`, CLN-11) |
 |---|---|---|---|
-| CL-01 Patient search & record | CLN-03 | CLN-11 (T-02, T-07) | `PatientSearchPage.test`, `PatientPage.test`, `e2e/patient-scope` |
-| CL-02 Screening timeline | CLN-04 | CLN-06 (prior records), CLN-11 (T-06) | `ReadingDisplay.test`, `AmendScreeningDialog.test`, `e2e/screening-amendment` |
-| CL-03 Review work queue | CLN-05 | CLN-07 (counts update) | `ReviewQueuePage.test`, `e2e/review-queue` |
-| CL-04 Explainable flag | CLN-06 | CLN-07 (sidebar), CLN-11 (T-10) | `ExplainableFlag.test`, `EvidencePanel.test`, `e2e/review-detail` |
-| CL-05 Clinical decision | CLN-07 | CLN-11 (T-01, T-03, T-04, T-09) | `DecisionPage.test`, `e2e/clinician-review`, `e2e/dismiss-with-reason` |
-| CL-06 Referral tracking | CLN-08 | CLN-07 (creation), CLN-11 | `CompleteReferralDialog.test`, `e2e/referral-loop` |
-| CL-07 Care team tasks | CLN-09 | CLN-07 (creation), CLN-11 (T-05) | `AssignTaskDialog.test`, `e2e/followup-conflict`, `e2e/task-confirmation` |
-| CL-08 Audit & access | CLN-01 (access), CLN-10 (explorer/export) | every phase emits events; CLN-02 (repository scope) | `RequireCapability.test`, `AuditExplorerPage.test`, `e2e/audit-trail` |
+| CL-01 Patient search & record | CLN-03 | CLN-11 (T-02, T-07) | `PatientSearchPage.test`, `PatientPage.test`, `stateMatrix.test`, `e2e/patient-scope`, `e2e/frd-test-cases` (T-02, T-07) |
+| CL-02 Screening timeline | CLN-04 | CLN-06 (prior records), CLN-11 (T-06) | `ReadingDisplay.test`, `AmendScreeningDialog.test`, `e2e/screening-amendment`, `e2e/frd-test-cases` (T-06) |
+| CL-03 Review work queue | CLN-05 | CLN-07 (counts update) | `ReviewQueuePage.test`, `stateMatrix.test`, `e2e/review-queue`, `e2e/full-pathway` |
+| CL-04 Explainable flag | CLN-06 | CLN-07 (sidebar), CLN-11 (T-10) | `ExplainableFlag.test`, `EvidencePanel.test`, `ReviewDetailPage.test`, `e2e/review-detail`, `e2e/frd-test-cases` (T-05, T-10) |
+| CL-05 Clinical decision | CLN-07 | CLN-11 (T-01, T-03, T-04, T-09) | `DecisionPage.test`, `e2e/clinician-review`, `e2e/dismiss-with-reason`, `e2e/frd-test-cases` (T-01, T-03, T-04, T-09) |
+| CL-06 Referral tracking | CLN-08 | CLN-07 (creation), CLN-11 | `CompleteReferralDialog.test`, `ReferralsPage.test`, `stateMatrix.test`, `e2e/referral-loop`, `e2e/full-pathway` |
+| CL-07 Care team tasks | CLN-09 | CLN-07 (creation), CLN-11 (T-05) | `AssignTaskDialog.test`, `TasksPage.test`, `stateMatrix.test`, `e2e/followup-conflict`, `e2e/task-confirmation`, `e2e/full-pathway` |
+| CL-08 Audit & access | CLN-01 (access), CLN-10 (explorer/export) | every phase emits events; CLN-02 (repository scope) | `RequireCapability.test`, `AuditExplorerPage.test`, `privacy.test`, `e2e/audit-trail`, `e2e/frd-test-cases` (T-02, T-08) |
 
 ## Scenario and test-case coverage
 

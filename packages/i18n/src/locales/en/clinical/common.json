@@ -14,5 +14,6 @@
     "body": "This portal is a demonstration with synthetic patient data. It is not for clinical use. Rule flags come from illustrative demo rules that are not clinically validated.",
     "roles": "Demo personas show what each role can do. Switching persona is demo only — it is not authentication.",
     "tools": "Use Demo tools in the top bar to reset data, load a scenario or simulate network problems."
-  }
+  },
+  "languageFallbackNotice": "Some Kinyarwanda text was not available during this session and was shown in English instead. It has been noted for the language reviewer."
 }

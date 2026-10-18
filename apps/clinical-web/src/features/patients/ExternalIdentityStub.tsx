@@ -38,7 +38,12 @@ export function ExternalIdentityStub({
     <Card title={t("clinical:patients.record.externalId.title")} as="section">
       <div className="space-y-3 text-sm">
         <p className="text-muted m-0">{t("clinical:patients.record.externalId.description")}</p>
-        <Button variant="secondary" icon="search" onClick={check}>
+        <Button
+          variant="secondary"
+          icon="search"
+          onClick={check}
+          className="h-auto max-w-full py-2 text-start whitespace-normal!"
+        >
           {t("clinical:patients.record.externalId.button")}
         </Button>
         {code === null ? null : (

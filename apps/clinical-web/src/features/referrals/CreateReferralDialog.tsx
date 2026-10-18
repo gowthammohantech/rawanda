@@ -120,7 +120,7 @@ export function CreateReferralDialog({
         }}
       >
         {loading ? (
-          <div aria-busy="true" aria-label={t("clinical:referrals.create.loading")}>
+          <div role="group" aria-busy="true" aria-label={t("clinical:referrals.create.loading")}>
             <LoadingSkeleton lines={2} />
           </div>
         ) : none ? (

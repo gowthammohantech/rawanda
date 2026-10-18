@@ -17,6 +17,7 @@ import { personaName } from "../timeline/people.ts";
 import { ActionPill } from "./AuditTable.tsx";
 import { CorrelationTrail } from "./CorrelationTrail.tsx";
 import { changeRows, visibleJustification } from "./model.ts";
+import { DRAWER_FULL_SCREEN_CLASS } from "../../components/responsive.ts";
 
 export type AuditEventDrawerProps = {
   event: AuditEvent | null;
@@ -34,6 +35,7 @@ export function AuditEventDrawer({
   const t = useTx();
   return (
     <Drawer
+      className={DRAWER_FULL_SCREEN_CLASS}
       open={event !== null}
       onOpenChange={(open) => {
         if (!open) onClose();

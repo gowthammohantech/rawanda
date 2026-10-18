@@ -17,6 +17,7 @@ import type { ReactNode } from "react";
 import type { PatientNames } from "../referrals/hooks.ts";
 import { personaName } from "../timeline/people.ts";
 import { isAwaitingConfirmation, taskType } from "./model.ts";
+import { STACK_BELOW_LG_CLASS } from "../../components/responsive.ts";
 
 export const FOLLOW_UP_STATUS_TONE: Record<FollowUp["status"], Tone> = {
   assigned: "info",
@@ -133,6 +134,7 @@ export function TaskTable({ rows, patients, nowIso, onOpen, emptyState, caption 
   return (
     <div data-testid="task-table">
       <AccessibleDataTable
+        className={STACK_BELOW_LG_CLASS}
         caption={caption}
         captionHidden
         columns={columns}
