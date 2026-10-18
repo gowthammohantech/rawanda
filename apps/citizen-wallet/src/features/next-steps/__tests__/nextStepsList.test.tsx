@@ -93,7 +93,7 @@ describe("Next steps list", () => {
       ),
     ).toBeTruthy();
     fireEvent.click(screen.getByTestId("next-steps-support"));
-    expect(routerLog.at(-1)).toEqual({ method: "push", href: "/more" });
+    expect(routerLog.at(-1)).toEqual({ method: "push", href: "/more/support" });
     expect(screen.queryByTestId(`next-step-card-${WITHDRAWN}`)).toBeNull();
   });
 

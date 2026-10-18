@@ -1,0 +1,41 @@
+{
+  "title": "Accessibility",
+  "eyebrow": "SETTINGS",
+  "intro": "Make the app easier to read and use.",
+  "language": {
+    "title": "Language",
+    "hint": "Works without internet. The app changes at once.",
+    "names": {
+      "en": "English",
+      "rw": "Ikinyarwanda"
+    }
+  },
+  "textSize": "Text size",
+  "textSizeHint": "Your phone's own text size setting still applies on top of this.",
+  "scale": {
+    "standard": "Standard",
+    "large": "Large",
+    "larger": "Larger",
+    "largest": "Largest"
+  },
+  "preview": {
+    "eyebrow": "PREVIEW",
+    "title": "Sample result",
+    "body": "This is how text will look in the app. This is a sample, not your health information.",
+    "chip": "Reviewed"
+  },
+  "highContrast": "High contrast",
+  "highContrastHint": "Black text, stronger borders and darker colours.",
+  "lowData": {
+    "title": "Low data",
+    "body": "This demo works without internet. It does not download pictures or videos."
+  },
+  "loading": "Loading your settings",
+  "saved": "Saved",
+  "saveError": "Your change was not saved. We put back your last saved setting.",
+  "retry": "Try again",
+  "conflict": "Your settings were changed somewhere else. We loaded your saved settings.",
+  "deviceOnly": "These choices are kept on this phone. After you choose a demo persona they are also saved to your profile.",
+  "welcomeLink": "Language and text size",
+  "audioLater": "Read-aloud is not part of this demo yet."
+}

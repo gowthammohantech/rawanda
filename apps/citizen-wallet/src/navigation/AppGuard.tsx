@@ -4,6 +4,8 @@
  * withdrawn → `/consent-withdrawn` (+ one `access.denied` per blocked route). A
  * `CONSENT_REQUIRED` error from ANY query re-checks consent, so the guard redirects at once.
  * Health screens only mount once consent is `granted` — no health query runs before that.
+ * CTZ-08: the consent-free allow-list (`CONSENT_FREE_ROUTES`: accessibility, support/*, consent,
+ * demo tools) renders without consent; those routes never query health data.
  */
 import { RepositoryError } from "@laif/repositories";
 import { ErrorState, LoadingState, Screen } from "@laif/ui-native";
@@ -14,7 +16,7 @@ import { useEffect, useRef } from "react";
 import { ctzKeys, useCitizenSession, useConsent } from "../data/queries.ts";
 import { useCitizenRepo } from "../data/repo.tsx";
 import { usePersona, useWalletStore } from "../providers.tsx";
-import { accountGate, appGuardHref, HREFS } from "../state/access.ts";
+import { accountGate, appGuardHref, HREFS, isConsentFreeRoute } from "../state/access.ts";
 
 export function isConsentRequired(error: unknown): boolean {
   return (
@@ -50,6 +52,7 @@ export function AppGuard() {
   const patientId = gate === null ? (session.data?.activePatientId ?? null) : null;
   const consent = useConsent(patientId);
   const onWithdrawnScreen = segments.includes("consent-withdrawn");
+  const consentFree = isConsentFreeRoute(segments);
   useConsentRequiredWatcher(personaId);
 
   // Relaunch restore: `session.started` once per persona per app run; keep the wallet context.
@@ -67,7 +70,12 @@ export function AppGuard() {
 
   const ready = session.data !== undefined && (patientId === null || consent.data !== undefined);
   const href = ready
-    ? appGuardHref(session.data ?? null, consent.data?.state ?? null, onWithdrawnScreen)
+    ? appGuardHref(
+        session.data ?? null,
+        consent.data?.state ?? null,
+        onWithdrawnScreen,
+        consentFree,
+      )
     : null;
 
   // Guard hit on a health route → one `access.denied` (CONSENT_REQUIRED) per route.

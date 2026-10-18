@@ -53,8 +53,6 @@
   "completedOn": "Done on {{date}}",
   "toChangeContact": "To change this, contact your care team.",
   "noAdvice": "The wallet only shows what your care team agreed. It does not give medical advice.",
-  "supportLink": "Contact support",
-  "supportHint": "Opens More, where support options are listed",
   "empty": {
     "title": "No next steps shared yet",
     "body": "Your care team has not shared any next steps. If you were told to come back, contact them."

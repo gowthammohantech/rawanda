@@ -1,4 +1,7 @@
-/** Welcome (CTZ-02 task 1): hero, synthetic-data notice, prominent EN/RW switcher. */
+/**
+ * Welcome (CTZ-02 task 1): hero, synthetic-data notice, prominent EN/RW switcher. CTZ-08 task 11:
+ * footer links to Accessibility and Support (usable before a persona is chosen).
+ */
 import {
   AppHeader,
   AppText,
@@ -36,15 +39,35 @@ export function WelcomeScreen() {
           <Button variant="secondary" fullWidth onPress={() => router.push("/about-demo")}>
             {t("citizen:onboarding.whatIsThis")}
           </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            icon="settings"
-            onPress={() => router.push("/demo-tools")}
-            testID="welcome-demo-tools"
-          >
-            {t("citizen:onboarding.demoToolsLink")}
-          </Button>
+          <View style={styles.links}>
+            <Button
+              variant="ghost"
+              size="sm"
+              icon="eye"
+              onPress={() => router.push("/accessibility")}
+              testID="welcome-accessibility"
+            >
+              {t("citizen:accessibility.welcomeLink")}
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              icon="people"
+              onPress={() => router.push("/support")}
+              testID="welcome-support"
+            >
+              {t("citizen:support.welcomeLink")}
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              icon="settings"
+              onPress={() => router.push("/demo-tools")}
+              testID="welcome-demo-tools"
+            >
+              {t("citizen:onboarding.demoToolsLink")}
+            </Button>
+          </View>
         </View>
       }
     >
@@ -68,4 +91,5 @@ export function WelcomeScreen() {
 const styles = StyleSheet.create({
   hero: { gap: spacing.md, paddingVertical: spacing.lg },
   actions: { gap: spacing.sm },
+  links: { flexDirection: "row", flexWrap: "wrap", justifyContent: "center", gap: spacing.xs },
 });

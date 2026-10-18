@@ -7,7 +7,6 @@
 import type { ApprovedInstruction } from "@laif/domain";
 import {
   AppText,
-  Button,
   EmptyState,
   ErrorState,
   LoadingState,
@@ -34,6 +33,7 @@ import {
   useNextSteps,
   useNextStepsListViewLog,
 } from "./useNextSteps.ts";
+import { SupportLink } from "../support/SupportLink.tsx";
 
 export function NextStepsListScreen() {
   const t = useTx();
@@ -77,16 +77,7 @@ export function NextStepsListScreen() {
         icon="calendar"
         title={t("citizen:nextSteps.empty.title")}
         description={t("citizen:nextSteps.empty.body")}
-        action={
-          <Button
-            variant="secondary"
-            onPress={() => router.push("/more")}
-            accessibilityHint={t("citizen:nextSteps.supportHint")}
-            testID="next-steps-support"
-          >
-            {t("citizen:nextSteps.supportLink")}
-          </Button>
-        }
+        action={<SupportLink testID="next-steps-support" />}
       />
     );
   } else {

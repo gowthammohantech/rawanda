@@ -1,0 +1,50 @@
+{
+  "title": "Ubufasha",
+  "eyebrow": "UBUFASHA",
+  "intro": "Uko wavugana n'itsinda rikwitaho n'uko wabona ubufasha kuri iyi porogaramu.",
+  "careTeam": {
+    "title": "Itsinda rikwitaho",
+    "whoToContact": "Uwo wabaza: itsinda rikwitaho ku {{facility}}"
+  },
+  "notEmergencyTitle": "Si iy'ibihe byihutirwa",
+  "notEmergency": "Iyi porogaramu si iy'ibihe byihutirwa. Niba wumva urembye cyane, jya ku kigo nderabuzima kikwegereye ubu.",
+  "noAdviceTitle": "Nta nama z'ubuvuzi",
+  "noAdvice": "Iyi porogaramu ntitanga inama z'ubuvuzi.",
+  "noAdviceMore": "Itsinda rikwitaho ni ryo ryonyine rishobora kukubwira icyo ibisubizo byawe bisobanuye kuri wowe.",
+  "callbackCta": "Saba ko baguhamagara",
+  "callbackHint": "Yohereza ubusabe ku itsinda rikwitaho",
+  "callbackDisabled": "Tanga uruhushya kugira ngo wohereze ubusabe",
+  "helpCta": "Ingingo z'ubufasha",
+  "helpHint": "Ibisubizo bigufi ku ikoreshwa ry'iyi porogaramu",
+  "link": "Ufite ikibazo? Vugana n'itsinda rikwitaho",
+  "linkHint": "Ifungura Ubufasha",
+  "welcomeLink": "Ubufasha",
+  "callback": {
+    "title": "Saba ko baguhamagara",
+    "intro": "Itsinda rikwitaho rishobora kuguhamagara ku kibazo ufite.",
+    "topicLegend": "Ikibazo cyawe kivuga ku ki?",
+    "topics": {
+      "appointment_question": "Ikibazo kijyanye na gahunda yo kwa muganga",
+      "result_question": "Ikibazo kijyanye n'igisubizo",
+      "app_problem": "Ikibazo kuri iyi porogaramu",
+      "other": "Ikindi"
+    },
+    "windowLegend": "Ni ryari bakubona neza?",
+    "windows": {
+      "morning": "Mu gitondo",
+      "afternoon": "Nyuma ya saa sita"
+    },
+    "note": "Hari ikindi? (si ngombwa)",
+    "noteHint": "Ntiwandike hano amakuru yihariye y'ubuzima bwawe.",
+    "counter": "{{count}} / {{max}}",
+    "send": "Ohereza ubusabe",
+    "sendHint": "Itsinda rikwitaho rihabwa igikorwa cyo kuguhamagara",
+    "retry": "Ongera ugerageze",
+    "sendError": "Ubusabe bwawe ntibwoherejwe. Nta cyahindutse. Ongera ugerageze.",
+    "successTitle": "Ubusabe bwoherejwe",
+    "successBody": "Itsinda rikwitaho rizagerageza kuguhamagara. Iri ni igerageza — nta muntu uzaguhamagara koko.",
+    "done": "Garuka ku Bufasha",
+    "disabled": "Tanga uruhushya kugira ngo wohereze ubusabe. Ushobora gukomeza gusoma ingingo z'ubufasha.",
+    "noPersona": "Hitamo umuntu w'igerageza kandi utange uruhushya kugira ngo wohereze ubusabe."
+  }
+}

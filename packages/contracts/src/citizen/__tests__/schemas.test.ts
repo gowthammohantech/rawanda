@@ -403,6 +403,10 @@ describe("citizen inputs", () => {
     expect(
       UpdateCitizenSettingsInputSchema.safeParse({ idempotencyKey: KEY, textScale: 1.15 }).success,
     ).toBe(true);
+    // CTZ-08 "Largest" preset.
+    expect(
+      UpdateCitizenSettingsInputSchema.safeParse({ idempotencyKey: KEY, textScale: 1.5 }).success,
+    ).toBe(true);
     expect(
       UpdateCitizenSettingsInputSchema.safeParse({ idempotencyKey: KEY, textScale: 3 }).success,
     ).toBe(false);

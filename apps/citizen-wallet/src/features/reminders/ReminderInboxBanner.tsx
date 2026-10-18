@@ -10,6 +10,7 @@ import { useRouter, useSegments } from "expo-router";
 import { Pressable, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { useConsent } from "../../data/queries.ts";
 import { useActivePatient } from "../health/useResults.ts";
 import { unacknowledged, useReminderProcessor, useReminders } from "./useReminders.ts";
 
@@ -17,7 +18,11 @@ export function ReminderInboxBanner() {
   const t = useTx();
   const router = useRouter();
   const segments = useSegments() as readonly string[];
-  const patientId = useActivePatient()?.patientId ?? null;
+  const activeId = useActivePatient()?.patientId ?? null;
+  // CTZ-08: the tabs also host consent-free routes (Accessibility / Support) — no reminder read
+  // (health data) unless consent is granted.
+  const consent = useConsent(activeId);
+  const patientId = consent.data?.state === "granted" ? activeId : null;
   useReminderProcessor(patientId);
   const reminders = useReminders(patientId);
   const waiting = unacknowledged(reminders.data);

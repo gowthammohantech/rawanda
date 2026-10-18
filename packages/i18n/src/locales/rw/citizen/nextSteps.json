@@ -53,8 +53,6 @@
   "completedOn": "Byakozwe ku wa {{date}}",
   "toChangeContact": "Kugira ngo uhindure ibi, vugana n'itsinda rikwitaho.",
   "noAdvice": "Agasanduku kerekana gusa ibyo itsinda rikwitaho ryemeje. Ntigatanga inama z'ubuvuzi.",
-  "supportLink": "Vugana n'ubufasha",
-  "supportHint": "Ifungura Ibindi, aho uburyo bw'ubufasha buri",
   "empty": {
     "title": "Nta ntambwe zikurikira urasangizwa",
     "body": "Itsinda rikwitaho ntirirasangiza intambwe zikurikira. Niba wabwiwe kugaruka, rivugishe."

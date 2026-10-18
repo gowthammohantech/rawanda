@@ -44,17 +44,44 @@ export function landingHref(
 }
 
 /**
+ * CTZ-08 task 11: `(app)` routes reachable WITHOUT consent — language, text size and help are
+ * needed to decide on consent. None of them queries health data. `more/support` covers its
+ * children (callback, help); the callback itself is disabled without consent.
+ */
+export const CONSENT_FREE_ROUTES = [
+  "more/accessibility",
+  "more/support",
+  "more/consent",
+  "more/demo-tools",
+] as const;
+
+/** Expo Router segments → route path without groups (`(app)/(tabs)/more/x` → `more/x`). */
+export function routePathOf(segments: readonly string[]): string {
+  return segments.filter((s) => !(s.startsWith("(") && s.endsWith(")"))).join("/");
+}
+
+export function isConsentFreeRoute(segments: readonly string[]): boolean {
+  const path = routePathOf(segments);
+  return CONSENT_FREE_ROUTES.some(
+    (route) => path === route || (route === "more/support" && path.startsWith(`${route}/`)),
+  );
+}
+
+/**
  * `(app)` guard: null = render the route. `onWithdrawnScreen` = the consent-withdrawn screen
- * itself (reachable while consent is not granted).
+ * itself (reachable while consent is not granted); `consentFree` = a CTZ-08 consent-free route
+ * (still needs a verified account with a linked record).
  */
 export function appGuardHref(
   session: CitizenSession | null,
   consent: ConsentState | null,
   onWithdrawnScreen: boolean,
+  consentFree = false,
 ): GateHref | null {
   const gate = accountGate(session);
   if (gate !== null) return gate;
   if (consent === "granted") return onWithdrawnScreen ? "/health" : null;
+  if (consentFree) return null;
   if (consent === "withdrawn") return onWithdrawnScreen ? null : HREFS.withdrawn;
   return HREFS.consent;
 }

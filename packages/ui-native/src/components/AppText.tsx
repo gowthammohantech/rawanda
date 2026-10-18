@@ -1,11 +1,10 @@
 import type { ReactNode } from "react";
 import { StyleSheet, Text, type StyleProp, type TextProps, type TextStyle } from "react-native";
 
+import { resolveColor, scaledType, useDisplayPrefs } from "../theme.tsx";
 import {
-  colors,
   fontFamilies,
   maxFontSizeMultiplier,
-  typeScale,
   type ColorToken,
   type TypeVariant,
 } from "../tokens.ts";
@@ -28,6 +27,11 @@ export type AppTextProps = Omit<TextProps, "allowFontScaling" | "style"> & {
   caps?: boolean;
   /** Dense rows (chips, tab badges): caps dynamic type at 1.6× instead of unlimited. */
   dense?: boolean;
+  /**
+   * App-level text size multiplier (CTZ-08); defaults to the `DisplayPrefsProvider` value.
+   * Composes with OS dynamic type (never replaces it).
+   */
+  textScale?: number;
   align?: TextStyle["textAlign"];
   style?: StyleProp<TextStyle>;
   children?: ReactNode;
@@ -53,7 +57,8 @@ function familyFor(heading: boolean, mono: boolean, weight: TextWeight): string 
 
 /**
  * The kit's only text primitive: token font family/size/colour, and dynamic type ALWAYS on
- * (`allowFontScaling` cannot be turned off through this component).
+ * (`allowFontScaling` cannot be turned off through this component). The app-level text scale
+ * and the high-contrast palette come from `DisplayPrefsProvider` (CTZ-08).
  */
 export function AppText({
   variant = "body",
@@ -64,17 +69,19 @@ export function AppText({
   mono,
   caps,
   dense = false,
+  textScale,
   align,
   style,
   children,
   ...rest
 }: AppTextProps) {
+  const prefs = useDisplayPrefs();
   const isMicro = variant === "micro";
   const isHeading = heading ?? (variant === "title" || variant === "display");
   const isMono = mono ?? isMicro;
   const isCaps = caps ?? isMicro;
   const resolvedWeight = weight ?? (isHeading ? "bold" : isMicro ? "medium" : "regular");
-  const scale = typeScale[variant];
+  const scale = scaledType(variant, textScale ?? prefs.textScale);
   return (
     <Text
       {...rest}
@@ -87,7 +94,7 @@ export function AppText({
           fontSize: scale.fontSize,
           lineHeight: scale.lineHeight,
           letterSpacing: isCaps ? Math.max(scale.letterSpacing, 0.6) : scale.letterSpacing,
-          color: colorValue ?? colors[color],
+          color: resolveColor(prefs.highContrast, color, colorValue),
         },
         isCaps ? styles.caps : null,
         align === undefined ? null : { textAlign: align },

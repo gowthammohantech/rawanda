@@ -9,7 +9,7 @@ import { z } from "zod";
 import { PatientIdSchema } from "../entities.ts";
 import { vMsg } from "../messages.ts";
 import { IdempotencyKey, NonEmptyTrimmed, Version } from "../primitives.ts";
-import { CITIZEN_NOTICE_VERSION, CONSENT_ACTIONS } from "./records.ts";
+import { CITIZEN_NOTICE_VERSION, CitizenTextScaleSchema, CONSENT_ACTIONS } from "./records.ts";
 
 /** Grant or withdraw consent for one linked patient (append-only record). */
 export const RecordConsentInputSchema = z.object({
@@ -57,7 +57,7 @@ export const UpdateCitizenSettingsInputSchema = z
     idempotencyKey: IdempotencyKey,
     expectedVersion: Version.optional(),
     language: z.enum(LANGUAGES).optional(),
-    textScale: z.union([z.literal(1), z.literal(1.15), z.literal(1.3)]).optional(),
+    textScale: CitizenTextScaleSchema.optional(),
     highContrast: z.boolean().optional(),
   })
   .refine(

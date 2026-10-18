@@ -10,7 +10,7 @@
 | Depends on | CTZ-07 |
 | Trace | CW-07, CW-08; `Implementation_notes.md` (EN⇄RW P0: offline, saved preference, translated validation, fallback); Tech spec §2.4 "Accessibility", "Support", §7 (dynamic font scaling, touch targets); PRD §10 "low literacy, missing translations, shared devices"; T-01, T-04, T-09 |
 | Size | M |
-| Status | Planned |
+| Status | Done |
 
 ## 2. Goal
 

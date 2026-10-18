@@ -34,8 +34,6 @@
   },
   "notDiagnosis": "This result is not a diagnosis.",
   "askCareTeam": "Talk to your care team if you have questions.",
-  "supportLink": "Contact support",
-  "supportHint": "Opens More, where support options are listed",
   "nextStepsLink": "See Next steps",
   "nextStepsHint": "Opens the next step your care team agreed for this result",
   "reviewedBy": "Reviewed by {{name}} · {{time}}",

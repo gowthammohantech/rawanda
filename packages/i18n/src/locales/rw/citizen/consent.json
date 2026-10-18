@@ -35,5 +35,7 @@
   "since": "Kuva {{date}}",
   "confirmTitle": "Uhagarike gusangiza amakuru yawe?",
   "confirmBody": "Porogaramu irahita ihagarika kwerekana ibisubizo byawe, intambwe zikurikira, kwibutswa n'uko byagenze, kandi kwibutswa kwateguwe guhagarikwa. Amakuru yawe yo kwa muganga ntasibwa — itsinda rikuvura riracyayafite. Ushobora kongera gutanga uburenganzira igihe icyo ari cyo cyose.",
-  "withdrawError": "Gusangiza ntibyashoboye guhagarikwa. Nta cyahindutse. Ongera ugerageze."
+  "withdrawError": "Gusangiza ntibyashoboye guhagarikwa. Nta cyahindutse. Ongera ugerageze.",
+  "withdrawnSettings": "Ururimi n'ingano y'inyandiko",
+  "withdrawnSupport": "Ubufasha"
 }

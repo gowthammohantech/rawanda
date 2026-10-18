@@ -35,5 +35,7 @@
   "since": "Since {{date}}",
   "confirmTitle": "Stop sharing your information?",
   "confirmBody": "The wallet will stop showing your results, next steps, reminders and timeline straight away, and scheduled reminders are cancelled. Your clinical record is not deleted — your care team still has it. You can give consent again at any time.",
-  "withdrawError": "Sharing could not be stopped. Nothing was changed. Try again."
+  "withdrawError": "Sharing could not be stopped. Nothing was changed. Try again.",
+  "withdrawnSettings": "Language and text size",
+  "withdrawnSupport": "Help and support"
 }

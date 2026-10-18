@@ -32,6 +32,7 @@ import {
   type TimelineChange,
   type TimelineItem,
 } from "./buildCitizenTimeline.ts";
+import { SupportLink } from "../support/SupportLink.tsx";
 import { ChangeDetailSheet } from "./ChangeDetailSheet.tsx";
 import { TimelineFilterChips } from "./TimelineFilterChips.tsx";
 import { TimelineList, UpdatedJustNow } from "./TimelineList.tsx";
@@ -97,6 +98,7 @@ export function TimelineScreen() {
         icon="activity"
         title={t("citizen:timeline.empty")}
         description={t("citizen:timeline.subtitle")}
+        action={<SupportLink testID="timeline-support" />}
       />
     );
   } else if (shown.length === 0) {

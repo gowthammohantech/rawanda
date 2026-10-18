@@ -16,6 +16,9 @@ import enCitizenReminders from "../locales/en/citizen/reminders.json";
 import enCitizenTimeline from "../locales/en/citizen/timeline.json";
 import enCitizenPrivacy from "../locales/en/citizen/privacy.json";
 import enCitizenCorrection from "../locales/en/citizen/correction.json";
+import enCitizenAccessibility from "../locales/en/citizen/accessibility.json";
+import enCitizenSupport from "../locales/en/citizen/support.json";
+import enCitizenHelp from "../locales/en/citizen/help.json";
 import rwCitizenBase from "../locales/rw/citizen.json";
 import rwCitizenErrors from "../locales/rw/citizen/errors.json";
 import rwCitizenOnboarding from "../locales/rw/citizen/onboarding.json";
@@ -30,6 +33,9 @@ import rwCitizenReminders from "../locales/rw/citizen/reminders.json";
 import rwCitizenTimeline from "../locales/rw/citizen/timeline.json";
 import rwCitizenPrivacy from "../locales/rw/citizen/privacy.json";
 import rwCitizenCorrection from "../locales/rw/citizen/correction.json";
+import rwCitizenAccessibility from "../locales/rw/citizen/accessibility.json";
+import rwCitizenSupport from "../locales/rw/citizen/support.json";
+import rwCitizenHelp from "../locales/rw/citizen/help.json";
 
 export const enCitizen = {
   ...enCitizenBase,
@@ -46,6 +52,9 @@ export const enCitizen = {
   timeline: enCitizenTimeline,
   privacy: enCitizenPrivacy,
   correction: enCitizenCorrection,
+  accessibility: enCitizenAccessibility,
+  support: enCitizenSupport,
+  help: enCitizenHelp,
 } as const;
 
 export const rwCitizen: object = {
@@ -63,4 +72,7 @@ export const rwCitizen: object = {
   timeline: rwCitizenTimeline,
   privacy: rwCitizenPrivacy,
   correction: rwCitizenCorrection,
+  accessibility: rwCitizenAccessibility,
+  support: rwCitizenSupport,
+  help: rwCitizenHelp,
 };

@@ -27,13 +27,13 @@ import { ReadingValue, readingsOf } from "./ReadingValue.tsx";
 import { ResultChip } from "./ResultCard.tsx";
 import { ReviewProvenance } from "./ReviewProvenance.tsx";
 import { UnderstandResultSheet } from "./UnderstandResultSheet.tsx";
+import { SupportLink } from "../support/SupportLink.tsx";
 
 export type ResultDetailProps = {
   result: ReleasedObservation;
   /** An approved next step is linked to this result (same review). */
   hasNextStep: boolean;
   onOpenNextSteps: () => void;
-  onOpenSupport: () => void;
   /** CTZ-07 "Something wrong?" → correction request with this result preselected. */
   onReportProblem: () => void;
 };
@@ -42,7 +42,6 @@ export function ResultDetail({
   result,
   hasNextStep,
   onOpenNextSteps,
-  onOpenSupport,
   onReportProblem,
 }: ResultDetailProps) {
   const t = useTx();
@@ -112,15 +111,7 @@ export function ResultDetail({
       <InfoCallout icon="info" testID="not-diagnosis">
         {`${t("citizen:health.notDiagnosis")} ${t("citizen:health.askCareTeam")}`}
       </InfoCallout>
-      <Button
-        variant="ghost"
-        icon="people"
-        onPress={onOpenSupport}
-        accessibilityHint={t("citizen:health.supportHint")}
-        testID="result-support"
-      >
-        {t("citizen:health.supportLink")}
-      </Button>
+      <SupportLink testID="result-support" />
 
       <Section title={t("citizen:health.detail.reviewer")}>
         <ReviewProvenance result={result} variant="detail" />

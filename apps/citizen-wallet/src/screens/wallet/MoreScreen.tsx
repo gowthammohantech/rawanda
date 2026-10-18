@@ -1,7 +1,7 @@
 /**
  * More tab hub (CTZ-02, regrouped in CTZ-07 task 1): `MY DATA` (Privacy, Consent), `SETTINGS`
  * (language, Accessibility), `HELP` (Support) and `DEMO` (demo tools) — 56 pt rows with chevrons.
- * Accessibility and Support screens arrive in CTZ-08 (rows shown, disabled, labelled).
+ * CTZ-08: Accessibility (language, text size, high contrast) and Support rows are live.
  */
 import { LanguageSwitcher, ListRow, Screen, Section, spacing, useTx } from "@laif/ui-native";
 import { useRouter } from "expo-router";
@@ -40,10 +40,10 @@ export function MoreScreen() {
         <Section title={t("citizen:more.sections.settings")} testID="more-section-settings">
           <LanguageSwitcher testID="more-language-switcher" />
           <ListRow
-            icon="settings"
+            icon="eye"
             title={t("citizen:more.accessibilityRow")}
-            subtitle={t("citizen:more.laterPhase")}
-            disabled
+            subtitle={t("citizen:more.accessibilitySub")}
+            onPress={() => router.push("/more/accessibility")}
             style={styles.row}
             testID="more-accessibility"
           />
@@ -52,8 +52,8 @@ export function MoreScreen() {
           <ListRow
             icon="people"
             title={t("citizen:more.supportRow")}
-            subtitle={t("citizen:more.laterPhase")}
-            disabled
+            subtitle={t("citizen:more.supportSub")}
+            onPress={() => router.push("/more/support")}
             style={styles.row}
             testID="more-support"
           />

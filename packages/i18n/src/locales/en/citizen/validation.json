@@ -7,5 +7,10 @@
     "descriptionMax": "Please keep this shorter (at most 500 letters).",
     "suggestedMax": "Please keep this shorter (at most 200 letters).",
     "mustUnderstand": "Please tick the box to continue."
+  },
+  "callback": {
+    "topicRequired": "Please choose what your question is about.",
+    "windowRequired": "Please choose a time of day.",
+    "noteMax": "Please keep this shorter (at most 300 letters)."
   }
 }

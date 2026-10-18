@@ -1,0 +1,50 @@
+{
+  "title": "Support",
+  "eyebrow": "HELP",
+  "intro": "How to reach your care team and get help with this app.",
+  "careTeam": {
+    "title": "Your care team",
+    "whoToContact": "Who to contact: your care team at {{facility}}"
+  },
+  "notEmergencyTitle": "Not for emergencies",
+  "notEmergency": "This app is not for emergencies. If you feel very unwell, go to your nearest health facility now.",
+  "noAdviceTitle": "No medical advice",
+  "noAdvice": "This app does not give medical advice.",
+  "noAdviceMore": "Only your care team can tell you what your results mean for you.",
+  "callbackCta": "Ask for a callback",
+  "callbackHint": "Sends a request to your care team",
+  "callbackDisabled": "Give consent to send requests",
+  "helpCta": "Help topics",
+  "helpHint": "Short answers about using this app",
+  "link": "Questions? Contact your care team",
+  "linkHint": "Opens Support",
+  "welcomeLink": "Help and support",
+  "callback": {
+    "title": "Ask for a callback",
+    "intro": "Your care team can call you back about a question.",
+    "topicLegend": "What is your question about?",
+    "topics": {
+      "appointment_question": "A question about an appointment",
+      "result_question": "A question about a result",
+      "app_problem": "A problem with this app",
+      "other": "Something else"
+    },
+    "windowLegend": "When is a good time to call?",
+    "windows": {
+      "morning": "Morning",
+      "afternoon": "Afternoon"
+    },
+    "note": "Anything else? (optional)",
+    "noteHint": "Please do not write private health details here.",
+    "counter": "{{count}} / {{max}}",
+    "send": "Send request",
+    "sendHint": "Your care team gets a task to call you back",
+    "retry": "Try again",
+    "sendError": "Your request was not sent. Nothing was changed. Try again.",
+    "successTitle": "Request sent",
+    "successBody": "Your care team will try to call you. This is a demo — no one will actually call.",
+    "done": "Back to Support",
+    "disabled": "Give consent to send requests. You can still read the help topics.",
+    "noPersona": "Choose a demo persona and give consent to send requests."
+  }
+}

@@ -41,6 +41,91 @@ export const colors = {
 
 export type ColorToken = keyof typeof colors;
 
+/**
+ * High-contrast token set (CTZ-08): the SAME colour names as `colors`, re-valued so every text
+ * colour reaches ≥ 7:1 (WCAG AAA) on every surface it is drawn on — ink `#000000` on surface
+ * `#FFFFFF`, actions on primary-dark `#075D66`, borders `#18252B`, soft tints flattened to white.
+ * Native only (not part of the ui-web parity set). `highContrast.test.ts` checks the ratios.
+ */
+export const highContrastColors: Readonly<Record<ColorToken, string>> = {
+  primary: "#075D66",
+  primaryDark: "#04434A",
+  primarySoft: "#FFFFFF",
+  positive: "#0E5A3C",
+  positiveSoft: "#FFFFFF",
+  warning: "#6E3F00",
+  warningSoft: "#FFFFFF",
+  danger: "#8A1A12",
+  dangerSoft: "#FFFFFF",
+  info: "#17497A",
+  infoSoft: "#FFFFFF",
+  ink: "#000000",
+  muted: "#18252B",
+  subtle: "#18252B",
+  background: "#FFFFFF",
+  canvas: "#FFFFFF",
+  surface: "#FFFFFF",
+  border: "#18252B",
+  borderSoft: "#18252B",
+  demoBannerBg: "#FFFFFF",
+  demoBannerFg: "#5A3A06",
+  demoBannerBorder: "#18252B",
+  sun: "#F4C54E",
+  loaderGlow: "#15939E",
+  loaderDeep: "#043D45",
+  onPrimary: "#FFFFFF",
+};
+
+/** Text colours and the backgrounds they sit on in the high-contrast set (≥ 7:1 each pair). */
+export const HIGH_CONTRAST_TEXT_PAIRS: readonly (readonly [ColorToken, ColorToken])[] = [
+  ...(
+    [
+      "ink",
+      "muted",
+      "subtle",
+      "primary",
+      "primaryDark",
+      "positive",
+      "warning",
+      "danger",
+      "info",
+    ] as const
+  ).flatMap((fg) =>
+    (
+      [
+        "surface",
+        "background",
+        "primarySoft",
+        "positiveSoft",
+        "warningSoft",
+        "dangerSoft",
+        "infoSoft",
+      ] as const
+    ).map((bg) => [fg, bg] as const),
+  ),
+  ["demoBannerFg", "demoBannerBg"],
+  ["onPrimary", "primary"],
+  ["onPrimary", "primaryDark"],
+  ["onPrimary", "danger"],
+];
+
+/** WCAG 2.x relative luminance of `#RRGGBB`. */
+function relativeLuminance(hex: string): number {
+  const match = /^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(hex);
+  if (match === null) throw new RangeError(`Expected #RRGGBB, got ${hex}`);
+  const [r, g, b] = [match[1], match[2], match[3]].map((part) => {
+    const c = parseInt(part ?? "0", 16) / 255;
+    return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+  });
+  return 0.2126 * (r ?? 0) + 0.7152 * (g ?? 0) + 0.0722 * (b ?? 0);
+}
+
+/** WCAG contrast ratio of two `#RRGGBB` colours (1–21). */
+export function contrastRatio(a: string, b: string): number {
+  const [hi, lo] = [relativeLuminance(a), relativeLuminance(b)].sort((x, y) => y - x);
+  return ((hi ?? 0) + 0.05) / ((lo ?? 0) + 0.05);
+}
+
 /** Semantic aliases → base colour token (same map as ui-web). */
 export const semanticColors = {
   riskWarning: "warning",
@@ -109,8 +194,15 @@ export const typeScale = {
 } as const;
 export type TypeVariant = keyof typeof typeScale;
 
-/** Font-size multiplier caps: dense rows only (everything else scales freely). */
-export const maxFontSizeMultiplier = { dense: 1.6 } as const;
+/** Font-size multiplier caps: dense rows and bottom-tab labels only (everything else is free). */
+export const maxFontSizeMultiplier = { dense: 1.6, tabLabel: 3 } as const;
+
+/**
+ * App-level text size presets (CTZ-08: Standard / Large / Larger / Largest), applied ON TOP of
+ * the OS dynamic type (`allowFontScaling` stays on): rendered size = token × preset × OS scale.
+ */
+export const TEXT_SCALES = [1, 1.15, 1.3, 1.5] as const;
+export type TextScale = (typeof TEXT_SCALES)[number];
 
 /**
  * Font family names as registered by `useLaifFonts()` (`@expo-google-fonts/*`, bundled).

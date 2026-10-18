@@ -1,5 +1,6 @@
 /**
- * Native providers (FND-10 order): I18nProvider > SafeAreaProvider > ToastProvider, then
+ * Native providers (FND-10 order): I18nProvider > ThemeProvider (CTZ-08 display preferences) >
+ * SafeAreaProvider > ToastProvider, then
  * QueryClientProvider and PersonaProvider. The `CitizenRepoProvider` (`src/data/repo.tsx`) is
  * mounted by `Boot` once the local database is open and seeded.
  */
@@ -24,6 +25,7 @@ import { useStore } from "zustand";
 import type { ShellServices } from "./services.ts";
 import type { AppPersona, AppSession } from "./session.ts";
 import type { WalletState, WalletStore } from "./state/session.ts";
+import { ThemeProvider } from "./theme/ThemeProvider.tsx";
 
 const SessionContext = createContext<AppSession | null>(null);
 const WalletContext = createContext<WalletStore | null>(null);
@@ -77,15 +79,17 @@ export function AppProviders({
 }: AppProvidersProps) {
   return (
     <I18nProvider i18n={services.i18n}>
-      <SafeAreaProvider initialMetrics={safeAreaMetrics}>
-        <ToastProvider>
-          <QueryClientProvider client={services.queryClient}>
-            <PersonaProvider session={services.session}>
-              <WalletContext.Provider value={services.wallet}>{children}</WalletContext.Provider>
-            </PersonaProvider>
-          </QueryClientProvider>
-        </ToastProvider>
-      </SafeAreaProvider>
+      <ThemeProvider store={services.display}>
+        <SafeAreaProvider initialMetrics={safeAreaMetrics}>
+          <ToastProvider>
+            <QueryClientProvider client={services.queryClient}>
+              <PersonaProvider session={services.session}>
+                <WalletContext.Provider value={services.wallet}>{children}</WalletContext.Provider>
+              </PersonaProvider>
+            </QueryClientProvider>
+          </ToastProvider>
+        </SafeAreaProvider>
+      </ThemeProvider>
     </I18nProvider>
   );
 }

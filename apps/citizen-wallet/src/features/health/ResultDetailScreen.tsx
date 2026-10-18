@@ -73,7 +73,6 @@ export function ResultDetailScreen({ observationId }: { observationId: string })
           result={result.data}
           hasNextStep={nextStep.instruction !== null}
           onOpenNextSteps={() => router.push("/next-steps")}
-          onOpenSupport={() => router.push("/more")}
           onReportProblem={() =>
             router.push({
               pathname: "/more/privacy/corrections/new",

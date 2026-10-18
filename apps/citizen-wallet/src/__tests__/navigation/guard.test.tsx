@@ -11,9 +11,10 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AppGuard } from "../../navigation/AppGuard.tsx";
 import { ConsentWithdrawnScreen } from "../../screens/wallet/ConsentWithdrawnScreen.tsx";
 import { ManageConsentScreen } from "../../screens/wallet/ManageConsentScreen.tsx";
+import { appGuardHref, isConsentFreeRoute, routePathOf } from "../../state/access.ts";
 import { onConsentWithdrawn } from "../../state/events.ts";
 import { auditsOf, renderShell } from "../../test/harness.tsx";
-import { resetRouter, segments } from "../../test/router-stub.tsx";
+import { lastHref, resetRouter, segments } from "../../test/router-stub.tsx";
 
 vi.mock("expo-router", () => import("../../test/router-stub.tsx"));
 
@@ -139,5 +140,83 @@ describe("wallet route guard", () => {
       })
       .catch(() => undefined);
     expect(await redirectHref()).toBe("/consent-withdrawn");
+  });
+
+  it("CTZ-08: consent-free routes render for CTZ-P3; other More routes stay blocked", async () => {
+    for (const route of [
+      ["more", "accessibility"],
+      ["more", "support"],
+      ["more", "support", "callback"],
+      ["more", "support", "help"],
+      ["more", "consent"],
+      ["more", "demo-tools"],
+    ]) {
+      resetRouter(["(app)", "(tabs)", ...route]);
+      const view = await renderShell(<AppGuard />, {
+        ...as(PERSONA_IDS.citizenWithdrawn),
+        readyTestId: "stack",
+      });
+      expect(screen.queryByTestId("redirect")).toBeNull();
+      expect(
+        (
+          (await auditsOf(view.store, "access.denied")) as unknown as {
+            changeSummary: { guard?: boolean };
+          }[]
+        ).filter((d) => d.changeSummary.guard === true),
+      ).toHaveLength(0);
+      view.unmount();
+    }
+    for (const route of [["more"], ["more", "privacy"], ["health"]]) {
+      resetRouter(["(app)", "(tabs)", ...route]);
+      const view = await renderShell(<AppGuard />, as(PERSONA_IDS.citizenWithdrawn));
+      expect(await redirectHref()).toBe("/consent-withdrawn");
+      view.unmount();
+    }
+  });
+
+  it("CTZ-08: the consent-withdrawn screen links to Accessibility and Support", async () => {
+    segments.current = ["(app)", "consent-withdrawn"];
+    await renderShell(
+      <>
+        <AppGuard />
+        <ConsentWithdrawnScreen />
+      </>,
+      { ...as(PERSONA_IDS.citizenWithdrawn), readyTestId: "stack" },
+    );
+    fireEvent.click(screen.getByTestId("withdrawn-accessibility"));
+    expect(lastHref()).toBe("/more/accessibility");
+    fireEvent.click(screen.getByTestId("withdrawn-support"));
+    expect(lastHref()).toBe("/more/support");
+    expect(screen.getByText("Questions? Contact your care team")).toBeTruthy();
+  });
+});
+
+describe("consent-free allow-list (CTZ-08 task 11)", () => {
+  it("strips route groups and matches only the allow-listed routes", () => {
+    expect(routePathOf(["(app)", "(tabs)", "more", "accessibility"])).toBe("more/accessibility");
+    expect(isConsentFreeRoute(["(app)", "(tabs)", "more", "accessibility"])).toBe(true);
+    expect(isConsentFreeRoute(["(app)", "(tabs)", "more", "support"])).toBe(true);
+    expect(isConsentFreeRoute(["(app)", "(tabs)", "more", "support", "callback"])).toBe(true);
+    expect(isConsentFreeRoute(["(app)", "(tabs)", "more", "consent"])).toBe(true);
+    expect(isConsentFreeRoute(["(app)", "(tabs)", "more", "demo-tools"])).toBe(true);
+    expect(isConsentFreeRoute(["(app)", "(tabs)", "more"])).toBe(false);
+    expect(isConsentFreeRoute(["(app)", "(tabs)", "more", "privacy"])).toBe(false);
+    expect(isConsentFreeRoute(["(app)", "(tabs)", "more", "accessibility-x"])).toBe(false);
+    expect(isConsentFreeRoute(["(app)", "(tabs)", "health"])).toBe(false);
+  });
+
+  it("consent-free routes skip only the consent gate, never the account gate", () => {
+    const session = {
+      account: { status: "active" },
+      activePatientId: "p1",
+    } as unknown as Parameters<typeof appGuardHref>[0];
+    expect(appGuardHref(session, "withdrawn", false, true)).toBeNull();
+    expect(appGuardHref(session, "withdrawn", false, false)).toBe("/consent-withdrawn");
+    expect(appGuardHref(session, "granted", false, true)).toBeNull();
+    const pending = {
+      account: { status: "pending_verification" },
+      activePatientId: null,
+    } as unknown as Parameters<typeof appGuardHref>[0];
+    expect(appGuardHref(pending, null, false, true)).toBe("/verify");
   });
 });

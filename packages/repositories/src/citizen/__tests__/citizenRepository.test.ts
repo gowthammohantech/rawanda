@@ -1106,6 +1106,11 @@ describe.each(adapters)(
       await h.repo.recordPrivacyNoticeViewed("demo-notice-v0.1");
       expect(await h.audits("citizen.access_history.viewed")).toHaveLength(1);
       expect(await h.audits("citizen.privacy_notice.viewed")).toHaveLength(1);
+      // CTZ-08: Support / Help views are persona-level audits (no consent needed).
+      await h.repo.recordSupportViewed();
+      await h.repo.recordHelpViewed();
+      expect(await h.audits("citizen.support.viewed")).toHaveLength(1);
+      expect(await h.audits("citizen.help.viewed")).toHaveLength(1);
     });
   },
 );

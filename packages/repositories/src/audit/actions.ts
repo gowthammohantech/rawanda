@@ -150,6 +150,9 @@ export const AUDIT_ACTIONS = {
   "citizen.access_history.viewed": access,
   "citizen.correction.viewed": access,
   "citizen.correction.duplicate_blocked": security,
+  // CTZ-08: Support / Help topics shown (once per focus; persona-level, no health data).
+  "citizen.support.viewed": access,
+  "citizen.help.viewed": access,
   // CTZ-02: persona choice + simulated identity verification (demo code, never a real check).
   "citizen.persona.selected": access,
   "citizen.identity.verification_attempted": security,
