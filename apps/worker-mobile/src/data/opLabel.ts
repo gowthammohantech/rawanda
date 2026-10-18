@@ -13,10 +13,13 @@
  * | follow_up : update           | `record_outcome` | `followup.outcome`  |
  * | follow_up : update           | other            | `followup.update`   |
  * | care_task : create           | (`targetType`)   | `correction.request`|
+ * | sync_operation : command     | (`resolution`)   | `conflict.decision` |
  * | anything else                |                  | `other`             |
  *
  * A resolution op created by `sync.resolveConflict` keeps the original op's entity / type and
- * has `resolvesOpId` set (`resolution: true`).
+ * has `resolvesOpId` set (`resolution: true`). A `keep_latest` resolution enqueues a
+ * `sync_operation : command` notice (entity id = the original op id) that tells the simulated
+ * server about the decision (HWM-09): `conflict.decision`.
  */
 import type { SyncOperation } from "@laif/domain";
 
@@ -28,6 +31,7 @@ export const SYNC_OP_LABELS = [
   "followup.outcome",
   "followup.update",
   "correction.request",
+  "conflict.decision",
   "other",
 ] as const;
 export type SyncOpLabel = (typeof SYNC_OP_LABELS)[number];
@@ -58,6 +62,8 @@ export function syncOpLabel(op: OpLike): SyncOpLabel {
     }
     case "care_task:create":
       return payloadField(op, "targetType") === undefined ? "other" : "correction.request";
+    case "sync_operation:command":
+      return "conflict.decision";
     default:
       return "other";
   }

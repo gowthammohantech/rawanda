@@ -18,8 +18,18 @@
  *   `VALIDATION_ERROR` / `FORBIDDEN` / `NOT_FOUND` → `rejected` (kept); `FORBIDDEN`
  *   `DEVICE_REVOKED` → this and every waiting op `blocked_revoked` until `restoreDevice()`;
  *   `TIMEOUT` / `INTERNAL` / `DEPENDENCY_UNAVAILABLE` / `OFFLINE` → `retryable_failure` with
- *   backoff `min(60 s, 2 s·2^(attempt−1)) ± 20 %` (seeded jitter, demo clock); auto-retry stops
- *   after 8 attempts (`retryNow` still works). A run stops at the first retryable failure.
+ *   backoff `min(60 s, 2 s·2^(attempt−1)) ± 20 %` (seeded jitter, demo clock) and a
+ *   `sync.retry_scheduled` audit; auto-retry stops after 8 attempts (`retryNow` still works).
+ *   HWM-09: a per-op server error (`INTERNAL`) does not stop the run — the other ops are still
+ *   tried; an unreachable server (`TIMEOUT` / `DEPENDENCY_UNAVAILABLE` / `OFFLINE`) ends it.
+ * - Runs that have something to send (or are manual) are audited `sync.run_started` /
+ *   `sync.run_finished` (HWM-09; idle automatic runs only leave their `syncRuns` row).
+ * - Conflict resolution (HWM-09, WF-02 steps 4–5): `reapply_on_latest` enqueues a NEW op
+ *   (`resolvesOpId`, new idempotency key, `baseVersion` = latest); `keep_latest` refreshes the
+ *   local row from the server snapshot and enqueues a `sync_operation:command` resolution notice
+ *   (entity id = the original op id) so the simulated server mirrors the decision. The remote
+ *   audits `sync.conflict_resolved` with the ORIGINAL op id for both choices (on the notice, or
+ *   on applying the re-applied op).
  * - On startup `sending` ops are reset to `queued` (crash recovery). No op is ever deleted.
  */
 import { IdempotencyKey, optionalNote, type WriteResult } from "@laif/contracts";
@@ -27,6 +37,7 @@ import { restoreDeviceSession, revokeDeviceSession } from "@laif/auth-demo";
 import {
   asId,
   CONFLICT_RESOLUTIONS,
+  type AuditEvent,
   fnv1a64Hex,
   syncOperationMachine,
   SYNC_OP_STATUSES,
@@ -89,7 +100,20 @@ export type SyncQueue = {
   recover(tx: TxContext["tx"]): Promise<void>;
 };
 
-type SendOutcome = "acknowledged" | "duplicate" | "retryable" | "conflict" | "rejected" | "revoked";
+type SendOutcome =
+  | "acknowledged"
+  | "duplicate"
+  | "retryable"
+  /** Retryable server error on this op only (`INTERNAL`): the run goes on with other ops. */
+  | "server_error"
+  | "conflict"
+  | "rejected"
+  | "revoked";
+
+/** Op ids an audit event's `changeSummary` refers to (sync history of an op). */
+const OP_REF_FIELDS = ["opId", "originalOpId", "newOpId", "noticeOpId"] as const;
+/** Audit actions that make up an op's sync history. */
+const HISTORY_ACTION_PREFIXES = ["sync.", "conflict."] as const;
 
 export function createSyncQueue(options: {
   engine: Engine;
@@ -258,6 +282,9 @@ export function createSyncQueue(options: {
             opId: op.id,
             baseVersion: op.baseVersion,
             currentVersion: error.conflict?.currentVersion ?? null,
+            // HWM-09 conflict screen: who / when changed it on the server.
+            changedBy: error.conflict?.changedBy ?? null,
+            changedAt: error.conflict?.changedAt ?? null,
           },
         });
         return "conflict";
@@ -269,14 +296,27 @@ export function createSyncQueue(options: {
       }
       if (error.retryable) {
         const delay = backoffMs(op.attempts, op.id);
+        const nextAttemptAt = new Date(ctx.now.getTime() + delay).toISOString();
         await ctx.tx.put(
           "syncOperations",
-          setStatus(op, "retryable_failure", ctx, {
-            lastError,
-            nextAttemptAt: new Date(ctx.now.getTime() + delay).toISOString(),
-          }),
+          setStatus(op, "retryable_failure", ctx, { lastError, nextAttemptAt }),
         );
-        return "retryable";
+        const exhausted = op.attempts >= SYNC_MAX_AUTO_ATTEMPTS;
+        await ctx.audit({
+          action: "sync.retry_scheduled",
+          entityType: op.entityType,
+          entityId: op.entityId,
+          correlationId: op.correlationId,
+          changeSummary: {
+            opId: op.id,
+            attempt: op.attempts,
+            code: error.code,
+            // After the last automatic attempt only "Retry now" sends it again.
+            nextAttemptAt: exhausted ? null : nextAttemptAt,
+            autoRetryExhausted: exhausted,
+          },
+        });
+        return error.code === "INTERNAL" ? "server_error" : "retryable";
       }
       await ctx.tx.put("syncOperations", setStatus(op, "rejected", ctx, { lastError }));
       await ctx.audit({
@@ -337,6 +377,8 @@ export function createSyncQueue(options: {
         opId: op.id,
         entityVersion: response.entityVersion,
         replayed: response.replayed,
+        // HWM-09 "Synced recently": the server's event id (short form in the UI).
+        serverEventId: response.eventId,
       },
     });
     return response.replayed ? "duplicate" : "acknowledged";
@@ -345,6 +387,7 @@ export function createSyncQueue(options: {
   async function run(trigger: SyncTrigger): Promise<SyncRun> {
     await engine.ready();
     const startedAt = engine.clock.nowIso();
+    const runId = engine.ids();
     const counts = {
       attempted: 0,
       acknowledged: 0,
@@ -355,6 +398,20 @@ export function createSyncQueue(options: {
       blocked: 0,
     };
     const offline = faults.get().offline;
+    const audited =
+      trigger === "manual" ||
+      trigger === "manual_dev" ||
+      (!offline && (await nextOp(new Set())) !== null);
+    if (audited) {
+      await engine.write(async (ctx) => {
+        await ctx.audit({
+          action: "sync.run_started",
+          entityType: "sync_operation",
+          entityId: runId,
+          changeSummary: { runId, trigger, offline },
+        });
+      });
+    }
     if (!offline) {
       const skip = new Set<string>();
       for (;;) {
@@ -371,6 +428,7 @@ export function createSyncQueue(options: {
         }
         if (outcome === "conflict") counts.conflicts += 1;
         if (outcome === "rejected") counts.rejected += 1;
+        if (outcome === "server_error") counts.retryableFailures += 1;
         if (outcome === "retryable") {
           counts.retryableFailures += 1;
           break;
@@ -383,7 +441,7 @@ export function createSyncQueue(options: {
     }
     return engine.write(async (ctx) => {
       const row: SyncRun = {
-        id: ctx.ids(),
+        id: runId,
         trigger,
         startedAt,
         finishedAt: ctx.nowIso,
@@ -392,6 +450,14 @@ export function createSyncQueue(options: {
         ...ctx.created(),
       };
       await ctx.tx.put("syncRuns", row);
+      if (audited) {
+        await ctx.audit({
+          action: "sync.run_finished",
+          entityType: "sync_operation",
+          entityId: runId,
+          changeSummary: { runId, trigger, offline, ...counts },
+        });
+      }
       return row;
     });
   }
@@ -521,6 +587,7 @@ export function createSyncQueue(options: {
           await ctx.tx.put("syncOperations", superseded);
           const latest = op.serverSnapshot as (Versioned & Record<string, JsonValue>) | null;
           let created: SyncOperation | null = null;
+          let notice: SyncOperation | null = null;
           ctx.useCorrelation(op.correlationId);
           if (input.resolution === "reapply_on_latest") {
             const payload: Record<string, JsonValue> = {
@@ -541,10 +608,28 @@ export function createSyncQueue(options: {
               resolvesOpId: op.id,
               baseVersion: latest?.version ?? op.baseVersion,
             });
-          } else if (latest) {
+          } else {
             // keep_latest: the device row becomes the server copy; the withdrawn payload stays
-            // on the superseded op.
-            await ctx.save(op.entityType, latest);
+            // on the superseded op (never deleted).
+            if (latest) await ctx.save(op.entityType, latest);
+            // Nothing is re-sent for the entity; a resolution notice tells the server (HWM-09).
+            notice = await insertOp(ctx, {
+              entityType: "sync_operation",
+              entityId: op.id,
+              opType: "command",
+              key,
+              payload: {
+                idempotencyKey: key,
+                opId: op.id,
+                resolution: input.resolution,
+                entityType: op.entityType,
+                entityId: op.entityId,
+                latestVersion: latest?.version ?? null,
+                ...(input.note !== undefined ? { note: input.note } : {}),
+              },
+              localVersion: 0,
+              baseVersion: null,
+            });
           }
           const event = await ctx.audit({
             action: "sync.conflict_resolved",
@@ -554,6 +639,8 @@ export function createSyncQueue(options: {
               originalOpId: op.id,
               resolution: input.resolution,
               newOpId: created?.id ?? null,
+              noticeOpId: notice?.id ?? null,
+              latestVersion: latest?.version ?? null,
             },
             justification: input.note ?? null,
           });
@@ -565,6 +652,35 @@ export function createSyncQueue(options: {
           };
         },
       });
+    },
+
+    async history(opIds: string | readonly string[]) {
+      await engine.ready();
+      const requested = typeof opIds === "string" ? [opIds] : opIds;
+      // Only ops of this device's own queue; only sync bookkeeping events (no domain audit).
+      const own = new Set(
+        (await engine.store.getAll<SyncOperation>("syncOperations")).map((op) => op.id as string),
+      );
+      const wanted = new Set<unknown>(requested.filter((id) => own.has(id)));
+      if (wanted.size === 0) return [];
+      const events = await engine.store.getAll<AuditEvent>("auditEvents");
+      return (
+        events
+          .filter((event) => {
+            if (!HISTORY_ACTION_PREFIXES.some((prefix) => event.action.startsWith(prefix))) {
+              return false;
+            }
+            const summary = event.changeSummary;
+            if (summary === null || typeof summary !== "object" || Array.isArray(summary)) {
+              return false;
+            }
+            return OP_REF_FIELDS.some((field) => wanted.has(summary[field]));
+          })
+          // Stable: same-instant events keep their write order.
+          .sort((a, b) => (a.occurredAt < b.occurredAt ? -1 : a.occurredAt > b.occurredAt ? 1 : 0))
+          // Free text (e.g. a resolution note) is never part of the sync history.
+          .map((event) => ({ ...event, justification: null }))
+      );
     },
 
     async simulateRemoteEdit(entityType, id, patch) {

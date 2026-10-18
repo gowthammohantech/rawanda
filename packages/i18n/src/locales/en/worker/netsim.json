@@ -37,11 +37,5 @@
   "needsDecision": "Needs your decision",
   "lastSynced": "Last synced",
   "never": "Not yet",
-  "runPass": "Run one sync pass",
-  "runOffline": "Offline (simulated): nothing was sent. Changes stay saved on this device.",
-  "runNothing": "Nothing to send.",
-  "runDone": "Sync pass: {{acknowledged}} of {{attempted}} acknowledged.",
-  "runFailed": "Sync pass failed: {{failed}} could not be sent and will be retried. Nothing was lost.",
-  "runConflicts": "Sync pass: {{count}} need your decision.",
   "updated": "Simulation updated"
 }

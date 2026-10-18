@@ -82,10 +82,14 @@ appId: host.exp.Exponent
     id: "open-network-simulation"
 - tapOn: "Work offline (simulated)"
 - assertVisible: "Online"
+# HWM-09: back online syncs by itself (debounced `online` trigger); Sync now from the Sync tab.
+- back
+- back
 - tapOn:
-    id: "netsim-run-pass"
-- back
-- back
+    id: "tab-sync"
+- tapOn:
+    id: "sync-now"
+    optional: true
 # Open the screening from the patient's history.
 - tapOn:
     id: "tab-patients"

@@ -12,13 +12,14 @@
  * | Failure type + rate: lost reply (timeout) | `timeoutRate` (dropped acknowledgement, after commit) |
  * | Simulate a clinician update               | `repo.sync.simulateRemoteEdit('followUp', id, …)`  |
  * | Make the next sync conflict               | `conflictOnce` (follow-up)                         |
- * | Run one sync pass                         | `repo.sync.process({ trigger: 'manual_dev' })`     |
  *
+ * The HWM-02 "Run one sync pass" dev button moved to the Sync center (HWM-09 "Sync now"); going
+ * back online here triggers a sync by itself (HWM-09 `online` trigger).
  * The kit has no slider (and RN core none), so delay and rate use preset segmented steps.
  */
 import { formatDateTime, useLanguage } from "@laif/i18n";
 import type { FollowUp, Patient } from "@laif/domain";
-import type { FaultConfig, FaultConfigPatch, SyncRun } from "@laif/repositories";
+import type { FaultConfig, FaultConfigPatch } from "@laif/repositories";
 import {
   Button,
   InfoCallout,
@@ -108,7 +109,6 @@ export function NetworkSimulationScreen({ onBack }: NetworkSimulationScreenProps
   const [modeChoice, setModeChoice] = useState<FailureMode>(failure.mode ?? "server_error");
   const mode = failure.mode ?? modeChoice;
   const [followUpId, setFollowUpId] = useState<string | null>(null);
-  const [running, setRunning] = useState(false);
 
   const followUps = useQuery({
     queryKey: ["home", "netsim", "followUps"],
@@ -160,37 +160,6 @@ export function NetworkSimulationScreen({ onBack }: NetworkSimulationScreenProps
       toast({ title: t("worker:netsim.conflictArmed") });
     } catch {
       failed();
-    }
-  };
-
-  const runPass = async () => {
-    setRunning(true);
-    let run: SyncRun;
-    try {
-      run = await repo.sync.process({ trigger: "manual_dev" });
-    } catch {
-      setRunning(false);
-      failed();
-      return;
-    }
-    setRunning(false);
-    await invalidateAfterWrite(queryClient);
-    if (run.offline) toast({ title: t("worker:netsim.runOffline"), tone: "warning" });
-    else if (run.retryableFailures > 0 || run.blocked > 0) {
-      toast({
-        title: t("worker:netsim.runFailed", { failed: run.retryableFailures + run.blocked }),
-        tone: "danger",
-      });
-    } else if (run.conflicts > 0) {
-      toast({ title: t("worker:netsim.runConflicts", { count: run.conflicts }), tone: "warning" });
-    } else if (run.attempted === 0) toast({ title: t("worker:netsim.runNothing"), tone: "info" });
-    else {
-      toast({
-        title: t("worker:netsim.runDone", {
-          acknowledged: run.acknowledged,
-          attempted: run.attempted,
-        }),
-      });
     }
   };
 
@@ -338,14 +307,6 @@ export function NetworkSimulationScreen({ onBack }: NetworkSimulationScreenProps
             },
           ]}
         />
-        <Button
-          testID="netsim-run-pass"
-          icon="sync"
-          loading={running}
-          onPress={() => void runPass()}
-        >
-          {t("worker:netsim.runPass")}
-        </Button>
       </Section>
     </Screen>
   );
