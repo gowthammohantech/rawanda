@@ -105,7 +105,7 @@ and ruleset versions). Staff time is a self-reported **proxy**; no SLA or review
 
 ## Accessibility and responsive layout
 
-Landmarks (banner, navigation, main, complementary), "Skip to content", focus moves to the page
+Landmarks (banner, navigation, main, complementary), skip link "Skip to main content", focus moves to the page
 `h1` on navigation, titles "{Page} · Programme Dashboard · CareConnect (Demo)", tables with
 captions / `scope` / `aria-sort`, charts as `figure` + summary + "View as table" (the SVG is
 removed while the table shows; no chart animation), AA token contrast (unit test), axe in E2E.

@@ -111,6 +111,10 @@ test("admin story: WF-03, WF-04, Scenario 1 and 2, governance audit — EN then 
   ] as const) {
     await explorer.getByRole("combobox", { name: "Action" }).selectOption(filter);
     await explorer.getByRole("button", { name: "Apply filters" }).click();
+    // The filter form remounts (key = filter key) once the URL changes: wait for that before
+    // choosing the next filter, or the remount can discard the next selection.
+    await expect(page).toHaveURL(new RegExp(`aaction=${filter.replaceAll(".", "\\.")}`));
+    await expect(explorer.getByRole("combobox", { name: "Action" })).toHaveValue(filter);
     await expect(explorer.getByRole("row").filter({ hasText: label }).first()).toBeVisible();
   }
 

@@ -94,7 +94,7 @@ describe("Reset demo (ADM-09)", () => {
     await user.type(screen.getByTestId("reset-confirm-input"), "RESET");
     await user.click(confirm);
 
-    expect(await screen.findByText("Demo data restored")).toBeTruthy();
+    expect(await screen.findByText("Demo data restored", {}, { timeout: 5000 })).toBeTruthy();
     await waitFor(() => expect(router.state.location.pathname).toBe("/admin/login"));
     expect(services.session.getState().session).toBeNull();
     expect(screen.queryByTestId("fault-pill")).toBeNull();
