@@ -1,0 +1,186 @@
+{
+  "title": "Kohereza abarwayi",
+  "subtitle": "Abarwayi bose boherejwe na {{facility}}: kurikirana kwemerwa, gahunda no kurangiza bifite ibimenyetso.",
+  "loading": "Turimo gufungura abarwayi boherejwe…",
+  "overdueDerived": "Byarengeje igihe — itariki ntarengwa {{date}} (byabazwe)",
+  "overdueHint": "Byabazwe uhereye ku itariki ntarengwa yashyizweho n'umuntu. \"Byarengeje igihe\" ntabwo ari imiterere ibikwa.",
+  "kpi": {
+    "label": "Incamake yo kohereza abarwayi",
+    "open": "Bitararangira",
+    "overdue": "Byarengeje igihe (byabazwe)",
+    "overdueHint": "Kohereza bitararangira byarenze itariki ntarengwa",
+    "completedMonth": "Byarangiye uku kwezi",
+    "medianDays": "Iminsi yo hagati kugeza birangiye (demo)",
+    "medianHint": "Kuva bisabwe kugeza birangiye bifite ibimenyetso — imibare ya demo",
+    "days": "Iminsi {{count}}"
+  },
+  "tabs": {
+    "label": "Imiterere yo kohereza",
+    "open": "Bitararangira",
+    "overdue": "Byarengeje igihe",
+    "completed": "Byarangiye",
+    "cancelled": "Byahagaritswe",
+    "all": "Byose"
+  },
+  "filters": {
+    "search": "Shakisha abarwayi boherejwe",
+    "searchPlaceholder": "Izina ry'umurwayi, nimero cyangwa aho yoherejwe",
+    "destination": "Aho yoherejwe",
+    "anyDestination": "Aho hose yoherejwe"
+  },
+  "empty": {
+    "open": "Nta kohereza bitararangira muri {{facility}}",
+    "overdue": "Nta kohereza byarengeje igihe muri {{facility}}",
+    "completed": "Nta kohereza byarangiye muri {{facility}}",
+    "cancelled": "Nta kohereza byahagaritswe muri {{facility}}",
+    "all": "Nta kohereza muri {{facility}}",
+    "filtered": "Nta kohereza bihuye n'ibi byatoranyijwe"
+  },
+  "table": {
+    "caption": "Kohereza — {{tab}}",
+    "patient": "Umurwayi",
+    "destination": "Aho yoherejwe",
+    "priority": "Icyihutirwa",
+    "due": "Itariki ntarengwa",
+    "status": "Imiterere",
+    "lastUpdate": "Byahinduwe bwa nyuma",
+    "open": "Fungura",
+    "openFor": "Fungura kohereza kwa {{name}}"
+  },
+  "stepper": {
+    "label": "Aho kohereza bigeze",
+    "created": "Byashyizweho",
+    "accepted": "Byemewe",
+    "scheduled": "Byahawe gahunda",
+    "completed": "Byarangiye",
+    "cancelled": "Byahagaritswe",
+    "byAt": "{{name}} · {{when}}"
+  },
+  "actions": {
+    "accept": "Emera",
+    "schedule": "Shyiraho gahunda",
+    "edit": "Hindura aho yoherejwe cyangwa itariki ntarengwa",
+    "complete": "Rangiza ufite ibimenyetso",
+    "cancel": "Hagarika kohereza",
+    "create": "Ohereza umurwayi"
+  },
+  "drawer": {
+    "title": "Kohereza",
+    "titleFor": "Kohereza — {{name}}",
+    "description": "Imiterere, ibimenyetso n'amateka y'uku kohereza.",
+    "loading": "Turimo gufungura uku kohereza…",
+    "denied": "Uku kohereza kuri hanze y'ikigo nderabuzima ukoreramo. Iki gikorwa cyanditswe mu gitabo cy'igenzura.",
+    "notFound": "Uku kohereza ntikwabonetse.",
+    "linkedReview": "Isuzuma bifitanye isano",
+    "openReview": "Fungura isuzuma",
+    "reviewSummary": "{{outcome}} — byemejwe na {{name}}",
+    "reviewNoDecision": "Nta cyemezo cyanditswe kuri iri suzuma.",
+    "referringFacility": "Ikigo cyohereje",
+    "appointment": "Gahunda",
+    "reason": "Impamvu yo kohereza",
+    "details": "Ibisobanuro",
+    "actions": "Ibikorwa",
+    "evidence": "Ibimenyetso byo kurangiza",
+    "recordedBy": "Byanditswe na",
+    "cancellation": "Guhagarika",
+    "cancelledBy": "Byahagaritswe na",
+    "byAt": "{{name}} · {{when}}",
+    "history": "Amateka",
+    "historyEmpty": "Nta mateka arandikwa.",
+    "historyUnavailable": "Amateka ntiyashoboye gufunguka. Kohereza ubwako kugaragara hejuru.",
+    "historyTransition": "{{from}} → {{to}}",
+    "historyEvidence": "Ikimenyetso: {{type}} ({{reference}})",
+    "historyFields": "Byahinduwe: {{fields}}",
+    "historyReason": "Impamvu: {{reason}}",
+    "field": {
+      "destinationFacilityId": "aho yoherejwe",
+      "dueAt": "itariki ntarengwa"
+    },
+    "actor": "Na {{name}}",
+    "actorUnknown": "N'ukoresha utazwi",
+    "terminal": "Uku kohereza kwarafunzwe. Nta yindi mpinduka ishoboka.",
+    "noPermission": "Inshingano yawe ntiyemerewe guhindura kohereza. Ushobora kugusoma.",
+    "noCompletePermission": "Inshingano yawe ntiyemerewe kurangiza kohereza.",
+    "destinationOnly": "Uku kohereza kwoherejwe ku kigo cyawe n'ikindi kigo. Ikigo cyohereje ni cyo cyonyine gishobora kuguhindura.",
+    "offline": "Nta murandasi. Impinduka zahagaritswe; kohereza bikomeza gusomeka."
+  },
+  "dialog": {
+    "choose": "Hitamo…",
+    "reasonHint": "Nibura inyuguti {{min}} (imyanya ntibarwa).",
+    "failed": "Nta cyatakaye: ibyo wanditse biracyahari. Ongera ugerageze — icyifuzo kimwe cyoherezwa, ntigishobora kubikwa kabiri.",
+    "retry": "Ongera ugerageze"
+  },
+  "update": {
+    "acceptTitle": "Emera kohereza",
+    "acceptBody": "Andika ko {{destination}} cyemeye uku kohereza.",
+    "note": "Icyitonderwa (si ngombwa)",
+    "scheduleTitle": "Shyiraho gahunda",
+    "scheduleBody": "Andika itariki n'isaha bya gahunda byumvikanyweho n'ikigo yoherejwemo.",
+    "appointmentAt": "Itariki n'isaha bya gahunda",
+    "appointmentAtHint": "Isaha ya Africa/Kigali.",
+    "editTitle": "Hindura aho yoherejwe cyangwa itariki ntarengwa",
+    "editBody": "Ibyari bisanzweho bigumishwa mu mateka yo kohereza.",
+    "editSave": "Bika impinduka",
+    "currentDestination": "Aho yoherejwe ubu",
+    "currentDue": "Itariki ntarengwa y'ubu",
+    "destination": "Ikigo yoherejwemo",
+    "destinationOption": "{{name}} (demo)",
+    "dueAt": "Itariki ntarengwa",
+    "dueAtHint": "Ishyirwaho nawe, isaha ya Africa/Kigali. Nta gihe cya protocole gikoreshwa."
+  },
+  "edit": {
+    "changeReason": "Impamvu y'impinduka"
+  },
+  "complete": {
+    "title": "Rangiza kohereza ufite ibimenyetso",
+    "description": "Kurangiza bisaba itariki, umusaruro n'ubwoko bw'ikimenyetso bwemewe hamwe na nimero yacyo.",
+    "notEvidenceNotice": "Kohereza ubutumwa bwibutsa cyangwa ubundi butumwa ntabwo ari ikimenyetso cyo kurangiza.",
+    "completedAt": "Byarangiye ku itariki",
+    "completedAtHint": "Igihe umurwayi yitabiriye (ntibirenge ubu). Isaha ya Africa/Kigali.",
+    "outcomeLabel": "Umusaruro",
+    "evidenceTypeLabel": "Ubwoko bw'ikimenyetso",
+    "evidenceTypeHint": "Ubwoko bw'ibimenyetso bwa demo, butaremezwa.",
+    "evidenceReference": "Nimero y'ikimenyetso",
+    "evidenceReferenceHint": "Urugero: umurongo mu gitabo cyangwa nimero y'urupapuro rwo kugaruka.",
+    "note": "Icyitonderwa (si ngombwa)",
+    "review": "Suzuma kandi urangize",
+    "confirmTitle": "Urangiza uku kohereza?",
+    "confirmBody": "Kohereza kuzafungwa nk'ukwarangiye hamwe n'iki kimenyetso.",
+    "confirm": "Emeza kurangiza",
+    "back": "Subira inyuma"
+  },
+  "cancel": {
+    "title": "Hagarika kohereza",
+    "description": "Guhagarika bifunga kohereza. Hanyuma hashobora gushyirwaho ukundi kohereza ku isuzuma rimwe.",
+    "reasonCode": "Impamvu yo guhagarika",
+    "rationale": "Sobanura impamvu yo guhagarika",
+    "confirm": "Hagarika kohereza"
+  },
+  "create": {
+    "title": "Ohereza umurwayi",
+    "description": "Ku isuzuma ryafatiwe icyemezo ritagira kohereza kutararangira.",
+    "loading": "Turimo gufungura amasuzuma yafatiwe ibyemezo…",
+    "review": "Isuzuma ryafatiwe icyemezo",
+    "reviewHint": "Hagaragara gusa amasuzuma yafatiwe ibyemezo atagira kohereza kutararangira (ibimenyetso byakuweho ntibirimo).",
+    "reviewOption": "{{patient}} — {{outcome}} ({{date}})",
+    "noneEligible": "Nta suzuma ryafatiwe icyemezo ritagira kohereza kutararangira.",
+    "reason": "Impamvu yo kohereza"
+  },
+  "conflict": {
+    "title": "Uku kohereza kwahindutse kuva wagufungura",
+    "body": "Undi muntu yabitse verisiyo nshya. Nta cyasimbujwe. Fungura verisiyo iheruka uyisuzume mbere yo kongera kugerageza."
+  },
+  "errors": {
+    "alreadyOpen": "Iri suzuma risanzwe rifite kohereza kutararangira. Hemewe kohereza kumwe gusa kutararangira ku isuzuma.",
+    "viewOpen": "Reba kohereza kutararangira",
+    "invalidTransition": "Iyi mpinduka ntishoboka uhereye ku miterere y'ubu yo kohereza."
+  },
+  "toast": {
+    "created": "Kohereza kwashyizweho",
+    "accepted": "Kohereza kwemewe",
+    "scheduled": "Gahunda yashyizweho",
+    "edited": "Kohereza kwahinduwe",
+    "completed": "Kohereza kwarangiye hamwe n'ibimenyetso",
+    "cancelled": "Kohereza kwahagaritswe"
+  }
+}
