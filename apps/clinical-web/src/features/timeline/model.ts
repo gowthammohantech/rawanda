@@ -151,6 +151,8 @@ export type FollowUpEvent = {
   assigneeId?: PersonaId | null;
   /** Link target (review detail). */
   reviewId?: string;
+  /** Link target (CLN-08: the referral drawer `/clinical/referrals?id=`). */
+  referralId?: string;
 };
 
 export type FollowUpSources = {
@@ -185,6 +187,7 @@ export function toFollowUpEvents(sources: FollowUpSources, nowIso: string): Foll
     const linked = reviewById.get(referral.reviewId);
     events.push({
       id: `referral-${referral.id}-created`,
+      referralId: referral.id,
       kind: "referralCreated",
       occurredAt: referral.requestedAt,
       actorId: linked?.decision?.decidedBy ?? linked?.reviewedBy ?? null,
@@ -196,6 +199,7 @@ export function toFollowUpEvents(sources: FollowUpSources, nowIso: string): Foll
     if (referral.appointmentAt !== null) {
       events.push({
         id: `referral-${referral.id}-scheduled`,
+        referralId: referral.id,
         kind: "referralScheduled",
         occurredAt:
           referral.updatedAt < referral.requestedAt ? referral.requestedAt : referral.updatedAt,
@@ -209,6 +213,7 @@ export function toFollowUpEvents(sources: FollowUpSources, nowIso: string): Foll
     if (referral.status === "completed") {
       events.push({
         id: `referral-${referral.id}-completed`,
+        referralId: referral.id,
         kind: "referralCompleted",
         occurredAt:
           referral.completedAt ?? referral.completionEvidence?.recordedAt ?? referral.updatedAt,
@@ -222,6 +227,7 @@ export function toFollowUpEvents(sources: FollowUpSources, nowIso: string): Foll
     if (referral.status === "cancelled_with_reason") {
       events.push({
         id: `referral-${referral.id}-cancelled`,
+        referralId: referral.id,
         kind: "referralCancelled",
         occurredAt: referral.updatedAt,
         actorId: null,

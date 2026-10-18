@@ -25,6 +25,7 @@ import { NavLink, Outlet, useLocation, useNavigate } from "react-router";
 import { useDemoTools } from "../../app/demo-tools.tsx";
 import { UNFILTERED_SCOPE } from "../../features/queue/model.ts";
 import { reviewCountsQuery } from "../../features/queue/useReviewQueue.ts";
+import { referralCountsQuery, UNFILTERED_REFERRAL_SCOPE } from "../../features/referrals/hooks.ts";
 import { ConnectionBanner } from "../ConnectionBanner.tsx";
 import { facilityLabel, personaOption } from "../../app/persona-labels.ts";
 import { useRepository } from "../../data/useRepository.ts";
@@ -74,9 +75,24 @@ function ShellChrome({ badgeCounts = {} }: ClinicalShellProps) {
     select: (counts) => counts.pending,
   });
 
+  // CLN-08 task 10: open referrals that are overdue (derived) — the referrals KPI cache entry.
+  const overdueReferrals = useQuery({
+    ...referralCountsQuery(
+      repo,
+      state?.activeFacilityId ?? "none",
+      UNFILTERED_REFERRAL_SCOPE,
+      can("referral.manage") && state !== null,
+    ),
+    select: (c) => c["overdue"] ?? 0,
+  });
+
   const counts: Partial<Record<NavItemId, number>> = useMemo(
-    () => ({ ...(pending.data === undefined ? {} : { queue: pending.data }), ...badgeCounts }),
-    [pending.data, badgeCounts],
+    () => ({
+      ...(pending.data === undefined ? {} : { queue: pending.data }),
+      ...(overdueReferrals.data === undefined ? {} : { referrals: overdueReferrals.data }),
+      ...badgeCounts,
+    }),
+    [pending.data, overdueReferrals.data, badgeCounts],
   );
 
   const sections = useMemo<readonly SidebarSection[]>(

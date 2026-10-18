@@ -363,6 +363,8 @@ export const ENTITY_TYPES = [
   "device_session",
   // ext (ADM-03): non-clinical programme follow-up action (collection `programmeActions`).
   "programme_action",
+  // ext (ADM-06): data-quality issue + its triage state (collection `dataQualityIssues`).
+  "data_quality_issue",
 ] as const;
 export type EntityType = (typeof ENTITY_TYPES)[number];
 

@@ -1,0 +1,64 @@
+# CTZ-07 correction request (device gate; not part of `pnpm verify`):
+# Marie (CTZ-P1) → My health → amended glucose result → Something wrong? → describe → tick →
+# Send → "Request sent" → Privacy → request shows SUBMITTED → My health → values unchanged.
+appId: host.exp.Exponent
+---
+- launchApp:
+    clearState: true
+- tapOn: "Continue"
+- tapOn:
+    id: "persona-card-persona-citizen-1"
+- assertVisible: "My health"
+# CTZ-P1's amended observation (CITIZEN_OVERLAY_IDS.amendedScreening): 122/78 mmHg, glucose 5.6.
+- scrollUntilVisible:
+    element:
+      id: "result-card-9c90bd61-dabb-5039-9c82-df61daaf1ca3"
+- tapOn:
+    id: "result-card-9c90bd61-dabb-5039-9c82-df61daaf1ca3"
+- copyTextFrom:
+    id: "reading-glucose"
+- evalScript: ${output.glucoseBefore = maestro.copiedText}
+- scrollUntilVisible:
+    element:
+      id: "result-something-wrong"
+- tapOn:
+    id: "result-something-wrong"
+- assertVisible: "Ask for a correction"
+- tapOn:
+    id: "correction-description"
+- inputText: "abc"
+- tapOn:
+    id: "correction-continue-describe"
+- assertVisible: "Please tell us a little more (at least 10 letters)."
+- assertVisible: "Please tick the box to continue."
+- tapOn:
+    id: "correction-description"
+- inputText: " - the time of this check looks wrong to me."
+- hideKeyboard
+- tapOn:
+    id: "correction-understood"
+- tapOn:
+    id: "correction-continue-describe"
+- assertVisible: "Check your request"
+- tapOn:
+    id: "correction-send"
+- tapOn:
+    id: "correction-send"
+    optional: true
+- assertVisible: "Request sent"
+- assertVisible: "Your record has not been changed. Your care team will review your request."
+- tapOn:
+    id: "correction-done"
+- assertVisible: "Who has looked at my record"
+- scrollUntilVisible:
+    element: "SUBMITTED"
+- assertVisible: "SUBMITTED"
+- tapOn: "My health"
+- scrollUntilVisible:
+    element:
+      id: "result-card-9c90bd61-dabb-5039-9c82-df61daaf1ca3"
+- tapOn:
+    id: "result-card-9c90bd61-dabb-5039-9c82-df61daaf1ca3"
+- assertVisible:
+    id: "reading-glucose"
+    text: ${output.glucoseBefore}

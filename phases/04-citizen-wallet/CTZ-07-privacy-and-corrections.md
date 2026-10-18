@@ -10,7 +10,7 @@
 | Depends on | CTZ-06 |
 | Trace | CW-06; WF-04 step 4; FRD Scenario 2; FRD §4 ("do not overwrite original… use correction/version events", reason required when correcting); FRD §7 (log access); Tech spec §2.4 "Privacy", §8 "Citizen — Correction request: task created; source clinical record unchanged"; T-01, T-03, T-04, T-05, T-06, T-09 |
 | Size | L |
-| Status | Planned |
+| Status | Done |
 
 ## 2. Goal
 

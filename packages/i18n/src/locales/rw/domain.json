@@ -268,7 +268,8 @@
     "ruleset": "Amategeko y'igerageza",
     "sync_operation": "Igikorwa cyo guhuza",
     "device_session": "Igikoresho cyinjiwemo",
-    "programme_action": "Igikorwa cya porogaramu"
+    "programme_action": "Igikorwa cya porogaramu",
+    "data_quality_issue": "Ikibazo cy'ubuziranenge bw'amakuru"
   },
   "pathwayStage": {
     "DRAFT_SCREENING": "Ipimwa ritararangira",
@@ -544,6 +545,16 @@
       },
       "change": {
         "viewed": "Impinduka ku makuru yarebwe mu gasanduku"
+      },
+      "privacy_notice": {
+        "viewed": "Itangazo ry'ibanga ryarebwe mu gasanduku"
+      },
+      "access_history": {
+        "viewed": "Amateka y'abarebye amakuru yarebwe mu gasanduku"
+      },
+      "correction": {
+        "viewed": "Icyifuzo cyo gukosora cyarebwe mu gasanduku",
+        "duplicate_blocked": "Icyifuzo cya kabiri cyo gukosora ikintu kimwe cyahagaritswe"
       }
     },
     "admin": {
@@ -553,6 +564,15 @@
       "programme_action": {
         "created": "Igikorwa cya porogaramu cyahawe ushinzwe",
         "status_changed": "Imiterere y'igikorwa cya porogaramu yahindutse"
+      },
+      "quality_issue": {
+        "detected": "Ikibazo cy'ubuziranenge bw'amakuru cyagaragaye (sisitemu)",
+        "triaged": "Ikibazo cy'ubuziranenge bw'amakuru cyasuzumwe"
+      }
+    },
+    "clinical": {
+      "referral": {
+        "updated": "Aho yoherejwe cyangwa itariki ntarengwa byahinduwe"
       }
     },
     "worker": {

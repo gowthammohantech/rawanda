@@ -37,7 +37,7 @@
     "overdueReferrals": "Kohereza byarengeje igihe",
     "overdueFollowUps": "Ikurikirana ryarengeje igihe",
     "pendingAged": "Isuzuma rimaze iminsi 8+ ritegereje",
-    "quality": "Ibimenyetso by'ubuziranenge bw'amakuru",
+    "quality": "Ibibazo by'ubuziranenge bitarakemurwa",
     "note": "Byarengeje igihe gusa iyo itariki yagenwe n'umuntu yarenze. Isuzuma ritegereje ryerekanwa hakurikijwe igihe rimaze — nta gihe ntarengwa cyemejwe."
   },
   "dataNote": {
@@ -133,8 +133,8 @@
       "numerator": "Ibipimo byagaragajwe bigitegereje isuzuma, hakurikijwe iminsi kuva bipimwe"
     },
     "openQualityIssues": {
-      "label": "Ibimenyetso by'ubuziranenge bw'amakuru",
-      "numerator": "Ibipimo bitagira igipimo cy'isukari hiyongereyeho imyirondoro ishobora kuba isa"
+      "label": "Ibibazo by'ubuziranenge bw'amakuru bitarakemurwa",
+      "numerator": "Ibibazo by'ubuziranenge bw'amakuru byagaragaye bitarasuzumwa — igice Bifunguye kuri Umutekano n'ubuziranenge"
     },
     "workloadMinutes": {
       "label": "Igihe cy'abakozi ku murwayi ku munsi (igereranya)",
@@ -157,12 +157,15 @@
       "flagged": "Ibipimo byagaragajwe muri icyo gihe",
       "referred": "Ibipimo byoherejwe muri icyo gihe",
       "patientDays": "Iminsi y'abarwayi: guhura gutandukanye (umurwayi, umunsi wa Kigali) kwa buri mukozi kuvuye mu ipimwa no kugerageza guhamagara, byateranyijwe ku bakozi bose",
-      "tasksAssigned": "Imirimo yo gukurikirana yatanzwe muri icyo gihe"
+      "tasksAssigned": "Imirimo yo gukurikirana yatanzwe muri icyo gihe",
+      "reviewed": "Ibimenyetso byasuzumwe muri icyo gihe",
+      "dismissed": "Ibimenyetso byakuweho muri icyo gihe"
     },
     "inclusion": {
       "cohort": "Ibipimo byoherejwe gusa (imishinga ntibarwa); abikuyeho uburenganzira ntibabarwa; ikipimo cyakosowe kibarwa rimwe",
       "deferred": "Ntibipimwa muri iyi prototype (byasubitswe)",
-      "proxy": "Igihe abakozi biyandikiye mu igerageza gusa — igipimo kigereranya, si igipimo nyacyo cy'akazi cyangwa cy'imikorere y'umuntu"
+      "proxy": "Igihe abakozi biyandikiye mu igerageza gusa — igipimo kigereranya, si igipimo nyacyo cy'akazi cyangwa cy'imikorere y'umuntu",
+      "reviewProxy": "Isuzuma ryafatiweho icyemezo ry'ibipimo byagaragajwe muri icyo gihe — igereranya rikomoka ku byavuye mu isuzuma, si igipimo cy'ukuri kw'ubuvuzi"
     },
     "attribution": {
       "period": "Igihe = itariki ya Kigali yo gupima",
@@ -172,7 +175,9 @@
       "reviewWeek": "Icyumweru = icyumweru cya ISO cya Kigali (gitangira ku wa Mbere) cy'icyemezo cy'isuzuma",
       "weekEnd": "Bibarwa ku mpera ya buri cyumweru (ku Cyumweru 23:59 Kigali); aka nyuma ni ubu (isaha y'igerageza)",
       "taskCreated": "Bitandukanye n'uburyo busanzwe: umurimo ubarwa mu gihe cy'itariki watangiweho (createdAt), kuko akazi kareba igihe kakoreweho",
-      "timeEntry": "Igihe = itariki y'igihe cyanditswe n'itariki ya Kigali ya buri guhura"
+      "timeEntry": "Igihe = itariki y'igihe cyanditswe n'itariki ya Kigali ya buri guhura",
+      "detection": "Ibibazo by'ibipimo bibarwa mu gihe cy'ipimwa; nimero zisubiramo zibarwa mu gihe cy'iyandikwa rya nyuma ry'umurwayi",
+      "audit": "Igihe = itariki ya Kigali y'igikorwa cy'igenzura"
     },
     "p90DaysToReview": {
       "label": "Ijanisha rya 90 ry'iminsi kugeza isuzuma",
@@ -234,6 +239,46 @@
     "weeklyMinutesPerPatientDay": {
       "label": "Iminota ku munsi w'umurwayi buri cyumweru",
       "numerator": "Iminota abakozi biyandikiye mu igerageza buri cyumweru cya ISO cya Kigali"
+    },
+    "qualityMissingFields": {
+      "label": "Ibipimo bibura amakuru ya ngombwa",
+      "numerator": "Ibipimo byoherejwe bibura nibura amakuru amwe ya ngombwa (umurwayi, ikigo, uwanditse, igihe, inkomoko, verisiyo y'amategeko; igipimo n'imiterere y'isukari iyo isukari yanditswe; ibipimo byombi by'umuvuduko w'amaraso)"
+    },
+    "qualityMissingByField": {
+      "label": "Amakuru abura ku buryo bw'umwanya",
+      "numerator": "Ibipimo bibura buri makuru ya ngombwa (igipimo kimwe gishobora kubura menshi)"
+    },
+    "identityMismatches": {
+      "label": "Amakuru y'umwirondoro ashobora kuba atavuguruzanya",
+      "numerator": "Inyandiko z'abarwayi zisangiye nimero imwe y'igerageza (imwe kuri buri tsinda) hiyongereyeho ibipimo bidafite inyandiko y'umurwayi mu bubasha"
+    },
+    "overturnedFlagRate": {
+      "label": "Ibimenyetso byakuweho (igereranya)",
+      "numerator": "Ibimenyetso byasuzumwe bigakurwaho hatanzwe impamvu — igereranya, si ukuri kw'ubuvuzi"
+    },
+    "missedFlagProxy": {
+      "label": "Igereranya ry'ibimenyetso byasimbutswe",
+      "numerator": "Ibipimo byazamuwe n'intoki itegeko ry'igerageza ritagaragaje — igereranya, si ukuri kw'ubuvuzi"
+    },
+    "duplicateSubmissionsPrevented": {
+      "label": "Ibyoherejwe kabiri byakumiriwe",
+      "numerator": "Ibyoherejwe byongeye guhurizwa hamwe n'igenzura ry'ububiko (ibikorwa by'igenzura)"
+    },
+    "completedWithoutEvidence": {
+      "label": "Kohereza byarangiye nta gihamya",
+      "numerator": "Kohereza byarangiye bidafite igihe cyo kurangiza cyangwa igihamya — bigomba kuba 0 (igenzura ry'ihame)"
+    },
+    "weeklyQualityTrend": {
+      "label": "Imigendekere y'ubuziranenge buri cyumweru",
+      "numerator": "Ibipimo bibura amakuru n'amakuru y'umwirondoro atavuguruzanya kuri buri cyumweru cya ISO (Kigali)"
+    },
+    "flagReviewOutcomesByGroup": {
+      "label": "Ibyavuye mu isuzuma ry'ibimenyetso ku matsinda (igereranya)",
+      "numerator": "Ibipimo byagaragajwe, ibyakuweho n'ibyazamuwe n'intoki ku gitsina n'ikigero cy'imyaka — ikimenyetso cy'ubutabera, si igipimo cy'ukuri kw'ubuvuzi"
+    },
+    "dismissalReasonDistribution": {
+      "label": "Impamvu zo gukuraho",
+      "numerator": "Ibimenyetso byakuweho ku buryo bw'impamvu zanditswe (inyandiko z'ubuntu ntizigaragazwa)"
     }
   }
 }

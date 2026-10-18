@@ -21,6 +21,7 @@ import {
   UpdateNotificationPrefsInputSchema,
   VerifyIdentityInputSchema,
 } from "../index.ts";
+import { CareTaskPayloadSchemas, CorrectionRequestInputSchema } from "../../index.ts";
 
 const T = "2026-10-14T06:00:00.000Z";
 const base = { version: 1, createdAt: T, updatedAt: T, synthetic: true };
@@ -313,8 +314,39 @@ describe("citizen projections", () => {
         status: "resolved_amended",
         createdBy: "persona-citizen-1",
         resolvedAt: T,
+        suggestedText: null,
+        resolutionKey: "glucose_context_corrected",
       }).success,
     ).toBe(true);
+  });
+
+  it("CTZ-07: correction payload accepts a routing role and an outcome KEY, never free text", () => {
+    const payload = {
+      targetType: "screening",
+      targetId: "scr-1",
+      description: "The time looks wrong.",
+      suggestedValue: null,
+      requestStatus: "resolved_no_change",
+      assignedRole: "clinician",
+    };
+    const schema = CareTaskPayloadSchemas.correction_request;
+    expect(schema.safeParse({ ...payload, resolutionKey: "reading_time_confirmed" }).success).toBe(
+      true,
+    );
+    expect(schema.safeParse({ ...payload, resolutionKey: "Checked, all fine!" }).success).toBe(
+      false,
+    );
+    expect(schema.safeParse({ ...payload, assignedRole: "nobody" }).success).toBe(false);
+    expect(
+      CorrectionRequestInputSchema.safeParse({
+        idempotencyKey: KEY,
+        patientId: "pat-1",
+        targetType: "patient",
+        targetId: "pat-1",
+        description: "My birth year is wrong.",
+        expectedTargetVersion: 0,
+      }).success,
+    ).toBe(false);
   });
 });
 

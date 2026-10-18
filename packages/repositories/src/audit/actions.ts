@@ -97,6 +97,9 @@ export const AUDIT_ACTIONS = {
   "referral.scheduled": seedChange,
   "referral.completed": seedChange,
   "referral.cancelled": seedChange,
+  // CLN-08: destination / due-date edit of an open referral (status changes stay
+  // `referral.transitioned`, whose changeSummary carries from → to + evidence / cancel reason).
+  "clinical.referral.updated": change,
 
   // ── Follow-ups ───────────────────────────────────────────────────────────
   "followup.created": change,
@@ -144,6 +147,12 @@ export const AUDIT_ACTIONS = {
   // CTZ-06: the Timeline tab was shown (once per focus) / a "what changed" sheet was opened.
   "citizen.timeline.viewed": access,
   "citizen.change.viewed": access,
+  // CTZ-07: privacy notice / access history / one correction request shown; a second request
+  // for the same record while one is still open was blocked (nothing written).
+  "citizen.privacy_notice.viewed": access,
+  "citizen.access_history.viewed": access,
+  "citizen.correction.viewed": access,
+  "citizen.correction.duplicate_blocked": security,
   // CTZ-02: persona choice + simulated identity verification (demo code, never a real check).
   "citizen.persona.selected": access,
   "citizen.identity.verification_attempted": security,
@@ -158,6 +167,13 @@ export const AUDIT_ACTIONS = {
   "admin.drilldown.viewed": accessClient,
   "admin.programme_action.created": change,
   "admin.programme_action.status_changed": change,
+  // ── Programme admin (ADM-06) ────────────────────────────────────────────
+  // Phase prose `system.quality_issue.detected` → app-area prefix rule: `admin.quality_issue.detected`
+  // (actor = system: actorId / actorRole null), one per NEW issue id. `admin.quality_issue.conflict`
+  // / `.denied` map to the canonical `conflict.detected` / `access.denied` (entityType
+  // `data_quality_issue`). Triage audits carry the note LENGTH, never the note text.
+  "admin.quality_issue.detected": change,
+  "admin.quality_issue.triaged": change,
 
   // ── Health worker app (HWM-09; phase names `sync.manual_requested` /
   // `sync.duplicate_tap_coalesced` are UI-originated, so app-prefixed) ─────────

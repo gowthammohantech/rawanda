@@ -108,7 +108,7 @@ describe("SettingsPage", () => {
     await waitFor(async () => {
       const faults = await services.repo.demo.getFaults();
       expect(faults.timeoutRate).toBe(1);
-      expect(faults.conflictOnce).toHaveLength(5);
+      expect(faults.conflictOnce).toHaveLength(6);
       expect(faults.latencyMs).toEqual([1000, 1000]);
     });
     await user.click(screen.getByRole("button", { name: "Turn all faults off" }));

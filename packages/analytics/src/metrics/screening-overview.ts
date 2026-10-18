@@ -8,7 +8,7 @@ import { hasBp, hasGlucose, isoWeeksBetween, type MetricsDataset } from "../data
 import { applyMetricsFilter, kigaliDate, kigaliIsoWeekStart } from "../filters.ts";
 import type { AnalyticsInput, MetricsFilter, Rate } from "../types.ts";
 import { classifyPathway } from "./funnel.ts";
-import { dataQuality } from "./quality.ts";
+import { openQualityIssueCount } from "./quality.ts";
 import { overdueSnapshot, pendingAgeBuckets } from "./timeliness.ts";
 import {
   groupBy,
@@ -273,7 +273,10 @@ export type NeedsAttention = {
   /** Pending reviews by age (no approved timing rule — FRD §5). */
   pendingReviewAges: Record<PendingReviewAgeBucket, number>;
   pendingReviewsAged8Plus: number;
-  /** Detected data-quality signals: missing glucose unit + possible duplicate identities. */
+  /**
+   * Open data-quality issues (ADM-06 `openQualityIssueCount`): detected issues not yet triaged —
+   * the same source as the Safety & quality "Open" tab.
+   */
   openQualityIssues: number;
 };
 
@@ -290,12 +293,11 @@ export function needsAttention(ds: MetricsDataset): NeedsAttention {
     "8+": buckets["8-14"] + buckets["15+"],
   };
   const overdue = overdueSnapshot(ds, now);
-  const quality = dataQuality(ds.cohort, {}, now);
   return {
     overdueReferrals: overdue.referrals,
     overdueFollowUps: overdue.followUps,
     pendingReviewAges: ages,
     pendingReviewsAged8Plus: ages["8+"],
-    openQualityIssues: quality.missingGlucoseUnit + quality.possibleDuplicateIdentities,
+    openQualityIssues: openQualityIssueCount(ds),
   };
 }

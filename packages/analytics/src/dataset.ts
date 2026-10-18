@@ -20,7 +20,7 @@
  *
  * Pure: time only from the `now` argument.
  */
-import type { TimeEntry } from "@laif/contracts";
+import type { DataQualityIssueStatus, TimeEntry } from "@laif/contracts";
 import type { FacilityId, FollowUp, PersonaId, Screening } from "@laif/domain";
 
 import {
@@ -51,7 +51,68 @@ export type MetricsRecords = AnalyticsInput & {
   taskFollowUps?: FollowUp[];
   /** ADM-05: workers of the in-scope facilities (codes only). */
   workers?: WorkerRef[];
+  /**
+   * ADM-06: groups of patient ids (sorted, ≥ 2) sharing one synthetic identifier. Computed by
+   * the repository (the identifiers themselves never leave it); when absent, derived from
+   * `patients[].syntheticIdentifier`. In a dataset: only groups detected in the period (latest
+   * member registration) whose anchor (first id) is in the cohort.
+   */
+  duplicateIdentifierGroups?: string[][];
+  /**
+   * ADM-06: submitted screenings whose patient has no patient record in the READ scope. Computed
+   * once on the first filter (so a narrower restriction never turns a patient registered at
+   * another in-scope facility into an orphan).
+   */
+  orphanScreeningIds?: string[];
+  /** ADM-06: age band per patient id at read time (dates of birth never leave the repository). */
+  patientAgeBands?: Record<string, AgeBand>;
+  /** ADM-06: `sync.duplicate_suppressed` audit events — facility and time only. */
+  duplicateSubmissions?: Array<{ facilityId: string; occurredAt: string }>;
+  /** ADM-06: stored triage status per data-quality issue id (absent = never triaged = open). */
+  qualityIssueStatus?: Record<string, DataQualityIssueStatus>;
 };
+
+/** ADM-06 fairness disaggregation (LAIF MoH p. 13): adult age bands + not recorded. */
+export const AGE_BANDS = ["18-39", "40-59", "60+", "unknown"] as const;
+export type AgeBand = (typeof AGE_BANDS)[number];
+
+/** Age band at `nowIso` from a date of birth, else the estimated age; under 18 → `unknown`. */
+export function ageBandOf(
+  patient: { dateOfBirth: string | null; estimatedAgeYears?: number },
+  nowIso: string,
+): AgeBand {
+  let age: number | null = null;
+  if (patient.dateOfBirth !== null && patient.dateOfBirth !== "") {
+    const today = kigaliDate(nowIso);
+    const [y, m, d] = patient.dateOfBirth.split("-").map(Number) as [number, number, number];
+    const [ty, tm, td] = today.split("-").map(Number) as [number, number, number];
+    age = ty - y - (tm < m || (tm === m && td < d) ? 1 : 0);
+  } else if (patient.estimatedAgeYears !== undefined) {
+    age = patient.estimatedAgeYears;
+  }
+  if (age === null || Number.isNaN(age) || age < 18) return "unknown";
+  if (age < 40) return "18-39";
+  if (age < 60) return "40-59";
+  return "60+";
+}
+
+/** Patient-id groups sharing a non-empty synthetic identifier (sorted ids, sorted groups). */
+export function duplicateIdentifierGroupsOf(
+  patients: ReadonlyArray<{ id: string; syntheticIdentifier: string }>,
+): string[][] {
+  const byIdentifier = new Map<string, string[]>();
+  for (const p of patients) {
+    const k = p.syntheticIdentifier.trim();
+    if (k === "") continue;
+    const list = byIdentifier.get(k);
+    if (list) list.push(p.id);
+    else byIdentifier.set(k, [p.id]);
+  }
+  return [...byIdentifier.values()]
+    .filter((ids) => ids.length > 1)
+    .map((ids) => [...ids].sort())
+    .sort((a, b) => ((a[0] as string) < (b[0] as string) ? -1 : 1));
+}
 
 export type DatasetFilter = MetricsFilter & { type?: ScreeningTypeFilter };
 
@@ -129,6 +190,38 @@ export function filterDataset(
       (isDayInRange(kigaliDate(f.createdAt), metricsFilter) ||
         f.attempts.some((a) => isDayInRange(kigaliDate(a.at), metricsFilter))),
   );
+  // ADM-06 quality sources.
+  const knownPatients = new Map<string, { createdAt: string }>(
+    records.patients.map((p) => [p.id, p]),
+  );
+  const orphanScreeningIds =
+    records.orphanScreeningIds ??
+    submitted
+      .filter((s) => s.patientId.trim() !== "" && !knownPatients.has(s.patientId))
+      .map((s) => s.id);
+  const cohortPatients = records.patients.filter((p) => !withdrawn.has(p.id));
+  const cohortPatientIds = new Set<string>(
+    applyMetricsFilter({ ...records, patients: cohortPatients }, metricsFilter).patients.map(
+      (p) => p.id,
+    ),
+  );
+  const duplicateIdentifierGroups = (
+    records.duplicateIdentifierGroups ?? duplicateIdentifierGroupsOf(records.patients)
+  ).filter((group) => {
+    const anchor = group[0];
+    if (anchor === undefined || group.length < 2 || !cohortPatientIds.has(anchor)) return false;
+    const detected = group.reduce(
+      (latest, id) => {
+        const at = knownPatients.get(id)?.createdAt;
+        return at !== undefined && (latest === null || at > latest) ? at : latest;
+      },
+      null as string | null,
+    );
+    return detected !== null && isDayInRange(kigaliDate(detected), metricsFilter);
+  });
+  const duplicateSubmissions = (records.duplicateSubmissions ?? []).filter(
+    (e) => facilityIds.has(e.facilityId) && isDayInRange(kigaliDate(e.occurredAt), metricsFilter),
+  );
   const workers = (records.workers ?? [])
     .map((w) => ({ ...w, facilityIds: w.facilityIds.filter((id) => facilityIds.has(id)) }))
     .filter((w) => w.facilityIds.length > 0);
@@ -145,6 +238,15 @@ export function filterDataset(
       timeEntries,
       taskFollowUps,
       workers,
+      duplicateIdentifierGroups,
+      orphanScreeningIds: orphanScreeningIds.filter((id) => screeningIds.has(id)),
+      ...(records.patientAgeBands === undefined
+        ? {}
+        : { patientAgeBands: records.patientAgeBands }),
+      duplicateSubmissions,
+      ...(records.qualityIssueStatus === undefined
+        ? {}
+        : { qualityIssueStatus: records.qualityIssueStatus }),
     },
     filter: {
       from: filter.from ?? null,

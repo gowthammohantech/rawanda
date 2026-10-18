@@ -1,6 +1,7 @@
 import { actorForPersona } from "@laif/auth-demo";
 import {
   createDemoClock,
+  hashCanonical,
   createSequentialIdGenerator,
   type AuditEvent,
   type DemoPersona,
@@ -911,3 +912,200 @@ describe.each(adapters)("CitizenRepository CTZ-05 reminders (%s adapter)", (_nam
     expect(await h.audits("citizen.reminder.preview_sent")).toHaveLength(1);
   });
 });
+
+describe.each(adapters)(
+  "CitizenRepository CTZ-07 privacy and corrections (%s adapter)",
+  (_name, makeStore) => {
+    const AMENDED = CITIZEN_OVERLAY_IDS.amendedScreening;
+    type Task = {
+      id: string;
+      kind: string;
+      status: string;
+      patientId: string;
+      payload: Record<string, unknown>;
+    };
+    const tasksOf = async (h: Awaited<ReturnType<typeof setup>>) =>
+      (await h.store.getAll<Task>("careTasks")).filter(
+        (t) => t.kind === "correction_request" && t.payload["requestStatus"] === "submitted",
+      );
+    /** Hash of everything a correction request must never touch (FRD §4, T-06). */
+    const recordHash = async (h: Awaited<ReturnType<typeof setup>>) =>
+      hashCanonical({
+        screenings: await h.store.getAll("screenings"),
+        careInstructions: await h.store.getAll("careInstructions"),
+        patients: await h.store.getAll("patients"),
+        citizenAccounts: await h.store.getAll("citizenAccounts"),
+      });
+    const request = (overrides: Record<string, unknown> = {}) => ({
+      patientId: P1,
+      targetType: "screening" as const,
+      targetId: AMENDED,
+      description: "The time of this check looks wrong to me.",
+      ...overrides,
+    });
+    const latestTarget = async (h: Awaited<ReturnType<typeof setup>>, id: string) =>
+      (await h.repo.listCorrectionTargets(P1)).find((t) => t.targetId === id)!;
+
+    it("valid request: one task (submitted, clinician), two audits sharing a correlation; record hash unchanged", async () => {
+      const h = await setup(makeStore());
+      const before = await recordHash(h);
+      const target = await latestTarget(h, AMENDED);
+      const result = await h.repo.createCorrectionRequest(
+        request({ expectedTargetVersion: target.version, suggestedValue: "Fasting" }),
+        h.key(),
+      );
+      expect(result.data).toMatchObject({
+        kind: "correction_request",
+        status: "open",
+        payload: { requestStatus: "submitted", assignedRole: "clinician", targetId: AMENDED },
+      });
+      expect(await tasksOf(h)).toHaveLength(1);
+      const requested = (await h.audits("correction.requested")).filter(
+        (e) => e.entityId === result.data.id,
+      );
+      const created = (await h.audits("task.created")).filter((e) => e.entityId === result.data.id);
+      expect(requested).toHaveLength(1);
+      expect(created).toHaveLength(1);
+      expect(requested[0]?.correlationId).toBe(created[0]?.correlationId);
+      expect(await recordHash(h)).toBe(before);
+      const listed = await h.repo.listCorrectionRequests(P1);
+      expect(listed.find((r) => r.id === result.data.id)).toMatchObject({
+        status: "submitted",
+        suggestedText: "Fasting",
+        resolutionKey: null,
+      });
+    });
+
+    it("same key = replay (one task); other key while open = DUPLICATE_OPEN_REQUEST + audit", async () => {
+      const h = await setup(makeStore());
+      const key = h.key();
+      const first = await h.repo.createCorrectionRequest(request(), key);
+      const replay = await h.repo.createCorrectionRequest(request(), key);
+      expect(replay.replayed).toBe(true);
+      expect(replay.data.id).toBe(first.data.id);
+      const error = await h.repo.createCorrectionRequest(request(), h.key()).then(
+        () => null,
+        (e: unknown) => e,
+      );
+      expect(error).toMatchObject({
+        code: "VALIDATION_ERROR",
+        reason: "DUPLICATE_OPEN_REQUEST",
+        details: { existingId: first.data.id, existingCreatedAt: first.data.createdAt },
+      });
+      expect(await tasksOf(h)).toHaveLength(1);
+      const blocked = await h.audits("citizen.correction.duplicate_blocked");
+      expect(blocked).toHaveLength(1);
+      expect(blocked[0]).toMatchObject({ entityId: first.data.id, outcome: "denied" });
+      // A different item is fine.
+      await h.repo.createCorrectionRequest(
+        request({ targetType: "patient", targetId: P1, description: "My birth year is wrong." }),
+        h.key(),
+      );
+      expect(await tasksOf(h)).toHaveLength(2);
+    });
+
+    it("conflict toggle or a stale target version → CONFLICT, nothing written (T-05)", async () => {
+      const h = await setup(makeStore());
+      await h.repo.demo.setFaults({ conflictOnce: [{ entityType: "patient", entityId: P1 }] });
+      await expect(h.repo.createCorrectionRequest(request(), h.key())).rejects.toMatchObject({
+        code: "CONFLICT",
+      });
+      const target = await latestTarget(h, AMENDED);
+      await expect(
+        h.repo.createCorrectionRequest(
+          request({ expectedTargetVersion: target.version - 1 }),
+          h.key(),
+        ),
+      ).rejects.toMatchObject({ code: "CONFLICT" });
+      expect(await tasksOf(h)).toHaveLength(0);
+      expect(await h.audits("conflict.detected")).toHaveLength(2);
+      // The toggle is consumed once: the next send goes through.
+      await h.repo.createCorrectionRequest(request(), h.key());
+      expect(await tasksOf(h)).toHaveLength(1);
+    });
+
+    it("targets: released results, approved steps, personal details; representative only Grace's", async () => {
+      const h = await setup(makeStore());
+      const targets = await h.repo.listCorrectionTargets(P1);
+      expect(targets.at(-1)).toMatchObject({ targetType: "patient", targetId: P1 });
+      expect(targets.some((t) => t.targetType === "screening" && t.targetId === AMENDED)).toBe(
+        true,
+      );
+      expect(targets.some((t) => t.targetType === "care_instruction")).toBe(true);
+      for (const t of targets) {
+        if (t.targetType === "screening") expect(t.observation.kind).toBe("released");
+      }
+      h.as(PERSONA_IDS.citizenRep);
+      const grace = await h.repo.listCorrectionTargets(P4);
+      expect(
+        grace.every(
+          (t) => t.targetId === P4 || ("observation" in t ? t.observation.patientId === P4 : true),
+        ),
+      ).toBe(true);
+      await forbidden(h.repo.listCorrectionTargets(P1), "SCOPE");
+      await expect(
+        h.repo.createCorrectionRequest(request({ patientId: P4 }), h.key()),
+      ).rejects.toMatchObject({ code: "VALIDATION_ERROR" });
+      await forbidden(h.repo.createCorrectionRequest(request(), h.key()), "SCOPE");
+    });
+
+    it("seeded resolved requests carry their outcome key; detail logs citizen.correction.viewed", async () => {
+      const h = await setup(makeStore());
+      const amended = await h.repo.getCorrectionRequest(
+        CITIZEN_OVERLAY_IDS.resolvedAmendedCorrection,
+        P1,
+      );
+      expect(amended).toMatchObject({
+        status: "resolved_amended",
+        resolutionKey: "glucose_context_corrected",
+        targetId: AMENDED,
+      });
+      await h.repo.getCorrectionRequest(CITIZEN_OVERLAY_IDS.resolvedAmendedCorrection, P1);
+      expect(await h.audits("citizen.correction.viewed")).toHaveLength(1); // de-duplicated
+      await forbidden(
+        h.repo.getCorrectionRequest(CITIZEN_OVERLAY_IDS.resolvedNoChangeCorrection, P1),
+        "SCOPE",
+      );
+      await expect(h.repo.getCorrectionRequest("nope", P1)).rejects.toMatchObject({
+        code: "NOT_FOUND",
+      });
+      h.as(PERSONA_IDS.citizen2);
+      expect(
+        await h.repo.getCorrectionRequest(CITIZEN_OVERLAY_IDS.resolvedNoChangeCorrection, P2),
+      ).toMatchObject({ status: "resolved_no_change", resolutionKey: "reading_time_confirmed" });
+    });
+
+    it("access history: staff + own, newest first, no system rows, no free text; views audited", async () => {
+      const h = await setup(makeStore());
+      type Row = { id: string } & Record<string, unknown>;
+      await h.store.put<Row>("accessEvents", {
+        ...(await h.store.getAll<Row>("accessEvents"))[0],
+        id: "system-row",
+        patientId: P1,
+        actorId: null,
+        actorRole: null,
+      });
+      const first = (await h.store.getAll<Row>("accessEvents")).find(
+        (e) => e["patientId"] === P1 && e["actorId"] !== null,
+      )!;
+      await h.store.put<Row>("accessEvents", {
+        ...first,
+        justification: "Clinician free text",
+        changeSummary: { note: "x" },
+      });
+      const events = await h.repo.listAccessEvents(P1);
+      expect(events.length).toBeGreaterThan(0);
+      expect(events.some((e) => e.id === "system-row")).toBe(false);
+      expect(events.every((e) => e.justification === null)).toBe(true);
+      expect(events.every((e) => JSON.stringify(e.changeSummary) === "{}")).toBe(true);
+      expect(events.some((e) => e.actorRole === "citizen")).toBe(true);
+      expect(events.some((e) => e.actorRole !== "citizen")).toBe(true);
+      const times = events.map((e) => e.occurredAt);
+      expect([...times].sort().reverse()).toEqual(times);
+      await h.repo.recordAccessHistoryViewed(P1);
+      await h.repo.recordPrivacyNoticeViewed("demo-notice-v0.1");
+      expect(await h.audits("citizen.access_history.viewed")).toHaveLength(1);
+      expect(await h.audits("citizen.privacy_notice.viewed")).toHaveLength(1);
+    });
+  },
+);

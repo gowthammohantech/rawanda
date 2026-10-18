@@ -22,6 +22,9 @@ export const CHART_SERIES = {
   overdueFollowUps: { color: "var(--color-risk-warning)", dash: "6 4", marker: "square" },
   /** ADM-05: pooled minutes per patient-day per week (one series). */
   minutesPerPatientDay: { color: "var(--color-primary)", marker: "circle" },
+  /** ADM-06 quality trend: missing fields solid + circle, mismatches dashed + square. */
+  missingFields: { color: "var(--color-primary)", marker: "circle" },
+  mismatches: { color: "var(--color-risk-warning)", dash: "6 4", marker: "square" },
 } as const satisfies Record<string, SeriesStyle>;
 export type ChartSeriesId = keyof typeof CHART_SERIES;
 

@@ -197,13 +197,35 @@ describe("buildCitizenOverlay", () => {
   });
 
   it("seeds resolved correction requests (amended and no-change)", () => {
-    const tasks = rows<{ id: string; status: string; payload: { requestStatus?: string } }>(
-      "careTasks",
-    );
-    expect(tasks.map((t) => [t.id, t.status, t.payload.requestStatus])).toEqual([
-      [CITIZEN_OVERLAY_IDS.resolvedAmendedCorrection, "done", "resolved_amended"],
-      [CITIZEN_OVERLAY_IDS.resolvedNoChangeCorrection, "done", "resolved_no_change"],
+    const tasks = rows<{
+      id: string;
+      status: string;
+      payload: {
+        requestStatus?: string;
+        resolutionKey?: string;
+        assignedRole?: string;
+        targetId: string;
+      };
+    }>("careTasks");
+    expect(
+      tasks.map((t) => [t.id, t.status, t.payload.requestStatus, t.payload.resolutionKey]),
+    ).toEqual([
+      [
+        CITIZEN_OVERLAY_IDS.resolvedAmendedCorrection,
+        "done",
+        "resolved_amended",
+        "glucose_context_corrected",
+      ],
+      [
+        CITIZEN_OVERLAY_IDS.resolvedNoChangeCorrection,
+        "done",
+        "resolved_no_change",
+        "reading_time_confirmed",
+      ],
     ]);
+    // CTZ-07: routed to the clinician role; the amended request targets the amended observation.
+    expect(tasks.every((t) => t.payload.assignedRole === "clinician")).toBe(true);
+    expect(tasks[0]?.payload.targetId).toBe(CITIZEN_OVERLAY_IDS.amendedScreening);
   });
 
   it("CTZ-P1 has read the completed follow-up step, not the upcoming appointment", () => {

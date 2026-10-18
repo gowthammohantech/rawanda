@@ -1,0 +1,104 @@
+{
+  "cta": "Saba ko bikosorwa",
+  "unchanged": "Amakuru yawe ntiyahinduwe. Itsinda rikwitaho rizasuzuma icyifuzo cyawe.",
+  "somethingWrong": "Hari ikitari cyo?",
+  "somethingWrongHint": "Saba itsinda rikwitaho kugenzura iki kintu",
+  "new": {
+    "title": "Saba ko bikosorwa",
+    "steps": {
+      "pick": "Hitamo igisa n'aho atari cyo",
+      "describe": "Tubwire ikitari cyo",
+      "review": "Genzura wohereze"
+    },
+    "pickLegend": "Ni iki gisa n'aho atari cyo?",
+    "groups": {
+      "results": "Ibisubizo by'ibipimo",
+      "steps": "Intambwe zikurikira"
+    },
+    "personalDetails": "Umwirondoro wanjye",
+    "personalDetailsBody": "Izina n'itariki y'amavuko (by'igerageza)",
+    "loading": "Turimo gutegura amakuru yawe…",
+    "continue": "Komeza",
+    "back": "Subira inyuma",
+    "whatWrong": "Ni iki kitari cyo?",
+    "whatWrongHint": "Hagati y'inyuguti 10 na 500. Andika mu magambo yawe.",
+    "shouldSay": "Hakwiye kwandikwa iki? (si ngombwa)",
+    "shouldSayHint": "Kugeza ku nyuguti 200.",
+    "counter": "{{count}} / {{max}}",
+    "understand": "Numva ko itsinda rinyitaho rizabigenzura; amakuru yanjye ntahinduka kugeza babikoze",
+    "reviewTitle": "Genzura icyifuzo cyawe",
+    "reviewItem": "Ikintu",
+    "reviewWhatWrong": "Ikitari cyo",
+    "reviewShouldSay": "Icyakwiye kwandikwa",
+    "reviewNothing": "Nta cyatanzwe",
+    "edit": "Hindura",
+    "send": "Ohereza icyifuzo",
+    "sendHint": "Byohereza icyifuzo cyawe ku itsinda rikwitaho. Amakuru yawe ntahinduka.",
+    "sendError": "Ntitwashoboye kohereza icyifuzo cyawe. Nta cyoherejwe. Ongera ugerageze.",
+    "retry": "Ongera ugerageze"
+  },
+  "duplicate": {
+    "title": "Wari warabajije kuri iki",
+    "body": "Wabajije kuri iki ku wa {{date}}. Itsinda rikwitaho riracyakigenzura.",
+    "view": "Reba icyo cyifuzo"
+  },
+  "conflict": {
+    "title": "Iki kintu cyahinduwe",
+    "body": "Iki kintu cyahinduwe n'itsinda rikwitaho. Ongera ukigenzure mbere yo kohereza.",
+    "reload": "Ongera ugenzure"
+  },
+  "success": {
+    "title": "Icyifuzo cyoherejwe",
+    "reference": "Nomero {{ref}}",
+    "view": "Reba icyifuzo",
+    "done": "Subira ku ibanga"
+  },
+  "list": {
+    "title": "Ibyifuzo byanjye byo gukosora",
+    "empty": "Ntabwo urasaba ko hagira ibikosorwa.",
+    "sentOn": "Cyoherejwe ku wa {{date}}"
+  },
+  "detail": {
+    "title": "Icyifuzo cyo gukosora",
+    "reference": "Nomero {{ref}}",
+    "sentOn": "Cyoherejwe ku wa {{date}}",
+    "description": "Ibyo watubwiye",
+    "suggested": "Ibyo wavuze ko byakwiye kwandikwa",
+    "outcome": "Umwanzuro",
+    "seeChange": "Reba ibyahindutse",
+    "notFoundTitle": "Icyifuzo ntikibonetse",
+    "notFound": "Ntitwabonye iki cyifuzo.",
+    "deniedTitle": "Ntikiboneka",
+    "denied": "Iki cyifuzo ntikiri mu makuru yawe.",
+    "back": "Subira inyuma"
+  },
+  "stepper": {
+    "label": "Aho icyifuzo kigeze",
+    "submitted": "Cyoherejwe",
+    "withCareTeam": "Kiri ku itsinda rikwitaho",
+    "resolved": "Cyakemuwe"
+  },
+  "status": {
+    "submitted": "CYOHEREJWE",
+    "in_review": "KIRI KU ITSINDA",
+    "resolved_amended": "CYAKOSOWE",
+    "resolved_no_change": "NTA GIHINDUTSE"
+  },
+  "statusBody": {
+    "submitted": "Itsinda rikwitaho ryakiriye icyifuzo cyawe.",
+    "in_review": "Itsinda rikwitaho ririmo kugenzura icyifuzo cyawe.",
+    "resolved_amended": "Itsinda rikwitaho ryakosoye amakuru yawe. Ibya mbere bibikwa mu mateka y'amakuru.",
+    "resolved_no_change": "Itsinda rikwitaho ryagenzuye kandi nta cyari gikwiye guhinduka."
+  },
+  "resolution": {
+    "glucose_context_corrected": "Itsinda rikwitaho ryongeyeho ko utari wariye mbere y'iki gipimo (ku gifu cyambaye ubusa).",
+    "reading_time_confirmed": "Itsinda rikwitaho ryagenzuye isaha igipimo cyafatiweho kandi yari yo.",
+    "unknown": "Itsinda rikwitaho ryarangije kugenzura icyifuzo cyawe."
+  },
+  "target": {
+    "result": "{{kind}} · {{date}}",
+    "step": "{{type}} · {{heading}}",
+    "personal": "Umwirondoro wanjye",
+    "unknown": "Ikintu kiri mu makuru yawe"
+  }
+}

@@ -1,9 +1,13 @@
 /**
  * Referrals: creation (from a decided review; one open referral per review), FND-02 machine
  * transitions (`completed` needs evidence), derived overdue, counts.
+ * CLN-08 adds: `q` search (patient name / synthetic id / destination), `getReferral` (scoped
+ * single read) and `editReferral` (destination / due date with a mandatory change reason; the
+ * previous values stay in the audit `before`, action `clinical.referral.updated`).
  */
 import {
   createReferralTransitionInputSchema,
+  ReferralEditInputSchema,
   ReferralFilterSchema,
   ReferralInputSchema,
   type Page,
@@ -18,6 +22,7 @@ import {
   referralMachine,
   REFERRAL_STATUSES,
   type FacilityId,
+  type Patient,
   type PersonaId,
   type Referral,
   type ReferralId,
@@ -27,6 +32,7 @@ import {
 
 import type {
   ReferralCall,
+  ReferralEditCall,
   ReferralFilterInput,
   ReferralTransitionCall,
 } from "../care-repository.ts";
@@ -106,7 +112,16 @@ function referralMatches(
   ctx: TxContext,
   r: Referral,
   filter: ReturnType<typeof ReferralFilterSchema.parse>,
+  patients: ReadonlyMap<string, Patient> | null,
 ): boolean {
+  const q = filter.q === undefined || filter.q === "" ? undefined : filter.q.toLowerCase();
+  if (q !== undefined) {
+    const patient = patients?.get(r.patientId);
+    const haystack = [patient?.displayName, patient?.syntheticIdentifier, r.destination, r.id];
+    if (!haystack.some((value) => value !== undefined && value.toLowerCase().includes(q))) {
+      return false;
+    }
+  }
   return (
     (!filter.priorities || filter.priorities.includes(r.priority)) &&
     (!filter.patientId || r.patientId === filter.patientId) &&
@@ -125,11 +140,15 @@ async function scopedReferrals(ctx: TxContext, f: ReferralFilterInput | undefine
     entityId: "list",
   });
   assertRequestedScope(ctx, permission, filter);
+  const patients =
+    filter.q === undefined || filter.q === ""
+      ? null
+      : new Map((await ctx.all<Patient>("patient")).map((p) => [p.id as string, p]));
   const rows = (await ctx.all<Referral>("referral")).filter(
     (r) =>
       (ctx.can(permission, referralResource(r)) ||
         ctx.can(permission, { ...referralResource(r), facilityId: r.destinationFacilityId })) &&
-      referralMatches(ctx, r, filter),
+      referralMatches(ctx, r, filter, patients),
   );
   return { filter, rows };
 }
@@ -145,6 +164,28 @@ export function createReferralService(engine: Engine) {
           filter.page,
           filter.pageSize,
         );
+      });
+    },
+
+    /**
+     * CLN-08: one referral, scope-checked like the list (referring OR destination facility).
+     * Out of scope → audited `access.denied` + `FORBIDDEN`; unknown → null. The view itself is
+     * audited by the UI (`referral.viewed`).
+     */
+    getReferral(id: string): Promise<Referral | null> {
+      return engine.read(async (ctx) => {
+        const target = { entityType: "referral", entityId: id } as const;
+        const permission = readPermission(ctx, READ_PERMISSIONS.referral, target);
+        const referral = await ctx.find<Referral>("referral", id);
+        if (!referral) return null;
+        const resource = referralResource(referral);
+        if (
+          !ctx.can(permission, resource) &&
+          !ctx.can(permission, { ...resource, facilityId: referral.destinationFacilityId })
+        ) {
+          ctx.authorize(permission, resource, target);
+        }
+        return referral;
       });
     },
 
@@ -284,8 +325,100 @@ export function createReferralService(engine: Engine) {
             entityId: referral.id,
             before: referral,
             after: next,
-            changeSummary: { from: referral.status, to: next.status },
+            changeSummary: {
+              from: referral.status,
+              to: next.status,
+              ...(input.to === "completed"
+                ? { evidenceType: input.evidenceType, evidenceReference: input.evidenceReference }
+                : {}),
+              ...(input.to === "cancelled_with_reason"
+                ? { cancelReasonCode: input.cancelReasonCode }
+                : {}),
+              ...(input.to === "scheduled" ? { appointmentAt: input.appointmentAt } : {}),
+            },
             justification: input.to === "cancelled_with_reason" ? input.reason : null,
+          });
+          return {
+            data: next,
+            entityType: "referral",
+            auditEventId: event.id,
+            sync: { entityType: "referral", entityId: referral.id, opType: "update" },
+          };
+        },
+      });
+    },
+
+    /**
+     * CLN-08: change destination and/or due date of an OPEN referral (`referral.manage`). The
+     * reason is mandatory; the previous values remain in the audit `before` and `changeSummary`.
+     * Terminal referrals → `INVALID_TRANSITION`; stale `expectedVersion` → `CONFLICT`.
+     */
+    editReferral(i: ReferralEditCall, key: string): Promise<WriteResult<Referral>> {
+      return engine.mutate({
+        op: "editReferral",
+        key,
+        input: i,
+        entityType: "referral",
+        permission: "referral.manage",
+        schema: ReferralEditInputSchema,
+        run: async (ctx, input) => {
+          const referral = await ctx.load<Referral>("referral", input.referralId);
+          const resource = referralResource(referral);
+          ctx.authorize("referral.manage", resource, {
+            entityType: "referral",
+            entityId: referral.id,
+          });
+          await ctx.assertVersion("referral", referral, input.expectedVersion, resource);
+          if (!OPEN(referral)) {
+            throw new RepositoryError("VALIDATION_ERROR", {
+              reason: "INVALID_TRANSITION",
+              details: { machine: "referral", from: referral.status, to: "edit" },
+            });
+          }
+          const patch: Partial<Referral> = {};
+          const changes: Record<string, { from: string; to: string }> = {};
+          if (
+            input.destinationFacilityId !== undefined &&
+            input.destinationFacilityId !== referral.destinationFacilityId
+          ) {
+            const destination = ctx.facilities.find((f) => f.id === input.destinationFacilityId);
+            if (!destination) {
+              throw new RepositoryError("VALIDATION_ERROR", {
+                fieldErrors: { destinationFacilityId: { key: "invalid", params: {} } },
+              });
+            }
+            patch.destinationFacilityId = destination.id;
+            patch.destination = destination.name;
+            changes["destinationFacilityId"] = {
+              from: referral.destinationFacilityId,
+              to: destination.id,
+            };
+          }
+          if (input.dueAt !== undefined && input.dueAt !== referral.dueAt) {
+            if (Date.parse(input.dueAt) <= ctx.now.getTime()) {
+              throw new RepositoryError("VALIDATION_ERROR", {
+                fieldErrors: { dueAt: { key: "dateMustBeFuture", params: {} } },
+              });
+            }
+            patch.dueAt = input.dueAt;
+            changes["dueAt"] = { from: referral.dueAt, to: input.dueAt };
+          }
+          if (Object.keys(changes).length === 0) {
+            throw new RepositoryError("VALIDATION_ERROR", {
+              fieldErrors: { changeReason: { key: "noChanges", params: {} } },
+            });
+          }
+          const next = ctx.touch(referral, patch);
+          await ctx.save("referral", next);
+          ctx.useCorrelation(await ctx.correlationOf(referral.id));
+          const event = await ctx.audit({
+            action: "clinical.referral.updated",
+            entityType: "referral",
+            entityId: referral.id,
+            before: referral,
+            after: next,
+            changeSummary: { fields: Object.keys(changes), ...changes },
+            justification: input.changeReason,
           });
           return {
             data: next,

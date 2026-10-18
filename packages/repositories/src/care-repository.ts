@@ -18,6 +18,7 @@ import type { ProgrammeMetrics } from "@laif/analytics";
 import type { ActorContext } from "@laif/auth-demo";
 import type {
   AccessGrant,
+  DataQualityIssue,
   ProgrammeAction,
   AuditFilterSchema,
   CareTaskInputSchema,
@@ -31,6 +32,7 @@ import type {
   MetricsFilterSchema,
   Page,
   PatientFilterSchema,
+  ReferralEditInputSchema,
   ReferralFilterSchema,
   ReferralInputSchema,
   ReferralTransitionInputSchema,
@@ -81,6 +83,11 @@ import type {
   ProgrammeActionFilterInput,
   ProgrammeActionUpdateCall,
 } from "./services/programme-actions.ts";
+import type {
+  QualityIssueFilterInput,
+  TriageQualityIssueCall,
+  UpsertDetectedIssuesResult,
+} from "./services/quality-issues.ts";
 import type { StoreAdapter } from "./store/store-adapter.ts";
 import type { FaultConfig, FaultConfigPatch, FaultInjector } from "./transport/faults.ts";
 
@@ -112,6 +119,7 @@ export type StartReviewCall = MutationInput<typeof StartReviewInputSchema>;
 export type ReviewDecisionCall = MutationInput<typeof ReviewDecisionInputSchema>;
 export type ReferralCall = MutationInput<typeof ReferralInputSchema>;
 export type ReferralTransitionCall = MutationInput<typeof ReferralTransitionInputSchema>;
+export type ReferralEditCall = MutationInput<typeof ReferralEditInputSchema>;
 export type FollowUpCall = MutationInput<typeof FollowUpInputSchema>;
 export type FollowUpUpdateCall = MutationInput<typeof FollowUpUpdateInputSchema>;
 export type CareTaskCall = MutationInput<typeof CareTaskInputSchema>;
@@ -303,8 +311,12 @@ export interface CareRepository {
   startReview(i: StartReviewCall, key: string): Promise<WriteResult<Review>>;
   decideReview(i: ReviewDecisionCall, key: string): Promise<WriteResult<Review>>;
   listReferrals(f?: ReferralFilterInput): Promise<Page<Referral>>;
+  /** CLN-08: scoped single read (referring or destination facility); out of scope → FORBIDDEN. */
+  getReferral(id: string): Promise<Referral | null>;
   createReferral(i: ReferralCall, key: string): Promise<WriteResult<Referral>>;
   transitionReferral(i: ReferralTransitionCall, key: string): Promise<WriteResult<Referral>>;
+  /** CLN-08: destination / due date of an open referral; `changeReason` required. */
+  editReferral(i: ReferralEditCall, key: string): Promise<WriteResult<Referral>>;
   listFollowUps(f?: FollowUpFilterInput): Promise<Page<FollowUp>>;
   createFollowUp(i: FollowUpCall, key: string): Promise<WriteResult<FollowUp>>;
   updateFollowUp(i: FollowUpUpdateCall, key: string): Promise<WriteResult<FollowUp>>;
@@ -355,6 +367,19 @@ export interface CareRepository {
     i: ProgrammeActionUpdateCall,
     key: string,
   ): Promise<WriteResult<ProgrammeAction>>;
+  /**
+   * ADM-06: data-quality issues + triage. `upsertDetectedIssues` (`metrics.read`, in scope)
+   * inserts new ids only and never resets an existing triage; `triageQualityIssue` needs
+   * `quality.triage` (+ `programme_action.write` to send to the facility), is idempotent on
+   * `key` and carries `expectedVersion`; `listQualityIssues` is limited to the actor's scope.
+   * None of them writes a clinical record.
+   */
+  listQualityIssues(f?: QualityIssueFilterInput): Promise<DataQualityIssue[]>;
+  upsertDetectedIssues(issues: readonly unknown[]): Promise<UpsertDetectedIssuesResult>;
+  triageQualityIssue(
+    i: TriageQualityIssueCall,
+    key: string,
+  ): Promise<WriteResult<DataQualityIssue>>;
   sync: SyncApi;
   demo: DemoApi;
   device: DeviceApi;

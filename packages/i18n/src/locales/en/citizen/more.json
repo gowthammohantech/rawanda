@@ -1,8 +1,6 @@
 {
   "consentRow": "Consent and sharing",
   "demoToolsRow": "Demo tools",
-  "languageTitle": "Language",
-  "comingSoon": "Privacy, accessibility and support settings arrive in later phases.",
   "demo": {
     "title": "Demo tools",
     "eyebrow": "DEMO ONLY",
@@ -23,5 +21,18 @@
     "conflictHint": "The next saved change to your record conflicts once.",
     "moreTools": "Offline and scenarios",
     "failed": "The demo tool could not run. Try again."
-  }
+  },
+  "sections": {
+    "myData": "MY DATA",
+    "settings": "SETTINGS",
+    "help": "HELP",
+    "demo": "DEMO"
+  },
+  "privacyRow": "Privacy",
+  "privacySub": "Notice, who looked at your record, corrections",
+  "consentSub": "Give or withdraw consent",
+  "accessibilityRow": "Accessibility",
+  "supportRow": "Support",
+  "laterPhase": "Coming soon in this demo",
+  "demoToolsSub": "Reset, clock and simulated faults"
 }

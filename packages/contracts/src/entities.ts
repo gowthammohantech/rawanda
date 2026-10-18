@@ -93,6 +93,7 @@ import {
 } from "@laif/domain";
 import { z } from "zod";
 
+import { DataQualityIssueSchema } from "./dataQualityIssue.ts";
 import { ProgrammeActionSchema } from "./programmeAction.ts";
 
 import {
@@ -428,6 +429,12 @@ export const CareTaskPayloadSchemas = {
     description: NonEmptyTrimmed,
     suggestedValue: JsonValueSchema,
     requestStatus: z.enum(CORRECTION_REQUEST_STATUSES).exactOptional(),
+    // ext (CTZ-07): routing role and the staff outcome KEY (vocabulary, never free text).
+    assignedRole: z.enum(ROLES).exactOptional(),
+    resolutionKey: z
+      .string()
+      .regex(/^[a-z][a-z0-9]*(?:_[a-z0-9]+)+$/u)
+      .exactOptional(),
   }),
   callback_request: z.object({
     topic: NonEmptyTrimmed,
@@ -606,4 +613,5 @@ export const ENTITY_SCHEMAS = {
   sync_operation: SyncOperationSchema,
   device_session: DeviceSessionSchema,
   programme_action: ProgrammeActionSchema,
+  data_quality_issue: DataQualityIssueSchema,
 } as const satisfies Record<(typeof ENTITY_TYPES)[number], z.ZodType>;
