@@ -10,6 +10,11 @@ export const workerKeys = {
   pendingCount: ["sync", "pendingCount"] as const,
   status: ["sync", "status"] as const,
   entity: (entityId: string) => ["sync", "entity", entityId] as const,
+  /** HWM-09 Sync center (grouped queue), one op's detail, one conflict comparison. */
+  syncCenter: (facilityId: string) => ["sync", "center", facilityId] as const,
+  syncOp: (facilityId: string, opId: string) => ["sync", "op", facilityId, opId] as const,
+  syncConflict: (facilityId: string, opId: string) =>
+    ["sync", "conflict", facilityId, opId] as const,
   home: ["home"] as const,
   /** Demo clock instant read from the repository (Today's date). */
   homeClock: ["home", "clock"] as const,

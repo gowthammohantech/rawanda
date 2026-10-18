@@ -422,7 +422,10 @@
       "duplicate_suppressed": "Kohereza kabiri byakumiriwe",
       "op_acknowledged": "Impinduka yahujwe",
       "op_rejected": "Impinduka ntiyemewe",
-      "conflict_resolved": "Ukuvuguruzanya mu guhuza kwakemuwe"
+      "conflict_resolved": "Ukuvuguruzanya mu guhuza kwakemuwe",
+      "run_started": "Guhuza byatangiye",
+      "run_finished": "Guhuza byarangiye",
+      "retry_scheduled": "Kongera kugerageza guhuza byateganyijwe"
     },
     "task": {
       "created": "Igikorwa cyashyizweho",
@@ -550,6 +553,12 @@
       "programme_action": {
         "created": "Igikorwa cya porogaramu cyahawe ushinzwe",
         "status_changed": "Imiterere y'igikorwa cya porogaramu yahindutse"
+      }
+    },
+    "worker": {
+      "sync": {
+        "manual_requested": "Gusaba guhuza n'intoki",
+        "duplicate_tap_coalesced": "Gukanda \"Huza ubu\" byongeye byahujwe n'ihuza riri gukorwa"
       }
     }
   }

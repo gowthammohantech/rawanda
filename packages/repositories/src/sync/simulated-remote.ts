@@ -11,9 +11,20 @@
  * reachable from the worker app (patient, screening, care task / correction request) keep the
  * device's entity id (`presetId`) so the acknowledged snapshot replaces the local row; the sync
  * queue never copies back a snapshot whose id differs from the op's entity (no duplicates).
+ *
+ * Conflict resolutions are mirrored (HWM-09, WF-02 step 5): the remote audits
+ * `sync.conflict_resolved` (`mirrored: true`) with the ORIGINAL op id — when it first applies a
+ * re-applied op (`resolvesOpId`), or when it receives a `keep_latest` resolution notice
+ * (`sync_operation:command`, idempotent by its key; nothing else changes on the server).
  */
-import type { WriteResult } from "@laif/contracts";
-import type { JsonValue, SyncOperation } from "@laif/domain";
+import { IdempotencyKey, optionalNote, type WriteResult } from "@laif/contracts";
+import {
+  CONFLICT_RESOLUTIONS,
+  ENTITY_TYPES,
+  type JsonValue,
+  type SyncOperation,
+} from "@laif/domain";
+import { z } from "zod";
 
 import type { RepositoryDeps } from "../care-repository.ts";
 import { Engine, type Versioned } from "../core/engine.ts";
@@ -54,7 +65,75 @@ export function createSimulatedRemote(
   });
   const services = createServices(engine);
 
+  const NoticeSchema = z.object({
+    idempotencyKey: IdempotencyKey,
+    opId: z.string().trim().min(1),
+    resolution: z.enum(CONFLICT_RESOLUTIONS),
+    entityType: z.enum(ENTITY_TYPES),
+    entityId: z.string().trim().min(1),
+    latestVersion: z.number().int().nullable(),
+    note: optionalNote(),
+  });
+
+  /** `keep_latest` resolution notice: one mirrored audit per key, no entity change. */
+  function receiveResolutionNotice(payload: Payload, key: string) {
+    return engine.mutate({
+      op: "mirrorConflictResolution",
+      key,
+      input: payload,
+      entityType: "sync_operation",
+      permission: null,
+      schema: NoticeSchema,
+      run: async (ctx, input) => {
+        const event = await ctx.audit({
+          action: "sync.conflict_resolved",
+          entityType: input.entityType,
+          entityId: input.entityId,
+          changeSummary: {
+            originalOpId: input.opId,
+            resolution: input.resolution,
+            newOpId: null,
+            latestVersion: input.latestVersion,
+            mirrored: true,
+          },
+          justification: input.note ?? null,
+        });
+        // A receipt (its id is never the notice's entity id, so nothing is copied back).
+        const receipt: Versioned = { id: event.id, version: 1, updatedAt: ctx.nowIso };
+        return { data: receipt, entityType: "audit_event", auditEventId: event.id, sync: null };
+      },
+    });
+  }
+
+  async function mirrorReapplied(op: SyncOperation, result: WriteResult<Versioned>) {
+    if (op.resolvesOpId === null || result.replayed) return;
+    const originalOpId = op.resolvesOpId;
+    await engine.write(async (ctx) => {
+      await ctx.audit({
+        action: "sync.conflict_resolved",
+        entityType: op.entityType,
+        entityId: op.entityId,
+        changeSummary: {
+          originalOpId,
+          resolution: "reapply_on_latest",
+          newOpId: op.id,
+          latestVersion: op.baseVersion,
+          mirrored: true,
+        },
+      });
+    });
+  }
+
   async function apply(op: SyncOperation): Promise<WriteResult<Versioned>> {
+    if (op.entityType === "sync_operation" && op.opType === "command") {
+      return receiveResolutionNotice((op.payload ?? {}) as Payload, op.idempotencyKey);
+    }
+    const result = await route(op);
+    await mirrorReapplied(op, result);
+    return result;
+  }
+
+  async function route(op: SyncOperation): Promise<WriteResult<Versioned>> {
     const payload = (op.payload ?? {}) as Payload;
     const key = op.idempotencyKey;
     const preset = { presetId: op.entityId };

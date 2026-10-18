@@ -17,6 +17,7 @@ import { NetworkProvider } from "./network/NetworkProvider.tsx";
 import { RepositoryProvider, useSessionStore } from "./providers.tsx";
 import { createAppRepository } from "./data/repository.ts";
 import { SessionProvider } from "./session/SessionProvider.tsx";
+import { SyncTriggersProvider } from "./sync/SyncTriggersProvider.tsx";
 
 type BootState =
   | { status: "starting" }
@@ -65,7 +66,9 @@ export function Boot({ openStore, noLatency, children }: BootProps) {
       <RepositoryProvider repo={state.repo}>
         <NetworkProvider>
           <DemoToolsProvider>
-            <SessionProvider>{children}</SessionProvider>
+            <SessionProvider>
+              <SyncTriggersProvider>{children}</SyncTriggersProvider>
+            </SessionProvider>
           </DemoToolsProvider>
         </NetworkProvider>
       </RepositoryProvider>

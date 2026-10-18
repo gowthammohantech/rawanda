@@ -422,7 +422,10 @@
       "duplicate_suppressed": "Duplicate submission prevented",
       "op_acknowledged": "Change synced",
       "op_rejected": "Change not accepted",
-      "conflict_resolved": "Sync conflict resolved"
+      "conflict_resolved": "Sync conflict resolved",
+      "run_started": "Sync run started",
+      "run_finished": "Sync run finished",
+      "retry_scheduled": "Sync retry scheduled"
     },
     "task": {
       "created": "Task created",
@@ -550,6 +553,12 @@
       "programme_action": {
         "created": "Programme action assigned",
         "status_changed": "Programme action status changed"
+      }
+    },
+    "worker": {
+      "sync": {
+        "manual_requested": "Manual sync requested",
+        "duplicate_tap_coalesced": "Repeated \"Sync now\" tap joined the running sync"
       }
     }
   }
