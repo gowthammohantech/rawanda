@@ -19,16 +19,34 @@ import {
   type Page,
   type WriteResult,
 } from "@laif/contracts";
-import type { AuditEvent, DistrictId, EntityType, FacilityId, JsonValue } from "@laif/domain";
+import type {
+  AuditEvent,
+  DistrictId,
+  EntityType,
+  FacilityId,
+  JsonValue,
+  Patient,
+  PatientId,
+} from "@laif/domain";
 import type { z } from "zod";
 
 import { isClientAuditAction } from "../audit/actions.ts";
 import type { AuditFilterInput, ExportRecordCall } from "../care-repository.ts";
 import { defer, deferRecord, type Engine } from "../core/engine.ts";
 import { RepositoryError } from "../errors.ts";
+import type { StoreAdapter } from "../store/store-adapter.ts";
 import { paginate, parseFilter, READ_PERMISSIONS, readPermission, sortBy } from "./shared.ts";
 
 export type ExportAuditFilterInput = z.input<typeof ExportAuditFilterSchema>;
+
+/** Patient id, or the id of the patient whose synthetic identifier matches (any facility). */
+async function resolvePatientRef(tx: StoreAdapter, value: PatientId): Promise<PatientId> {
+  const needle = value.trim().toUpperCase();
+  const match = (await tx.getAll<Patient>("patients")).find(
+    (p) => p.id === value || p.syntheticIdentifier.toUpperCase() === needle,
+  );
+  return match?.id ?? value;
+}
 
 export function createAuditService(engine: Engine) {
   return {
@@ -45,7 +63,13 @@ export function createAuditService(engine: Engine) {
      */
     listAuditEvents(f?: AuditFilterInput): Promise<Page<AuditEvent>> {
       return engine.read(async (ctx) => {
-        const filter = parseFilter(AuditFilterSchema, f);
+        const parsed = parseFilter(AuditFilterSchema, f);
+        // A `patientId` filter may be a synthetic identifier (`DEMO-P-0009`): resolved against
+        // EVERY patient so an out-of-scope one is still detected (empty result + access.denied).
+        const filter =
+          parsed.patientId === undefined
+            ? parsed
+            : { ...parsed, patientId: await resolvePatientRef(ctx.tx, parsed.patientId) };
         const permission = readPermission(ctx, READ_PERMISSIONS.audit, {
           entityType: "audit_event",
           entityId: "log",

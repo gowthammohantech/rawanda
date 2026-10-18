@@ -3,7 +3,7 @@
  * `actions` filter, out-of-scope filter values (ignored + `access.denied`), and the audit-export
  * path (`recordExport` template `audit_*` → `audit.export`, role + facility scope).
  */
-import type { AuditEvent } from "@laif/domain";
+import type { AuditEvent, Patient } from "@laif/domain";
 import { FACILITY_IDS, PERSONA_IDS, SEED_ANCHORS } from "@laif/mock-data";
 import { describe, expect, it } from "vitest";
 
@@ -91,6 +91,27 @@ describe("listAuditEvents facility scope (CLN-10)", () => {
       actorId: PERSONA_IDS.clinAlpha1,
       entityId: WF04.reviewId,
     });
+  });
+
+  it("a Beta-1 patient filter (synthetic identifier) returns nothing and is audited once", async () => {
+    const h = await createHarness({ appId: "clinical", personaId: PERSONA_IDS.clinAlpha1 });
+    const patient = (await h.store.getAll<Patient>("patients")).find(
+      (p) => p.id === WF04.patientId,
+    );
+    expect(patient?.facilityId).toBe(FACILITY_IDS.beta1);
+    const synthetic = patient?.syntheticIdentifier ?? "";
+    // Seed the patient's audit history (Beta-1 clinician opens the record).
+    h.as(PERSONA_IDS.clinBeta1);
+    await h.repo.getPatient(WF04.patientId);
+    h.as(PERSONA_IDS.clinAlpha1);
+    const page = await h.repo.listAuditEvents({ patientId: synthetic.toLowerCase() });
+    expect(page.total).toBe(0);
+    const denied = (await h.store.getAll<AuditEvent>("auditEvents")).filter(
+      (e) => e.action === "access.denied" && summaryOf(e)["via"] === "audit_filter",
+    );
+    expect(denied).toHaveLength(1);
+    expect(denied[0]).toMatchObject({ actorId: PERSONA_IDS.clinAlpha1, outcome: "denied" });
+    expect(summaryOf(denied[0] as AuditEvent)["filter"]).toBe("patientId");
   });
 
   it("filters by a list of actions / prefixes and records the filter summary in audit.viewed", async () => {
