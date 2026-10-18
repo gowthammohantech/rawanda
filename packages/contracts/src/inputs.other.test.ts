@@ -103,6 +103,23 @@ describe("care task inputs", () => {
     expect(
       errorKeys(CareTaskUpdateInputSchema, { ...base, action: "cancel", reason: VALID_REASON }),
     ).toEqual({});
+    // CLN-09: a correction outcome is a vocabulary key, never free text.
+    expect(
+      errorKeys(CareTaskUpdateInputSchema, {
+        ...base,
+        action: "complete",
+        resolutionKey: "reading_time_confirmed",
+      }),
+    ).toEqual({});
+    expect(
+      Object.keys(
+        errorKeys(CareTaskUpdateInputSchema, {
+          ...base,
+          action: "complete",
+          resolutionKey: "Checked, all fine",
+        }),
+      ),
+    ).toEqual(["resolutionKey"]);
   });
 
   it("correction and callback requests", () => {

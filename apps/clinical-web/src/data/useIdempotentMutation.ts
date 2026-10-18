@@ -49,6 +49,11 @@ export type IdempotentMutation<TVariables, TData> = {
   idempotencyKey: string;
   /** Clears error / data (the key is kept). */
   reset: () => void;
+  /**
+   * Starts a NEW form session key and returns it (CLN-09: "Re-apply my change on latest" after a
+   * `CONFLICT` is a new write, never a replay of the rejected one).
+   */
+  rotateKey: () => string;
 };
 
 const defaultKey = (): string => crypto.randomUUID();
@@ -106,8 +111,16 @@ export function useIdempotentMutation<TVariables, TData>(
     return run(last.value);
   }, [run]);
 
+  const rotateKey = useCallback(() => {
+    const next = newKey();
+    keyRef.current = next;
+    setKey(next);
+    return next;
+  }, [newKey]);
+
   return {
     submit: run,
+    rotateKey,
     retry,
     isSubmitting: mutation.isPending,
     error,

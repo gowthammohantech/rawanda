@@ -299,6 +299,8 @@ export interface CareRepository {
   /** CLN-08: destination / due date of an open referral; `changeReason` required. */
   editReferral(i: ReferralEditCall, key: string): Promise<WriteResult<Referral>>;
   listFollowUps(f?: FollowUpFilterInput): Promise<Page<FollowUp>>;
+  /** CLN-09: scoped single read (task drawer `?id=`); out of scope → FORBIDDEN (audited). */
+  getFollowUp(id: string): Promise<FollowUp | null>;
   createFollowUp(i: FollowUpCall, key: string): Promise<WriteResult<FollowUp>>;
   updateFollowUp(i: FollowUpUpdateCall, key: string): Promise<WriteResult<FollowUp>>;
   listTasks(f?: TaskFilterInput): Promise<Page<CareTask>>;

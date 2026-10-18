@@ -13,6 +13,7 @@ import {
   COMPLETION_EVIDENCE_TYPES,
   CONTACT_METHODS,
   CONTACT_RESULTS,
+  CORRECTION_RESOLUTION_KEYS,
   DISMISS_REASON_CODES,
   ENTITY_TYPES,
   FOLLOW_UP_OUTCOMES,
@@ -584,7 +585,13 @@ const careTaskUpdateBase = {
 
 export const CareTaskUpdateInputSchema = z.discriminatedUnion("action", [
   z.object({ ...careTaskUpdateBase, action: z.literal("start") }),
-  z.object({ ...careTaskUpdateBase, action: z.literal("complete"), note: optionalNote() }),
+  z.object({
+    ...careTaskUpdateBase,
+    action: z.literal("complete"),
+    note: optionalNote(),
+    /** CLN-09: correction requests only — the outcome KEY shown to the citizen (vocabulary). */
+    resolutionKey: z.enum(CORRECTION_RESOLUTION_KEYS).optional(),
+  }),
   z.object({ ...careTaskUpdateBase, action: z.literal("cancel"), reason: Reason }),
   z.object({
     ...careTaskUpdateBase,

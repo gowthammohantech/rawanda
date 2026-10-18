@@ -1,0 +1,273 @@
+{
+  "title": "Imirimo y'itsinda ry'ubuvuzi",
+  "subtitle": "Imirimo yo gukurikirana muri {{facility}}: gushinga abajyanama b'ubuzima bemewe, gukurikirana guhura n'umurwayi no kwemeza irangizwa rifite ibimenyetso.",
+  "loading": "Imirimo irimo kuzanwa…",
+  "overdueDerived": "Yarengeje igihe — yagombaga {{date}} (byabazwe)",
+  "overdueHint": "Byabazwe uhereye ku itariki umuntu yashyizeho. Si itegeko ry'igihe cy'ubuvuzi.",
+  "reassignReason": "Impamvu yo guha undi muntu",
+  "kpi": {
+    "label": "Incamake y'imirimo",
+    "open": "Ifunguye",
+    "overdue": "Yarengeje igihe",
+    "overdueHint": "Byabazwe ku matariki yashyizweho (igihe cy'igerageza)",
+    "unassigned": "Itarahabwa umuntu",
+    "awaitingConfirmation": "Itegereje kwemezwa"
+  },
+  "tabs": {
+    "label": "Uko imirimo igaragara",
+    "dueSoon": "Igiye kugera",
+    "overdue": "Yarengeje igihe",
+    "unassigned": "Itarahabwa umuntu",
+    "unableToReach": "Ntiyabonetse",
+    "awaitingConfirmation": "Itegereje kwemezwa",
+    "completed": "Yarangiye"
+  },
+  "empty": {
+    "dueSoon": "Nta mirimo igiye kugera muri {{facility}}",
+    "overdue": "Nta mirimo yarengeje igihe muri {{facility}}",
+    "unassigned": "Imirimo yose ifunguye muri {{facility}} ifite umujyanama w'ubuzima",
+    "unableToReach": "Nta mirimo yanditswe ko umurwayi atabonetse",
+    "awaitingConfirmation": "Nta mirimo itegereje kwemezwa",
+    "completed": "Nta mirimo irarangira"
+  },
+  "table": {
+    "caption": "Imirimo y'itsinda — {{tab}}",
+    "patient": "Umurwayi",
+    "type": "Ubwoko",
+    "assignedTo": "Yahawe",
+    "due": "Itariki ntarengwa",
+    "status": "Uko bihagaze",
+    "attempts": "Inshuro zageragejwe",
+    "unassigned": "Ntawe wahawe",
+    "open": "Fungura",
+    "openFor": "Fungura umurimo wa {{name}}"
+  },
+  "type": {
+    "repeatTest": "Gusubiramo ikizamini",
+    "plannedReview": "Isuzuma riteganyijwe",
+    "referralFollowUp": "Gukurikirana iyoherezwa"
+  },
+  "actions": {
+    "create": "Kora umurimo",
+    "assign": "Shinga",
+    "reassign": "Ha undi",
+    "setDueDate": "Hindura itariki ntarengwa",
+    "updateStatus": "Andika uko bihagaze",
+    "complete": "Andika irangizwa",
+    "confirm": "Suzuma irangizwa",
+    "note": "Ongeraho icyitonderwa"
+  },
+  "announce": {
+    "saved": "Umurimo wabitswe.",
+    "movedTo": "Umurimo wabitswe. Ubu ugaragara muri: {{tabs}}."
+  },
+  "workload": {
+    "title": "Akazi k'abajyanama b'ubuzima",
+    "body": "Imirimo ifunguye n'iyarengeje igihe kuri buri mujyanama w'ubuzima wemewe, kugira ngo akazi kagabanywe neza.",
+    "counts": "{{open}} ifunguye · {{overdue}} yarengeje igihe",
+    "empty": "Nta bajyanama b'ubuzima bemewe muri iki kigo."
+  },
+  "dialog": {
+    "choose": "Hitamo…",
+    "failed": "Ibyo wanditse byagumyeho. Ongera ugerageze — hoherezwa icyifuzo kimwe, nta kibikwa kabiri.",
+    "retry": "Ongera ugerageze",
+    "reasonHint": "Nibura inyuguti {{min}} (utabariyemo imyanya)."
+  },
+  "errors": {
+    "invalidTransition": "Iyi ntambwe ntigishoboka kuri uyu murimo. Funga uwufungure kugira ngo urebe uko uhagaze ubu.",
+    "workerNotAuthorised": "Uyu mujyanama w'ubuzima ntiyemerewe muri iki kigo. Hitamo umujyanama uri ku rutonde."
+  },
+  "assign": {
+    "title": "Shinga umurimo",
+    "body": "Hitamo umujyanama w'ubuzima wemewe w'iki kigo.",
+    "reassignTitle": "Ha undi umurimo",
+    "reassignBody": "Ubu wahawe {{name}}. Uwari awufite agumaho mu mateka y'umurimo.",
+    "confirm": "Shinga",
+    "reassignConfirm": "Ha undi",
+    "worker": "Umujyanama w'ubuzima",
+    "workerHint": "Hagaragara gusa abajyanama b'ubuzima bemewe b'iki kigo, n'akazi bafite ubu.",
+    "workerOption": "{{name}} — {{open}} ifunguye, {{overdue}} yarengeje igihe",
+    "dueAt": "Itariki n'isaha ntarengwa",
+    "dueHint": "Igaragara mu isaha ya Kigali. Igomba kuba nyuma y'ubu.",
+    "change": "Shinga {{name}}"
+  },
+  "due": {
+    "title": "Hindura itariki ntarengwa",
+    "body": "Itariki ntarengwa iriho: {{current}}.",
+    "reason": "Impamvu y'impinduka",
+    "confirm": "Hindura itariki",
+    "change": "Itariki nshya {{when}}"
+  },
+  "statusDialog": {
+    "title": "Andika uko bihagaze",
+    "body": "Andika uko umurwayi yaherukaga kuvugishwa.",
+    "status": "Uko bihagaze",
+    "hint": {
+      "contacted": "Umurwayi yabonetse.",
+      "unable_to_reach": "Umurwayi ntiyabonetse. Umurimo ushobora guhabwa undi."
+    },
+    "at": "Ryari",
+    "method": "Uburyo bwo kuvugana",
+    "reasonCode": "Impamvu umurwayi atabonetse",
+    "note": "Icyitonderwa (si ngombwa)",
+    "confirm": "Bika uko bihagaze",
+    "change": "Shyira uko bihagaze kuri {{status}}"
+  },
+  "complete": {
+    "title": "Andika irangizwa",
+    "body": "Irangizwa rikenera igihe, umusaruro n'ubwoko bw'ikimenyetso.",
+    "notEvidence": "Kohereza urwibutso cyangwa ubutumwa si ikimenyetso cy'uko gukurikirana kwabaye.",
+    "completedAt": "Byarangiye ku wa",
+    "outcomeLabel": "Umusaruro",
+    "evidenceTypeLabel": "Ubwoko bw'ikimenyetso",
+    "note": "Icyitonderwa (si ngombwa)",
+    "confirm": "Andika irangizwa",
+    "change": "Andika ko umurimo warangiye",
+    "outcome": {
+      "attended": "Yaje",
+      "repeat_screening_done": "Isuzuma ryasubiwemo",
+      "declined": "Umurwayi yanze"
+    },
+    "evidenceType": {
+      "facility_attendance_record": "Inyandiko yo kwitabira ikigo",
+      "clinician_confirmation": "Kwemezwa n'umuganga",
+      "return_slip_reference": "Nimero y'urupapuro rwo kugaruka",
+      "facility_register_checked": "Igitabo cy'ikigo cyarebwe",
+      "appointment_card_seen": "Ikarita ya gahunda yarebwe",
+      "worker_accompanied_visit": "Umujyanama w'ubuzima yaherekeje umurwayi",
+      "patient_verbal_confirmation": "Umurwayi yabyemeje mu magambo"
+    }
+  },
+  "confirm": {
+    "title": "Suzuma irangizwa ryavuzwe",
+    "body": "Umujyanama w'ubuzima yavuze ko uyu murimo warangiye. Wemeze, cyangwa uwusubize umujyanama ufite impamvu.",
+    "outcome": "Umusaruro wavuzwe",
+    "recordedBy": "Byanditswe na",
+    "evidenceType": "Ubwoko bw'ikimenyetso",
+    "noEvidence": "Nta bwoko bw'ikimenyetso bwanditswe",
+    "workerNote": "Icyitonderwa cy'umujyanama",
+    "attempts": "Inshuro zo kuvugana",
+    "noAttempts": "Nta nshuro zo kuvugana zanditswe.",
+    "attempt": "{{when}} · {{method}} · {{result}} · {{name}}",
+    "confirm": "Emeza irangizwa",
+    "change": "Emeza irangizwa ryavuzwe"
+  },
+  "returnToWorker": {
+    "open": "Subiza umujyanama…",
+    "title": "Subiza umurimo umujyanama",
+    "body": "Umurimo usubira ku mujyanama nk'uwavuganywe. Sobanura ikibura.",
+    "reason": "Impamvu yo gusubiza",
+    "confirm": "Subiza umujyanama",
+    "change": "Subiza umurimo umujyanama"
+  },
+  "note": {
+    "title": "Ongeraho icyitonderwa",
+    "body": "Ibyitonderwa byongerwa mu mateka y'umurimo kandi ntibishobora guhindurwa nyuma.",
+    "label": "Icyitonderwa",
+    "hint": "Inyuguti {{min}}–{{max}}.",
+    "confirm": "Ongeraho icyitonderwa",
+    "change": "Ongeraho icyitonderwa"
+  },
+  "create": {
+    "title": "Kora umurimo",
+    "body": "Kora umurimo wo gukurikirana ku isuzuma ryafatiwe icyemezo. Umurimo umwe ufunguye wa buri bwoko ku isuzuma.",
+    "review": "Isuzuma ryafatiwe icyemezo",
+    "reviewOption": "{{name}} — {{decision}}",
+    "none": "Nta suzuma ryafatiwe icyemezo rikeneye umurimo mushya.",
+    "type": "Ubwoko bw'umurimo",
+    "worker": "Umujyanama w'ubuzima (si ngombwa)",
+    "noWorker": "Shinga nyuma",
+    "confirm": "Kora umurimo"
+  },
+  "drawer": {
+    "title": "Umurimo",
+    "titleFor": "Umurimo wa {{name}}",
+    "description": "Ibisobanuro, amateka n'ibikorwa by'umurimo wo gukurikirana.",
+    "loading": "Umurimo urimo kuzanwa…",
+    "denied": "Uyu murimo ni uw'ikindi kigo kandi ntushobora gufungurirwa hano. Igerageza ryanditswe.",
+    "notFound": "Umurimo ntubonetse",
+    "version": "Verisiyo {{version}}",
+    "newerVersion": "Undi muntu yabitse verisiyo nshya y'uyu murimo (verisiyo {{version}}). Uracyareba verisiyo wafunguye.",
+    "showLatest": "Erekana verisiyo iheruka",
+    "wf02Hint": "Igerageza: kugira ngo urebe uguhangana kwa verisiyo, fungura Igenamiterere mu yindi tab uhitemo “Igana umujyanama uvugurura gukurikirana”, hanyuma ugaruke ubike impinduka hano.",
+    "actions": "Ibikorwa",
+    "offline": "Nta murandasi (igerageza). Impinduka zahagaritswe; umurimo uracyasomeka.",
+    "noPermission": "Uruhare rwawe rushobora kongeraho ibyitonderwa ariko ntirushobora gushinga cyangwa kurangiza imirimo.",
+    "details": "Ibisobanuro",
+    "confirmation": "Kwemezwa n'umuganga",
+    "byAt": "{{name}} · {{when}}",
+    "linkedReview": "Isuzuma bifitanye isano",
+    "openReview": "Fungura isuzuma",
+    "linkedReferral": "Iyoherezwa bifitanye isano",
+    "openReferral": "Fungura iyoherezwa",
+    "returnReason": "Impamvu yasubijwe",
+    "timeline": "Abahawe umurimo n'inshuro zo kuvugana",
+    "notes": "Ibyitonderwa",
+    "notesEmpty": "Nta byitonderwa biraba."
+  },
+  "conflict": {
+    "title": "Uyu murimo wahindutse mu gihe wakoraga",
+    "body": "Undi muntu yabitse uyu murimo nyuma y'uko uwufungura. Nta kintu cyasimbujwe. Hitamo icyo gukora.",
+    "versions": "Kopi yawe: verisiyo {{yours}} · Iheruka: verisiyo {{latest}}",
+    "field": "Igice",
+    "yours": "Impinduka yawe",
+    "latest": "Iheruka (na {{name}} saa {{time}})",
+    "latestBy": "Iheruka (na {{name}})",
+    "someone": "undi ukoresha",
+    "lastNote": "Icyitonderwa giheruka",
+    "confirmation": "Kwemezwa",
+    "keepLatest": "Gumana iheruka",
+    "reapply": "Ongera ushyire impinduka yanjye ku iheruka",
+    "cancel": "Hagarika",
+    "reapplyBlocked": "Impinduka yawe ntigihuye na verisiyo iheruka. Gumana iheruka wongere utangire.",
+    "previewTitle": "Ongera ushyire impinduka yawe kuri verisiyo iheruka?",
+    "previewBody": "Impinduka yawe izabikwa kuri verisiyo {{version}}. Reba uko bizaba:",
+    "afterSave": "Nyuma yo kubika",
+    "saveOnLatest": "Bika kuri verisiyo iheruka",
+    "back": "Subira inyuma"
+  },
+  "corrections": {
+    "title": "Ibisabwa byo gukosora inyandiko",
+    "body": "Ibyo abarwayi basaba ko hasuzumwa ikintu mu nyandiko yabo. Gukemura icyifuzo ntibihindura inyandiko ubwayo.",
+    "empty": "Nta byifuzo byo gukosora bifunguye",
+    "target": "Bijyanye na",
+    "description": "Ibyo umurwayi yavuze",
+    "suggested": "Ikosora ryatanzwe",
+    "requested": "Byasabwe na",
+    "start": "Tangira isuzuma",
+    "resolve": "Kemura",
+    "resolveTitle": "Kemura icyifuzo cyo gukosora",
+    "resolveBody": "Hitamo umusaruro. Umurwayi abona amagambo yemejwe, ntabwo abona inyandiko yanditswe n'abakozi.",
+    "outcome": "Umusaruro",
+    "outcomeHint": "Ikosora nyaryo ry'inyandiko rikorwa ukwaryo (rifite impamvu).",
+    "resolveConfirm": "Kemura icyifuzo",
+    "citizenSees": "Umurwayi azabona: {{status}}",
+    "conflict": "Iki cyifuzo cyahinduwe n'undi muntu. Ongera ufungure urupapuro wongere ugerageze.",
+    "resolution": {
+      "glucose_context_corrected": "Kuba yari atariye byakosowe",
+      "reading_value_corrected": "Agaciro k'igipimo kakosowe",
+      "personal_details_corrected": "Imyirondoro yakosowe",
+      "reading_time_confirmed": "Igihe cy'igipimo cyarebwe — ni cyo",
+      "record_checked_no_change": "Inyandiko yarebwe — nta gihinduka gikenewe"
+    },
+    "status": {
+      "resolved_amended": "inyandiko yakosowe",
+      "resolved_no_change": "byarebwe, nta gihinduka gikenewe"
+    }
+  },
+  "toast": {
+    "assigned": "Umurimo wahawe {{name}}",
+    "reassigned": "Umurimo wahawe {{name}}",
+    "dueChanged": "Itariki ntarengwa yahinduwe",
+    "statusRecorded": "Uko bihagaze byanditswe",
+    "completed": "Irangizwa ryanditswe",
+    "confirmed": "Irangizwa ryemejwe",
+    "returned": "Umurimo wasubijwe umujyanama",
+    "noteAdded": "Icyitonderwa cyongeweho",
+    "created": "Umurimo wakozwe",
+    "keptLatest": "Hagumyeho verisiyo iheruka — impinduka yawe ntiyabitswe",
+    "reapplied": "Impinduka yawe yabitswe kuri verisiyo iheruka",
+    "correctionStarted": "Icyifuzo cyo gukosora kirimo gusuzumwa",
+    "correctionResolved": "Icyifuzo cyo gukosora cyakemuwe"
+  }
+}

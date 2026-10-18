@@ -26,6 +26,7 @@ export type PatientTab = (typeof PATIENT_TABS)[number];
 
 export type PatientsRouteParams = { q?: string; facility?: string; page?: number };
 export type ReferralsRouteParams = { tab?: string; facility?: string; q?: string; id?: string };
+export type TasksRouteParams = { tab?: string; id?: string };
 
 const LOGIN = ROUTE_PATTERNS.login;
 const enc = encodeURIComponent;
@@ -62,7 +63,14 @@ export const routes = {
     const query = search.toString();
     return query === "" ? ROUTE_PATTERNS.referrals : `${ROUTE_PATTERNS.referrals}?${query}`;
   },
-  tasks: () => ROUTE_PATTERNS.tasks,
+  /** `/clinical/tasks`, optionally `?tab=&id=` (CLN-09: `id` opens the task drawer). */
+  tasks: (params: TasksRouteParams = {}) => {
+    const search = new URLSearchParams();
+    if (params.tab !== undefined && params.tab !== "dueSoon") search.set("tab", params.tab);
+    if (params.id !== undefined) search.set("id", params.id);
+    const query = search.toString();
+    return query === "" ? ROUTE_PATTERNS.tasks : `${ROUTE_PATTERNS.tasks}?${query}`;
+  },
   audit: () => ROUTE_PATTERNS.audit,
   settings: () => ROUTE_PATTERNS.settings,
 } as const;
