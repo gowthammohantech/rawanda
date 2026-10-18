@@ -3,7 +3,7 @@
  * `sync.retry_scheduled` / `sync.run_*` audits, the per-op `sync.history`, and the server-side
  * mirror of both conflict resolutions (`sync.conflict_resolved` with the ORIGINAL op id).
  */
-import type { AuditEvent, FollowUp, SyncOperation } from "@laif/domain";
+import type { AuditEvent, FollowUp, Screening, SyncOperation } from "@laif/domain";
 import { PERSONA_IDS } from "@laif/mock-data";
 import { describe, expect, it } from "vitest";
 
@@ -178,6 +178,31 @@ describe("conflict resolution mirror (HWM-09, WF-02 step 5)", () => {
   });
 });
 
+describe("chain rule after a per-op server error (HWM-09)", () => {
+  it("INTERNAL on an op: later ops of the SAME entity wait; other entities are still tried", async () => {
+    const h = await worker();
+    await h.repo.demo.loadScenario("SCN-08-offline-sync");
+    const [first] = await h.repo.sync.list();
+    const local = (await h.store.get<Screening>("screenings", first!.entityId))!;
+    await h.repo.amendScreening(
+      {
+        screeningId: local.id,
+        expectedVersion: local.version,
+        field: "systolic",
+        after: 119,
+        reason: "Typo corrected after re-reading the cuff.",
+      },
+      h.key(),
+    );
+    await h.repo.demo.setFaults({ offline: false, serverErrorRate: 1, latencyMs: [0, 0] });
+    const run = await h.repo.sync.process({ trigger: "manual" });
+    // create(X) fails, create(Y) is still tried, amend(X) waits behind the failed create(X).
+    expect(run).toMatchObject({ attempted: 2, retryableFailures: 2 });
+    const amend = (await h.repo.sync.list()).find((o) => o.opType === "update")!;
+    expect(amend).toMatchObject({ status: "queued", attempts: 0 });
+  });
+});
+
 describe("sync.history (HWM-09)", () => {
   it("returns the op's audit trail (several ops at once) with the server event id of the ack", async () => {
     const h = await worker();
@@ -193,5 +218,26 @@ describe("sync.history (HWM-09)", () => {
       serverEventId: expect.any(String) as unknown,
     });
     expect(await h.repo.sync.history([opA!.id, opB!.id])).toHaveLength(2);
+  });
+
+  it("only this queue's ops, only sync/conflict events, never free text", async () => {
+    const h = await worker();
+    const op = await conflicted(h);
+    await h.repo.sync.resolveConflict(
+      op.id,
+      "keep_latest",
+      h.key(),
+      "Supervisor already fixed it.",
+    );
+    const history = await h.repo.sync.history(op.id);
+    expect(history.length).toBeGreaterThan(0);
+    expect(history.every((e) => /^(sync|conflict)\./.test(e.action))).toBe(true);
+    expect(history.every((e) => e.justification === null)).toBe(true);
+    // Raw audit still keeps the note (attributable); history() just never returns it.
+    expect((await named(h, "sync.conflict_resolved"))[0]?.justification).toBe(
+      "Supervisor already fixed it.",
+    );
+    // Ids that are not ops of this device (e.g. an entity / audit id) return nothing.
+    expect(await h.repo.sync.history([op.entityId, history[0]!.id])).toEqual([]);
   });
 });

@@ -112,6 +112,8 @@ type SendOutcome =
 
 /** Op ids an audit event's `changeSummary` refers to (sync history of an op). */
 const OP_REF_FIELDS = ["opId", "originalOpId", "newOpId", "noticeOpId"] as const;
+/** Audit actions that make up an op's sync history. */
+const HISTORY_ACTION_PREFIXES = ["sync.", "conflict."] as const;
 
 export function createSyncQueue(options: {
   engine: Engine;
@@ -654,11 +656,20 @@ export function createSyncQueue(options: {
 
     async history(opIds: string | readonly string[]) {
       await engine.ready();
-      const wanted = new Set<unknown>(typeof opIds === "string" ? [opIds] : opIds);
+      const requested = typeof opIds === "string" ? [opIds] : opIds;
+      // Only ops of this device's own queue; only sync bookkeeping events (no domain audit).
+      const own = new Set(
+        (await engine.store.getAll<SyncOperation>("syncOperations")).map((op) => op.id as string),
+      );
+      const wanted = new Set<unknown>(requested.filter((id) => own.has(id)));
+      if (wanted.size === 0) return [];
       const events = await engine.store.getAll<AuditEvent>("auditEvents");
       return (
         events
           .filter((event) => {
+            if (!HISTORY_ACTION_PREFIXES.some((prefix) => event.action.startsWith(prefix))) {
+              return false;
+            }
             const summary = event.changeSummary;
             if (summary === null || typeof summary !== "object" || Array.isArray(summary)) {
               return false;
@@ -667,6 +678,8 @@ export function createSyncQueue(options: {
           })
           // Stable: same-instant events keep their write order.
           .sort((a, b) => (a.occurredAt < b.occurredAt ? -1 : a.occurredAt > b.occurredAt ? 1 : 0))
+          // Free text (e.g. a resolution note) is never part of the sync history.
+          .map((event) => ({ ...event, justification: null }))
       );
     },
 

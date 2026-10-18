@@ -43,7 +43,11 @@ export function OpRow({ row, section, onOpen, onResolve, onRetry, retrying = fal
       <StatusChip tone="warning">{t("worker:sync.state.rejected")}</StatusChip>
     ) : section === "synced" ? (
       <StatusChip tone={op.status === "superseded" ? "neutral" : "positive"}>
-        {op.status === "superseded" ? t("worker:sync.withdrawn") : t("worker:sync.state.synced")}
+        {op.status !== "superseded"
+          ? t("worker:sync.state.synced")
+          : row.replaced
+            ? t("worker:sync.replaced")
+            : t("worker:sync.withdrawn")}
       </StatusChip>
     ) : undefined;
 

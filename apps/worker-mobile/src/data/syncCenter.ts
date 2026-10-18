@@ -86,6 +86,8 @@ export type SyncOpRow = {
   label: SyncOpLabel;
   /** Created by a re-apply resolution (`resolvesOpId`). */
   resolution: boolean;
+  /** Superseded by a re-applied op (not withdrawn by "keep latest"). */
+  replaced: boolean;
   patientName: string | null;
   retry: RetryView;
   errorCode: SyncErrorCode | null;
@@ -189,6 +191,9 @@ export async function loadSyncCenter(
     if (opId !== null && eventId !== null) serverEvent.set(opId, shortId(eventId));
   }
 
+  const reappliedOriginals = new Set(
+    ops.flatMap((o) => (o.resolvesOpId === null ? [] : [o.resolvesOpId as string])),
+  );
   const row = (op: SyncOperation): SyncOpRow => {
     const described = describeSyncOp(op);
     const patientId = patientIdOfOp(op, followUpById, screeningById);
@@ -196,6 +201,7 @@ export async function loadSyncCenter(
       op,
       label: described.label,
       resolution: described.resolution,
+      replaced: op.status === "superseded" && reappliedOriginals.has(op.id),
       patientName: patientId === null ? null : (patientById.get(patientId)?.displayName ?? null),
       retry: retryView(op, nowMs),
       errorCode: errorCodeOf(op),
@@ -292,6 +298,7 @@ export async function loadOpDetail(
       op,
       label: described.label,
       resolution: described.resolution,
+      replaced: op.status === "superseded" && ops.some((o) => o.resolvesOpId === op.id),
       patientName: patientId === null ? null : (patientById.get(patientId)?.displayName ?? null),
       retry: retryView(op, Date.parse(demo.clockIso)),
       errorCode: errorCodeOf(op),

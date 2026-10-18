@@ -197,6 +197,26 @@ describe("SyncCenterScreen (HWM-09)", () => {
     });
   });
 
+  it("Synced recently: a re-applied original reads 'Replaced', a kept-latest one 'Withdrawn'", async () => {
+    const store = await scenarioStore("SCN-09-version-conflict");
+    const view = await render(store);
+    const repo = view.repo();
+    await repo.sync.process({ trigger: "manual" });
+    const [op] = await repo.sync.list({ statuses: ["needs_resolution"] });
+    await repo.sync.resolveConflict(op!.id, "reapply_on_latest", crypto.randomUUID());
+    await repo.sync.process({ trigger: "after_resolution" });
+    await view.services.queryClient.invalidateQueries();
+    const synced = await screen.findByTestId("sync-section-synced");
+    await waitFor(() =>
+      expect(
+        within(within(synced).getByTestId(`op-row-${op!.id}`)).getByText(
+          "Replaced by your re-applied update",
+        ),
+      ).toBeTruthy(),
+    );
+    expect(within(synced).queryByText("Withdrawn — the latest version was kept")).toBeNull();
+  });
+
   it("reassigned task → Not accepted with explanation, kept on device, Copy details", async () => {
     const view = await render();
     const repo = view.repo();

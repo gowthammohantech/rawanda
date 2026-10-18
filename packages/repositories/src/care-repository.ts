@@ -206,7 +206,8 @@ export interface SyncApi {
   /**
    * HWM-09: the device's own sync audit trail of one op (or several), oldest first — every
    * local audit event whose `changeSummary` names the op (`opId` / `originalOpId` / `newOpId` /
-   * `noticeOpId`). No permission needed (sync bookkeeping of this device; ids only).
+   * `noticeOpId`). Only ids of this device's own queue and only `sync.*` / `conflict.*` events;
+   * `justification` (free text) is always `null`. No permission needed (sync bookkeeping).
    */
   history(opIds: string | readonly string[]): Promise<AuditEvent[]>;
   resolveConflict(
