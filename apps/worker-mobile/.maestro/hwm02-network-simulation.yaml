@@ -20,8 +20,17 @@ appId: host.exp.Exponent
 - assertVisible: "Offline (simulated)"
 - tapOn: "Work offline (simulated)"
 - assertVisible: "Online"
+# HWM-09: the "Run one sync pass" dev button moved to the Sync tab ("Sync now").
 - tapOn: "100%"
+- back
+- back
 - tapOn:
-    id: "netsim-run-pass"
-- assertVisible: "Nothing to send."
+    id: "tab-sync"
+- tapOn:
+    id: "sync-now"
+- assertVisible: "Nothing to sync"
+- tapOn:
+    id: "avatar-button"
+- tapOn:
+    id: "open-network-simulation"
 - tapOn: "Off"

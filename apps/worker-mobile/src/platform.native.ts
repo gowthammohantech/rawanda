@@ -9,6 +9,7 @@ import { openExpoSqliteExecutor } from "@laif/repositories/expo-sqlite";
 import { createNativeIdGenerator } from "@laif/repositories/ids/native";
 import { createSqliteStoreAdapter } from "@laif/repositories/sqlite";
 import Storage from "expo-sqlite/kv-store";
+import { Share } from "react-native";
 
 import { APP_ID } from "./config.ts";
 import type { AppPlatform } from "./platform.types.ts";
@@ -25,4 +26,12 @@ export const platform: AppPlatform = {
       Storage.removeItemSync(key);
     },
   }),
+  copyText: async (text) => {
+    try {
+      const result = await Share.share({ message: text });
+      return result.action !== Share.dismissedAction;
+    } catch {
+      return false;
+    }
+  },
 };

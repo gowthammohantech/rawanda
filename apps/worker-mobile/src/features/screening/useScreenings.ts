@@ -1,30 +1,21 @@
 /**
  * HWM-06 hooks over `src/data/screenings.ts`: the draft under review (+ stored-ruleset preview),
- * submit (then, only after the commit and only when the simulated network is online, one
- * fire-and-forget sync pass — the phase's `engine.drainOnce('after_submit')`; FND-07
- * `SyncTrigger` has no `after_submit`, so it is `auto`), a submitted screening with its sync
- * view, and amendments. Scope always comes from the signed-in device session.
+ * submit (then, only after the commit, the HWM-09 `after_write` sync trigger — debounced, and
+ * skipped while the simulated network is offline; the phase's `engine.drainOnce('after_submit')`),
+ * a submitted screening with its sync view, and amendments. Scope always comes from the
+ * signed-in device session.
  */
 import type { Screening } from "@laif/domain";
 import type { CareRepository } from "@laif/repositories";
-import { useQuery, useQueryClient, type QueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback } from "react";
 
 import * as drafts from "../../data/drafts.ts";
 import { invalidateAfterWrite, invalidateDrafts, workerKeys } from "../../data/queryKeys.ts";
 import * as screenings from "../../data/screenings.ts";
-import { useNetwork } from "../../network/NetworkProvider.tsx";
 import { useRepository } from "../../providers.tsx";
 import { useRequiredScope } from "../../session/useScope.ts";
-
-/** One sync pass after a committed write when online (fire-and-forget), then refresh. */
-export function syncAfterWrite(repo: CareRepository, queryClient: QueryClient, offline: boolean) {
-  if (offline) return;
-  void repo.sync
-    .process({ trigger: "auto" })
-    .catch(() => undefined)
-    .finally(() => void invalidateAfterWrite(queryClient));
-}
+import { useSyncTriggers } from "../../sync/SyncTriggersProvider.tsx";
 
 export type ReviewData =
   | {
@@ -65,7 +56,7 @@ export function useReviewDraft(draftId: string) {
 export function useSubmitScreening() {
   const repo = useRepository();
   const queryClient = useQueryClient();
-  const { offline } = useNetwork();
+  const triggers = useSyncTriggers();
   const { personaId, facilityId } = useRequiredScope();
   return useCallback(
     async (draftId: string, now: Date) => {
@@ -78,11 +69,11 @@ export function useSubmitScreening() {
       if (outcome.status === "submitted") {
         queryClient.removeQueries({ queryKey: workerKeys.draft(draftId) });
         await Promise.all([invalidateDrafts(queryClient), invalidateAfterWrite(queryClient)]);
-        if (!outcome.replayed) syncAfterWrite(repo, queryClient, offline);
+        if (!outcome.replayed) triggers.afterWrite();
       }
       return outcome;
     },
-    [repo, queryClient, offline, personaId, facilityId],
+    [repo, queryClient, triggers, personaId, facilityId],
   );
 }
 
@@ -114,7 +105,7 @@ export function useScreeningSync(screening: Screening | null) {
 export function useAmendScreening() {
   const repo = useRepository();
   const queryClient = useQueryClient();
-  const { offline } = useNetwork();
+  const triggers = useSyncTriggers();
   return useCallback(
     async (
       screening: Pick<Screening, "id" | "version">,
@@ -123,9 +114,9 @@ export function useAmendScreening() {
     ) => {
       const amended = await screenings.amend(repo, screening, call, key);
       await invalidateAfterWrite(queryClient);
-      syncAfterWrite(repo, queryClient, offline);
+      triggers.afterWrite();
       return amended;
     },
-    [repo, queryClient, offline],
+    [repo, queryClient, triggers],
   );
 }

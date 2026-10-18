@@ -143,7 +143,20 @@ export type ReviewDetail = {
 
 export type ReviewCounts = Record<"pending" | "urgent" | "overdue" | "assigned" | "all", number>;
 
-export type SyncTrigger = "manual" | "manual_dev" | "auto" | "startup" | "online" | "interval";
+/**
+ * What started a `sync.process()` run. HWM-09 adds `foreground` (app became active),
+ * `after_write` (a local write was committed) and `after_resolution` (a conflict was resolved).
+ */
+export type SyncTrigger =
+  | "manual"
+  | "manual_dev"
+  | "auto"
+  | "startup"
+  | "online"
+  | "interval"
+  | "foreground"
+  | "after_write"
+  | "after_resolution";
 
 /** One `sync.process()` run (persisted in `syncRuns`). */
 export type SyncRun = {
@@ -192,6 +205,13 @@ export interface SyncApi {
   process(options?: { trigger?: SyncTrigger }): Promise<SyncRun>;
   /** `retryable_failure` (or `blocked_revoked` after restore) → `queued`, schedule cleared. */
   retryNow(opId: string): Promise<SyncOperation>;
+  /**
+   * HWM-09: the device's own sync audit trail of one op (or several), oldest first — every
+   * local audit event whose `changeSummary` names the op (`opId` / `originalOpId` / `newOpId` /
+   * `noticeOpId`). Only ids of this device's own queue and only `sync.*` / `conflict.*` events;
+   * `justification` (free text) is always `null`. No permission needed (sync bookkeeping).
+   */
+  history(opIds: string | readonly string[]): Promise<AuditEvent[]>;
   resolveConflict(
     opId: string,
     resolution: ConflictResolution,

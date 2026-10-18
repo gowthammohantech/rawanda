@@ -12,6 +12,7 @@ import { invalidateAfterWrite, workerKeys } from "../../data/queryKeys.ts";
 import { recentPatients } from "../../data/recentPatients.ts";
 import { useRepository } from "../../providers.tsx";
 import { useRequiredScope } from "../../session/useScope.ts";
+import { useSyncTriggers } from "../../sync/SyncTriggersProvider.tsx";
 
 /** `value`, settled for `delayMs` (search debounce). */
 export function useDebouncedValue<T>(value: T, delayMs: number): T {
@@ -127,6 +128,7 @@ export function usePatientHistory(patientId: string, enabled: boolean) {
 export function useRegisterPatient() {
   const repo = useRepository();
   const queryClient = useQueryClient();
+  const triggers = useSyncTriggers();
   const { facilityId } = useRequiredScope();
   const findCandidates = useCallback(
     async (input: RegisterPatientCall) => {
@@ -140,9 +142,11 @@ export function useRegisterPatient() {
       const patient = await patients.register(repo, input, key);
       touchRecentPatient(facilityId, patient.id);
       await invalidateAfterWrite(queryClient);
+      // HWM-09: a committed local write triggers a (debounced) sync when online.
+      triggers.afterWrite();
       return patient;
     },
-    [repo, queryClient, facilityId],
+    [repo, queryClient, facilityId, triggers],
   );
   return { findCandidates, register };
 }

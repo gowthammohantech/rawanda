@@ -12,4 +12,9 @@ export type AppPlatform = {
   languageStorage(): LanguageStorage;
   /** Synchronous key/value storage for the demo persona session (`laif.worker.persona`). */
   personaStorage(): KeyValueStorage;
+  /**
+   * HWM-09 "Copy details" for a supervisor: the system share sheet on device (it offers Copy;
+   * no clipboard dependency), the clipboard on web. Resolves false when it is unavailable.
+   */
+  copyText(text: string): Promise<boolean>;
 };

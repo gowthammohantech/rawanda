@@ -29,4 +29,13 @@ export const platform: AppPlatform = {
   createIds: () => createWebIdGenerator(),
   languageStorage: () => createWebLanguageStorage(APP_ID),
   personaStorage: browserStorage,
+  copyText: async (text) => {
+    try {
+      if (typeof navigator === "undefined" || navigator.clipboard === undefined) return false;
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      return false;
+    }
+  },
 };
