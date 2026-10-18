@@ -19,6 +19,7 @@ import { Link } from "react-router";
 import { facilityLabel } from "../../app/persona-labels.ts";
 import { routes } from "../../app/routes.ts";
 import { ageSexLabel } from "./labels.ts";
+import { STACK_BELOW_LG_CLASS } from "../../components/responsive.ts";
 
 export type PatientResultsTableProps = {
   rows: readonly PatientSummary[];
@@ -105,6 +106,7 @@ export function PatientResultsTable({
 
   return (
     <AccessibleDataTable
+      className={STACK_BELOW_LG_CLASS}
       caption={caption}
       columns={columns}
       rows={rows}

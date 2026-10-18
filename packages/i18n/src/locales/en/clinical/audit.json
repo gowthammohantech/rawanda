@@ -59,7 +59,7 @@
     "entity": "Entity",
     "facility": "Facility",
     "correlation": "Correlation",
-    "open": "Details",
+    "open": "Open",
     "openFor": "Open audit event {{action}} at {{time}}",
     "system": "System",
     "none": "—",

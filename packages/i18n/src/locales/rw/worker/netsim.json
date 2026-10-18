@@ -37,5 +37,13 @@
   "needsDecision": "Bikeneye icyemezo cyawe",
   "lastSynced": "Igihe byahujwe bwa nyuma",
   "never": "Ntibirabaho",
-  "updated": "Kwigana kwavuguruwe"
+  "updated": "Kwigana kwavuguruwe",
+  "reassign": "Igana guhindurirwa umukozi",
+  "reassignDone": "Seriveri yiganwa yahaye iki gikorwa cyo gukurikirana {{worker}}.",
+  "reassignNone": "Nta wundi mukozi kuri iki kigo wo kugiha.",
+  "clock": "Isaha y'igikoresho (kwigana)",
+  "clockOk": "Nyayo",
+  "clockAhead": "+10 min",
+  "clockBehind": "−30 min",
+  "clockHint": "Byimura isaha y'iki gikoresho gusa ugereranyije na seriveri yiganwa. Itandukaniro rirenze iminota 5 ryerekana iburira nyuma yo guhuza gukurikira."
 }

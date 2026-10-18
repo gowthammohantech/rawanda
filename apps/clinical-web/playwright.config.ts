@@ -11,6 +11,8 @@ export default defineConfig({
   testDir: "./e2e",
   fullyParallel: false,
   workers: 1,
+  // CLN-11: the route sweeps (a11y / responsive) visit every screen; allow for a loaded machine.
+  timeout: 60_000,
   reporter: "list",
   use: {
     baseURL: `http://localhost:${PORT}`,

@@ -112,6 +112,7 @@ export function WorkerField({
     return (
       <div
         data-testid="workers-loading"
+        role="group"
         aria-busy="true"
         aria-label={t("clinical:decision.fields.workersLoading")}
       >

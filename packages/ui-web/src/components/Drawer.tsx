@@ -19,6 +19,13 @@ export type DrawerProps = {
   size?: "md" | "lg";
   /** Visually hide the title (navigation drawer). */
   hideTitle?: boolean;
+  /**
+   * Where focus goes on close (Radix `onCloseAutoFocus`). Needed for a controlled drawer with
+   * no `trigger`, so focus can return to the control that opened it.
+   */
+  onCloseAutoFocus?: (event: Event) => void;
+  /** Extra classes for the sheet (e.g. `max-lg:max-w-none` for full screen on tablets). */
+  className?: string;
 };
 
 /** Side sheet on Radix Dialog (detail drawers, the mobile navigation drawer). */
@@ -33,6 +40,8 @@ export function Drawer({
   side = "end",
   size = "md",
   hideTitle = false,
+  onCloseAutoFocus,
+  className,
 }: DrawerProps) {
   const t = useTx();
   return (
@@ -45,10 +54,12 @@ export function Drawer({
         <Dialog.Overlay className="bg-ink/40 fixed inset-0 z-50" />
         <Dialog.Content
           {...(description === undefined ? { "aria-describedby": undefined } : {})}
+          {...(onCloseAutoFocus === undefined ? {} : { onCloseAutoFocus })}
           className={cx(
             "bg-surface shadow-overlay fixed inset-y-0 z-50 flex w-full flex-col",
             side === "end" ? "end-0" : "start-0",
             size === "md" ? "max-w-md" : "max-w-2xl",
+            className,
           )}
         >
           <div className="border-border-soft flex items-start justify-between gap-3 border-b px-5 py-4">

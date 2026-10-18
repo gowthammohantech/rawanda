@@ -9,6 +9,9 @@ export default function SettingsRoute() {
       onBack={() => (router.canGoBack() ? router.back() : router.replace("/"))}
       onSignedOut={() => router.replace("/sign-in")}
       onOpenNetwork={() => router.push("/settings/network")}
+      onOpenActivity={() => router.push("/settings/activity")}
+      onOpenReset={() => router.push("/settings/reset")}
+      onRevoked={() => router.replace("/revoked")}
     />
   );
 }

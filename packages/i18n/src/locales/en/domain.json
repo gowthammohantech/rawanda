@@ -598,7 +598,11 @@
     "worker": {
       "sync": {
         "manual_requested": "Manual sync requested",
-        "duplicate_tap_coalesced": "Repeated \"Sync now\" tap joined the running sync"
+        "duplicate_tap_coalesced": "Repeated \"Sync now\" tap joined the running sync",
+        "clock_drift_detected": "Device clock differs from the server"
+      },
+      "settings": {
+        "language_changed": "App language changed"
       }
     }
   }

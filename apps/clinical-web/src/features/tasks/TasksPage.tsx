@@ -25,7 +25,7 @@ import { useSearchParams } from "react-router";
 import { useDemoTools } from "../../app/demo-tools.tsx";
 import { facilityLabel } from "../../app/persona-labels.ts";
 import { PageHeader } from "../../components/PageHeader.tsx";
-import { QueryErrorState } from "../../components/QueryErrorState.tsx";
+import { AsyncBoundary, whenReady } from "../../components/AsyncBoundary.tsx";
 import { useSession } from "../../session/useSession.ts";
 import { useDemoNow } from "../decision/hooks.ts";
 import { useReferralPatients } from "../referrals/hooks.ts";
@@ -46,6 +46,7 @@ import {
 import { TaskDrawer } from "./TaskDrawer.tsx";
 import { TaskTable } from "./TaskTable.tsx";
 import { WorkloadStrip } from "./WorkloadStrip.tsx";
+import { KPI_STRIP_CLASS } from "../../components/responsive.ts";
 
 const isTab = (value: string): value is TaskTab => (TASK_TABS as readonly string[]).includes(value);
 
@@ -116,28 +117,34 @@ export function TasksPage() {
     count: counts === null ? "…" : counts[tab],
     ...(tab === params.tab
       ? {
-          content: loading ? (
-            <div aria-busy="true" aria-label={t("clinical:tasks.loading")}>
-              <LoadingSkeleton lines={6} />
-            </div>
-          ) : followUps.isError ? (
-            <QueryErrorState error={followUps.error} onRetry={() => void followUps.refetch()} />
-          ) : (
-            <TaskTable
-              caption={t("clinical:tasks.table.caption", { tab: t(`clinical:tasks.tabs.${tab}`) })}
-              rows={rowsForTab(rows, tab, new Date(nowIso))}
-              patients={patients.data}
-              nowIso={nowIso}
-              onOpen={(fu) => update({ id: fu.id })}
-              emptyState={
-                <div data-testid="tasks-empty">
-                  <EmptyState
-                    icon="check"
-                    title={t(`clinical:tasks.empty.${tab}`, { facility: facilityName })}
-                  />
-                </div>
-              }
-            />
+          content: (
+            <AsyncBoundary
+              query={whenReady(followUps, nowIso !== undefined)}
+              testId="tasks"
+              loadingLabel={t("clinical:tasks.loading")}
+              skeleton="lines"
+              skeletonLines={6}
+            >
+              {(data) => (
+                <TaskTable
+                  caption={t("clinical:tasks.table.caption", {
+                    tab: t(`clinical:tasks.tabs.${tab}`),
+                  })}
+                  rows={nowIso === undefined ? [] : rowsForTab(data, tab, new Date(nowIso))}
+                  patients={patients.data}
+                  nowIso={nowIso ?? ""}
+                  onOpen={(fu) => update({ id: fu.id })}
+                  emptyState={
+                    <div data-testid="tasks-empty">
+                      <EmptyState
+                        icon="check"
+                        title={t(`clinical:tasks.empty.${tab}`, { facility: facilityName })}
+                      />
+                    </div>
+                  }
+                />
+              )}
+            </AsyncBoundary>
           ),
         }
       : {}),
@@ -169,12 +176,16 @@ export function TasksPage() {
       </p>
 
       {loading ? (
-        <div aria-busy="true" aria-label={t("clinical:tasks.loading")}>
+        <div role="group" aria-busy="true" aria-label={t("clinical:tasks.loading")}>
           <LoadingSkeleton variant="lines" lines={2} />
         </div>
       ) : (
         <div data-testid="task-kpis">
-          <KpiStrip items={kpis} label={t("clinical:tasks.kpi.label")} />
+          <KpiStrip
+            className={KPI_STRIP_CLASS}
+            items={kpis}
+            label={t("clinical:tasks.kpi.label")}
+          />
         </div>
       )}
 

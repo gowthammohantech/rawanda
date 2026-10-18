@@ -150,6 +150,7 @@
     "title": "Evidence summary",
     "subtitle": "Read-only, from the flag-time snapshot",
     "openDetail": "Open full evidence",
-    "unavailable": "The evidence snapshot is not available."
+    "unavailable": "The evidence snapshot is not available.",
+    "disclosure": "Evidence"
   }
 }

@@ -27,4 +27,15 @@ describe("Drawer", () => {
     await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
     expect(document.activeElement).toBe(trigger);
   });
+
+  it("appends className to the sheet", async () => {
+    renderUi(
+      <Drawer open title="Task" className="max-lg:max-w-none">
+        <p>Body</p>
+      </Drawer>,
+    );
+    const dialog = await screen.findByRole("dialog", { name: "Task" });
+    expect(dialog.className).toContain("max-w-md");
+    expect(dialog.className).toContain("max-lg:max-w-none");
+  });
 });

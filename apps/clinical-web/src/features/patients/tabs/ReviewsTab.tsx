@@ -19,6 +19,7 @@ import { routes } from "../../../app/routes.ts";
 import { QueryErrorState } from "../../../components/QueryErrorState.tsx";
 import { usePatientReviews } from "../../timeline/hooks.ts";
 import { personaName } from "../../timeline/people.ts";
+import { STACK_BELOW_LG_CLASS } from "../../../components/responsive.ts";
 
 const REVIEW_TONE: Readonly<Record<Review["status"], Tone>> = {
   pending: "warning",
@@ -34,7 +35,7 @@ export function ReviewsTab({ patient }: { patient: Patient }) {
 
   if (reviews.isPending) {
     return (
-      <div aria-busy="true" aria-label={t("clinical:timeline.reviews.loading")}>
+      <div role="group" aria-busy="true" aria-label={t("clinical:timeline.reviews.loading")}>
         <LoadingSkeleton variant="table" lines={3} />
       </div>
     );
@@ -106,6 +107,7 @@ export function ReviewsTab({ patient }: { patient: Patient }) {
   return (
     <div data-testid="patient-reviews">
       <AccessibleDataTable
+        className={STACK_BELOW_LG_CLASS}
         caption={t("clinical:timeline.reviews.caption")}
         captionHidden
         columns={columns}

@@ -15,9 +15,9 @@ import {
   MicroLabel,
   Screen,
   Section,
-  colors,
   spacing,
   useTx,
+  usePalette,
 } from "@laif/ui-native";
 import { useFocusEffect, useRouter } from "expo-router";
 import { useCallback, useState } from "react";
@@ -41,6 +41,7 @@ import {
 } from "./useReminders.ts";
 
 export function RemindersScreen() {
+  const palette = usePalette();
   const t = useTx();
   const router = useRouter();
   const patient = useActivePatient();
@@ -178,7 +179,7 @@ export function RemindersScreen() {
         style={styles.flex}
         contentContainerStyle={styles.content}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={colors.primary} />
+          <RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={palette.primary} />
         }
         testID="reminders-scroll"
       >

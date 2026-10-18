@@ -4,6 +4,8 @@
  * this app). Switches update optimistically, so the OfflineBanner appears in the same render.
  * HWM-02: the fault state lives in the network-mode store (one view shared with the header badge
  * and the Network simulation screen).
+ * HWM-10: `reset` runs `demo/reset.ts` (reseed + sign out + new device id + device clock cleared,
+ * language kept) and toasts "Demo data restored".
  */
 import { SCENARIOS } from "@laif/mock-data";
 import {
@@ -19,12 +21,14 @@ import { createContext, useCallback, useContext, useMemo, useState, type ReactNo
 import { APP_ID } from "./config.ts";
 import { invalidateAfterWrite } from "./data/queryKeys.ts";
 import { useNetwork } from "./network/NetworkProvider.tsx";
-import { useRepository } from "./providers.tsx";
+import { resetDemoBaseline } from "./demo/reset.ts";
+import { useDeviceClockStore, useRepository, useSessionStore } from "./providers.tsx";
 
 export type DemoToolsValue = {
   faults: DemoFaultToggleState;
   setFault: (key: DemoFaultToggleKey, enabled: boolean) => void;
-  reset: () => Promise<void>;
+  /** Resolves `true` once the baseline is restored (`false` after a failure toast). */
+  reset: () => Promise<boolean>;
   loadScenario: (scenarioId: string) => Promise<void>;
   scenarios: readonly DemoScenarioOption[];
   /** Bumped after a reset / scenario load so mounted screens remount and refetch. */
@@ -37,6 +41,8 @@ const DemoToolsContext = createContext<DemoToolsValue | null>(null);
 
 export function DemoToolsProvider({ children }: { children?: ReactNode }) {
   const repo = useRepository();
+  const session = useSessionStore();
+  const deviceClock = useDeviceClockStore();
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const t = useTx();
@@ -68,13 +74,15 @@ export function DemoToolsProvider({ children }: { children?: ReactNode }) {
 
   const reset = useCallback(async () => {
     try {
-      await repo.demo.resetDemo();
+      await resetDemoBaseline({ repo, session, deviceClock });
       await afterDatasetChange();
-      toast({ title: t("demo:tools.resetDone") });
+      toast({ title: t("worker:settings.reset.done") });
+      return true;
     } catch {
       failed();
+      return false;
     }
-  }, [repo, afterDatasetChange, toast, t, failed]);
+  }, [repo, session, deviceClock, afterDatasetChange, toast, t, failed]);
 
   const scenarios = useMemo(
     () =>

@@ -10,7 +10,7 @@
 | Depends on | CLN-10 |
 | Trace | PRD §6, §8, §9 (happy-path, permission-denied and error-state tests per feature); FRD §3 Scenarios 1–2, §8 T-01..T-10, §9 DoD; spec §7 (required UX states, responsive, a11y), §9 (axe, Playwright), §13 DoD per feature; Implementation_notes (EN⇄RW P0, fallback, translated validation); README Non-negotiables |
 | Size | M |
-| Status | Not started |
+| Status | Done |
 
 ## 2. Goal
 

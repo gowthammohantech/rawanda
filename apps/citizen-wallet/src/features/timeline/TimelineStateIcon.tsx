@@ -4,7 +4,7 @@
  * done = filled circle + check, waiting = hollow circle + clock hands, changed = pencil,
  * cancelled = circle with a slash, info = small dot. Decorative (hidden from screen readers).
  */
-import { colors, type TranslationKey, type Tone, type IconName } from "@laif/ui-native";
+import { type TranslationKey, type Tone, type IconName, usePalette } from "@laif/ui-native";
 import Svg, { Circle, Path } from "react-native-svg";
 
 import type { TimelineState } from "./buildCitizenTimeline.ts";
@@ -53,6 +53,7 @@ export const STATE_SPECS: Record<TimelineState, StateSpec> = {
 const SIZE = 24;
 
 export function TimelineStateIcon({ state }: { state: TimelineState }) {
+  const palette = usePalette();
   const common = {
     width: SIZE,
     height: SIZE,
@@ -65,10 +66,10 @@ export function TimelineStateIcon({ state }: { state: TimelineState }) {
     case "done":
       return (
         <Svg {...common}>
-          <Circle cx={12} cy={12} r={10} fill={colors.positive} />
+          <Circle cx={12} cy={12} r={10} fill={palette.positive} />
           <Path
             d="m7.5 12.2 3 3 6-6.4"
-            stroke={colors.onPrimary}
+            stroke={palette.onPrimary}
             strokeWidth={2.2}
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -82,13 +83,13 @@ export function TimelineStateIcon({ state }: { state: TimelineState }) {
             cx={12}
             cy={12}
             r={9}
-            fill={colors.surface}
-            stroke={colors.warning}
+            fill={palette.surface}
+            stroke={palette.warning}
             strokeWidth={2}
           />
           <Path
             d="M12 7.5V12l3 2"
-            stroke={colors.warning}
+            stroke={palette.warning}
             strokeWidth={2}
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -98,10 +99,10 @@ export function TimelineStateIcon({ state }: { state: TimelineState }) {
     case "changed":
       return (
         <Svg {...common}>
-          <Circle cx={12} cy={12} r={10} fill={colors.infoSoft} />
+          <Circle cx={12} cy={12} r={10} fill={palette.infoSoft} />
           <Path
             d="M8 16.2 8.6 13.4l5.6-5.6a1.4 1.4 0 0 1 2 2l-5.6 5.6zM13.2 8.8l2 2"
-            stroke={colors.info}
+            stroke={palette.info}
             strokeWidth={1.8}
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -115,17 +116,17 @@ export function TimelineStateIcon({ state }: { state: TimelineState }) {
             cx={12}
             cy={12}
             r={9}
-            fill={colors.surface}
-            stroke={colors.muted}
+            fill={palette.surface}
+            stroke={palette.muted}
             strokeWidth={2}
           />
-          <Path d="m6 18 12-12" stroke={colors.muted} strokeWidth={2} strokeLinecap="round" />
+          <Path d="m6 18 12-12" stroke={palette.muted} strokeWidth={2} strokeLinecap="round" />
         </Svg>
       );
     case "info":
       return (
         <Svg {...common}>
-          <Circle cx={12} cy={12} r={4} fill={colors.subtle} />
+          <Circle cx={12} cy={12} r={4} fill={palette.subtle} />
         </Svg>
       );
   }

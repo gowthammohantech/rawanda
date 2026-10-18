@@ -33,9 +33,11 @@ import { useCitizenSession, useConsent, useRecordConsent } from "../../data/quer
 import { usePersona, useWallet } from "../../providers.tsx";
 import { accountGate, HREFS } from "../../state/access.ts";
 import { useWalletActions } from "../../state/useWalletActions.ts";
+import { useTitleFocus } from "../../a11y/useTitleFocus.ts";
 
 export function ConsentScreen() {
   const t = useTx();
+  const titleRef = useTitleFocus();
   const router = useRouter();
   const { toast } = useToast();
   const persona = usePersona();
@@ -58,7 +60,7 @@ export function ConsentScreen() {
     router.replace(HREFS.persona);
     await endSession();
   };
-  const header = <AppHeader title={t("citizen:consent.title")} />;
+  const header = <AppHeader titleRef={titleRef} title={t("citizen:consent.title")} />;
 
   if (persona === null) return <Redirect href="/welcome" />;
   if (session.isPending || (patientId !== null && consent.isPending)) {

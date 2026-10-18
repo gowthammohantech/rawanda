@@ -6,10 +6,11 @@
  */
 import type { CitizenAccessEvent } from "@laif/contracts";
 import { formatDateTime, useLanguage } from "@laif/i18n";
-import { AppText, colors, initialsOf, radii, spacing, useTx } from "@laif/ui-native";
+import { AppText, initialsOf, radii, spacing, useTx, type Palette } from "@laif/ui-native";
 import { StyleSheet, View } from "react-native";
 
 import { actionKeyOf, actorText, isOwnEvent, purposeKeyOf } from "./copy.ts";
+import { useThemedStyles } from "../../theme/useThemedStyles.ts";
 
 export type AccessEventRowProps = {
   event: CitizenAccessEvent;
@@ -22,6 +23,7 @@ export type AccessEventRowProps = {
 };
 
 export function AccessEventRow({ event, personaId, ownName, patientName }: AccessEventRowProps) {
+  const styles = useThemedStyles(makeStyles);
   const t = useTx();
   const { language } = useLanguage();
   const own = isOwnEvent(event, personaId);
@@ -69,32 +71,33 @@ export function AccessEventRow({ event, personaId, ownName, patientName }: Acces
   );
 }
 
-const styles = StyleSheet.create({
-  row: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.md,
-    minHeight: 56,
-    paddingVertical: spacing.sm,
-  },
-  avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: colors.background,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  avatarOwn: { backgroundColor: colors.primarySoft, borderColor: colors.primarySoft },
-  body: { flex: 1, gap: spacing.xxs },
-  chip: {
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xxs,
-    borderRadius: radii.sm,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  chipOwn: { borderColor: colors.primary },
-});
+const makeStyles = (c: Palette) =>
+  StyleSheet.create({
+    row: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: spacing.md,
+      minHeight: 56,
+      paddingVertical: spacing.sm,
+    },
+    avatar: {
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: c.background,
+      borderWidth: 1,
+      borderColor: c.border,
+    },
+    avatarOwn: { backgroundColor: c.primarySoft, borderColor: c.primarySoft },
+    body: { flex: 1, gap: spacing.xxs },
+    chip: {
+      paddingHorizontal: spacing.sm,
+      paddingVertical: spacing.xxs,
+      borderRadius: radii.sm,
+      borderWidth: 1,
+      borderColor: c.border,
+    },
+    chipOwn: { borderColor: c.primary },
+  });

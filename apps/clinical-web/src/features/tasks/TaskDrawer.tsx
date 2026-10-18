@@ -48,6 +48,7 @@ import { allowedTaskActions, taskType, type TaskAction } from "./model.ts";
 import { SetDueDateDialog } from "./SetDueDateDialog.tsx";
 import { TaskOverduePill, TaskStatusPill } from "./TaskTable.tsx";
 import { UpdateTaskStatusDialog } from "./UpdateTaskStatusDialog.tsx";
+import { DRAWER_FULL_SCREEN_CLASS } from "../../components/responsive.ts";
 
 export type TaskDrawerProps = {
   id: string | null;
@@ -79,6 +80,7 @@ export function TaskDrawer({ id, onClose, nowIso, patients, onSaved }: TaskDrawe
 
   return (
     <Drawer
+      className={DRAWER_FULL_SCREEN_CLASS}
       open={id !== null}
       onOpenChange={(open) => {
         if (!open) onClose();
@@ -93,7 +95,7 @@ export function TaskDrawer({ id, onClose, nowIso, patients, onSaved }: TaskDrawe
     >
       <div data-testid="task-drawer" data-followup-id={id ?? ""}>
         {query.isPending ? (
-          <div aria-busy="true" aria-label={t("clinical:tasks.drawer.loading")}>
+          <div role="group" aria-busy="true" aria-label={t("clinical:tasks.drawer.loading")}>
             <LoadingSkeleton lines={6} />
           </div>
         ) : denied ? (

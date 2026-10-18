@@ -1,0 +1,34 @@
+# HWM-10: Reset demo lists what will be removed, stays disabled until RESET is typed exactly,
+# then restores the baseline and signs out ("Demo data restored").
+appId: host.exp.Exponent
+---
+- runFlow: subflows/fresh-start.yaml
+- runFlow: subflows/sign-in.yaml
+- runFlow: subflows/set-offline.yaml
+- runFlow: subflows/record-screening.yaml
+- tapOn:
+    id: "avatar-button"
+- scrollUntilVisible:
+    element:
+      id: "open-reset-demo"
+- tapOn:
+    id: "open-reset-demo"
+- assertVisible:
+    id: "reset-summary"
+- assertVisible: "1 waiting to sync.*"
+- tapOn:
+    id: "reset-confirm-input"
+- inputText: "reset"
+- assertVisible: "Type RESET exactly to enable the button."
+- eraseText
+- inputText: "RESET"
+- hideKeyboard
+- tapOn:
+    id: "reset-confirm"
+- assertVisible: "Demo data restored"
+- assertVisible:
+    id: "sign-in-screen"
+- runFlow: subflows/sign-in.yaml
+- tapOn:
+    id: "tab-sync"
+- assertVisible: "Everything on this device is synced"

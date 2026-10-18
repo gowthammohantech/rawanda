@@ -29,7 +29,7 @@ describe("My health list", () => {
   it("CTZ-P1: follow-up result with chip, values + units and reviewer; opens the detail", async () => {
     const { store } = await renderShell(<HealthListScreen />, as(PERSONA_IDS.citizen1));
     const list = await screen.findByTestId("results-list", {}, { timeout: 10_000 });
-    expect(screen.getByText("Muraho, Xelrix")).toBeTruthy();
+    expect(screen.getByText("Hello, Xelrix")).toBeTruthy();
     expect(screen.getByText("Results your care team has shared with you")).toBeTruthy();
     const chips = within(list).getAllByTestId("result-chip-followUpAgreed");
     expect(chips.length).toBeGreaterThan(0);

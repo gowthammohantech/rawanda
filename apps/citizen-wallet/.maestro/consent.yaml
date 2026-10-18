@@ -19,7 +19,7 @@ appId: host.exp.Exponent
 - assertVisible: "You stopped sharing. Your care team still has your record; this app no longer shows it."
 - assertNotVisible: "Next steps"
 # Deep link to a health tab is blocked while consent is withdrawn.
-- openLink: "citizen-wallet://health"
+- openLink: "laifwallet://health"
 - assertVisible: "Give consent again"
 - tapOn: "Give consent again"
 - tapOn: "I have read this"

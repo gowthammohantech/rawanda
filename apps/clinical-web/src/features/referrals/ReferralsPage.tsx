@@ -27,7 +27,7 @@ import { useSearchParams } from "react-router";
 import { useDemoTools } from "../../app/demo-tools.tsx";
 import { facilityLabel } from "../../app/persona-labels.ts";
 import { PageHeader } from "../../components/PageHeader.tsx";
-import { QueryErrorState } from "../../components/QueryErrorState.tsx";
+import { AsyncBoundary, whenReady } from "../../components/AsyncBoundary.tsx";
 import { useSession } from "../../session/useSession.ts";
 import { useDemoNow } from "../decision/hooks.ts";
 import { useDebouncedValue } from "../patients/hooks.ts";
@@ -52,6 +52,7 @@ import {
 } from "./model.ts";
 import { ReferralDrawer } from "./ReferralDrawer.tsx";
 import { ReferralTable } from "./ReferralTable.tsx";
+import { KPI_STRIP_CLASS } from "../../components/responsive.ts";
 
 const FACILITY_IDS = FACILITIES_REFERENCE.map((f) => f.id as string);
 
@@ -129,44 +130,47 @@ export function ReferralsPage() {
     count: counts.data === undefined ? "…" : tabCount(counts.data, tab),
     ...(tab === params.tab
       ? {
-          content:
-            rows.isPending || nowIso === undefined ? (
-              <div aria-busy="true" aria-label={t("clinical:referrals.loading")}>
-                <LoadingSkeleton lines={6} />
-              </div>
-            ) : rows.isError ? (
-              <QueryErrorState error={rows.error} onRetry={() => void rows.refetch()} />
-            ) : (
-              <ReferralTable
-                caption={t("clinical:referrals.table.caption", {
-                  tab: t(`clinical:referrals.tabs.${tab}`),
-                })}
-                rows={rows.data}
-                patients={patients.data}
-                nowIso={nowIso}
-                onOpen={(referral) => update({ id: referral.id })}
-                emptyState={
-                  <div data-testid="referrals-empty">
-                    <EmptyState
-                      icon="external"
-                      title={
-                        params.q !== "" || params.facility !== null
-                          ? t("clinical:referrals.empty.filtered")
-                          : t(`clinical:referrals.empty.${tab}`, { facility: facilityName })
-                      }
-                      {...(params.q !== "" || params.facility !== null
-                        ? {
-                            onClearFilters: () => {
-                              setText("");
-                              update({ q: "", facility: null });
-                            },
-                          }
-                        : {})}
-                    />
-                  </div>
-                }
-              />
-            ),
+          content: (
+            <AsyncBoundary
+              query={whenReady(rows, nowIso !== undefined)}
+              testId="referrals"
+              loadingLabel={t("clinical:referrals.loading")}
+              skeleton="lines"
+              skeletonLines={6}
+            >
+              {(data) => (
+                <ReferralTable
+                  caption={t("clinical:referrals.table.caption", {
+                    tab: t(`clinical:referrals.tabs.${tab}`),
+                  })}
+                  rows={data}
+                  patients={patients.data}
+                  nowIso={nowIso ?? ""}
+                  onOpen={(referral) => update({ id: referral.id })}
+                  emptyState={
+                    <div data-testid="referrals-empty">
+                      <EmptyState
+                        icon="external"
+                        title={
+                          params.q !== "" || params.facility !== null
+                            ? t("clinical:referrals.empty.filtered")
+                            : t(`clinical:referrals.empty.${tab}`, { facility: facilityName })
+                        }
+                        {...(params.q !== "" || params.facility !== null
+                          ? {
+                              onClearFilters: () => {
+                                setText("");
+                                update({ q: "", facility: null });
+                              },
+                            }
+                          : {})}
+                      />
+                    </div>
+                  }
+                />
+              )}
+            </AsyncBoundary>
+          ),
         }
       : {}),
   }));
@@ -195,12 +199,16 @@ export function ReferralsPage() {
       />
 
       {kpiCounts.isPending ? (
-        <div aria-busy="true" aria-label={t("clinical:referrals.loading")}>
+        <div role="group" aria-busy="true" aria-label={t("clinical:referrals.loading")}>
           <LoadingSkeleton variant="lines" lines={2} />
         </div>
       ) : (
         <div data-testid="referral-kpis">
-          <KpiStrip items={kpis} label={t("clinical:referrals.kpi.label")} />
+          <KpiStrip
+            className={KPI_STRIP_CLASS}
+            items={kpis}
+            label={t("clinical:referrals.kpi.label")}
+          />
         </div>
       )}
 

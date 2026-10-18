@@ -1,10 +1,11 @@
 import { buildI18nInstance, createMemoryLanguageStorage } from "@laif/i18n";
 import { renderNative } from "@laif/test-utils/native";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
+import { createRef } from "react";
 import { describe, expect, it } from "vitest";
 
 import { AppHeader } from "./AppHeader.tsx";
-import { AppText } from "./AppText.tsx";
+import { AppText, type AppTextRef } from "./AppText.tsx";
 import { DemoBanner } from "./DemoBanner.tsx";
 import { LanguageSwitcher } from "./LanguageSwitcher.tsx";
 import { OfflineBanner } from "./OfflineBanner.tsx";
@@ -55,6 +56,12 @@ describe("AppHeader / LanguageSwitcher", () => {
     expect(screen.getByRole("heading", { name: "Patients" })).toBeTruthy();
     fireEvent.click(screen.getByRole("button", { name: "Back" }));
     expect(back).toBe(1);
+  });
+
+  it("titleRef receives the title's host node (apps move screen-reader focus to it, CTZ-09)", () => {
+    const ref = createRef<AppTextRef>();
+    renderNative(<AppHeader title="Timeline" titleRef={ref} />);
+    expect(ref.current).toBe(screen.getByRole("heading", { name: "Timeline" }));
   });
 
   it("can hide the switcher explicitly", () => {

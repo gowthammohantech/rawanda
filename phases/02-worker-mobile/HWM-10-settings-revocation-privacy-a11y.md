@@ -12,7 +12,7 @@
 | Depends on | HWM-09 |
 | Trace | PRD HW-01, HW-08, §6, §8, §10 (lost phone, reassignment offline, clock drift) · FRD HW-01, HW-08, §7 (revocation, lost device), §8 T-02, T-09 · Tech spec §2.2 "Settings", §7 a11y, §9, §10 Reset demo, §13 DoD · Implementation notes (EN⇄RW P0) · README non-negotiables |
 | Size | M |
-| Status | Planned |
+| Status | Done |
 
 ## 2. Goal
 

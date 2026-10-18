@@ -21,6 +21,7 @@ import type { ReactNode } from "react";
 import { facilityLabel } from "../../app/persona-labels.ts";
 import { personaName } from "../timeline/people.ts";
 import { familyOf, shortId } from "./model.ts";
+import { STACK_BELOW_LG_CLASS } from "../../components/responsive.ts";
 
 const FAMILY_TONE: Record<NonNullable<ReturnType<typeof familyOf>>, Tone> = {
   auth: "neutral",
@@ -158,6 +159,7 @@ export function AuditTable({
   return (
     <div data-testid="audit-table">
       <AccessibleDataTable
+        className={STACK_BELOW_LG_CLASS}
         caption={t("clinical:audit.table.caption")}
         captionHidden
         columns={columns}

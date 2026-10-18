@@ -29,11 +29,13 @@ import { useCitizenSession, useVerifyIdentity } from "../../data/queries.ts";
 import { usePersona } from "../../providers.tsx";
 import { accountGate, HREFS } from "../../state/access.ts";
 import { useWalletActions } from "../../state/useWalletActions.ts";
+import { useTitleFocus } from "../../a11y/useTitleFocus.ts";
 
 type ServiceError = "unavailable" | "generic" | null;
 
 export function VerifyScreen() {
   const t = useTx();
+  const titleRef = useTitleFocus();
   const router = useRouter();
   const persona = usePersona();
   const session = useCitizenSession();
@@ -107,6 +109,7 @@ export function VerifyScreen() {
       testID="verify-screen"
       header={
         <AppHeader
+          titleRef={titleRef}
           title={t("citizen:onboarding.verify.title")}
           onBack={() => {
             router.replace(HREFS.persona);

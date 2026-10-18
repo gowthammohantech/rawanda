@@ -7,6 +7,7 @@
 import { InfoCallout, LoadingSkeleton, useTx } from "@laif/ui-web";
 
 import { useDemoTools } from "../../app/demo-tools.tsx";
+import { AsyncBoundary } from "../../components/AsyncBoundary.tsx";
 import { PageHeader } from "../../components/PageHeader.tsx";
 import { ACTION_CAPABILITY } from "../../session/capabilities.ts";
 import { useSession } from "../../session/useSession.ts";
@@ -24,22 +25,37 @@ export function SettingsPage() {
   return (
     <>
       <PageHeader title={t("clinical:nav.settings")} subtitle={t("clinical:settings.subtitle")} />
-      {!faultsReady ? (
-        <div data-testid="settings-skeleton" className="grid gap-4 lg:grid-cols-2">
-          <LoadingSkeleton variant="card" lines={3} />
-          <LoadingSkeleton variant="card" lines={3} />
-        </div>
-      ) : (
-        <div className="space-y-4">
-          {canUseDemoTools ? <InfoCallout>{t("clinical:settings.everyRole")}</InfoCallout> : null}
-          <div className="grid items-start gap-4 lg:grid-cols-2">
-            <LanguageCard />
-            {canUseDemoTools ? <ResetDemoCard /> : null}
-            {canUseDemoTools ? <FaultSimulationCard /> : null}
-            {canUseDemoTools ? <ScenarioCard /> : null}
+      {/* Settings has no remote read: "loading" = the persisted fault configuration; the
+          offline marker does not apply (the page itself works offline). */}
+      <AsyncBoundary
+        query={{
+          status: faultsReady ? "success" : "pending",
+          data: faultsReady ? true : undefined,
+          error: null,
+          dataUpdatedAt: 0,
+          refetch: () => undefined,
+        }}
+        offline={false}
+        loadingLabel={t("clinical:settings.loading")}
+        loadingFallback={
+          <div data-testid="settings-skeleton" className="grid gap-4 lg:grid-cols-2">
+            <LoadingSkeleton variant="card" lines={3} />
+            <LoadingSkeleton variant="card" lines={3} />
           </div>
-        </div>
-      )}
+        }
+      >
+        {() => (
+          <div className="space-y-4">
+            {canUseDemoTools ? <InfoCallout>{t("clinical:settings.everyRole")}</InfoCallout> : null}
+            <div className="grid items-start gap-4 lg:grid-cols-2 [&>*]:min-w-0">
+              <LanguageCard />
+              {canUseDemoTools ? <ResetDemoCard /> : null}
+              {canUseDemoTools ? <FaultSimulationCard /> : null}
+              {canUseDemoTools ? <ScenarioCard /> : null}
+            </div>
+          </div>
+        )}
+      </AsyncBoundary>
     </>
   );
 }

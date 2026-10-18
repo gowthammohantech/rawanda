@@ -1,4 +1,4 @@
-import { screen, within } from "@testing-library/react";
+import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { NavLink } from "react-router";
 import { describe, expect, it, vi } from "vitest";
@@ -215,5 +215,39 @@ describe("AppShell", () => {
     );
     expect(screen.getByText(/IGERAGEZA/)).toBeTruthy();
     expect(screen.getByRole("group", { name: "Ururimi" })).toBeTruthy();
+  });
+
+  it("returns focus to the menu button when the navigation drawer closes", async () => {
+    const user = userEvent.setup();
+    renderUi(
+      <AppShell sidebar={<Sidebar sections={sections} LinkComponent={NavLink} />}>
+        <h1>Queue</h1>
+      </AppShell>,
+      { route: "/clinical/queue" },
+    );
+    const menu = screen.getByRole("button", { name: "Open navigation menu" });
+    await user.click(menu);
+    await screen.findByRole("dialog", { name: "Main navigation" });
+    await user.keyboard("{Escape}");
+    await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
+    expect(document.activeElement).toBe(menu);
+  });
+
+  it("uses w-60 for the inline sidebar unless sidebarWidthClassName replaces it", () => {
+    const { container, unmount } = renderUi(
+      <AppShell sidebar={<Sidebar sections={sections} />}>
+        <h1>Queue</h1>
+      </AppShell>,
+    );
+    expect(container.querySelector("aside.lg\\:block")?.className).toContain("w-60");
+    unmount();
+    const rail = renderUi(
+      <AppShell sidebar={<Sidebar sections={sections} />} sidebarWidthClassName="w-16 xl:w-60">
+        <h1>Queue</h1>
+      </AppShell>,
+    );
+    const aside = rail.container.querySelector("aside.lg\\:block");
+    expect(aside?.className).toContain("w-16 xl:w-60");
+    expect(aside?.className.split(" ")).not.toContain("w-60");
   });
 });

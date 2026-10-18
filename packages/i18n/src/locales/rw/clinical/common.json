@@ -14,5 +14,6 @@
     "body": "Uru rubuga ni igerageza rikoresha amakuru y'abarwayi atari ay'ukuri. Ntirukoreshwa mu buvuzi. Ibimenyetso by'amategeko biva ku mategeko y'igerageza atemejwe mu buvuzi.",
     "roles": "Abakozi b'igerageza berekana icyo buri ruhare rushobora gukora. Guhindura umukozi ni igerageza gusa — si ukwinjira mu buryo bwemewe.",
     "tools": "Koresha Ibikoresho by'igerageza hejuru kugira ngo usubize amakuru uko yari ari, ufungure urugero cyangwa wigane ibibazo by'umuyoboro."
-  }
+  },
+  "languageFallbackNotice": "Amwe mu magambo y'Ikinyarwanda ntiyabonetse muri iki gihe, agaragazwa mu Cyongereza. Byandikiwe ugenzura ururimi."
 }

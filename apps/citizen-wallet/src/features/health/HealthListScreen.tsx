@@ -12,9 +12,9 @@ import {
   LoadingState,
   MicroLabel,
   Screen,
-  colors,
   spacing,
   useTx,
+  usePalette,
 } from "@laif/ui-native";
 import { useRouter } from "expo-router";
 import { useState } from "react";
@@ -35,6 +35,7 @@ import {
 } from "./useResults.ts";
 
 export function HealthListScreen() {
+  const palette = usePalette();
   const t = useTx();
   const router = useRouter();
   const persona = usePersona();
@@ -110,7 +111,7 @@ export function HealthListScreen() {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={refresh}
-            tintColor={colors.primary}
+            tintColor={palette.primary}
             accessibilityLabel={t("citizen:health.refreshHint")}
           />
         }

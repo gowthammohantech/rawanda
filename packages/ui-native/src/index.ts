@@ -83,7 +83,12 @@ export {
   type SuppressedValue,
   type FormattedMetric,
 } from "./components/metric-value.ts";
-export { AppText, type AppTextProps, type TextWeight } from "./components/AppText.tsx";
+export {
+  AppText,
+  type AppTextProps,
+  type AppTextRef,
+  type TextWeight,
+} from "./components/AppText.tsx";
 
 // Brand
 export { RwandaMark, type RwandaMarkProps } from "./components/RwandaMark.tsx";

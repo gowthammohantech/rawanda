@@ -14,3 +14,6 @@ export const IS_E2E = process.env.EXPO_PUBLIC_LAIF_E2E === "1";
  * shown in a production-like build.
  */
 export const SHOW_TEST_HOOKS = IS_E2E || (typeof __DEV__ !== "undefined" && __DEV__);
+
+/** Pinned Expo SDK (ADR-0002) — shown in Settings → About. */
+export const EXPO_SDK_VERSION = "58" as const;

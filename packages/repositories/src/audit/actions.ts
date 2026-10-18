@@ -198,6 +198,11 @@ export const AUDIT_ACTIONS = {
   // `sync.duplicate_tap_coalesced` are UI-originated, so app-prefixed) ─────────
   "worker.sync.manual_requested": accessClient,
   "worker.sync.duplicate_tap_coalesced": accessClient,
+  // HWM-10: phase names `settings.language_changed` / `sync.clock_drift_detected` are
+  // UI-originated (the language switcher; the device-clock check after a sync run), so
+  // app-prefixed. `settings.network_sim_changed` maps to the canonical `demo.fault_toggled`.
+  "worker.settings.language_changed": { category: "change", client: true },
+  "worker.sync.clock_drift_detected": { category: "security", client: true },
 
   // ── Sync & devices ───────────────────────────────────────────────────────
   "sync.op_acknowledged": change,

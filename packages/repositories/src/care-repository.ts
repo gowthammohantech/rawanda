@@ -272,8 +272,36 @@ export type StartDeviceSessionCall = {
   deviceId: string;
 };
 
+/**
+ * One row of the worker device's Activity log (HWM-10): the audit metadata only — never the
+ * `before` / `after` snapshots, the change summary or free-text justification.
+ */
+export type DeviceActivityEntry = Pick<
+  AuditEvent,
+  | "id"
+  | "action"
+  | "category"
+  | "outcome"
+  | "actorId"
+  | "actorRole"
+  | "entityType"
+  | "entityId"
+  | "correlationId"
+  | "occurredAt"
+> & {
+  /** `device` = this device's audit log; `server` = mirrored from the simulated sync server. */
+  source: "device" | "server";
+};
+
 /** Device identity + demo device sessions (HWM-01). Demo sign-in — not authentication. */
 export interface DeviceApi {
+  /**
+   * HWM-10 Activity log, newest first: every event this device wrote since the current seed
+   * baseline (seed history excluded — after a reset only `demo.reset` remains) plus the
+   * simulated server's events about this device's sync ops (same correlation id) or by the
+   * signed-in persona. Requires a signed-in, non-revoked device session.
+   */
+  listActivity(): Promise<DeviceActivityEntry[]>;
   /** Store meta `device_id`, created on first call (platform UUID); cleared only by a reset. */
   getOrCreateDeviceId(): Promise<string>;
   getSession(id: string): Promise<DeviceSession | null>;

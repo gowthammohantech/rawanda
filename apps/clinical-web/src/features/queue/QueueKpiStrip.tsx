@@ -9,6 +9,7 @@
 import { formatTime, useLanguage } from "@laif/i18n";
 import type { ReviewCounts } from "@laif/repositories";
 import { Icon, KpiStrip, LoadingSkeleton, useTx, type KpiItem } from "@laif/ui-web";
+import { KPI_STRIP_CLASS } from "../../components/responsive.ts";
 
 export type QueueKpiStripProps = {
   counts: ReviewCounts | undefined;
@@ -22,7 +23,12 @@ export function QueueKpiStrip({ counts, reviewedThisWeek, staleSince }: QueueKpi
   const { language } = useLanguage();
   if (counts === undefined) {
     return (
-      <div aria-busy="true" aria-label={t("clinical:queue.kpi.label")} data-testid="queue-kpis">
+      <div
+        role="group"
+        aria-busy="true"
+        aria-label={t("clinical:queue.kpi.label")}
+        data-testid="queue-kpis"
+      >
         <LoadingSkeleton variant="kpi" />
       </div>
     );
@@ -73,7 +79,7 @@ export function QueueKpiStrip({ counts, reviewedThisWeek, staleSince }: QueueKpi
   ];
   return (
     <div data-testid="queue-kpis" className="space-y-1">
-      <KpiStrip items={items} label={t("clinical:queue.kpi.label")} />
+      <KpiStrip className={KPI_STRIP_CLASS} items={items} label={t("clinical:queue.kpi.label")} />
       {staleSince === null ? null : (
         <p role="status" data-testid="queue-kpis-stale" className="text-risk-warning text-xs">
           {t("clinical:queue.kpi.stale", {

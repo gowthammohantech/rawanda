@@ -1,0 +1,59 @@
+/*
+ * Clinical responsive rules (CLN-11 task 3, spec §7). Breakpoints are Tailwind's defaults, which
+ * match the spec: md 768 · lg 1024 · xl 1280 · 2xl 1440 (`theme(--breakpoint-*)`).
+ *
+ * - Sidebar: full ≥ 1280, icon rail 1024–1279, drawer < 1024 (ResponsiveSidebar + AppShell).
+ * - KPI strips: 2 × N below 1024 (`KPI_STRIP_CLASS` in components/responsive.ts).
+ * - Review detail: two columns ≥ 1280, one column below with the evidence first.
+ * - Decision page: evidence sidebar ≥ 1024, an "Evidence" disclosure below.
+ * - Detail drawers: full screen below 1024 (`DRAWER_FULL_SCREEN_CLASS`).
+ * - Tables (`.cw-stack-lg`): rows become stacked cards below 1024 — `@laif/ui-web`'s
+ *   AccessibleDataTable stacks below 768 by itself; this extends it to the 768–1023 band. Every
+ *   cell's column header comes from its `data-label`.
+ * - Reduced motion is handled globally by `@laif/ui-web` base styles.
+ */
+@media (max-width: 1023.98px) {
+  .cw-stack-lg table,
+  .cw-stack-lg tbody,
+  .cw-stack-lg tbody > tr {
+    display: block;
+  }
+  .cw-stack-lg thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .cw-stack-lg tbody > tr {
+    margin-bottom: 0.75rem;
+    border: 1px solid var(--color-border-soft);
+    border-radius: var(--radius-md);
+    padding: 0.75rem;
+  }
+  .cw-stack-lg tbody > tr > td,
+  .cw-stack-lg tbody > tr > th {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.25rem 0;
+    text-align: end;
+    overflow-wrap: anywhere;
+  }
+  .cw-stack-lg tbody > tr > [data-label]::before {
+    content: attr(data-label);
+    flex-shrink: 0;
+    max-width: 45%;
+    text-align: start;
+    font-family: var(--font-mono);
+    font-size: var(--text-micro);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+  .cw-stack-lg tbody > tr > td[colspan] {
+    display: block;
+    text-align: center;
+  }
+}

@@ -85,6 +85,8 @@ describe("worker sync hooks (HWM-02)", () => {
     );
     expect(screen.getByTestId("pending").textContent).toBe("0");
     expect(screen.getByRole("button", { name: "Sync" })).toBeTruthy();
+    // The probe's effect (which installs the helpers) may run just after the first paint.
+    await waitFor(() => expect(harness.write).toBeTypeOf("function"));
 
     await act(async () => {
       await harness.write!();

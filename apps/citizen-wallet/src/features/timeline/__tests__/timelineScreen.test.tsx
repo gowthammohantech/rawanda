@@ -92,10 +92,10 @@ describe("Timeline tab", () => {
     await openTimeline();
     const appointment = screen.getByTestId(`timeline-item-step:${APPOINTMENT}`);
     expect(appointment.getAttribute("aria-label")).toMatch(
-      /^WAITING\. Appointment on 19 Oct 2026\. Agreed by .+ · 4 Oct 2026\. 4 Oct 2026$/u,
+      /^Status: WAITING\. Appointment on 19 Oct 2026\. Agreed by .+ · 4 Oct 2026\. 4 Oct 2026$/u,
     );
     const followUp = screen.getByTestId(`timeline-item-step:${FOLLOW_UP}`);
-    expect(followUp.getAttribute("aria-label")).toMatch(/^DONE\. Follow-up done/u);
+    expect(followUp.getAttribute("aria-label")).toMatch(/^Status: DONE\. Follow-up done/u);
     for (const state of ["done", "waiting", "changed", "info"]) {
       expect(rowsWithState(state).length, state).toBeGreaterThan(0);
     }

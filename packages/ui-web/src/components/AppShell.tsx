@@ -1,4 +1,11 @@
-import { cloneElement, isValidElement, useState, type ReactElement, type ReactNode } from "react";
+import {
+  cloneElement,
+  isValidElement,
+  useRef,
+  useState,
+  type ReactElement,
+  type ReactNode,
+} from "react";
 
 import { SkipLink } from "../a11y/SkipLink.tsx";
 import { cx } from "../cx.ts";
@@ -20,8 +27,16 @@ export type AppShellProps = {
    * the full sidebar drawer. Omitted = the drawer only below 1024 px (unchanged default).
    */
   rail?: ReactNode;
-  /** Narrower inline sidebar (208 px) from 1024 px to 1279 px, the full 240 px from 1280 px. */
+  /**
+   * Narrower inline sidebar (208 px) from 1024 px to 1279 px, the full 240 px from 1280 px.
+   * Shorthand for `sidebarWidthClassName="w-52 xl:w-60"`; ignored when that prop is set.
+   */
   compactSidebar?: boolean;
+  /**
+   * Width classes of the inline (≥ 1024 px) sidebar column; replaces the default `w-60`.
+   * E.g. `w-16 xl:w-60` for an icon rail between 1024 and 1279 px.
+   */
+  sidebarWidthClassName?: string;
   children?: ReactNode;
   className?: string;
 };
@@ -37,11 +52,15 @@ export function AppShell({
   banners,
   rail,
   compactSidebar = false,
+  sidebarWidthClassName,
   children,
   className,
 }: AppShellProps) {
   const t = useTx();
   const [navOpen, setNavOpen] = useState(false);
+  // The navigation drawer has no Radix trigger: remember the opener (the topbar menu button)
+  // and return focus to it on close (WCAG 2.4.3).
+  const opener = useRef<HTMLElement | null>(null);
   const drawerSidebar = isValidElement(sidebar)
     ? cloneElement(sidebar as ReactElement<SidebarProps>, { onNavigate: () => setNavOpen(false) })
     : sidebar;
@@ -57,7 +76,7 @@ export function AppShell({
         <aside
           className={cx(
             "sticky top-12 hidden max-h-[calc(100dvh-120px)] min-h-[560px] shrink-0 self-start lg:block",
-            compactSidebar ? "w-52 xl:w-60" : "w-60",
+            sidebarWidthClassName ?? (compactSidebar ? "w-52 xl:w-60" : "w-60"),
           )}
         >
           {sidebar}
@@ -71,12 +90,25 @@ export function AppShell({
           title={t("shell:navigation")}
           hideTitle
           side="start"
+          onCloseAutoFocus={(event) => {
+            if (opener.current?.isConnected === true) {
+              event.preventDefault();
+              opener.current.focus();
+            }
+          }}
         >
           {drawerSidebar}
         </Drawer>
         <div className="flex min-w-0 flex-1 flex-col gap-4">
           <header className="space-y-3">
-            <Topbar {...topbar} onOpenNavigation={() => setNavOpen(true)} />
+            <Topbar
+              {...topbar}
+              onOpenNavigation={() => {
+                opener.current =
+                  document.activeElement instanceof HTMLElement ? document.activeElement : null;
+                setNavOpen(true);
+              }}
+            />
             {banners === undefined ? null : <div className="space-y-2">{banners}</div>}
           </header>
           <main id="main" tabIndex={-1} className="min-w-0 flex-1 space-y-5 outline-none">

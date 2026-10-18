@@ -10,29 +10,35 @@ import {
   IconButton,
   RwandaMark,
   Sheet,
-  colors,
   initialsOf,
   minTouchTarget,
   radii,
   spacing,
   useTx,
+  usePalette,
+  type Palette,
 } from "@laif/ui-native";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 
+import { useTitleFocus } from "../a11y/useTitleFocus.ts";
 import { usePersona } from "../providers.tsx";
 import { HREFS } from "../state/access.ts";
 import { useWalletActions } from "../state/useWalletActions.ts";
+import { useThemedStyles } from "../theme/useThemedStyles.ts";
 
 export type WalletHeaderProps = { title: string; onBack?: () => void };
 
 export function WalletHeader({ title, onBack }: WalletHeaderProps) {
+  const palette = usePalette();
+  const styles = useThemedStyles(makeStyles);
   const t = useTx();
   const persona = usePersona();
   const router = useRouter();
   const { endSession } = useWalletActions();
   const [menuOpen, setMenuOpen] = useState(false);
+  const titleRef = useTitleFocus();
   const name = persona?.displayName ?? "";
 
   const switchPersona = async () => {
@@ -52,7 +58,7 @@ export function WalletHeader({ title, onBack }: WalletHeaderProps) {
             accessibilityLabel={t("citizen:onboarding.header.signedInAs", { name })}
           >
             <View style={styles.avatar}>
-              <AppText variant="caption" weight="semibold" colorValue={colors.onPrimary} dense>
+              <AppText variant="caption" weight="semibold" colorValue={palette.onPrimary} dense>
                 {initialsOf(name)}
               </AppText>
             </View>
@@ -68,7 +74,7 @@ export function WalletHeader({ title, onBack }: WalletHeaderProps) {
           />
         </View>
       </View>
-      <AppHeader title={title} {...(onBack === undefined ? {} : { onBack })} />
+      <AppHeader title={title} titleRef={titleRef} {...(onBack === undefined ? {} : { onBack })} />
       <Sheet
         visible={menuOpen}
         onClose={() => setMenuOpen(false)}
@@ -91,32 +97,33 @@ export function WalletHeader({ title, onBack }: WalletHeaderProps) {
   );
 }
 
-const styles = StyleSheet.create({
-  brandRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    flexWrap: "wrap",
-    gap: spacing.sm,
-    paddingHorizontal: spacing.lg,
-    paddingTop: spacing.sm,
-  },
-  personaRow: { flexDirection: "row", alignItems: "center", gap: spacing.xs },
-  pill: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.xs,
-    minHeight: minTouchTarget,
-    paddingHorizontal: spacing.sm,
-    borderRadius: radii.pill,
-    backgroundColor: colors.primarySoft,
-  },
-  avatar: {
-    width: 28,
-    height: 28,
-    borderRadius: radii.pill,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: colors.primary,
-  },
-});
+const makeStyles = (c: Palette) =>
+  StyleSheet.create({
+    brandRow: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      flexWrap: "wrap",
+      gap: spacing.sm,
+      paddingHorizontal: spacing.lg,
+      paddingTop: spacing.sm,
+    },
+    personaRow: { flexDirection: "row", alignItems: "center", gap: spacing.xs },
+    pill: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: spacing.xs,
+      minHeight: minTouchTarget,
+      paddingHorizontal: spacing.sm,
+      borderRadius: radii.pill,
+      backgroundColor: c.primarySoft,
+    },
+    avatar: {
+      width: 28,
+      height: 28,
+      borderRadius: radii.pill,
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: c.primary,
+    },
+  });

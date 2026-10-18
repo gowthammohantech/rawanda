@@ -48,5 +48,6 @@
     "simulateWf02Hint": "Saves a new version of the WF-02 follow-up as a simulated community health worker, so the next save in the portal shows a version conflict.",
     "simulatedActor": "Simulated actor",
     "simulatedDone": "Follow-up updated by a simulated worker (version {{version}})"
-  }
+  },
+  "loading": "Loading the demo settings"
 }

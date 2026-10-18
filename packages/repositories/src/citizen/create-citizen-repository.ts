@@ -53,7 +53,7 @@ import {
   type Review,
   type Screening,
 } from "@laif/domain";
-import { CITIZEN_PERSONA_CODES, createSeed, type SeedDataset } from "@laif/mock-data";
+import { CITIZEN_PERSONA_CODES, createSeed, PERSONA_IDS, type SeedDataset } from "@laif/mock-data";
 
 import type { AuditAction } from "../audit/actions.ts";
 import type { RepositoryDeps } from "../care-repository.ts";
@@ -63,6 +63,7 @@ import { applyClockOffset, createDemoApi, META_KEYS } from "../services/demo.ts"
 import { createFaultInjector, FAULTS_META_KEY } from "../transport/faults.ts";
 import { realSleep, simulateTransport, withSimulatedTransport } from "../transport/simulated.ts";
 import type {
+  CitizenDemoApi,
   CitizenLinkedPatient,
   CitizenPersonaSummary,
   CitizenRepository,
@@ -489,6 +490,120 @@ export function createCitizenRepository(input: CitizenRepositoryDeps): CitizenRe
   }
 
   // ── Repository ────────────────────────────────────────────────────────────
+
+  // ── Demo tools (CTZ-09 task 10) ────────────────────────────────────────────
+
+  /** The simulated Clinical Portal actor of the seeded "care team confirms attendance" step. */
+  const SIMULATED_CLINICIAN = PERSONA_IDS.clinAlpha1;
+  const SIMULATED_EVIDENCE = "clinician_confirmation" as const;
+
+  /**
+   * DEMO ONLY — represents an action in the Clinical Portal (isolated wallet, D3): completes the
+   * linked referral / follow-up of a planned approved step with `clinician_confirmation`
+   * evidence as the simulated clinician; the step's progress is derived from it.
+   */
+  const simulateCareTeamConfirmation: CitizenDemoApi["simulateCareTeamConfirmation"] = async ({
+    patientId,
+    instructionId,
+  }) => {
+    await engine.ready();
+    return engine.write(async (ctx) => {
+      const { patient } = await assertPatientAccess(ctx, patientId);
+      const planned = (await instructionsOf(ctx, patientId))
+        .filter(
+          (step) =>
+            step.progress === "planned" &&
+            (step.sourceType === "referral" || step.sourceType === "follow_up"),
+        )
+        .sort((a, b) => {
+          const at = (x: typeof a) => x.appointmentAt ?? "9999";
+          return at(a) < at(b) ? -1 : at(a) > at(b) ? 1 : byIdAsc(a, b);
+        });
+      const step =
+        instructionId === undefined
+          ? planned[0]
+          : planned.find((candidate) => candidate.id === instructionId);
+      if (step === undefined) {
+        throw new RepositoryError("VALIDATION_ERROR", {
+          reason: "INVALID_TRANSITION",
+          details: { instructionId: instructionId ?? null, expected: "planned approved step" },
+        });
+      }
+      const persona = await ctx.tx.get<{ id: string; role: string }>(
+        "personas",
+        SIMULATED_CLINICIAN,
+      );
+      const actor = {
+        actorId: SIMULATED_CLINICIAN as never,
+        actorRole: (persona?.role ?? "clinician") as never,
+      };
+      const note = "Simulated care-team confirmation (demo).";
+      let sourceType: "referral" | "follow_up";
+      let before: Referral | FollowUp;
+      let after: Referral | FollowUp;
+      if (step.sourceType === "referral") {
+        sourceType = "referral";
+        const referral = await ctx.load<Referral>("referral", step.sourceId);
+        before = referral;
+        after = ctx.touch(referral, {
+          status: "completed",
+          completedAt: ctx.nowIso,
+          completionEvidence: {
+            type: SIMULATED_EVIDENCE,
+            reference: "DEMO-SIM-CONF",
+            outcome: "attended_seen",
+            note,
+            recordedBy: SIMULATED_CLINICIAN,
+            recordedAt: ctx.nowIso,
+          },
+        });
+        await ctx.save("referral", after);
+      } else {
+        sourceType = "follow_up";
+        const followUp = await ctx.load<FollowUp>("follow_up", step.sourceId);
+        before = followUp;
+        after = ctx.touch(followUp, {
+          status: "completed",
+          completedAt: ctx.nowIso,
+          outcome: {
+            kind: "attended",
+            occurredAt: ctx.nowIso,
+            evidenceType: SIMULATED_EVIDENCE,
+            reasonCode: null,
+            note,
+            recordedBy: SIMULATED_CLINICIAN,
+          },
+          clinicianConfirmation: { status: "confirmed", by: SIMULATED_CLINICIAN, at: ctx.nowIso },
+        });
+        await ctx.save("follow_up", after);
+      }
+      const event = await ctx.audit({
+        action: "demo.simulated_staff_action",
+        entityType: sourceType,
+        entityId: step.sourceId,
+        before,
+        after,
+        patientId: patient.id,
+        facilityId: patient.facilityId,
+        actor,
+        changeSummary: {
+          simulated: true,
+          staffAction: "confirm_attendance",
+          instructionId: step.id,
+          evidenceType: SIMULATED_EVIDENCE,
+          requestedBy: ctx.actor?.personaId ?? null,
+        },
+      });
+      return {
+        instructionId: step.id,
+        sourceType,
+        sourceId: step.sourceId,
+        version: after.version,
+        simulatedActorId: SIMULATED_CLINICIAN,
+        auditEventId: event.id,
+      };
+    });
+  };
 
   const repository: CitizenRepository = {
     listPersonas() {
@@ -1635,7 +1750,10 @@ export function createCitizenRepository(input: CitizenRepositoryDeps): CitizenRe
       });
     },
 
-    demo: createDemoApi({ engine, remote: null, faults, seed }),
+    demo: {
+      ...createDemoApi({ engine, remote: null, faults, seed }),
+      simulateCareTeamConfirmation,
+    },
   };
 
   const wrapped = withSimulatedTransport(repository, faults, {

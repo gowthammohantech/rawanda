@@ -33,7 +33,7 @@ import {
 
 import { useRepository } from "../data/useRepository.ts";
 import { useSessionStore } from "../session/useSession.ts";
-import { APP_ID } from "./config.ts";
+import { APP_ID, IS_E2E } from "./config.ts";
 
 export type DemoToolsValue = {
   /** Topbar menu switches, derived from `faultConfig`. */
@@ -54,6 +54,18 @@ export type DemoToolsValue = {
   scenarios: readonly DemoScenarioOption[];
   /** Bumped after a reset / scenario load so mounted screens remount and refetch. */
   epoch: number;
+};
+
+/** `window.__laifDemo` (E2E builds only): reset + fault control + a state probe for Playwright. */
+export type LaifDemoHandle = {
+  appId: string;
+  reset: () => Promise<boolean>;
+  setFaults: (patch: FaultConfigPatch) => Promise<boolean>;
+  getDemoState: () => Promise<{
+    epoch: number;
+    faults: FaultConfig;
+    signedIn: boolean;
+  }>;
 };
 
 const DEFAULTS: FaultConfig = normaliseFaultConfig({}, DEFAULT_FAULT_CONFIG);
@@ -178,6 +190,28 @@ export function DemoToolsProvider({ children }: { children?: ReactNode }) {
     [repo, afterDatasetChange, scenarios, toast, t, failed],
   );
 
+  // REL-03 / CLN-11 E2E debug handle — only in `VITE_LAIF_E2E=1` builds (a normal production
+  // build contains no `__laifDemo`; `IS_E2E` is a build-time constant, so this is dropped).
+  useEffect(() => {
+    if (!IS_E2E) return;
+    const handle: LaifDemoHandle = {
+      appId: APP_ID,
+      reset: () => reset({ silent: true }),
+      setFaults: (patch) => applyFaults(patch),
+      // No repository read here: audit reads are themselves audited.
+      getDemoState: () =>
+        Promise.resolve({
+          epoch,
+          faults: configRef.current,
+          signedIn: session.state() !== null,
+        }),
+    };
+    (window as unknown as { __laifDemo?: LaifDemoHandle }).__laifDemo = handle;
+    return () => {
+      delete (window as unknown as { __laifDemo?: LaifDemoHandle }).__laifDemo;
+    };
+  }, [reset, applyFaults, session, epoch]);
+
   const faults = useMemo(() => faultTogglesFromConfig(faultConfig), [faultConfig]);
   const value = useMemo(
     () => ({
@@ -210,4 +244,12 @@ export function useDemoTools(): DemoToolsValue {
   const value = useContext(DemoToolsContext);
   if (value === null) throw new Error("useDemoTools must be used inside <DemoToolsProvider>");
   return value;
+}
+
+/**
+ * The "Offline" fault (CLN-11 AsyncBoundary): false outside a `<DemoToolsProvider>` (isolated
+ * component tests), so state components never require the whole demo stack.
+ */
+export function useSimulatedOffline(): boolean {
+  return useContext(DemoToolsContext)?.faultConfig.offline ?? false;
 }

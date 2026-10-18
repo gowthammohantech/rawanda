@@ -1,6 +1,7 @@
 /**
  * Clinical shell (CLN-01 task 8): `@laif/ui-web` AppShell (SkipLink + DemoBanner always) with the
- * grouped Sidebar (capability-aware items, count-badge slots, Settings / Help footer), the Topbar
+ * grouped, responsive Sidebar (CLN-11 `ResponsiveSidebar`: full ≥ 1280, icon rail 1024–1279,
+ * drawer below) (capability-aware items, count-badge slots, Settings / Help footer), the Topbar
  * (patient search with ⌘K/Ctrl+K — CLN-03, bell, Demo tools, EN/RW LanguageSwitcher, role chip + active facility,
  * PersonaSwitcher with facility switch and Sign out) and the RoleBanner
  * ("… — demo role switch, not authentication") + the ConnectionBanner (CLN-02) under it.
@@ -10,17 +11,15 @@ import {
   AppShell,
   DemoToolsMenu,
   Drawer,
-  Icon,
   PersonaSwitcher,
   RoleBanner,
-  Sidebar,
   useToast,
   useTx,
   type SidebarSection,
 } from "@laif/ui-web";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import { NavLink, Outlet, useLocation, useNavigate } from "react-router";
+import { Outlet, useLocation, useNavigate } from "react-router";
 
 import { useDemoTools } from "../../app/demo-tools.tsx";
 import { UNFILTERED_SCOPE } from "../../features/queue/model.ts";
@@ -36,15 +35,13 @@ import { permittedFacilityIdsFor } from "../../session/session-store.ts";
 import { useSession } from "../../session/useSession.ts";
 import { useSwitchFacility } from "../../session/useSwitchFacility.ts";
 import { NAV_FOOTER, NAV_SECTIONS, type NavItemId } from "./navConfig.ts";
+import { RAIL_WIDTH_CLASS, ResponsiveSidebar } from "./ResponsiveSidebar.tsx";
 import { TopbarPatientSearch } from "./TopbarPatientSearch.tsx";
 
 export type ClinicalShellProps = {
   /** Count-badge slots per nav item (CLN-05/08/09); the queue count is wired here already. */
   badgeCounts?: Partial<Record<NavItemId, number>>;
 };
-
-const FOOTER_LINK =
-  "target-min flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors";
 
 export function ClinicalShell(props: ClinicalShellProps) {
   const { epoch } = useDemoTools();
@@ -181,47 +178,18 @@ function ShellChrome({ badgeCounts = {} }: ClinicalShellProps) {
     { id: "sign-out", label: t("clinical:common.signOut"), onSelect: () => void signOut() },
   ];
 
-  const footer = (
-    <div className="space-y-3">
-      <ul className="m-0 list-none space-y-0.5 p-0">
-        {NAV_FOOTER.map((item) => (
-          <li key={item.id}>
-            <NavLink
-              to={item.to}
-              className={({ isActive }) =>
-                `${FOOTER_LINK} ${
-                  isActive
-                    ? "bg-surface text-ink shadow-card font-semibold"
-                    : "text-ink/80 hover:bg-surface/60 hover:text-ink"
-                }`
-              }
-            >
-              <Icon name={item.icon} size={18} className="text-muted shrink-0" />
-              <span className="min-w-0 flex-1 truncate">{t(item.labelKey)}</span>
-            </NavLink>
-          </li>
-        ))}
-        <li>
-          <button
-            type="button"
-            onClick={() => setHelpOpen(true)}
-            className={`${FOOTER_LINK} text-ink/80 hover:bg-surface/60 hover:text-ink w-full text-start`}
-          >
-            <Icon name="info" size={18} className="text-muted shrink-0" />
-            <span className="min-w-0 flex-1 truncate">{t("clinical:nav.help")}</span>
-          </button>
-        </li>
-      </ul>
-      <p className="border-border-soft bg-surface text-muted rounded-md border px-3 py-2 text-xs">
-        {t("clinical:common.activeFacility", { facility: activeFacility })}
-      </p>
-    </div>
-  );
-
   return (
     <>
       <AppShell
-        sidebar={<Sidebar sections={sections} LinkComponent={NavLink} footer={footer} />}
+        sidebar={
+          <ResponsiveSidebar
+            sections={sections}
+            footerLinks={NAV_FOOTER}
+            onHelp={() => setHelpOpen(true)}
+            facilityText={t("clinical:common.activeFacility", { facility: activeFacility })}
+          />
+        }
+        sidebarWidthClassName={RAIL_WIDTH_CLASS}
         topbar={{
           searchSlot: <TopbarPatientSearch />,
           notifications: {

@@ -18,7 +18,7 @@ export function CorrelationTrail({ event }: { event: AuditEvent }) {
 
   if (trail.isPending) {
     return (
-      <div aria-busy="true" aria-label={t("clinical:audit.trail.loading")}>
+      <div role="group" aria-busy="true" aria-label={t("clinical:audit.trail.loading")}>
         <LoadingSkeleton lines={4} />
       </div>
     );
