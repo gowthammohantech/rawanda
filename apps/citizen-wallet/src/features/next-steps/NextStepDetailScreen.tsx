@@ -54,6 +54,12 @@ export function NextStepDetailScreen({ instructionId }: { instructionId: string 
           step={step.data}
           onReload={() => step.refetch()}
           onOpenSupport={() => router.push("/more")}
+          onReportProblem={() =>
+            router.push({
+              pathname: "/more/privacy/corrections/new",
+              params: { targetType: "care_instruction", targetId: step.data.id },
+            })
+          }
         />
       </>
     );

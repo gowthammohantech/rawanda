@@ -60,6 +60,8 @@ function aCorrection(overrides: Partial<CorrectionRequest> = {}): CorrectionRequ
     status: "submitted",
     createdBy: asId<never>("persona-citizen-1"),
     resolvedAt: null,
+    suggestedText: null,
+    resolutionKey: null,
     version: 1,
     createdAt: "2026-10-06T08:24:00.000Z",
     updatedAt: "2026-10-06T08:24:00.000Z",
@@ -286,6 +288,10 @@ describe("buildCitizenTimeline", () => {
 
   it("correction: open → waiting; resolved amended → info + changed; no change → info + info", () => {
     expect(build({ corrections: [aCorrection()] }).map((i) => i.state)).toEqual(["waiting"]);
+    expect(build({ corrections: [aCorrection()] })[0]?.linkRoute).toEqual({
+      pathname: "/more/privacy/corrections/[requestId]",
+      params: { requestId: "task-1" },
+    });
     const amended = build({
       corrections: [
         aCorrection({ status: "resolved_amended", resolvedAt: "2026-10-08T08:00:00.000Z" }),

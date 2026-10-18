@@ -1,4 +1,4 @@
-import type { Referral, Review } from "@laif/domain";
+import type { AuditEvent, Patient, Referral, Review } from "@laif/domain";
 import { FACILITY_IDS, PERSONA_IDS, SEED_ANCHORS } from "@laif/mock-data";
 import { describe, expect, it } from "vitest";
 
@@ -144,5 +144,112 @@ describe("referrals service", () => {
     h.as(PERSONA_IDS.chwAlpha1A);
     const mine = await h.repo.listReferrals({ assignedWorkerId: PERSONA_IDS.chwAlpha1A });
     expect(mine.items.every((r) => r.assignedWorkerId === PERSONA_IDS.chwAlpha1A)).toBe(true);
+  });
+
+  it("CLN-08 q search matches patient name / destination; counts follow the same filter", async () => {
+    const h = await createHarness({ personaId: PERSONA_IDS.clinAlpha1 });
+    const anchor = SEED_ANCHORS.OVERDUE_REFERRAL;
+    const patient = (await h.store.get<Patient>("patients", anchor.patientId))!;
+    const q = patient.displayName.slice(0, 5);
+    const list = await h.repo.listReferrals({ q, pageSize: 200 });
+    expect(list.items.map((r) => r.id)).toContain(anchor.referralId);
+    const counts = await h.repo.countReferrals({ q });
+    expect(counts["all"]).toBe(list.total);
+    expect((await h.repo.listReferrals({ q: "zz-no-such-name" })).total).toBe(0);
+  });
+
+  it("CLN-08 getReferral: in scope → row; out of scope → FORBIDDEN + access.denied; unknown → null", async () => {
+    const h = await createHarness({ personaId: PERSONA_IDS.clinAlpha1 });
+    const own = await h.repo.getReferral(SEED_ANCHORS.OVERDUE_REFERRAL.referralId);
+    expect(own?.id).toBe(SEED_ANCHORS.OVERDUE_REFERRAL.referralId);
+    expect(await h.repo.getReferral("ref-nope")).toBeNull();
+    const other = SEED_ANCHORS.COMPLETED_REFERRAL_WITH_EVIDENCE.referralId;
+    await expect(h.repo.getReferral(other)).rejects.toMatchObject({ code: "FORBIDDEN" });
+    const denied = (await h.store.getAll<AuditEvent>("auditEvents")).filter(
+      (e) => e.action === "access.denied" && e.entityId === other,
+    );
+    expect(denied.length).toBeGreaterThan(0);
+  });
+
+  it("CLN-08 editReferral: reason required, previous values audited, stale → CONFLICT, terminal refused", async () => {
+    const h = await createHarness({ personaId: PERSONA_IDS.clinAlpha1 });
+    const ref = (await h.store.get<Referral>(
+      "referrals",
+      SEED_ANCHORS.OVERDUE_REFERRAL.referralId,
+    ))!;
+    const base = { referralId: ref.id, expectedVersion: ref.version };
+    await expect(
+      h.repo.editReferral(
+        { ...base, dueAt: "2026-10-30T06:00:00.000Z", changeReason: "x" },
+        h.key(),
+      ),
+    ).rejects.toMatchObject({ fieldErrors: { changeReason: { key: "reasonTooShort" } } });
+    await expect(
+      h.repo.editReferral({ ...base, changeReason: "Nothing actually changes here." }, h.key()),
+    ).rejects.toMatchObject({ code: "VALIDATION_ERROR" });
+    await expect(
+      h.repo.editReferral(
+        { ...base, dueAt: "2026-10-01T06:00:00.000Z", changeReason: "Clinic moved the slot." },
+        h.key(),
+      ),
+    ).rejects.toMatchObject({ fieldErrors: { dueAt: { key: "dateMustBeFuture" } } });
+    const edited = await h.repo.editReferral(
+      {
+        ...base,
+        dueAt: "2026-10-30T06:00:00.000Z",
+        destinationFacilityId: FACILITY_IDS.alpha2,
+        changeReason: "Destination clinic has an earlier slot.",
+      },
+      h.key(),
+    );
+    expect(edited.data).toMatchObject({
+      dueAt: "2026-10-30T06:00:00.000Z",
+      destinationFacilityId: FACILITY_IDS.alpha2,
+      status: ref.status,
+    });
+    const event = (await h.store.getAll<AuditEvent>("auditEvents")).find(
+      (e) => e.id === edited.auditEventId,
+    )!;
+    expect(event.action).toBe("clinical.referral.updated");
+    expect(event.justification).toBe("Destination clinic has an earlier slot.");
+    expect(event.changeSummary).toMatchObject({ dueAt: { from: ref.dueAt } });
+    await expect(
+      h.repo.editReferral(
+        { ...base, dueAt: "2026-11-02T06:00:00.000Z", changeReason: "Second edit, stale copy." },
+        h.key(),
+      ),
+    ).rejects.toMatchObject({ code: "CONFLICT", conflict: { latest: { id: ref.id } } });
+    const done = await h.repo.transitionReferral(
+      {
+        referralId: ref.id,
+        expectedVersion: edited.entityVersion,
+        to: "completed",
+        completedAt: "2026-10-14T05:00:00.000Z",
+        outcome: "attended_seen",
+        evidenceType: "facility_attendance_record",
+        evidenceReference: "REG-2026-001",
+      },
+      h.key(),
+    );
+    const completedEvent = (await h.store.getAll<AuditEvent>("auditEvents")).find(
+      (e) => e.id === done.auditEventId,
+    )!;
+    expect(completedEvent.changeSummary).toMatchObject({
+      from: "scheduled",
+      to: "completed",
+      evidenceType: "facility_attendance_record",
+      evidenceReference: "REG-2026-001",
+    });
+    await expect(
+      h.repo.editReferral(
+        {
+          referralId: ref.id,
+          expectedVersion: done.entityVersion,
+          dueAt: "2026-11-02T06:00:00.000Z",
+          changeReason: "Too late, it is completed.",
+        },
+        h.key(),
+      ),
+    ).rejects.toMatchObject({ reason: "INVALID_TRANSITION" });
   });
 });

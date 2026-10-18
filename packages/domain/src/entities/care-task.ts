@@ -3,6 +3,7 @@ import type {
   CareTaskStatus,
   CorrectionRequestStatus,
   EntityType,
+  Role,
 } from "../enums.ts";
 import type {
   CareTaskId,
@@ -26,6 +27,14 @@ export type CorrectionRequestPayload = {
   suggestedValue: JsonValue;
   // ext (CTZ-01): citizen-visible request state; absent = derived from the task status.
   requestStatus?: CorrectionRequestStatus;
+  // ext (CTZ-07): role the request is routed to (citizen requests → `clinician`).
+  assignedRole?: Role;
+  /**
+   * ext (CTZ-07): outcome vocabulary key set by staff when the request is resolved (e.g.
+   * `glucose_context_corrected`, `reading_time_confirmed`) — never free text; the wallet shows
+   * `citizen:correction.resolution.<key>`.
+   */
+  resolutionKey?: string;
 };
 
 export type CallbackRequestPayload = {

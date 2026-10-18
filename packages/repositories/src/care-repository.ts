@@ -33,6 +33,7 @@ import type {
   MetricsFilterSchema,
   Page,
   PatientFilterSchema,
+  ReferralEditInputSchema,
   ReferralFilterSchema,
   ReferralInputSchema,
   ReferralTransitionInputSchema,
@@ -120,6 +121,7 @@ export type StartReviewCall = MutationInput<typeof StartReviewInputSchema>;
 export type ReviewDecisionCall = MutationInput<typeof ReviewDecisionInputSchema>;
 export type ReferralCall = MutationInput<typeof ReferralInputSchema>;
 export type ReferralTransitionCall = MutationInput<typeof ReferralTransitionInputSchema>;
+export type ReferralEditCall = MutationInput<typeof ReferralEditInputSchema>;
 export type FollowUpCall = MutationInput<typeof FollowUpInputSchema>;
 export type FollowUpUpdateCall = MutationInput<typeof FollowUpUpdateInputSchema>;
 export type CareTaskCall = MutationInput<typeof CareTaskInputSchema>;
@@ -292,8 +294,12 @@ export interface CareRepository {
   startReview(i: StartReviewCall, key: string): Promise<WriteResult<Review>>;
   decideReview(i: ReviewDecisionCall, key: string): Promise<WriteResult<Review>>;
   listReferrals(f?: ReferralFilterInput): Promise<Page<Referral>>;
+  /** CLN-08: scoped single read (referring or destination facility); out of scope → FORBIDDEN. */
+  getReferral(id: string): Promise<Referral | null>;
   createReferral(i: ReferralCall, key: string): Promise<WriteResult<Referral>>;
   transitionReferral(i: ReferralTransitionCall, key: string): Promise<WriteResult<Referral>>;
+  /** CLN-08: destination / due date of an open referral; `changeReason` required. */
+  editReferral(i: ReferralEditCall, key: string): Promise<WriteResult<Referral>>;
   listFollowUps(f?: FollowUpFilterInput): Promise<Page<FollowUp>>;
   createFollowUp(i: FollowUpCall, key: string): Promise<WriteResult<FollowUp>>;
   updateFollowUp(i: FollowUpUpdateCall, key: string): Promise<WriteResult<FollowUp>>;

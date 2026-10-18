@@ -151,7 +151,11 @@ export function DecisionSuccess({
             className="flex flex-wrap items-center gap-x-5 gap-y-2"
           >
             {referral !== null && can("referral.manage") ? (
-              <Link to={routes.referrals()} className={linkClass} data-testid="view-referral">
+              <Link
+                to={routes.referrals({ id: referral.id })}
+                className={linkClass}
+                data-testid="view-referral"
+              >
                 {t("clinical:decision.success.viewReferral")}
               </Link>
             ) : null}

@@ -58,9 +58,13 @@ function useEventTitle() {
   };
 }
 
-export type FollowUpTimelineProps = { events: readonly FollowUpEvent[] };
+export type FollowUpTimelineProps = {
+  events: readonly FollowUpEvent[];
+  /** CLN-08: referral events link to the referral drawer (the route needs `referral.manage`). */
+  canOpenReferral?: boolean;
+};
 
-export function FollowUpTimeline({ events }: FollowUpTimelineProps) {
+export function FollowUpTimeline({ events, canOpenReferral = false }: FollowUpTimelineProps) {
   const t = useTx();
   const { language } = useLanguage();
   const title = useEventTitle();
@@ -89,7 +93,14 @@ export function FollowUpTimeline({ events }: FollowUpTimelineProps) {
       dateLabel: formatDate(event.occurredAt, language),
       dateTime: event.occurredAt,
       title:
-        event.reviewId === undefined ? (
+        event.referralId !== undefined && canOpenReferral ? (
+          <Link
+            to={routes.referrals({ id: event.referralId })}
+            className="text-primary-dark underline"
+          >
+            {title(event)}
+          </Link>
+        ) : event.reviewId === undefined ? (
           title(event)
         ) : (
           <Link to={routes.review(event.reviewId)} className="text-primary-dark underline">

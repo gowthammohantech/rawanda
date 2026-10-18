@@ -76,6 +76,32 @@ export type CitizenLinkedPatient = {
   consentState: ConsentState;
 };
 
+/**
+ * CTZ-07: something a citizen may ask to have corrected — a released result, an approved next
+ * step or "my personal details" (synthetic name / date of birth). `version` is the stored
+ * record's version at read time (sent back as `expectedTargetVersion`, stale → `CONFLICT`).
+ */
+export type CorrectionTarget =
+  | {
+      targetType: "screening";
+      targetId: string;
+      version: number;
+      observation: ReleasedObservation;
+    }
+  | {
+      targetType: "care_instruction";
+      targetId: string;
+      version: number;
+      instruction: ApprovedInstruction;
+    }
+  | {
+      targetType: "patient";
+      targetId: string;
+      version: number;
+      displayName: string;
+      dateOfBirth: string | null;
+    };
+
 /** Persona picker entry (CTZ-02). Demo persona — role switching is not real sign-in. */
 export type CitizenPersonaSummary = {
   personaId: PersonaId;
@@ -203,14 +229,43 @@ export interface CitizenRepository {
   recordChangeViewed(patientId: string, observationId: string): Promise<void>;
   /** Derived progress timeline, newest first (reminders are never `done`). */
   listTimeline(patientId: string): Promise<TimelineItem[]>;
-  /** Citizen-visible access history, newest first. */
+  /**
+   * Citizen-visible access history, newest first: who looked (persona, role, facility), what
+   * and when. Wallet-internal system actions (no actor) are hidden; `justification` and
+   * `changeSummary` are never returned (staff free text never reaches the wallet).
+   */
   listAccessEvents(patientId: string): Promise<CitizenAccessEvent[]>;
-  /** Creates a `correction_request` care task; the record itself is never changed. */
+  /** CTZ-07: the access history list was shown — `citizen.access_history.viewed` (audit). */
+  recordAccessHistoryViewed(patientId: string): Promise<void>;
+  /** CTZ-07: the privacy notice was opened — `citizen.privacy_notice.viewed` (audit). */
+  recordPrivacyNoticeViewed(noticeVersion: string): Promise<void>;
+  /**
+   * CTZ-07: what the citizen may ask to correct (released results, approved next steps, then
+   * personal details). Link + consent required; a representative only sees the represented
+   * patient's items.
+   */
+  listCorrectionTargets(patientId: string): Promise<CorrectionTarget[]>;
+  /**
+   * Creates a `correction_request` care task (payload `requestStatus: submitted`,
+   * `assignedRole: clinician`) + `correction.requested` and `task.created` sharing one
+   * correlation ID; the record itself is NEVER changed. The target must be visible to the
+   * citizen (else `VALIDATION_ERROR` on `targetId`). `expectedTargetVersion` older than the
+   * stored record — or the demo-tools `conflict-next-write` toggle — → `CONFLICT`, nothing
+   * written. An open (`submitted` / `in_review`) request for the same target →
+   * `VALIDATION_ERROR` reason `DUPLICATE_OPEN_REQUEST` (`details.existingId` / `existingCreatedAt`)
+   * + `citizen.correction.duplicate_blocked`. Same key = replay of the first result (T-04/T-09).
+   */
   createCorrectionRequest(
     i: CitizenCorrectionCall,
     key: string,
   ): Promise<WriteResult<CitizenCareTask>>;
   listCorrectionRequests(patientId: string): Promise<CorrectionRequest[]>;
+  /**
+   * CTZ-07: one correction request of the patient + `citizen.correction.viewed` (de-duplicated
+   * per persona + request per demo minute). Unknown id → `NOT_FOUND`; another patient's
+   * request → `FORBIDDEN` `SCOPE` + `access.denied`.
+   */
+  getCorrectionRequest(id: string, patientId: string): Promise<CorrectionRequest>;
   /** Creates a `callback_request` care task (support stub; link required, not consent). */
   createCallbackRequest(i: CallbackRequestCall, key: string): Promise<WriteResult<CitizenCareTask>>;
   /** Settings of the signed-in persona (null before the first save). */

@@ -1,4 +1,11 @@
 {
   "codeSixDigits": "Enter the 6 numbers",
-  "mustConfirmRead": "Please confirm you have read this"
+  "mustConfirmRead": "Please confirm you have read this",
+  "correction": {
+    "targetRequired": "Please choose what looks wrong.",
+    "descriptionMin": "Please tell us a little more (at least 10 letters).",
+    "descriptionMax": "Please keep this shorter (at most 500 letters).",
+    "suggestedMax": "Please keep this shorter (at most 200 letters).",
+    "mustUnderstand": "Please tick the box to continue."
+  }
 }

@@ -1,0 +1,84 @@
+{
+  "title": "Ibanga",
+  "eyebrow": "AMAKURU YANJYE",
+  "subtitle": "Reba abashobora kubona amakuru yawe, abayarebye, kandi usabe ko hagira ibikosorwa.",
+  "loading": "Turimo gutegura amakuru y'ibanga ryawe…",
+  "error": "Ntitwashoboye kubibona. Ongera ugerageze.",
+  "whoCanSee": {
+    "title": "Abashobora kubona amakuru yanjye",
+    "body": "Itsinda rikwitaho ku kigo nderabuzima n'umujyanama w'ubuzima ugusura bashobora kubona ibipimo byawe n'intambwe zikurikira. Wowe ubona ibyo itsinda rikwitaho ryagusangije.",
+    "noticeLink": "Soma itangazo ry'ibanga"
+  },
+  "whoLooked": "Abarebye amakuru yanjye",
+  "whoLookedBody": "Abantu bafunguye amakuru yawe muri iri gerageza, n'igihe babikoreye.",
+  "seeAll": "Reba byose",
+  "somethingWrong": {
+    "title": "Hari ikitari cyo?",
+    "body": "Niba hari ikintu kiri mu makuru yawe gisa n'aho atari cyo, saba itsinda rikwitaho kukigenzura. Amakuru yawe ntahinduka kugeza babikoze."
+  },
+  "myRequests": "Ibyifuzo byanjye",
+  "seeAllRequests": "Reba ibyifuzo byose",
+  "notice": {
+    "title": "Itangazo ry'ibanga",
+    "heading": "ITANGAZO RY'IGERAGEZA — AMAGAMBO ATEMEJWE",
+    "version": "Verisiyo {{version}}",
+    "shownTitle": "Ibigaragazwa",
+    "shownBody": "Ibisubizo by'ibipimo byawe nyuma y'uko itsinda rikwitaho ribisuzumye, intambwe zikurikira mwumvikanyeho, kwibutswa wahisemo, n'ibyifuzo wohereje.",
+    "whoTitle": "Ababibona",
+    "whoBody": "Wowe, umuntu wemewe n'amategeko kugukorera, n'itsinda rikwitaho ku kigo nderabuzima. Umuntu wese urebye amakuru yawe agaragara mu mateka y'abayarebye.",
+    "storedTitle": "Aho abikwa",
+    "storedBody": "Muri iri gerageza abikwa kuri iki gikoresho gusa. Serivisi nyayo yabika amakuru mu Rwanda.",
+    "keptTitle": "Igihe abikwa",
+    "keptBody": "Bizemezwa na Minisiteri.",
+    "choicesTitle": "Amahitamo yawe",
+    "choicesBody": "Ushobora gutanga cyangwa gukuraho uruhushya igihe icyo ari cyo cyose, no gusaba itsinda rikwitaho gukosora ikintu gisa n'aho atari cyo.",
+    "rightsTitle": "Uburenganzira bwawe hakurikijwe Itegeko N° 058/2021",
+    "rightsIntro": "Itegeko rirengera amakuru bwite n'ubuzima bwite riguha ubu burenganzira:",
+    "rights": {
+      "access": "Kubona — kureba amakuru akubikiwe.",
+      "correction": "Gukosora — gusaba ko amakuru atari yo akosorwa.",
+      "portability": "Kwimura — guhabwa amakuru yawe ngo uyajyane ahandi.",
+      "erasure": "Gusiba — gusaba ko amakuru yawe asibwa."
+    },
+    "rightNotAvailable": "Uburyo buzagenwa na Minisiteri; ntiburaboneka muri iri gerageza.",
+    "consentLink": "Gucunga uruhushya",
+    "correctionLink": "Saba ko bikosorwa"
+  },
+  "access": {
+    "title": "Abarebye amakuru yanjye",
+    "intro": "Abantu bose bafunguye amakuru yawe muri iri gerageza. Amazina y'abakozi ntagaragazwa — hagaragara gusa umwanya wabo n'ikigo nderabuzima.",
+    "listLabel": "Amateka y'abarebye",
+    "filter": {
+      "label": "Erekana",
+      "all": "Byose",
+      "careTeam": "Itsinda rikwitaho",
+      "me": "Njye"
+    },
+    "empty": "Nta muntu urareba amakuru yawe muri iri gerageza.",
+    "filterEmpty": "Nta kintu cyo kwerekana kuri iyi hitamo.",
+    "showAll": "Erekana byose",
+    "chip": {
+      "viewed": "YAREBWE",
+      "updated": "YAHINDUWE",
+      "you": "WOWE"
+    },
+    "actor": {
+      "you": "Wowe",
+      "staff": "{{role}} (w'igerageza) · {{facility}}",
+      "careTeam": "Itsinda rikwitaho (ry'igerageza)"
+    },
+    "action": {
+      "record_viewed": "Yarebye amakuru yawe",
+      "result_viewed": "Yarebye igisubizo cy'igipimo",
+      "next_steps_viewed": "Yarebye intambwe zawe zikurikira",
+      "record_updated": "Yahinduye amakuru yawe"
+    },
+    "purpose": {
+      "care_review": "Ku isuzuma ry'ubuvuzi bwawe",
+      "follow_up_visit": "Ku isura ryo gukurikirana",
+      "self_access": "Muri iyi porogaramu",
+      "representative_access": "Muri iyi porogaramu, mu izina rya {{name}}",
+      "support": "Kugufasha ku cyifuzo cyawe"
+    }
+  }
+}

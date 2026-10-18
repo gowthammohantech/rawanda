@@ -543,6 +543,16 @@
       },
       "change": {
         "viewed": "Record change viewed in the wallet"
+      },
+      "privacy_notice": {
+        "viewed": "Privacy notice viewed in the wallet"
+      },
+      "access_history": {
+        "viewed": "Access history viewed in the wallet"
+      },
+      "correction": {
+        "viewed": "Correction request viewed in the wallet",
+        "duplicate_blocked": "Second correction request for the same item blocked"
       }
     },
     "admin": {
@@ -556,6 +566,11 @@
       "quality_issue": {
         "detected": "Data-quality issue detected (system)",
         "triaged": "Data-quality issue triaged"
+      }
+    },
+    "clinical": {
+      "referral": {
+        "updated": "Referral destination or due date changed"
       }
     }
   }

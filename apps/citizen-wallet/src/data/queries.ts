@@ -139,6 +139,28 @@ export function useCorrectionRequests(patientId: string | null) {
   return usePatientQuery(patientId, "corrections", (id) => repo.listCorrectionRequests(id));
 }
 
+/** CTZ-07: what the citizen may ask to correct (results, next steps, personal details). */
+export function useCorrectionTargets(patientId: string | null) {
+  const repo = useCitizenRepo();
+  return usePatientQuery(patientId, "correction-targets", (id) => repo.listCorrectionTargets(id));
+}
+
+/** CTZ-07: one correction request; fetched once per mount (= one `citizen.correction.viewed`). */
+export function useCorrectionRequest(patientId: string | null, requestId: string) {
+  const repo = useCitizenRepo();
+  const personaId = usePersonaId();
+  return useQuery({
+    queryKey: [...ctzKeys.patient(personaId, patientId, "correction"), requestId],
+    queryFn: () => repo.getCorrectionRequest(requestId, patientId as string),
+    enabled: personaId !== null && patientId !== null && requestId !== "",
+    retry: shouldRetry,
+    staleTime: Number.POSITIVE_INFINITY,
+    gcTime: 0,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
+}
+
 type Vars<I> = { input: I; key: string };
 
 /** A write that invalidates everything of the signed-in persona on success. */

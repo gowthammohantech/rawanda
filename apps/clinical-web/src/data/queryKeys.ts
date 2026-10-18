@@ -24,6 +24,12 @@ export const clinicalKeys = {
   reviewCounts: (fac: Fac, f: Filter = {}) => ["clinical", fac, "reviewCounts", f] as const,
   review: (fac: Fac, id: string) => ["clinical", fac, "review", id] as const,
   referrals: (fac: Fac, f: Filter = {}) => ["clinical", fac, "referrals", f] as const,
+  /** CLN-08 tab counts / KPI strip / sidebar badge (`countReferrals`). */
+  referralCounts: (fac: Fac, f: Filter = {}) => ["clinical", fac, "referralCounts", f] as const,
+  /** CLN-08 drawer: one referral (`getReferral`). */
+  referral: (fac: Fac, id: string) => ["clinical", fac, "referral", id] as const,
+  /** CLN-08 create dialog: decided reviews without an open referral. */
+  referralEligible: (fac: Fac, f: Filter = {}) => ["clinical", fac, "referralEligible", f] as const,
   followUps: (fac: Fac, f: Filter = {}) => ["clinical", fac, "followUps", f] as const,
   workers: (fac: Fac) => ["clinical", fac, "workers"] as const,
   audit: (fac: Fac, f: Filter = {}) => ["clinical", fac, "audit", f] as const,
@@ -36,8 +42,26 @@ const ROOT_SEGMENTS: Partial<Record<QueryEntity, readonly string[]>> = {
   // `patientTimeline` (CLN-04) merges reviews, referrals and follow-ups; an amendment also
   // refreshes it (phase task 6).
   screenings: ["screenings", "patientStats", "patients", "patientTimeline"],
-  reviews: ["reviews", "reviewCounts", "review", "patientStats", "patients", "patientTimeline"],
-  referrals: ["referrals", "review", "reviewCounts", "patientStats", "patients", "patientTimeline"],
+  reviews: [
+    "reviews",
+    "reviewCounts",
+    "review",
+    "patientStats",
+    "patients",
+    "patientTimeline",
+    "referralEligible",
+  ],
+  referrals: [
+    "referrals",
+    "referralCounts",
+    "referral",
+    "referralEligible",
+    "review",
+    "reviewCounts",
+    "patientStats",
+    "patients",
+    "patientTimeline",
+  ],
   followUps: ["followUps", "review", "patientStats", "patients", "patientTimeline"],
   workers: ["workers"],
   audit: ["audit"],
